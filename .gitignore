@@ -1,0 +1,16 @@
+Debug/*
+Release/*
+doc/*
+.moc/*
+.tmp/*
+*.pdf
+*.plist
+tex/*.aux
+tex/*.log
+tex/*.out
+tex/*.png
+.DS_Store
+.cproject
+.project
+.externalToolBuilders/*
+.texlipse
