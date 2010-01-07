@@ -13,4 +13,5 @@ tex/*.png
 .cproject
 .project
 .externalToolBuilders/*
-.texlipse
+.texlipsei
+bla
