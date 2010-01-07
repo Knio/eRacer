@@ -1,5 +1,5 @@
-Debug/*
-Release/*
+Debug/
+Release/
 doc/*
 .moc/*
 .tmp/*
@@ -14,3 +14,11 @@ tex/*.png
 .project
 .externalToolBuilders/*
 .texlipse
+*.ncb
+*.suo
+*.pyc
+*.tmp
+*.TMP
+*.pdb
+*.user
+*_wrap.cxx
