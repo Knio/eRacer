@@ -13,7 +13,6 @@ tex/*.png
 .cproject
 .project
 .externalToolBuilders/*
-<<<<<<< HEAD:.gitignore
 .texlipse
 *.ncb
 *.suo
