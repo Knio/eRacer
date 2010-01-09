@@ -60,7 +60,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
-				AdditionalLibraryDirectories="&quot;$(SystemDrive)\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Lib\x86&quot;;&quot;$(SystemDrive)\Python26\libs\&quot;"
+				AdditionalLibraryDirectories="&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(SystemDrive)\Python26\libs\&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -132,7 +132,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
-				AdditionalLibraryDirectories="&quot;$(SystemDrive)\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Lib\x86&quot;;&quot;$(SystemDrive)\Python26\libs\&quot;"
+				AdditionalLibraryDirectories="&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(SystemDrive)\Python26\libs\&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
