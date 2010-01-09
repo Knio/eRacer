@@ -7,6 +7,7 @@
 #include <strsafe.h>
 #pragma warning( default : 4996 )
 
+
 // A structure for our custom vertex type
 //Borrowed from the samples for a quick demonstration, the whole sample section
 //should be replaced with programmable shaders, although I'm less certain how to 
@@ -34,9 +35,9 @@ protected:
 	GraphicsLayer& operator= (const GraphicsLayer); 
 
 public:
-	~GraphicsLayer();	//Destructor
+	~GraphicsLayer() {};	//Destructor
 	int Init( HWND hWnd );
-	int DrawEntity();
+	//int DrawEntity();			 // until its implemented
 	int RenderFrame();
 	int Shutdown();
 

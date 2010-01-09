@@ -19,7 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="1"
 			>
 			<Tool
@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(SystemDrive)\Python26\include\"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -57,7 +58,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib"
+				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib"
+				OutputFile="$(OutDir)\_$(ProjectName).pyd"
+				AdditionalLibraryDirectories="&quot;$(SystemDrive)\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Lib\x86&quot;;&quot;$(SystemDrive)\Python26\libs\&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -87,7 +90,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -110,6 +113,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="$(SystemDrive)\Python26\include\"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -126,6 +130,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib"
+				OutputFile="$(OutDir)\_$(ProjectName).pyd"
+				AdditionalLibraryDirectories="&quot;$(SystemDrive)\Program Files (x86)\Microsoft DirectX SDK (August 2009)\Lib\x86&quot;;&quot;$(SystemDrive)\Python26\libs\&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -165,12 +172,24 @@
 			<File
 				RelativePath=".\Source\Main.cpp"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<Filter
 				Name="Graphics"
 				>
 				<File
 					RelativePath=".\Source\Graphics\GraphicsLayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Window.cpp"
 					>
 				</File>
 			</Filter>
@@ -191,10 +210,44 @@
 					RelativePath=".\Source\Graphics\GraphicsLayer.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Graphics\Window.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Input"
 				>
+			</Filter>
+			<Filter
+				Name="SWIG"
+				>
+				<File
+					RelativePath=".\Source\SWIG\swig.i"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="$(SWIG_DIR)\swig.exe -c++ -python $(InputPath)&#x0D;&#x0A;"
+							Outputs="$(ProjDir)\SWIG\$(InputName)_wrap.cxx"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="$(SWIG_DIR)\swig.exe -c++ -python $(InputPath)&#x0D;&#x0A;"
+							Outputs="SWIG\$(InputName)_wrap.cxx"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\Source\SWIG\swig_wrap.cxx"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
