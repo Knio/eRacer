@@ -231,7 +231,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							CommandLine="$(SWIG_DIR)\swig.exe -c++ -python $(InputPath)&#x0D;&#x0A;"
-							Outputs="$(ProjDir)\SWIG\$(InputName)_wrap.cxx"
+							Outputs="Source\SWIG\$(InputName)_wrap.cxx"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -240,7 +240,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							CommandLine="$(SWIG_DIR)\swig.exe -c++ -python $(InputPath)&#x0D;&#x0A;"
-							Outputs="SWIG\$(InputName)_wrap.cxx"
+							Outputs="Source\SWIG\$(InputName)_wrap.cxx"
 						/>
 					</FileConfiguration>
 				</File>

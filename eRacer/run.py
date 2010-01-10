@@ -12,13 +12,12 @@ from Graphics.Graphics import Graphics
 w = Window("Test")
 g = Graphics.GetGraphicsInstance()
 
-g.Init(w.hwnd)
+h = w.hwnd
+h.disown()
+g.Init(h)
 
-while 1:
+while w.Poll():
   g.RenderFrame()
-  if not w.Poll():
-    break
-  
   time.sleep(0.1)
   
 g.Shutdown()
