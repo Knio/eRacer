@@ -1,6 +1,5 @@
 import sys
 import time
-import testdoxy #just to test doxygen, not used at all
 # paths to code
 sys.path.append('Release')
 sys.path.append('Source')
