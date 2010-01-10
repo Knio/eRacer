@@ -207,16 +207,6 @@ OPTIMIZE_FOR_FORTRAN = NO
 
 OPTIMIZE_OUTPUT_VHDL = NO
 
-# Doxygen selects the parser to use depending on the extension of the files it parses. 
-# With this tag you can assign which parser to use for a given extension. 
-# Doxygen has a built-in mapping, but you can override or extend it using this tag. 
-# The format is ext=language, where ext is a file extension, and language is one of 
-# the parsers supported by doxygen: IDL, Java, Javascript, C#, C, C++, D, PHP, 
-# Objective-C, Python, Fortran, VHDL, C, C++. For instance to make doxygen treat 
-# .inc files as Fortran files (default is PHP), and .f files as C (default is Fortran), 
-# use: inc=Fortran f=C. Note that for custom extensions you also need to set FILE_PATTERNS otherwise the files are not read by doxygen.
-
-EXTENSION_MAPPING = 
 
 # If you use STL classes (i.e. std::string, std::vector, etc.) but do not want 
 # to include (a tag file for) the STL sources as input, then you should 
@@ -272,21 +262,6 @@ SUBGROUPING = YES
 
 TYPEDEF_HIDES_STRUCT = NO
 
-# The SYMBOL_CACHE_SIZE determines the size of the internal cache use to 
-# determine which symbols to keep in memory and which to flush to disk. 
-# When the cache is full, less often used symbols will be written to disk. 
-# For small to medium size projects (<1000 input files) the default value is 
-# probably good enough. For larger projects a too small cache size can cause 
-# doxygen to be busy swapping symbols to and from disk most of the time 
-# causing a significant performance penality. 
-# If the system has enough physical memory increasing the cache will improve the 
-# performance by keeping more symbols in memory. Note that the value works on 
-# a logarithmic scale so increasing the size by one will rougly double the 
-# memory usage. The cache size is given by this formula: 
-# 2^(16+SYMBOL_CACHE_SIZE). The valid range is 0..9, the default is 0, 
-# corresponding to a cache size of 2^16 = 65536 symbols
-
-SYMBOL_CACHE_SIZE = 0
 
 #---------------------------------------------------------------------------
 # Build related configuration options
@@ -495,14 +470,6 @@ SHOW_NAMESPACES = YES
 
 FILE_VERSION_FILTER = 
 
-# The LAYOUT_FILE tag can be used to specify a layout file which will be parsed by 
-# doxygen. The layout file controls the global structure of the generated output files 
-# in an output format independent way. The create the layout file that represents 
-# doxygen's defaults, run doxygen with the -l option. You can optionally specify a 
-# file name after the option, if omitted DoxygenLayout.xml will be used as the name 
-# of the layout file.
-
-LAYOUT_FILE = 
 
 #---------------------------------------------------------------------------
 # configuration options related to warning and progress messages
@@ -564,7 +531,7 @@ WARN_LOGFILE =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT = src
+INPUT = eRacer/Source
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 
@@ -876,56 +843,6 @@ BINARY_TOC = NO
 
 TOC_EXPAND = NO
 
-# If the GENERATE_QHP tag is set to YES and both QHP_NAMESPACE and QHP_VIRTUAL_FOLDER 
-# are set, an additional index file will be generated that can be used as input for 
-# Qt's qhelpgenerator to generate a Qt Compressed Help (.qch) of the generated 
-# HTML documentation.
-
-GENERATE_QHP = NO
-
-# If the QHG_LOCATION tag is specified, the QCH_FILE tag can 
-# be used to specify the file name of the resulting .qch file. 
-# The path specified is relative to the HTML output folder.
-
-QCH_FILE = 
-
-# The QHP_NAMESPACE tag specifies the namespace to use when generating 
-# Qt Help Project output. For more information please see 
-# http://doc.trolltech.com/qthelpproject.html#namespace
-
-QHP_NAMESPACE = 
-
-# The QHP_VIRTUAL_FOLDER tag specifies the namespace to use when generating 
-# Qt Help Project output. For more information please see 
-# http://doc.trolltech.com/qthelpproject.html#virtual-folders
-
-QHP_VIRTUAL_FOLDER = doc
-
-# If QHP_CUST_FILTER_NAME is set, it specifies the name of a custom filter to add. 
-# For more information please see 
-# http://doc.trolltech.com/qthelpproject.html#custom-filters
-
-QHP_CUST_FILTER_NAME = 
-
-# The QHP_CUST_FILT_ATTRS tag specifies the list of the attributes of the custom filter to add.For more information please see 
-# <a href="http://doc.trolltech.com/qthelpproject.html#custom-filters">Qt Help Project / Custom Filters</a>.
-
-QHP_CUST_FILTER_ATTRS = 
-
-# The QHP_SECT_FILTER_ATTRS tag specifies the list of the attributes this project's 
-# filter section matches. 
-# <a href="http://doc.trolltech.com/qthelpproject.html#filter-attributes">Qt Help Project / Filter Attributes</a>.
-
-QHP_SECT_FILTER_ATTRS = 
-
-# If the GENERATE_QHP tag is set to YES, the QHG_LOCATION tag can 
-# be used to specify the location of Qt's qhelpgenerator. 
-# If non-empty doxygen will try to run qhelpgenerator on the generated 
-# .qhp file.
-
-QHG_LOCATION = 
-
-# The DISABLE_INDEX tag can be used to turn on/off the condensed index at 
 # top of each HTML page. The value NO (the default) enables the index and 
 # the value YES disables it.
 
@@ -1043,9 +960,6 @@ LATEX_BATCHMODE = NO
 
 LATEX_HIDE_INDICES = NO
 
-# If LATEX_SOURCE_CODE is set to YES then doxygen will include source code with syntax highlighting in the LaTeX output. Note that which sources are shown also depends on other settings such as SOURCE_BROWSER.
-
-LATEX_SOURCE_CODE = NO
 
 #---------------------------------------------------------------------------
 # configuration options related to the RTF output
@@ -1356,10 +1270,6 @@ HAVE_DOT = NO
 
 DOT_FONTNAME = FreeSans
 
-# The DOT_FONTSIZE tag can be used to set the size of the font of dot graphs. 
-# The default size is 10pt.
-
-DOT_FONTSIZE = 10
 
 # By default doxygen will tell dot to use the output directory to look for the 
 # FreeSans.ttf font (which doxygen will put there itself). If you specify a 
