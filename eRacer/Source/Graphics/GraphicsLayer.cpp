@@ -93,13 +93,21 @@ int GraphicsLayer::RenderFrame()
 int GraphicsLayer::Shutdown()
 {
 	if( NULL != m_pd3dDevice)
+	{
         m_pd3dDevice->Release();
+		m_pd3dDevice = NULL;
+	}
 
     if( NULL != m_pD3D)
-        m_pD3D->Release();
+	{
+		m_pD3D->Release();
+		m_pD3D = NULL;
+	}
 
 	if( NULL != m_pVB)
+	{
         m_pVB->Release();
-
+		m_pVB = NULL;
+	}
 	return S_OK;
 }
