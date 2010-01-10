@@ -21,7 +21,7 @@ while 1:
   
   time.sleep(0.1)
   
-g.ShutDown()
+g.Shutdown()
   
 del w
 del g
