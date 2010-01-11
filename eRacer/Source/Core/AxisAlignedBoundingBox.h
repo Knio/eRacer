@@ -14,6 +14,9 @@
 
 using namespace std;
 
+/**
+ * @brief Enum to reference the 8 corners of a box
+ */
 enum BoxCorners {
 	LEFT_BOTTOM_FRONT,
 	LEFT_BOTTOM_BACK,
@@ -61,14 +64,43 @@ public:
 	 */
 	void merge(const AxisAlignedBoundingBox& newBox);
 
+	/**
+	 * @return The center of the box
+	 */
 	Point3 getCenter() const;
+	
+	/**
+	 * @brief Getter for the 8 corners of the box.
+	 * @param boxCorner
+	 *			the corner you want to get
+	 * @return the point in 3-D space where the corner is located
+	 * @see BoxCorner
+	 */
 	Point3 getCorner(BoxCorners boxCorner) const;
+
+	/**
+	 * @brief getter for the left bottom front corner
+	 *
+	 * This is equivalent to calling getCorner(LEFT_BOTTOM_FRONT), 
+	 * but does not require to copy the point.
+	 *
+	 * @return a constant reference to the left bottom front corner of the box
+	 */
 	const Point3& getMin() const;
+
+	/**
+	 * @brief getter for the right top back corner
+	 *
+	 * This is equivalent to calling getCorner(RIGHT_TOP_BACK), 
+	 * but does not require to copy the point.
+	 *
+	 * @return a constant reference to the right top back corner of the box
+	 */
 	const Point3& getMax() const;
 
 private:
-	D3DXVECTOR3 min_;
-	D3DXVECTOR3 max_;
+	Point3 min_;
+	Point3 max_;
 };
 
 inline Point3 AxisAlignedBoundingBox::getCenter() const { 
