@@ -7,7 +7,7 @@
  */
 
 #include "AxisAlignedBoundingBox.h"
-
+#include <cassert>
 
 AxisAlignedBoundingBox::AxisAlignedBoundingBox()
 	:	min_(ORIGIN),
@@ -66,26 +66,24 @@ void AxisAlignedBoundingBox::merge(const AxisAlignedBoundingBox& newBox){
 		max_.z = newBox.getMax().z;
 }
 
-Point3 AxisAlignedBoundingBox::getCorner(int i) const{
-	switch (i){
-	case 0:
+Point3 AxisAlignedBoundingBox::getCorner(BoxCorners boxCorner) const{
+	switch (boxCorner){
+	case LEFT_BOTTOM_FRONT:
 		return min_;
-	case 1:
+	case LEFT_BOTTOM_BACK:
 		return Point3(min_.x, min_.y, max_.z);
-	case 2:
+	case LEFT_TOP_FRONT:
 		return Point3(min_.x, max_.y, min_.z);
-	case 3:
+	case LEFT_TOP_BACK:
 		return Point3(min_.x, max_.y, max_.z);
-	case 4:
+	case RIGHT_BOTTOM_FRONT:
 		return Point3(max_.x, min_.y, min_.z);
-	case 5:
+	case RIGHT_BOTTOM_BACK:
 		return Point3(max_.x, min_.y, max_.z);
-	case 6:
+	case RIGHT_TOP_FRONT:
 		return Point3(max_.x, max_.y, min_.z);
-	case 7:
+	case RIGHT_TOP_BACK:
 		return max_;
-	default:
-		throw logic_error("no such corner");
 	}
 }
 

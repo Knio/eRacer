@@ -14,6 +14,17 @@
 
 using namespace std;
 
+enum BoxCorners {
+	LEFT_BOTTOM_FRONT,
+	LEFT_BOTTOM_BACK,
+	LEFT_TOP_FRONT,
+	LEFT_TOP_BACK,
+	RIGHT_BOTTOM_FRONT,
+	RIGHT_BOTTOM_BACK,
+	RIGHT_TOP_FRONT,
+	RIGHT_TOP_BACK
+};
+
 /**
  * @brief Bounding box whose sides are parallel to the axes of the coordinate system.
  */
@@ -51,7 +62,7 @@ public:
 	void merge(const AxisAlignedBoundingBox& newBox);
 
 	Point3 getCenter() const;
-	Point3 getCorner(int i) const;
+	Point3 getCorner(BoxCorners boxCorner) const;
 	const Point3& getMin() const;
 	const Point3& getMax() const;
 
