@@ -2,16 +2,17 @@
 eRacer game.
 '''
 
-from Game import Game, Logic, Entity
+from Game import Game, Entity
 
 from Input    import Input
+from Logic    import Logic
 from Graphics import Graphics
 from Physics  import Physics
 
 
 class TestEntity(Entity):
   def tick(self, time):
-    print 'Hi! %r' % time.delta
+    print 'Hi! %10r %10r %10r' % (time.elapsed, time.delta, time.Fps())
 
 class eRacer(Game):
   def __init__(self):

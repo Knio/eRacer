@@ -197,9 +197,21 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\Source\Main.py"
+				>
+			</File>
 			<Filter
 				Name="Graphics"
 				>
+				<File
+					RelativePath=".\Source\Graphics\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Graphics.py"
+					>
+				</File>
 				<File
 					RelativePath=".\Source\Graphics\GraphicsLayer.cpp"
 					>
@@ -208,16 +220,96 @@
 					RelativePath=".\Source\Graphics\Window.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Graphics\Window.py"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Input"
 				>
+				<File
+					RelativePath=".\Source\Input\Keyboard.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
 			</Filter>
 			<Filter
 				Name="Core"
 				>
 				<File
+					RelativePath=".\Source\Core\__init__.py"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\AxisAlignedBoundingBox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\Time.py"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Sound"
+				>
+			</Filter>
+			<Filter
+				Name="Physics"
+				>
+				<File
+					RelativePath=".\Source\Physics\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\Physics.py"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Logic"
+				>
+				<File
+					RelativePath=".\Source\Logic\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Logic\Logic.py"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Game"
+				>
+				<File
+					RelativePath=".\Source\Game\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Game\Entity.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Game\Game.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Game\Module.py"
 					>
 				</File>
 			</Filter>
@@ -242,6 +334,10 @@
 			<Filter
 				Name="Input"
 				>
+				<File
+					RelativePath=".\Source\Input\Keyboard.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="SWIG"
