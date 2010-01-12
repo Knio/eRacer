@@ -281,6 +281,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\Time.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\types.h"
 					>
 				</File>
