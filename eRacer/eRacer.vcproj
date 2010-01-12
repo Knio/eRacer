@@ -44,8 +44,10 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\"
-				RuntimeLibrary="3"
+				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -65,8 +67,9 @@
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
 				AdditionalLibraryDirectories="&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;"
 				GenerateDebugInformation="true"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
+				OptimizeReferences="0"
+				EnableCOMDATFolding="0"
+				LinkTimeCodeGeneration="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -118,7 +121,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\"
+				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -210,6 +213,14 @@
 				Name="Input"
 				>
 			</Filter>
+			<Filter
+				Name="Core"
+				>
+				<File
+					RelativePath=".\Source\Core\AxisAlignedBoundingBox.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -259,6 +270,18 @@
 				</File>
 				<File
 					RelativePath=".\Source\SWIG\swig_wrap.cxx"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Core"
+				>
+				<File
+					RelativePath=".\Source\Core\AxisAlignedBoundingBox.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\types.h"
 					>
 				</File>
 			</Filter>
