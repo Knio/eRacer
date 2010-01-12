@@ -281,6 +281,18 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\math.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\matrix.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\point.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\Time.h"
 					>
 				</File>
