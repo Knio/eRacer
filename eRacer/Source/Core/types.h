@@ -6,6 +6,7 @@
 
 typedef D3DXVECTOR3 Vector3;
 typedef D3DXVECTOR3 Point3;
+typedef D3DXMATRIX Matrix;
 
 const Point3 ORIGIN(0,0,0); 
 

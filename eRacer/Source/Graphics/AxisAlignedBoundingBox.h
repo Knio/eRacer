@@ -9,7 +9,7 @@
 #ifndef AXISALIGNEDBOUNDINGBOX_H_
 #define AXISALIGNEDBOUNDINGBOX_H_
 
-#include "types.h"
+#include "../Core/types.h"
 #include <vector>
 
 using namespace std;

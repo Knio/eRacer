@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="eRacer"
 	ProjectGUID="{0939ED8C-9AD7-4EBB-811A-8FF10C5AC2BD}"
 	RootNamespace="eRacer"
@@ -44,7 +44,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\"
+				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\;$(BOOST_DIR)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
@@ -201,7 +201,27 @@
 				Name="Graphics"
 				>
 				<File
+					RelativePath=".\Source\Graphics\AxisAlignedBoundingBox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\GeometryNode.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\GraphicsLayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\InnerNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\MovingGeometryNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Spatial.cpp"
 					>
 				</File>
 				<File
@@ -216,10 +236,6 @@
 			<Filter
 				Name="Core"
 				>
-				<File
-					RelativePath=".\Source\Core\AxisAlignedBoundingBox.cpp"
-					>
-				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -231,7 +247,31 @@
 				Name="Graphics"
 				>
 				<File
+					RelativePath=".\Source\Graphics\AxisAlignedBoundingBox.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\GeometryNode.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\GraphicsLayer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\InnerNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\MovingGeometryNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Spatial.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\TriMesh.h"
 					>
 				</File>
 				<File
@@ -276,10 +316,6 @@
 			<Filter
 				Name="Core"
 				>
-				<File
-					RelativePath=".\Source\Core\AxisAlignedBoundingBox.h"
-					>
-				</File>
 				<File
 					RelativePath=".\Source\Core\math.h"
 					>

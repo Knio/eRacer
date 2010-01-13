@@ -7,6 +7,8 @@
 #include <strsafe.h>
 #pragma warning( default : 4996 )
 
+#include "TriMesh.h"
+
 
 // A structure for our custom vertex type
 //Borrowed from the samples for a quick demonstration, the whole sample section
@@ -37,6 +39,7 @@ protected:
 public:
 	~GraphicsLayer() {};	//Destructor
 	int Init( HWND hWnd );
+	void draw(const TriMesh& mesh);
 	//int DrawEntity();			 // until its implemented
 	int RenderFrame();
 	int Shutdown();

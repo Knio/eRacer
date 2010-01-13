@@ -111,3 +111,7 @@ int GraphicsLayer::Shutdown()
 	}
 	return S_OK;
 }
+
+void GraphicsLayer::draw(const TriMesh& mesh){
+	//TODO implement
+}
