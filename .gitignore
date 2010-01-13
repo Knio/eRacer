@@ -23,3 +23,5 @@ tex/*.png
 *.user
 *_wrap.cxx
 eRacer/Source/SWIG/eRacer.py
+.metadata
+eRacer/.externalToolBuilders
