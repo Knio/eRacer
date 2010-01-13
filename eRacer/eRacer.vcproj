@@ -121,7 +121,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\"
+				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\;$(BOOST_DIR)"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
