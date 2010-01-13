@@ -1,4 +1,4 @@
-from Module import Module
+from Game import Module
 
 class Logic(Module):
   '''
