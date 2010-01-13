@@ -23,3 +23,10 @@ GeometryNode::~GeometryNode(){
 void GeometryNode::draw(GraphicsLayer& renderer) const{
 	renderer.draw(*geometry_);
 }
+
+GeometryNode::GeometryNode(const string& name)
+	: Spatial(name),
+	  transform_(IDENTITY)
+{
+	
+}

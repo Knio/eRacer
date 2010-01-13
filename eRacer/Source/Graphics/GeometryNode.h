@@ -51,6 +51,17 @@ public:
 	virtual void draw(GraphicsLayer& renderer) const;
 
 protected:
+	/**
+	 * @brief Constructor. Only for inheriting classes.
+	 *
+	 * This will also compute the world bounding volume.
+	 *
+	 * @param name
+	 *			a name for this node to fascilitate debugging
+	 */
+	GeometryNode(const string& name);
+
+
 	boost::shared_ptr<TriMesh> geometry_;
 	Matrix transform_;
 };

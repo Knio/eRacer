@@ -1,10 +1,22 @@
 /**
- * @file .cpp
- * @brief Implementation of the  class
+ * @file MovingGeometryNode.cpp
+ * @brief Implementation of the MovingGeometryNode class
  *
- * @date 12.01.2010
+ * @date 13.01.2010
  * @author: Ole Rehmsen
  */
 
-#include "Spatial.h"
+#include "MovingGeometryNode.h"
 
+MovingGeometryNode::MovingGeometryNode(const string& name)
+	: GeometryNode(name) 
+{
+	
+}
+MovingGeometryNode::~MovingGeometryNode(){
+	
+}
+
+void MovingGeometryNode::setTransform(const  Matrix& transform){
+	transform_ = transform;
+}

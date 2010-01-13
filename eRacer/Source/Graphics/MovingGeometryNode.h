@@ -8,16 +8,18 @@
 
 #pragma once
 
+#include "GeometryNode.h"
+
 /**
  * @brief a node containing moving geometry
  */
-class MovingGeometryNode
+class MovingGeometryNode : public GeometryNode
 {
 public:
 	MovingGeometryNode(const string& name);
 	virtual ~MovingGeometryNode();
 
-	void setTransform(const SRTTransform& transform);
+	void setTransform(const Matrix& transform);
 private:
-	AxisAlignedBoundingVolume localBoundingVolume_;
+	AxisAlignedBoundingBox localBoundingVolume_;
 };
