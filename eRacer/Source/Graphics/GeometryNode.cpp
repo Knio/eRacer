@@ -14,6 +14,7 @@ GeometryNode::GeometryNode(const string& name, const Matrix& transform, TriMesh*
 	  geometry_(geometry)
 {
 	assert(0 != geometry);
+	//TODO compute the world bounding volume
 }
 
 GeometryNode::~GeometryNode(){

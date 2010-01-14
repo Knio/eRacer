@@ -25,3 +25,5 @@ tex/*.png
 eRacer/Source/SWIG/eRacer.py
 .metadata
 eRacer/.externalToolBuilders
+eRacer/profile.data
+eRacer/.pydevproject

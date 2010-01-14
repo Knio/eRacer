@@ -35,13 +35,15 @@ void InnerNode::addChild(Spatial* spatial){
 }
 
 void InnerNode::removeChild(Spatial* spatial){
+	/*
 	worldBoundingVolume_.reset();
-	for(vector<Spatial*>::const_iterator i = children_.begin();
+	for(vector<Spatial*>::iterator i = children_.begin();
 		i != children_.end(); i++){
 		if(*i == spatial)
 			children_.erase(i);
 		else
 			worldBoundingVolume_.merge((*i)->getWorldBoundingVolume());
 	}
+	*/
 	//TODO destroy child?
 }

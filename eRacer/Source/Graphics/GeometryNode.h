@@ -35,7 +35,7 @@ public:
 	 *			the transformation to apply to the geometry (for instancing)
 	 * @param geometry
 	 *			a const pointer to the geometry - geometry can be shared 
-	 *			among many nodes
+	 *			among many nodes. must not be NULL
 	 */
 	GeometryNode(const string& name, const Matrix& transform, TriMesh* geometry);
 	virtual ~GeometryNode();
