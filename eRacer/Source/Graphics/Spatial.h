@@ -51,9 +51,9 @@ public:
 
 	const AxisAlignedBoundingBox& getWorldBoundingVolume() const;
 protected:
-	AxisAlignedBoundingBox worldBoundingVolume_;
-	bool visible_;
 	string name_;
+	bool visible_;
+	AxisAlignedBoundingBox worldBoundingVolume_;
 };
 
 inline void Spatial::setVisible(bool visible){

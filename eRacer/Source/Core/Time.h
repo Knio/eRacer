@@ -9,7 +9,7 @@ struct Time
 	long long elapsed;
 	long long delta;
 	
-	Time() : current(GetTime()), delta(0), start(GetTime()) {  }
+	Time() : start(GetTime()), current(GetTime()), delta(0) {  }
 
 	long long GetTime()
 	{

@@ -62,7 +62,7 @@ protected:
 	GeometryNode(const string& name);
 
 
-	boost::shared_ptr<TriMesh> geometry_;
 	Matrix transform_;
+	boost::shared_ptr<TriMesh> geometry_;
 };
 
