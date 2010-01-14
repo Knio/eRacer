@@ -14,4 +14,11 @@ const Matrix IDENTITY(1,0,0,0,
 					  0,0,1,0,
 					  0,0,0,1);
 
+#define PI D3DX_PI
+
+struct Plane {
+	Vector3 normal;
+	float distance;
+};
+
 #endif // TYPES_H_
