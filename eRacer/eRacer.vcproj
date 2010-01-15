@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="eRacer"
 	ProjectGUID="{0939ED8C-9AD7-4EBB-811A-8FF10C5AC2BD}"
 	RootNamespace="eRacer"
@@ -205,15 +205,15 @@
 				Name="Graphics"
 				>
 				<File
+					RelativePath=".\Source\Graphics\__init__.py"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\AxisAlignedBoundingBox.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\GeometryNode.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\__init__.py"
 					>
 				</File>
 				<File
@@ -261,7 +261,6 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
