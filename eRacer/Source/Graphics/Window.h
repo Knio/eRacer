@@ -9,10 +9,11 @@ class Window
   public:
 	static Window* window;
 	HWND hwnd;
+	HINSTANCE hinst;
 	int width;
 	int height;
 	
-	Window(int width=800, int height=600): width(width), height(height) {}
+	Window(int width=800, int height=600): width(width), height(height), hinst(GetModuleHandle(NULL)) {}
 	~Window();
 
 	void Create(char* title);
