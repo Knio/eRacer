@@ -11,25 +11,21 @@
 
 #include "../Core/types.h"
 #include <vector>
+#include "Renderable.h"
 
 using namespace std;
 
-struct CUSTOMVERTEX;
 
 /**
  * @brief A triangular mesh that can be drawn by Direct3D. 
  */
-class TriMesh {
+class TriMesh : public Renderable {
 public:
 
 
 
 private:
-	vector<CUSTOMVERTEX> vertices_;
-	vector<unsigned short> indices_;
-
-	IDirect3DVertexBuffer9* vertexBuffer_;
-	IDirect3DIndexBuffer9* indexBuffer_;
+	ID3DXMesh* mesh_;
 };
 
 

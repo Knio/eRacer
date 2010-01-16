@@ -18,12 +18,12 @@ Spatial::Spatial(const string& name)
 Spatial::~Spatial(){
 }
 
-void Spatial::onDraw(GraphicsLayer& renderer) const{
+void Spatial::cull(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const{
 	if(!visible_)
 		return;
 
 	//TODO: culling
 
-	draw(renderer);
+	cullRecursive(camera, visibleNodes);
 }
 

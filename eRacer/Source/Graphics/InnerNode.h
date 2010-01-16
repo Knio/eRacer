@@ -34,12 +34,14 @@ public:
 	/**
 	 * @brief tell all children to check for culling
 	 *
-	 * @param renderer
-	 *			the renderer the children should use
+	 * @param camera
+	 *			The camera to cull against
+	 * @param visibleNodes
+	 * 			A vector to push all visible nodes to
 	 * 
-	 * @see Spatial::draw
+	 * @see Spatial::cullRecursive
 	 */
-	virtual void draw(GraphicsLayer& renderer) const;
+	virtual void cullRecursive(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const;
 
 	/**
 	 * @brief add a child to this node

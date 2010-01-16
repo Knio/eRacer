@@ -64,6 +64,9 @@ public:
 	 */
 	void merge(const AxisAlignedBoundingBox& newBox);
 
+
+	bool intersects(const Plane& plane) const;
+
 	/**
 	 * @return The center of the box
 	 */
