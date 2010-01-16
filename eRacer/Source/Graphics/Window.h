@@ -13,7 +13,7 @@ class Window
 	int width;
 	int height;
 	
-	Window(int width=800, int height=600): width(width), height(height), hinst(GetModuleHandle(NULL)) {}
+	Window(int width=800, int height=600): hinst(GetModuleHandle(NULL)), width(width), height(height) {}
 	~Window();
 
 	void Create(char* title);

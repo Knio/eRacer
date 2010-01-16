@@ -6,6 +6,8 @@ Tom Flanagan
 #ifndef POINT_HEADER
 #define POINT_HEADER
 
+#include <cstdio>
+
 template <typename T=float>
 struct PointType
 {

@@ -121,7 +121,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\;$(BOOST_DIR)"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -429,23 +429,7 @@
 				Name="Sound"
 				>
 				<File
-					RelativePath=".\Source\Sound\fmod.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Sound\fmod_errors.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Sound\fmoddyn.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Sound\SoundLayer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Sound\wincompat.h"
 					>
 				</File>
 			</Filter>
