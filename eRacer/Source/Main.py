@@ -29,7 +29,7 @@ class Main(Game):
     self.physics   = Physics(self)
     
     # order that modules will be ticked in the main loop
-    #self.AddModule(self.input)
+    self.AddModule(self.input)
     self.AddModule(self.logic)
     self.AddModule(self.sound)
     self.AddModule(self.physics)
@@ -38,8 +38,17 @@ class Main(Game):
     # testing stuff
     self.logic.Add(TestEntity())
     self.sound.PlaySound2D("Resources/jaguar.wav")
-    
-  
+     
   def Tick(self, time):
-    Game.Tick(self, time)
+    Game.Tick(self, time)    
+    
+    # testing
+    from Input import KEY
+    
+    if self.input[KEY.A]:
+      print 'A'
+    
+    if self.input[KEY.SPACE]:
+      self.sound.PlaySound2D("Resources/jaguar.wav")
+
     

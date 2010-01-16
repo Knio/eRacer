@@ -11,6 +11,10 @@ class Graphics(Module):
     
     self.hwnd = self.window.hwnd
     self.hwnd.disown()
+    
+    self.hinst = self.window.hinst
+    self.hinst.disown()
+    
     self.graphics.Init(self.hwnd)
 
   def Tick(self, time):
@@ -21,3 +25,6 @@ class Graphics(Module):
       return
     self.graphics.RenderFrame()
   
+  def Quit(self):
+    Module.Quit(self)
+    # TODO close window
