@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="eRacer"
 	ProjectGUID="{0939ED8C-9AD7-4EBB-811A-8FF10C5AC2BD}"
 	RootNamespace="eRacer"
@@ -258,6 +258,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Core\Time.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\vect3.cpp"
 					>
 				</File>
 			</Filter>
