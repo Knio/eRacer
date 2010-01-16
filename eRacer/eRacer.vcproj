@@ -140,7 +140,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib dinput8.lib python26.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
-				AdditionalLibraryDirectories="&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;"
+				AdditionalLibraryDirectories="Lib;&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -388,6 +388,10 @@
 			<Filter
 				Name="Core"
 				>
+				<File
+					RelativePath=".\Source\Core\consts.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Source\Core\math.h"
 					>
