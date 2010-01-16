@@ -37,6 +37,7 @@ public:
 private:
 	void updateView();
 	void updateProjection();
+	void updatePlanes();
 
 	Matrix viewMatrix_;
 	Matrix projectionMatrix_;
