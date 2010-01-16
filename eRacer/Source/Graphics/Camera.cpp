@@ -37,13 +37,11 @@ void Camera::updatePlanes(){
 
 	//near
 	planes_[4].normal = lookAt_-position_;
-	D3DXVec3Normalize(&planes_[4].normal,&planes_[4].normal);
-	Point3 onPlane = position_+near_*planes_[4].normal;
-	planes_[4].distance = D3DXVec3Dot(&planes_[4].normal, &onPlane);
+	normalize(planes_[4].normal);
+	planes_[4].distance = dot(planes_[4].normal, position_+near_*planes_[4].normal);
 
 	//far
 	planes_[5].normal = -planes_[4].normal;
-	onPlane = position_+far_*planes_[4].normal;
-	planes_[5].distance = D3DXVec3Dot(&planes_[5].normal, &onPlane);
+	planes_[5].distance = dot(planes_[5].normal, position_+far_*planes_[4].normal);
 }
 

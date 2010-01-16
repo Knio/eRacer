@@ -214,10 +214,9 @@ inline void Camera::setLookAt(const Point3& lookAt){
 inline void Camera::setUp(const Vector3& approxUp){
 	up_ = approxUp;
 	Vector3 viewDirection = lookAt_ - position_;
-	D3DXVec3Normalize(&viewDirection,&viewDirection);
-	D3DXVec3Normalize(&up_, &up_);
-	D3DXVec3Cross(&up_,&viewDirection, &approxUp);
-	D3DXVec3Cross(&up_,&up_, &viewDirection);
+	normalize(viewDirection);
+	normalize(up_);
+	up_ = cross(cross(viewDirection, approxUp),viewDirection);
 }
 
 inline void Camera::updateView(){

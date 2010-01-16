@@ -11,3 +11,15 @@ float dot(const Vector3 &A, const Vector3 &B)
 {
 	return D3DXVec3Dot(&A, &B);
 }
+
+Vector3& normalize(Vector3& A){
+	D3DXVec3Normalize(&A, &A);
+	return A;
+}
+
+
+Vector3 normalized(const Vector3& A){
+	Vector3 result;
+	D3DXVec3Normalize(&result, &A);
+	return result;
+}
