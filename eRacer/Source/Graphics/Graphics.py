@@ -9,12 +9,15 @@ class Graphics(Module):
     self.window   = Window("Test")
     self.graphics = eRacer.GraphicsLayer.GetGraphicsInstance()
     
-    h = self.window.hwnd
-    h.disown()
-    self.graphics.Init(h)
+    self.hwnd = self.window.hwnd
+    self.hwnd.disown()
+    self.graphics.Init(self.hwnd)
 
-  def tick(self, time):
+  def Tick(self, time):
+    Module.Tick(self, time)
     if not self.window.Poll():
+      # post quit message
       self.game.state = 0
+      return
     self.graphics.RenderFrame()
   

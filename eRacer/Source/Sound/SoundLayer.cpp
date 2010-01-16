@@ -49,8 +49,8 @@ int SoundLayer::Update()
 
 int SoundLayer::Shutdown()
 {
-	FMUSIC_FreeSong(m_fmodule);
-
+	FMUSIC_FreeSong(m_fmodule);	 // this crashes the game. fix me
+	
 	//Clear the Cache
     for( map< const char*, FSOUND_SAMPLE* >::const_iterator it = m_SoundCache2D.begin(); it != m_SoundCache2D.end(); ++it)
 		FSOUND_Sample_Free(it->second);

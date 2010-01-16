@@ -7,15 +7,7 @@ class Window(eRacer.Window):
     eRacer.Window.__init__(self)
     self.Create(title)
   
+  # UNUSED
   def MsgProc(self, hwnd, msg, wparam, lparam):
-    print hwnd, msg, wparam, lparam
-        
+    print hwnd, msg, wparam, lparam        
     return windll.user32.DefWindowProcA(c_int(hwnd), c_int(message), c_int(wParam), c_int(lParam))
-
-    
-    
-    
-    
-    
-  
-

@@ -57,7 +57,6 @@ LRESULT Window::MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
     switch( msg )
     {
         case WM_DESTROY:
-			Graphics()->Shutdown();
             PostQuitMessage( 0 );
             return 0;
 

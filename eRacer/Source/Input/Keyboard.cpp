@@ -10,6 +10,7 @@
 
 int Keyboard::Init(HWND hWnd, HINSTANCE hInstance)
 {
+	//if (!hInstance) hInstance = GetModuleHandle(NULL);
 	if (FAILED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_lpdi, NULL)))
 		return -1;
 	if (FAILED(m_lpdi->CreateDevice(GUID_SysKeyboard, &m_lpKeyboard, NULL)))

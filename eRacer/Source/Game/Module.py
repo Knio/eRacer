@@ -8,30 +8,32 @@ class Module(object):
     self.game = game
     self.objects = []
     
-  def add(self, obj):
+  def Add(self, obj):
     '''
     add an object to this module
     '''
     self.objects.append(obj)
     
     
-  def start(self):
+  def Start(self):
     '''
     initialize this module
     '''
     pass
+    print 'Starting module %s' % self.__class__.__name__
     
-  def tick(self, time):
+  def Tick(self, time):
     '''
     update this module
     time in microseconds since last update
     calls .tick
     '''
     for i in self.objects:
-      i.tick(time)
+      i.Tick(time)
     
-  def quit(self):
+  def Quit(self):
     '''
     destroy this module
     '''
     pass
+    print 'Quitting module %s' % self.__class__.__name__
