@@ -412,6 +412,10 @@
 					RelativePath=".\Source\Core\types.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Core\vect3.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sound"
