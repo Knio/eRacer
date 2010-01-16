@@ -41,14 +41,16 @@ public:
 	virtual ~GeometryNode();
 
 	/**
-	 * @brief prepare for and trigger rendering
+	 * @brief Add myself to the list
 	 *
-	 * @param renderer
-	 *			the renderer to use for rendering
+	 * @param camera
+	 *			The camera to cull against - not needed here
+	 * @param visibleNodes
+	 * 			A vector to push this node to
 	 *
-	 * @see Spatial::draw
+	 * @see Spatial::cullRecursive
 	 */
-	virtual void draw(GraphicsLayer& renderer) const;
+	virtual void cullRecursive(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const;
 
 protected:
 	/**

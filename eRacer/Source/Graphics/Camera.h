@@ -10,7 +10,7 @@
 #define CAMERA_H_
 
 #include "../Core/types.h"
-
+#include <cassert>
 
 
 /**
@@ -97,16 +97,18 @@ inline void Camera::updateView(){
 
 }
 
-inline void Camera::setNear(float near){
-	assert(near>0);
-	near_ = near;
+
+inline void Camera::setNear(float nea){
+	assert(nea>0);
+	near_ = nea;
 }
 
-inline void Camera::setFar(float far){
-	assert(far>0);
-	assert(far>=near);
-	far_ = far;
+inline void Camera::setFar(float fa){
+	assert(fa>0);
+	assert(fa>=near_);
+	far_ = fa;
 }
+
 
 inline void Camera::setAspectRatio(float aspectRatio){
 	assert(aspectRatio>0);

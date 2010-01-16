@@ -9,8 +9,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "AxisAlignedBoundingBox.h"
-#include "GraphicsLayer.h"
+#include "Camera.h"
+
+class GeometryNode;
 
 /**
  * @brief Abstract base class for all nodes in a scene graph.
@@ -34,23 +37,29 @@ public:
 	/**
 	 * @brief Visibility and culling.
 	 *
-	 * @param renderer 
-	 *			The renderer to use in case this node is visible.
+	 * @param camera
+	 *			The camera to cull against
+	 * @param visibleNodes
+	 * 			A vector to push all visible nodes to
 	 */
-	void onDraw(GraphicsLayer& renderer) const;
+	void cull(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const;
 	
-	/**
-	 * @brief Pure virtual. Called if the node should be drawn.
-	 *
-	 * @param renderer
-	 *			The renderer to use for drawing
-	 */
-	virtual void draw(GraphicsLayer& renderer) const = 0;
 
 	void setVisible(bool visible);
 
 	const AxisAlignedBoundingBox& getWorldBoundingVolume() const;
 protected:
+	/**
+	 * @brief Pure virtual. Called if the node should not be culled.
+	 *
+	 * @param camera
+	 *			The camera to cull against
+	 * @param visibleNodes
+	 * 			A vector to push all visible nodes to
+	 */
+	virtual void cullRecursive(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const = 0;
+
+
 	string name_;
 	bool visible_;
 	AxisAlignedBoundingBox worldBoundingVolume_;

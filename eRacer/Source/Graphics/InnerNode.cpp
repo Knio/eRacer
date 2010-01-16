@@ -22,10 +22,10 @@ InnerNode::~InnerNode(){
 	}
 }
 
-void InnerNode::draw(GraphicsLayer& renderer) const{
+void InnerNode::cullRecursive(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const{
 	for(vector<Spatial*>::const_iterator i = children_.begin();
 		i != children_.end(); i++){
-		(*i)->onDraw(renderer);
+		(*i)->cull(camera,visibleNodes);
 	}
 }
 

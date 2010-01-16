@@ -21,8 +21,8 @@ GeometryNode::~GeometryNode(){
 	geometry_.reset();
 }
 
-void GeometryNode::draw(GraphicsLayer& renderer) const{
-	renderer.draw(*geometry_);
+void GeometryNode::cullRecursive(const Camera&, vector<const GeometryNode*>& visibleNodes) const{
+	visibleNodes.push_back(this);
 }
 
 GeometryNode::GeometryNode(const string& name)
