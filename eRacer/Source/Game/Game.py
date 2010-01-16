@@ -13,7 +13,7 @@ class Game(object):
     self.time = Time()
     self.state = 0
 
-  def addmodule(self, module, name=None):
+  def AddModule(self, module, name=None):
     self.modules.append(module)
     if name:
       self.namedmodules[name] = module
@@ -26,23 +26,24 @@ class Game(object):
       return self.namedmodules[name]
     except KeyError: raise AttributeError
 
-  def start(self):
-    for i in self.modules:
-      i.start()
-    self.state = 1
-
-  def run(self):  
-    self.start()  
+  def Run(self):  
+    self.Start()  
     while self.state:
       t = self.time.Tick()
-      self.tick(self.time)
-    self.quit()
+      self.Tick(self.time)
+    self.Quit()
 
-  def tick(self, time):
+  def Start(self):
     for i in self.modules:
-      i.tick(time)
+      i.Start()
+    self.state = 1
+
+  def Tick(self, time):
+    for i in self.modules:
+      i.Tick(time)
       
-  def quit(self):
+  def Quit(self):
+    print 'Quitting game'
     for i in self.modules:
-      i.quit()
+      i.Quit()
 
