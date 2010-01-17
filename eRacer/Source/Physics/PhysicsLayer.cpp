@@ -1,3 +1,11 @@
+/**
+ * @file PhysicsLayer.cpp
+ * @brief Implementation of the PhysicsLayer class
+ *
+ * @date 16.01.2010
+ * @author: Michael Blackadar
+ */
+
 #include "PhysicsLayer.h"
 
 PhysicsLayer::PhysicsLayer(){
@@ -23,4 +31,5 @@ void PhysicsLayer::Init(){
 
 void PhysicsLayer::Shutdown(){
 	gPhysicsSDK->release();
+	std::cout << "PHYSX released" << std::endl;
 }
