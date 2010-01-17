@@ -14,11 +14,16 @@
 
 
 #include "../Core/Event.h"
-class KeyPressedEvent : public Event
+
+struct KeyPressedEvent : public Event
 {
-  public:
 	int key;
 	KeyPressedEvent(int k) : key(k) {}
+};
+struct KeyReleasedEvent : public Event
+{
+	int key;
+	KeyReleasedEvent(int k) : key(k) {}
 };
 
 /**

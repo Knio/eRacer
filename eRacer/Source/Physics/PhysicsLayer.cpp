@@ -6,6 +6,7 @@
  * @author: Michael Blackadar
  */
 
+#include "../Core/Consts.h"
 #include "PhysicsLayer.h"
 
 NxPhysicsSDK* PhysicsLayer::gPhySDK = NULL;
@@ -29,7 +30,7 @@ void PhysicsLayer::Init(){
 		std::cout << "PHYSX initialized" << std::endl;
 	}
 	NxSceneDesc sceneDesc;
-	sceneDesc.gravity = NxVec3(0, -9.8, 0);
+	sceneDesc.gravity = NxVec3(0, Constants::GRAVITY, 0);
 	gPhyScene = gPhySDK->createScene(sceneDesc);
 	sceneDesc.simType = NX_SIMULATION_SW;
 

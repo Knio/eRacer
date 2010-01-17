@@ -7,7 +7,6 @@
  */
 
 #include "Keyboard.h"
-#include <cstdio>
 
 int Keyboard::Init(HWND hWnd, HINSTANCE hInstance)
 {
@@ -49,16 +48,12 @@ int Keyboard::Update(void)
 		if (KeyDown(m_OldKeyState, i) && !KeyDown(m_KeyState, i))
 		{
 			// a key was released
-			printf("KeyReleasedEvent(%d)\n", i);
-			//Event e = KeyReleasedEvent(i);
-			//e.test();
+			KeyReleasedEvent(i).Send();
 		}
 		if (!KeyDown(m_OldKeyState, i) && KeyDown(m_KeyState, i))
 		{
 			// a key was pressed
-			printf("KeyPressedEvent(%d)\n", i);
-			Event e = KeyPressedEvent(i);
-			e.Send();
+			KeyPressedEvent(i).Send();
 		}
 	}
 

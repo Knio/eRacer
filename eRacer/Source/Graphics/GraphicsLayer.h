@@ -3,10 +3,6 @@
 #define GRAPHICSLAYER_H
 
 #include <d3d9.h>
-#pragma warning( disable : 4996 ) // disable deprecated warning 
-#include <strsafe.h>
-#pragma warning( default : 4996 )
-
 #include "TriMesh.h"
 
 namespace Graphics {
@@ -41,7 +37,6 @@ public:
 	~GraphicsLayer() {};	//Destructor
 	int Init( HWND hWnd );
 	void draw(const TriMesh& mesh);
-	//int DrawEntity();			 // until its implemented
 	int RenderFrame();
 	int Shutdown();
 

@@ -7,10 +7,11 @@ class EventManager
 public:
 	static EventManager* g_EventManager;
 	EventManager() { g_EventManager = this; }
+	virtual ~EventManager() { }
 	virtual void Queue(Event* e) { }
 	virtual void Send (Event* e) { }
 	virtual void Register(int func, void* obj) { }
-
+	
 };
 
 

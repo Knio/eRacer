@@ -258,6 +258,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\Consts.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\Event.cpp"
 					>
 				</File>
@@ -429,6 +433,10 @@
 			<Filter
 				Name="Core"
 				>
+				<File
+					RelativePath=".\Source\Core\Consts.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Source\Core\Event.h"
 					>

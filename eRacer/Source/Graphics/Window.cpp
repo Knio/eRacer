@@ -1,8 +1,6 @@
 #include "Window.h"
-#include "GraphicsLayer.h" // get rid of this
 
 namespace Graphics {
-
 
 Window *Window::window = NULL;
 LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
