@@ -20,6 +20,9 @@
 #include "fmod_errors.h"
 #include "..\Core\types.h"
 
+#undef min
+#undef max
+
 using namespace std;
 
 class SoundLayer

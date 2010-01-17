@@ -121,7 +121,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;"
+				AdditionalIncludeDirectories="&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;"
+				PreprocessorDefinitions="WIN32;"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -138,7 +139,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib dinput8.lib python26.lib"
+				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib dinput8.lib python26.lib PhysXLoader.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
 				AdditionalLibraryDirectories="Lib;&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;"
 				GenerateDebugInformation="true"
@@ -282,6 +283,14 @@
 				</File>
 				<File
 					RelativePath=".\Source\Physics\Physics.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\PhysicsLayer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\PhysicsObject.cpp"
 					>
 				</File>
 			</Filter>
@@ -438,6 +447,18 @@
 				>
 				<File
 					RelativePath=".\Source\Sound\SoundLayer.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Physics"
+				>
+				<File
+					RelativePath=".\Source\Physics\PhysicsLayer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\PhysicsObject.h"
 					>
 				</File>
 			</Filter>

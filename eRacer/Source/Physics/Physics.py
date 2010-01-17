@@ -1,4 +1,16 @@
 from Game import Module
+import eRacer
 
 class Physics(Module):
-  pass
+  def __init__(self, game):
+    Module.__init__(self, game)
+    self.physics = eRacer.PhysicsLayer()
+    self.physics.Init()
+    
+
+  def Tick(self, time):
+    Module.Tick(self, time)
+    
+  def Quit(self):
+    Module.Quit(self)
+    self.physics.Shutdown()
