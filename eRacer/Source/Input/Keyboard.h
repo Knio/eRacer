@@ -12,6 +12,15 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
+
+#include "../Core/Event.h"
+class KeyPressedEvent : public Event
+{
+  public:
+	int key;
+	KeyPressedEvent(int k) : key(k) {}
+};
+
 /**
  * @brief DirectX Keyboard Wrapper Class
  */

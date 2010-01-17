@@ -262,6 +262,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\Event.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\Event.py"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\Time.py"
 					>
 				</File>
@@ -401,7 +409,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							CommandLine="$(SWIG_DIR)\swig.exe -c++ -python $(InputPath)&#x0D;&#x0A;"
-							Outputs="Source\SWIG\$(InputName)_wrap.cxx"
+							Outputs="Source\SWIG\$(InputName)_wrap.cxx;Source\SWIG\$(InputName)_wrap.h"
 						/>
 					</FileConfiguration>
 				</File>
@@ -409,10 +417,18 @@
 					RelativePath=".\Source\SWIG\swig_wrap.cxx"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\SWIG\swig_wrap.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Core"
 				>
+				<File
+					RelativePath=".\Source\Core\Event.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Source\Core\math.h"
 					>

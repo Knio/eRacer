@@ -7,6 +7,7 @@
  */
 
 #include "Keyboard.h"
+#include <cstdio>
 
 int Keyboard::Init(HWND hWnd, HINSTANCE hInstance)
 {
@@ -22,6 +23,8 @@ int Keyboard::Init(HWND hWnd, HINSTANCE hInstance)
 		return -1;
 	if (FAILED(m_lpKeyboard->Acquire()))
 		return -1;
+	if (FAILED(m_lpKeyboard->GetDeviceState(sizeof(unsigned char[256]), (void*) m_KeyState)))
+		return -1;
 
 	return 0;
 }
@@ -33,12 +36,31 @@ int Keyboard::Update(void)
 	while( hr == DIERR_INPUTLOST )
 		m_lpKeyboard->Acquire();
 
+	//For efficiency, should swap between keystate buffer pointers instead of copying
+	memcpy( m_OldKeyState, m_KeyState, 256);
+	
 	if (FAILED(m_lpKeyboard->GetDeviceState(sizeof(unsigned char[256]), (void*) m_KeyState)))
 		return -1;
 
-	//For efficiency, should swap between keystate buffer pointers instead of copying
-	memcpy( m_OldKeyState, m_KeyState, 256);
 	//Events should be triggered here
+
+	for (int i=0;i<256;i++)
+	{
+		if (KeyDown(m_OldKeyState, i) && !KeyDown(m_KeyState, i))
+		{
+			// a key was released
+			printf("KeyReleasedEvent(%d)\n", i);
+			//Event e = KeyReleasedEvent(i);
+			//e.test();
+		}
+		if (!KeyDown(m_OldKeyState, i) && KeyDown(m_KeyState, i))
+		{
+			// a key was pressed
+			printf("KeyPressedEvent(%d)\n", i);
+			Event e = KeyPressedEvent(i);
+			e.Send();
+		}
+	}
 
 	return 0;
 }
