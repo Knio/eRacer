@@ -1,17 +1,21 @@
 /**
  * @file PhysicsLayer.h
- * @brief Definition of the PhysicsLayer class
+ * @brief The Physics Layer is responsible for simulating all physics objects in the scene.
  *
  * @date 16.01.2010
  * @author: Michael Blackadar
  */
 
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#ifndef PHYSICS_LAYER_H
+#define PHYSICS_LAYER_H
 
 #include <iostream>
+#include <vector>
 #include "NxPhysics.h"
+#include "PhysicsObject.h"
+using std::vector;
 
+class PhysicsObject;
 
 class PhysicsLayer{
 public:
@@ -31,7 +35,10 @@ public:
 	 * @brief Release the PHYSX object.
 	 */
 	void Shutdown();
+	void AddPhyObj(PhysicsObject& phyObj);
+	static NxPhysicsSDK* gPhySDK;
+	static NxScene* gPhyScene;
 private:
-	NxPhysicsSDK* gPhysicsSDK;
+	vector<PhysicsObject> phyObjs;
 };
 #endif

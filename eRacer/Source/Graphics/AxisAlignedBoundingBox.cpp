@@ -9,6 +9,8 @@
 #include "AxisAlignedBoundingBox.h"
 #include <cassert>
 
+namespace Graphics {
+
 AxisAlignedBoundingBox::AxisAlignedBoundingBox()
 	:	min_(ORIGIN),
 	 	max_(ORIGIN)
@@ -92,5 +94,6 @@ Point3 AxisAlignedBoundingBox::getCorner(BoxCorners boxCorner) const{
 	}
 }
 
+}
 
 

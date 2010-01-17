@@ -6,7 +6,7 @@ Tom Flanagan
 #ifndef POINT_HEADER
 #define POINT_HEADER
 
-#include <cstdio>
+#include <sstream>
 
 template <typename T=float>
 struct PointType
@@ -239,8 +239,12 @@ struct PointType
     const char* str() const
     {
         static char s[256];
+
         #pragma warning(disable : 4996)
-        sprintf(s, "<%6.2f, %6.2f, %6.2f, %6.2f>", (float)a1,(float)a2,(float)a3,(float)a4);
+        stringstream stream;
+        stream << "<" << a1 << ", " << a2 << ", " << a3 << ", " << a4 << ">";
+        // deprecated: sprintf(s, "<%6.2f, %6.2f, %6.2f, %6.2f>", (float)a1,(float)a2,(float)a3,(float)a4);
+        s = stream.str().c_str();
         return s;
     }
 

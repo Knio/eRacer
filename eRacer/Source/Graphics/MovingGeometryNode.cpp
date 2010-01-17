@@ -8,6 +8,8 @@
 
 #include "MovingGeometryNode.h"
 
+namespace Graphics {
+
 MovingGeometryNode::MovingGeometryNode(const string& name)
 	: GeometryNode(name) 
 {
@@ -19,4 +21,6 @@ MovingGeometryNode::~MovingGeometryNode(){
 
 void MovingGeometryNode::setTransform(const  Matrix& transform){
 	transform_ = transform;
+}
+
 }

@@ -4,6 +4,9 @@
 
 #include <d3d9.h>
 
+namespace Graphics {
+
+
 class Window
 {
   public:
@@ -21,3 +24,5 @@ class Window
 	int Poll();
 };
 #endif
+
+}

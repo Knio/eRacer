@@ -12,6 +12,7 @@
 #include "../Core/types.h"
 #include <cassert>
 
+namespace Graphics {
 
 /**
  * @brief A camera, defining position, direction, up vector and the view frustum.
@@ -267,6 +268,6 @@ inline const Matrix& Camera::getProjectionMatrix() const{
 	return projectionMatrix_;
 }
 
-
+}
 
 #endif /* CAMERA_H_ */

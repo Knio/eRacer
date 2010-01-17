@@ -8,6 +8,8 @@
 
 #include "GeometryNode.h"
 
+namespace Graphics {
+
 GeometryNode::GeometryNode(const string& name, const Matrix& transform, TriMesh* geometry)
 	: Spatial(name),
 	  transform_(transform),
@@ -30,4 +32,6 @@ GeometryNode::GeometryNode(const string& name)
 	  transform_(IDENTITY)
 {
 	
+}
+
 }

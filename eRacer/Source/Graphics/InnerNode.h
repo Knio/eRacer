@@ -14,6 +14,8 @@
 
 using namespace std;
 
+namespace Graphics {
+
 /**
  * @brief A node in a scene graph that does not contain any geometry.
  *
@@ -68,3 +70,5 @@ public:
 private:
 	vector<Spatial*> children_;
 };
+
+}

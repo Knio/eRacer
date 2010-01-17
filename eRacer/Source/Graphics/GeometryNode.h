@@ -12,6 +12,8 @@
 #include "boost/smart_ptr.hpp" 
 #include "TriMesh.h"
 
+namespace Graphics {
+
 /**
  * @brief node containing non-moving geometry
  *
@@ -68,3 +70,4 @@ protected:
 	boost::shared_ptr<TriMesh> geometry_;
 };
 
+}

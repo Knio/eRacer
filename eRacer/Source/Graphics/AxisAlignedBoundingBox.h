@@ -14,6 +14,8 @@
 
 using namespace std;
 
+namespace Graphics {
+
 /**
  * @brief Enum to reference the 8 corners of a box
  */
@@ -117,5 +119,6 @@ inline const Point3& AxisAlignedBoundingBox::getMax() const {
 	return max_; 
 }
 
+}
 
 #endif /* AXISALIGNEDBOUNDINGBOX_H_ */

@@ -8,6 +8,8 @@
 
 #include "InnerNode.h"
 
+namespace Graphics {
+
 InnerNode::InnerNode(const string& name)
 	: Spatial(name)
 {
@@ -46,4 +48,6 @@ void InnerNode::removeChild(Spatial* spatial){
 	}
 	*/
 	//TODO destroy child?
+}
+
 }

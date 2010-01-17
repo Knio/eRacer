@@ -9,6 +9,7 @@
 
 #include "TriMesh.h"
 
+namespace Graphics {
 
 // A structure for our custom vertex type
 //Borrowed from the samples for a quick demonstration, the whole sample section
@@ -56,5 +57,7 @@ public:
 inline GraphicsLayer *Graphics()
 {
 	return GraphicsLayer::GetGraphicsInstance();
+}
+
 }
 #endif
