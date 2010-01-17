@@ -119,6 +119,6 @@ inline const Point3& AxisAlignedBoundingBox::getMax() const {
 	return max_; 
 }
 
-}
+};
 
 #endif /* AXISALIGNEDBOUNDINGBOX_H_ */

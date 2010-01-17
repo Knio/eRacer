@@ -76,4 +76,4 @@ inline const AxisAlignedBoundingBox& Spatial::getWorldBoundingVolume() const{
 	return worldBoundingVolume_;
 }
 
-}
+};

@@ -50,4 +50,4 @@ void InnerNode::removeChild(Spatial* spatial){
 	//TODO destroy child?
 }
 
-}
+};

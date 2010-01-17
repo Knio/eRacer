@@ -268,6 +268,6 @@ inline const Matrix& Camera::getProjectionMatrix() const{
 	return projectionMatrix_;
 }
 
-}
+};
 
 #endif /* CAMERA_H_ */

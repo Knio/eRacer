@@ -31,4 +31,4 @@ void Spatial::cull(const Camera& camera, vector<const GeometryNode*>& visibleNod
 }
 
 
-}
+};

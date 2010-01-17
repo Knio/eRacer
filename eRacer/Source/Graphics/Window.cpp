@@ -16,7 +16,7 @@ void Window::Create(char* title)
     WNDCLASSEX wc;
 	wc.cbSize = sizeof( WNDCLASSEX );
     wc.style = CS_CLASSDC;
-	wc.lpfnWndProc = MsgProc;
+	wc.lpfnWndProc = Graphics::MsgProc;
     wc.cbClsExtra = 0L;
     wc.cbWndExtra = 0L;
     wc.hInstance = GetModuleHandle( NULL );
@@ -70,4 +70,4 @@ LRESULT Window::MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
     return DefWindowProc( hWnd, msg, wParam, lParam );
 }
 
-}
+};

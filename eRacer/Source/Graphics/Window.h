@@ -25,4 +25,4 @@ class Window
 };
 #endif
 
-}
+};

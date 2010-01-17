@@ -71,4 +71,4 @@ private:
 	vector<Spatial*> children_;
 };
 
-}
+};

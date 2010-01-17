@@ -70,4 +70,4 @@ protected:
 	boost::shared_ptr<TriMesh> geometry_;
 };
 
-}
+};

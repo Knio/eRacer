@@ -59,5 +59,5 @@ inline GraphicsLayer *Graphics()
 	return GraphicsLayer::GetGraphicsInstance();
 }
 
-}
+};
 #endif

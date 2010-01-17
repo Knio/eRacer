@@ -20,4 +20,4 @@ Renderable::~Renderable() {
 	// TODO Auto-generated destructor stub
 }
 
-}
+};

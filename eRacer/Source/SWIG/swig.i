@@ -4,10 +4,15 @@
 /* Includes the header in the wrapper code */
 #include "..\Core\Event.h"
 #include "..\Core\Time.h"
+
+#include "..\Graphics\TriMesh.h"
 #include "..\Graphics\GraphicsLayer.h"
 #include "..\Graphics\Window.h"
+
 #include "..\Sound\SoundLayer.h"
+
 #include "..\Physics\PhysicsLayer.h"
+
 #include "..\Input\Keyboard.h"
 
 %}
@@ -17,9 +22,14 @@
 %feature("director") EventManager;
 %include "..\Core\Event.h"
 %include "..\Core\Time.h"
+
+%include "..\Graphics\TriMesh.h"
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
+
 %include "..\Sound\SoundLayer.h"
+
 %include "..\Physics\PhysicsLayer.h"
+
 %include "..\Input\Keyboard.h"
 

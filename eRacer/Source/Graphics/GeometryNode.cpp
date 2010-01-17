@@ -34,4 +34,4 @@ GeometryNode::GeometryNode(const string& name)
 	
 }
 
-}
+};

@@ -30,6 +30,6 @@ private:
 	ID3DXMesh* mesh_;
 };
 
-}
+};
 
 #endif /* TRIMESH_H_ */

@@ -94,6 +94,6 @@ Point3 AxisAlignedBoundingBox::getCorner(BoxCorners boxCorner) const{
 	}
 }
 
-}
+};
 
 

@@ -118,4 +118,4 @@ void GraphicsLayer::draw(const TriMesh& mesh){
 	//TODO implement
 }
 
-}
+};

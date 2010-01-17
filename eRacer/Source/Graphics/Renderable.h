@@ -21,6 +21,6 @@ public:
 	virtual ~Renderable();
 };
 
-}
+};
 
 #endif /* RENDERABLE_H_ */

@@ -23,4 +23,4 @@ void MovingGeometryNode::setTransform(const  Matrix& transform){
 	transform_ = transform;
 }
 
-}
+};
