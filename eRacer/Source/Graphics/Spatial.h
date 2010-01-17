@@ -13,6 +13,9 @@
 #include "AxisAlignedBoundingBox.h"
 #include "Camera.h"
 
+namespace Graphics {
+
+
 class GeometryNode;
 
 /**
@@ -71,4 +74,6 @@ inline void Spatial::setVisible(bool visible){
 
 inline const AxisAlignedBoundingBox& Spatial::getWorldBoundingVolume() const{
 	return worldBoundingVolume_;
+}
+
 }

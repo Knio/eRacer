@@ -15,6 +15,8 @@
 
 using namespace std;
 
+namespace Graphics {
+
 
 /**
  * @brief A triangular mesh that can be drawn by Direct3D. 
@@ -28,5 +30,6 @@ private:
 	ID3DXMesh* mesh_;
 };
 
+}
 
 #endif /* TRIMESH_H_ */

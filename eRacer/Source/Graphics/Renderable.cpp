@@ -8,6 +8,9 @@
 
 #include "Renderable.h"
 
+namespace Graphics {
+
+
 Renderable::Renderable() {
 	// TODO Auto-generated constructor stub
 
@@ -15,4 +18,6 @@ Renderable::Renderable() {
 
 Renderable::~Renderable() {
 	// TODO Auto-generated destructor stub
+}
+
 }

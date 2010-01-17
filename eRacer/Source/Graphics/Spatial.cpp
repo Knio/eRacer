@@ -8,6 +8,9 @@
 
 #include "Spatial.h"
 
+namespace Graphics {
+
+
 Spatial::Spatial(const string& name)
 	: name_(name),
 	  visible_(true)
@@ -27,3 +30,5 @@ void Spatial::cull(const Camera& camera, vector<const GeometryNode*>& visibleNod
 	cullRecursive(camera, visibleNodes);
 }
 
+
+}

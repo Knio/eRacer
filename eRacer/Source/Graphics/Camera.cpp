@@ -8,6 +8,8 @@
 
 #include "Camera.h"
 
+namespace Graphics {
+
 Camera::Camera(const Point3& position, const Point3& lookAt, const Vector3& approxUp)
 	: position_(position),
 	  lookAt_(lookAt),
@@ -45,3 +47,4 @@ void Camera::updatePlanes(){
 	planes_[5].distance = dot(planes_[5].normal, position_+far_*planes_[4].normal);
 }
 
+}

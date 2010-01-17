@@ -1,6 +1,9 @@
 #include "Window.h"
 #include "GraphicsLayer.h" // get rid of this
 
+namespace Graphics {
+
+
 Window *Window::window = NULL;
 LRESULT WINAPI MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -13,7 +16,7 @@ void Window::Create(char* title)
     WNDCLASSEX wc;
 	wc.cbSize = sizeof( WNDCLASSEX );
     wc.style = CS_CLASSDC;
-	wc.lpfnWndProc = ::MsgProc;
+	wc.lpfnWndProc = MsgProc;
     wc.cbClsExtra = 0L;
     wc.cbWndExtra = 0L;
     wc.hInstance = GetModuleHandle( NULL );
@@ -65,4 +68,6 @@ LRESULT Window::MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
             return 0;
     }
     return DefWindowProc( hWnd, msg, wParam, lParam );
+}
+
 }

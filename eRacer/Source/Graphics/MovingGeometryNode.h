@@ -10,6 +10,9 @@
 
 #include "GeometryNode.h"
 
+namespace Graphics {
+
+
 /**
  * @brief a node containing moving geometry
  */
@@ -23,3 +26,6 @@ public:
 private:
 	AxisAlignedBoundingBox localBoundingVolume_;
 };
+
+
+}

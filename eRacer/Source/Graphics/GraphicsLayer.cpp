@@ -1,5 +1,7 @@
 #include "GraphicsLayer.h"
 
+namespace Graphics {
+
 GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
 
 GraphicsLayer::GraphicsLayer()
@@ -114,4 +116,6 @@ int GraphicsLayer::Shutdown()
 
 void GraphicsLayer::draw(const TriMesh& mesh){
 	//TODO implement
+}
+
 }
