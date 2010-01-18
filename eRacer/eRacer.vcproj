@@ -259,6 +259,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\Consts.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\Event.cpp"
 					>
 				</File>
