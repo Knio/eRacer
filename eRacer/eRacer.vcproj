@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="eRacer"
 	ProjectGUID="{0939ED8C-9AD7-4EBB-811A-8FF10C5AC2BD}"
 	RootNamespace="eRacer"
@@ -44,7 +44,8 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\;$(BOOST_DIR)"
+				AdditionalIncludeDirectories=".\Include;&quot;$(PYTHON_DIR)\include\&quot;;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Foundation\include&quot;"
+				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
@@ -65,7 +66,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
-				AdditionalLibraryDirectories="&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;"
+				AdditionalLibraryDirectories="Lib;&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
@@ -121,8 +122,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;"
-				PreprocessorDefinitions="WIN32;"
+				AdditionalIncludeDirectories=".\Include;&quot;$(PYTHON_DIR)\include\&quot;;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Foundation\include&quot;"
+				PreprocessorDefinitions="WIN32"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
@@ -255,10 +256,6 @@
 				>
 				<File
 					RelativePath=".\Source\Core\__init__.py"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\Consts.cpp"
 					>
 				</File>
 				<File
@@ -434,7 +431,7 @@
 				Name="Core"
 				>
 				<File
-					RelativePath=".\Source\Core\Consts.h"
+					RelativePath=".\Source\Core\consts.h"
 					>
 				</File>
 				<File

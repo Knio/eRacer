@@ -70,6 +70,7 @@ void AxisAlignedBoundingBox::merge(const AxisAlignedBoundingBox& newBox){
 
 bool AxisAlignedBoundingBox::intersects(const Plane& plane) const{
 	//TODO implement
+	return false;
 }
 
 

@@ -12,10 +12,10 @@
 #pragma comment(lib, "fmodvc.lib")
 #pragma warning( disable : 4995 ) // disable deprecated warning 
 #include <string>
+#include "wincompat.h"
 #pragma warning( default : 4995 )
 #include <map>
 #include <windows.h>
-#include "wincompat.h"
 #include "fmod.h"
 #include "fmod_errors.h"
 #include "..\Core\types.h"
