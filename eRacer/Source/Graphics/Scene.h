@@ -10,8 +10,8 @@
 
 #include <vector>
 #include "Camera.h"
-#include "GeometryNode.h"
-#include "MovingGeometryNode.h"
+#include "StaticGeometry.h"
+#include "MovingGeometry.h"
 
 using namespace std;
 
@@ -45,7 +45,7 @@ public:
 	 *			the list the visible geometry nodes are appended to 
 	 *
 	 */
-	void GetVisibleNodes(const Camera& camera, vector<GeometryNode*>& visibleNodes);
+	void GetVisibleNodes(const Camera& camera, vector<StaticGeometry*>& visibleNodes) const;
 
 	/**
 	 * @brief Factory method to create new non-moving geometry in the scene
@@ -59,7 +59,7 @@ public:
 	 *
 	 * @see CreateGeometry
 	 */ 
-	GeometryNode* CreateStaticGeometry(const Matrix& transform);
+	StaticGeometry* CreateStaticGeometry(const Matrix& transform);
 
 	/**
 	 * @brief Factory method to create new geometry in the scene
@@ -68,7 +68,7 @@ public:
 	 *			a transformation matrix for the geometry
 	 * @return a pointer to the newly created geometry
 	 */ 
-	MovingGeometryNode* CreateMovingGeometry(const Matrix& transform);
+	MovingGeometry* CreateMovingGeometry(const Matrix& transform);
 
 
 };

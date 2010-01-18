@@ -199,10 +199,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\GeometryNode.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Graphics\Graphics.py"
 					>
 				</File>
@@ -215,7 +211,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\MovingGeometryNode.cpp"
+					RelativePath=".\Source\Graphics\MovingGeometry.cpp"
 					>
 				</File>
 				<File
@@ -228,6 +224,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\Spatial.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\StaticGeometry.cpp"
 					>
 				</File>
 				<File
@@ -361,10 +361,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\GeometryNode.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Graphics\GraphicsLayer.h"
 					>
 				</File>
@@ -373,7 +369,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\MovingGeometryNode.h"
+					RelativePath=".\Source\Graphics\MovingGeometry.h"
 					>
 				</File>
 				<File
@@ -386,6 +382,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\Spatial.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\StaticGeometry.h"
 					>
 				</File>
 				<File

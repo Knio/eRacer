@@ -16,7 +16,7 @@
 namespace Graphics {
 
 
-class GeometryNode;
+class StaticGeometry;
 
 /**
  * @brief Abstract base class for all nodes in a scene graph.
@@ -45,7 +45,7 @@ public:
 	 * @param visibleNodes
 	 * 			A vector to push all visible nodes to
 	 */
-	void cull(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const;
+	void cull(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const;
 	
 
 	void setVisible(bool visible);
@@ -60,7 +60,7 @@ protected:
 	 * @param visibleNodes
 	 * 			A vector to push all visible nodes to
 	 */
-	virtual void cullRecursive(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const = 0;
+	virtual void cullRecursive(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const = 0;
 
 
 	string name_;

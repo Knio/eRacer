@@ -1,6 +1,6 @@
 /**
- * @file GeometryNode.h
- * @brief Definition of the GeometryNode class
+ * @file StaticGeometry.h
+ * @brief Definition of the StaticGeometry class
  *
  * @date 12.01.2010
  * @author: Ole Rehmsen
@@ -23,7 +23,7 @@ namespace Graphics {
  * 
  * @see MovingGeometryNode
  */
-class GeometryNode : public Spatial
+class StaticGeometry : public Spatial
 {
 public:
 	/**
@@ -39,8 +39,8 @@ public:
 	 *			a const pointer to the geometry - geometry can be shared 
 	 *			among many nodes. must not be NULL
 	 */
-	GeometryNode(const string& name, const Matrix& transform, TriMesh* geometry);
-	virtual ~GeometryNode();
+	StaticGeometry(const string& name, const Matrix& transform, TriMesh* geometry);
+	virtual ~StaticGeometry();
 
 	/**
 	 * @brief Add myself to the list
@@ -52,7 +52,7 @@ public:
 	 *
 	 * @see Spatial::cullRecursive
 	 */
-	virtual void cullRecursive(const Camera& camera, vector<const GeometryNode*>& visibleNodes) const;
+	virtual void cullRecursive(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const;
 
 protected:
 	/**
@@ -63,7 +63,7 @@ protected:
 	 * @param name
 	 *			a name for this node to fascilitate debugging
 	 */
-	GeometryNode(const string& name);
+	StaticGeometry(const string& name);
 
 
 	Matrix transform_;
