@@ -7,7 +7,6 @@ class Physics(Module):
     self.physics = eRacer.PhysicsLayer()
     self.physics.Init()
     
-
   def Tick(self, time):
     Module.Tick(self, time)
     
