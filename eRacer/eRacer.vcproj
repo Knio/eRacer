@@ -223,6 +223,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\Scene.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Spatial.cpp"
 					>
 				</File>
@@ -374,6 +378,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\Renderable.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Scene.h"
 					>
 				</File>
 				<File
