@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib"
+				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib dinput8.lib python26.lib PhysXLoader.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
 				AdditionalLibraryDirectories="Lib;&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;"
 				GenerateDebugInformation="true"

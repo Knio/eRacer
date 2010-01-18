@@ -1,2 +1,2 @@
 from Time  import Time
-from Event import EventManager
+from Event import Event

@@ -22,8 +22,9 @@ tex/*.png
 *.TMP
 *.pdb
 *.user
-*_wrap.cxx
 eRacer/Source/SWIG/eRacer.py
+eRacer/Source/SWIG/swig_wrap.h
+eRacer/Source/SWIG/swig_wrap.cxx
 .metadata
 eRacer/.externalToolBuilders
 eRacer/profile.data

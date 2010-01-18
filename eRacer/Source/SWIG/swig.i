@@ -21,7 +21,7 @@
 
 /* Parse the header file to generate wrappers */
 
-%feature("director") EventManager;
+%feature("director") Event;
 %include "..\Core\Event.h"
 %include "..\Core\Time.h"
 

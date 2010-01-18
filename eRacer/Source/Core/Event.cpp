@@ -1,5 +1,5 @@
 
 #include "Event.h"
 
-EventManager* EventManager::g_EventManager = 0;
+Event* Event::g_Event = 0;
 
