@@ -6,6 +6,7 @@
  * @author: Don Ha
  */
 
+#include "../Core/Event.h"
 #include "Keyboard.h"
 
 int Keyboard::Init(HWND hWnd, HINSTANCE hInstance)
@@ -48,12 +49,12 @@ int Keyboard::Update(void)
 		if (KeyDown(m_OldKeyState, i) && !KeyDown(m_KeyState, i))
 		{
 			// a key was released
-			KeyReleasedEvent(i).Send();
+			EVENT(KeyReleasedEvent(i));
 		}
 		if (!KeyDown(m_OldKeyState, i) && KeyDown(m_KeyState, i))
 		{
 			// a key was pressed
-			KeyPressedEvent(i).Send();
+			EVENT(KeyPressedEvent(i));
 		}
 	}
 

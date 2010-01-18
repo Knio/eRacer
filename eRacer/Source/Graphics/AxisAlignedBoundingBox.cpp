@@ -70,6 +70,8 @@ void AxisAlignedBoundingBox::merge(const AxisAlignedBoundingBox& newBox){
 
 bool AxisAlignedBoundingBox::intersects(const Plane& plane) const{
 	//TODO implement
+	assert(false);
+	return false;
 }
 
 
@@ -92,6 +94,8 @@ Point3 AxisAlignedBoundingBox::getCorner(BoxCorners boxCorner) const{
 	case RIGHT_TOP_BACK:
 		return max_;
 	}
+	assert(false);
+	return ORIGIN;
 }
 
 };

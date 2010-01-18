@@ -44,7 +44,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="$(PYTHON_DIR)\include\;$(DXSDK_DIR)\Include\;$(BOOST_DIR)"
+				AdditionalIncludeDirectories="&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib"
+				AdditionalDependencies="d3dxof.lib dxguid.lib d3dx9d.lib d3d9.lib dinput8.lib python26.lib PhysXLoader.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
 				AdditionalLibraryDirectories="&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;"
 				GenerateDebugInformation="true"

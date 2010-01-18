@@ -12,20 +12,6 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
-
-#include "../Core/Event.h"
-
-struct KeyPressedEvent : public Event
-{
-	int key;
-	KeyPressedEvent(int k) : key(k) {}
-};
-struct KeyReleasedEvent : public Event
-{
-	int key;
-	KeyReleasedEvent(int k) : key(k) {}
-};
-
 /**
  * @brief DirectX Keyboard Wrapper Class
  */

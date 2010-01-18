@@ -7,7 +7,7 @@ import os
 os.environ['PATH'] += ';Lib'
 
 from Game     import Game, Entity
-from Core     import EventManager
+from Core     import Event
 from Input    import Input
 from Logic    import Logic
 from Sound    import Sound
@@ -23,13 +23,7 @@ class Main(Game):
   def __init__(self):
     Game.__init__(self)
     
-    #f = Foo()
-    #print f.zero()
-    #print f.one()
-    #print f.two()
-    #raise SystemExit
-    
-    self.e = EventManager()
+    self.event = Event(self)
     
     # graphics must be created first because
     # some other modules need a HWND

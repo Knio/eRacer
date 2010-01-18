@@ -1,41 +1,28 @@
 #ifndef EVENT_H_
 #define EVENT_H_
 
-class Event;
-class EventManager
+#include <assert.h>
+
+#define EVENT(x) Event::g_Event->x
+#define DEFINE_EVENT(name, ...) \
+	virtual int name(__VA_ARGS__) { assert(false); return -1; } 
+
+class Event
 {	
+
 public:
-	static EventManager* g_EventManager;
-	EventManager() { g_EventManager = this; }
-	virtual ~EventManager() { }
-	virtual void Queue(Event* e) { }
-	virtual void Send (Event* e) { }
+	static Event* g_Event;
+	Event() { g_Event = this; }
+	virtual ~Event() { }
+
 	virtual void Register(int func, void* obj) { }
+	
+	DEFINE_EVENT(KeyPressedEvent,  int key)
+	DEFINE_EVENT(KeyReleasedEvent, int key)
 	
 };
 
 
-class Event
-{
-  public:
-	/*
-	adds this event to the global event queue. 
-	it will be sent to all listeners when the event
-	queue is next flushed.
-	*/
-	virtual void Queue() 
-	{
-		EventManager::g_EventManager->Queue(this);
-	}
-
-	/*
-	send this event to all listners *now*.
-	*/
-	virtual void Send()
-	{
-		EventManager::g_EventManager->Send(this);
-	}
-};
 
 #endif
 
