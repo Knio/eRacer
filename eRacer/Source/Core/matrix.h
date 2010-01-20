@@ -281,6 +281,4 @@ struct MatrixType
 };
 
 
-typedef MatrixType<float> Matrix;
-
 #endif
