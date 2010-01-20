@@ -43,6 +43,12 @@ Vector3& normalize(Vector3& A);
  */
 Vector3 normalized(const Vector3& A);
 
+
+inline float length(const Vector3& v){
+	return D3DXVec3Length(&v);
+}
+
+
 Vector3 transformAffine(const Matrix& T, const Vector3& u);
 
 #endif

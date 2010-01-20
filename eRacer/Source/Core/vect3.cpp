@@ -26,6 +26,8 @@ Vector3 normalized(const Vector3& A){
 	return result;
 }
 
+
+
 Vector3 transformAffine(const Matrix& T, const Vector3& u){
 	//Make sure the matrix is affine
 	assert(0 == T._41);
