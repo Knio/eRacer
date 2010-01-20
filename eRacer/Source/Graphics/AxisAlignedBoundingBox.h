@@ -67,9 +67,6 @@ public:
 	 */
 	void merge(const AxisAlignedBoundingBox& newBox);
 
-
-	bool intersects(const Plane& plane) const;
-
 	/**
 	 * @return The center of the box
 	 */
@@ -113,6 +110,8 @@ public:
 	 *			the maxiaml x,y,z of the box
 	 */
 	void set(const Point3& min, const Point3& max);
+
+	bool cull(const Plane& plane) const; 
 
 private:
 	Point3 min_;

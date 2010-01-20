@@ -65,5 +65,9 @@ void Camera::updatePlanes(){
 	planes_[5].distance = combinedMatrix._44 - combinedMatrix._43;
 }
 
-const Plane& Camera::getPlane(int planeIndex) {assert(false); return planes_[0];}
+const Plane& Camera::getPlane(int planeIndex) const {
+	assert(0 <= planeIndex);
+	assert(planeIndex < 6);
+	return planes_[planeIndex];
+}
 };
