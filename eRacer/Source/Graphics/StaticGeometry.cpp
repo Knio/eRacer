@@ -60,6 +60,9 @@ void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
     }
 
 	mesh_->UnlockVertexBuffer();
+
+	worldBoundingVolume_.set(min,max);
+	//TODO transform to world coordinates
 	
 }
 
