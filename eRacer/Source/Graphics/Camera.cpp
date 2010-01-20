@@ -47,4 +47,5 @@ void Camera::updatePlanes(){
 	planes_[5].distance = dot(planes_[5].normal, position_+far_*planes_[4].normal);
 }
 
+const Plane& Camera::getPlane(int planeIndex) {assert(false); return planes_[0];}
 };

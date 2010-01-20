@@ -15,6 +15,9 @@ Scene::Scene()
 {
 	
 }
+void Scene::GetVisibleNodes(const Camera& camera, vector<StaticGeometry*>& visibleNodes) const {assert(false);}
+MovingGeometry* Scene::CreateMovingGeometry(const Matrix &transform) {assert(false); return 0;}
+StaticGeometry* Scene::CreateStaticGeometry(const Matrix& transform) {assert(false); return 0;}
 
 Scene::~Scene(){
 }

@@ -10,17 +10,14 @@
 
 namespace Graphics {
 
-StaticGeometry::StaticGeometry(const string& name, const Matrix& transform, TriMesh* geometry)
+StaticGeometry::StaticGeometry(const string& name, const Matrix& transform)
 	: Spatial(name),
-	  transform_(transform),
-	  geometry_(geometry)
+	  transform_(transform)
 {
-	assert(0 != geometry);
 	//TODO compute the world bounding volume
 }
 
 StaticGeometry::~StaticGeometry(){
-	geometry_.reset();
 }
 
 void StaticGeometry::cullRecursive(const Camera&, vector<const StaticGeometry*>& visibleNodes) const{
