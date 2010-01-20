@@ -30,7 +30,7 @@ void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
 	assert(NULL == mesh_);
 	assert(NULL != mesh);
 	mesh_ = mesh;
-
+/*
 	Vertex* vertices;
 		
 	assert(SUCCEEDED(mesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
@@ -62,6 +62,7 @@ void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
 	mesh_->UnlockVertexBuffer();
 
 	worldBoundingVolume_.set(transformAffine(transform_,min),transformAffine(transform_, max));
+	*/
 }
 
 
