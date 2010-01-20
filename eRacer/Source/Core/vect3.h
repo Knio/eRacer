@@ -5,7 +5,9 @@
 #include <d3dx9math.h>
 
 typedef D3DXVECTOR3 Vector3;
+typedef D3DXVECTOR4 Vector4;
 typedef D3DXVECTOR3 Point3;
+typedef D3DXVECTOR4 Point4;
 typedef D3DXMATRIX Matrix;
 
 
@@ -41,5 +43,12 @@ Vector3& normalize(Vector3& A);
  */
 Vector3 normalized(const Vector3& A);
 
+
+inline float length(const Vector3& v){
+	return D3DXVec3Length(&v);
+}
+
+
+Vector3 transformAffine(const Matrix& T, const Vector3& u);
 
 #endif

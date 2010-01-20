@@ -25,7 +25,10 @@ void Spatial::cull(const Camera& camera, vector<const StaticGeometry*>& visibleN
 	if(!visible_)
 		return;
 
-	//TODO: culling
+	for(int i=0; i<6; i++){
+		if(worldBoundingVolume_.cull(camera.getPlane(i)))
+			return;
+	}
 
 	cullRecursive(camera, visibleNodes);
 }

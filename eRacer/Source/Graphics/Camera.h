@@ -164,7 +164,7 @@ public:
 	 * 			The index of the plane to return
 	 * @return the specified plane
 	 */
-	const Plane& getPlane(int planeIndex);
+	const Plane& getPlane(int planeIndex) const;
 private:
 	void updateView();
 	void updateProjection();

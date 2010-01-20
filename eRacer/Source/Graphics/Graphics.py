@@ -11,20 +11,19 @@ class Graphics(Module):
     
     self.hwnd = self.window.hwnd
     self.hwnd.disown()
-    
     self.hinst = self.window.hinst
     self.hinst.disown()
+    
+    self.scene = eRacer.Scene()
     
     self.graphics.Init(self.hwnd)
 
   def Tick(self, time):
     Module.Tick(self, time)
-    if not self.window.Poll():
-      # post quit message
-      self.game.state = 0
-      return
+    self.window.Poll()
     self.graphics.RenderFrame()
   
   def Quit(self):
     Module.Quit(self)
     # TODO close window
+    
