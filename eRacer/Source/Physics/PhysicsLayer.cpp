@@ -9,8 +9,10 @@
 #include "../Core/Consts.h"
 #include "PhysicsLayer.h"
 
-NxPhysicsSDK* PhysicsLayer::gPhySDK = NULL;
-NxScene* PhysicsLayer::gPhyScene = NULL;
+// Debugging globals
+NxReal debugMode = 0.0;
+
+NxVec3 gDefaultGravity((NxReal)0,(NxReal)-9.8,(NxReal)0);
 
 PhysicsLayer::PhysicsLayer(){
 }
@@ -19,33 +21,113 @@ PhysicsLayer::~PhysicsLayer(){
 
 }
 
-void PhysicsLayer::Init(){
-	gPhySDK = NULL;
-	gPhySDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
-	if(gPhySDK == NULL){
-		std::cout << "PHYSX failed to initialize" << std::endl;
+void PhysicsLayer::InitSDK()
+{
+	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION, NULL, NULL);
+    if (!gPhysicsSDK)  
+	{
+		printf("SDK instance not initialized\n");
 		return;
 	}
-	else{
-		std::cout << "PHYSX initialized" << std::endl;
+}
+
+void PhysicsLayer::ResetSDK()
+{
+	ReleaseSDK();
+	InitSDK();
+}
+
+void PhysicsLayer::ReleaseSDK()
+{
+	if (gScene)
+	{
+		GetPhysicsResults();  // Make sure to fetchResults() before shutting down
+		gPhysicsSDK->releaseScene(*gScene);
 	}
-	NxSceneDesc sceneDesc;
-	sceneDesc.gravity = NxVec3(0, Constants::GRAVITY, 0);
-	gPhyScene = gPhySDK->createScene(sceneDesc);
-	sceneDesc.simType = NX_SIMULATION_SW;
-
-    // Create the default material
-    NxMaterial* defaultMaterial = gPhyScene->getMaterialFromIndex(0); 
-    defaultMaterial->setRestitution(0.5);
-    defaultMaterial->setStaticFriction(0.5);
-    defaultMaterial->setDynamicFriction(0.5);
+	if (gPhysicsSDK)  gPhysicsSDK->release();
 }
 
-void PhysicsLayer::Shutdown(){
-	gPhySDK->release();
-	std::cout << "PHYSX released" << std::endl;
+void PhysicsLayer::StartPhysics()
+{
+	// Update the time step
+	//gDeltaTime = UpdateTime();
+
+	// Start collision and dynamics for delta time since the last frame
+    //gScene->simulate(gDeltaTime);
+	gScene->flushStream();
 }
 
-void PhysicsLayer::AddPhyObj(PhysicsObject& phyObj){
-	phyObjs.push_back(phyObj);
+void PhysicsLayer::GetPhysicsResults()
+{
+	// Get results from gScene->simulate(gDeltaTime)
+	while (!gScene->fetchResults(NX_RIGID_BODY_FINISHED, false));
+}
+
+void PhysicsLayer::ReadParametersFromFile()
+{
+}
+
+void PhysicsLayer::SetParameters()
+{
+	// Set the physics parameters
+	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, (NxReal)0.01);
+
+	// Set the debug visualization parameters
+	gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, debugMode);
+	gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, debugMode);
+	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, debugMode);
+
+    // Create the scene
+    NxSceneDesc sceneDesc;
+ 	sceneDesc.simType				= NX_SIMULATION_SW;
+    sceneDesc.gravity               = gDefaultGravity;
+
+    gScene = gPhysicsSDK->createScene(sceneDesc);	
+
+	if(!gScene)
+	{ 
+		sceneDesc.simType			= NX_SIMULATION_SW; 
+		gScene = gPhysicsSDK->createScene(sceneDesc);  
+		if(!gScene) 
+		{
+			printf("scene instance not initialized\n");
+			return;
+		}
+	}
+}
+
+NxActor* PhysicsLayer::AddActor(NxActorDesc actorDesc)
+{
+	return gScene->createActor(actorDesc);
+}
+
+NxMaterial* PhysicsLayer::AddMaterial(NxMaterialDesc materialDesc)
+{
+	return gScene->createMaterial(materialDesc);
+}
+
+int PhysicsLayer::FindMaterialIndex(NxMaterial* material)
+{
+	return material->getMaterialIndex();
+}
+
+int PhysicsLayer::AddMaterialReturnIndex(NxMaterialDesc materialDesc)
+{
+	NxMaterial* matTemp = AddMaterial(materialDesc);
+
+	return FindMaterialIndex(matTemp);
+}
+
+void PhysicsLayer::FinalizeSDK()
+{
+	// Get the current time
+	//UpdateTime();
+
+	// Start the first frame of the simulation
+	if (gScene)  StartPhysics();
+}
+
+NxScene* PhysicsLayer::ReturnScene()
+{
+	return gScene;
 }

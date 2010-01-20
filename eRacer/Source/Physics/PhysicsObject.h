@@ -11,18 +11,53 @@
 
 #include <iostream>
 #include "NxPhysics.h"
-#include "NxActor.h"
-#include "PhysicsLayer.h"
 
-class PhysicsLayer;
-
+/**
+* @brief Storage of an actor component that physx will use for simulation
+*/
 class PhysicsObject{
 public:
+	/**
+	* @breif Constructor stub
+	*/
 	PhysicsObject();
+	
+	/**
+	* @breif Destructor stub
+	*/
 	~PhysicsObject();
-private:
-	NxActor* createBox();
-	NxActor* actor;
+
+	/**
+	* @brief Method that sets mass for the physics component
+	*/
+	void setMass(float f);
+
+	/**
+	* @brief Method that returns the mass of the physics component
+	*
+	* @return The mass of the component
+	*/
+	float getMass();
+
+	/**
+	* @breif Method that returns the orientation matrix of the Actor
+	*
+	* @return The orientation matrix of the Actor
+	*/
+	NxMat33 returnOrientationMatrix();
+
+	/**
+	* @brief Returns the actor component of the class
+	*
+	* @return The actor the component
+	*/
+	NxActor* returnActor();
+
+protected:
+	/**
+	* @breif The PhysX object that is used to control behaviour
+	*/
+	NxActor* Actor;
 };
 
 #endif
