@@ -3,7 +3,7 @@
 #define GRAPHICSLAYER_H
 
 #include <d3d9.h>
-#include "TriMesh.h"
+#include "StaticGeometry.h"
 
 namespace Graphics {
 
@@ -36,7 +36,6 @@ protected:
 public:
 	~GraphicsLayer() {};	//Destructor
 	int Init( HWND hWnd );
-	void draw(const TriMesh& mesh);
 	int RenderFrame();
 	int Shutdown();
 

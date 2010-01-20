@@ -6,8 +6,10 @@
 #include "..\Core\Event.h"
 #include "..\Core\Time.h"
 
-#include "..\Graphics\Renderable.h"
-#include "..\Graphics\TriMesh.h"
+#include "..\Graphics\Camera.h"
+#include "..\Graphics\Scene.h"
+#include "..\Graphics\StaticGeometry.h"
+#include "..\Graphics\MovingGeometry.h"
 #include "..\Graphics\GraphicsLayer.h"
 #include "..\Graphics\Window.h"
 
@@ -25,8 +27,12 @@
 %include "..\Core\Event.h"
 %include "..\Core\Time.h"
 
-%include "..\Graphics\Renderable.h"
-%include "..\Graphics\TriMesh.h"
+%include "..\Graphics\Camera.h"
+%include "..\Graphics\StaticGeometry.h"
+%include "..\Graphics\MovingGeometry.h"
+%include "..\Graphics\Scene.h"
+%include "..\Graphics\StaticGeometry.h"
+%include "..\Graphics\MovingGeometry.h"
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
 

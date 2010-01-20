@@ -9,8 +9,11 @@
 #pragma once
 
 #include "Spatial.h"
-#include "boost/smart_ptr.hpp" 
-#include "TriMesh.h"
+#include <vector>
+#include "d3d9types.h"
+#include "d3dx9mesh.h"
+
+using namespace std;
 
 namespace Graphics {
 
@@ -35,11 +38,8 @@ public:
 	 *			a name for this node to fascilitate debugging
 	 * @param transform
 	 *			the transformation to apply to the geometry (for instancing)
-	 * @param geometry
-	 *			a const pointer to the geometry - geometry can be shared 
-	 *			among many nodes. must not be NULL
 	 */
-	StaticGeometry(const string& name, const Matrix& transform, TriMesh* geometry);
+	StaticGeometry(const string& name, const Matrix& transform);
 	virtual ~StaticGeometry();
 
 	/**
@@ -54,6 +54,49 @@ public:
 	 */
 	virtual void cullRecursive(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const;
 
+	/**
+	 * @brief getter for the mesh
+	 *
+	 * @return a const pointer to the mesh
+	 */
+	const LPD3DXMESH GetMesh() const;
+	
+	/**
+	 * @brief setter for the mesh
+	 *
+	 * @param mesh
+	 *			a pointer to the mesh for this geometry
+	 */
+	void SetMesh(const LPD3DXMESH mesh);
+
+	/**
+	 * @brief read access to the vector of materials
+	 *
+	 * @return read-only referece to the vector of materials
+	 */
+	const vector<D3DMATERIAL9*>& Materials() const;
+	
+	/**
+	 * @brief read/write access to the vector of materials
+	 * 
+	 * @return read/write reference to the vector of materials
+	 */
+	vector<D3DMATERIAL9*>& Materials();
+
+	/**
+	 * @brief read access to the vector of textures
+	 *
+	 * @return read-only referece to the vector of textures
+	 */
+	const vector<LPDIRECT3DTEXTURE9>& Textures() const;
+
+	/**
+	 * @brief read/write access to the vector of textures
+	 * 
+	 * @return read/write reference to the vector of textures
+	 */
+	vector<LPDIRECT3DTEXTURE9>& Textures();
+
 protected:
 	/**
 	 * @brief Constructor. Only for inheriting classes.
@@ -67,7 +110,33 @@ protected:
 
 
 	Matrix transform_;
-	boost::shared_ptr<TriMesh> geometry_;
+	LPD3DXMESH mesh_;
+	vector<D3DMATERIAL9*> materials_;
+	vector<LPDIRECT3DTEXTURE9> textures_;
 };
+
+inline const LPD3DXMESH StaticGeometry::GetMesh() const{
+	return mesh_;
+}
+
+inline void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
+	mesh_ = mesh;
+}
+
+inline const vector<D3DMATERIAL9*>& StaticGeometry::Materials() const{
+	return materials_;
+}
+
+inline vector<D3DMATERIAL9*>& StaticGeometry::Materials(){
+	return materials_;
+}
+
+inline const vector<LPDIRECT3DTEXTURE9>& StaticGeometry::Textures() const{
+	return textures_;
+}
+
+inline vector<LPDIRECT3DTEXTURE9>& StaticGeometry::Textures(){
+	return textures_;
+}
 
 };

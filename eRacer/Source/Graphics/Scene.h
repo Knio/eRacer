@@ -53,24 +53,29 @@ public:
 	 * Static geometry does not change its transform or its mesh over time.
 	 * This is useful for optimization of the culling process.
 	 * 
+	 * @param name
+	 *			a name for the geometry - for debugging
 	 * @param transform
 	 *			a transformation matrix for the geometry
 	 * @return a pointer to the newly created geometry
 	 *
 	 * @see CreateGeometry
 	 */ 
-	StaticGeometry* CreateStaticGeometry(const Matrix& transform);
+	StaticGeometry* CreateStaticGeometry(const string& name, const Matrix& transform);
 
 	/**
 	 * @brief Factory method to create new geometry in the scene
 	 *
+	 * @param name
+	 *			a name for the geometry - for debugging
 	 * @param transform
 	 *			a transformation matrix for the geometry
 	 * @return a pointer to the newly created geometry
 	 */ 
-	MovingGeometry* CreateMovingGeometry(const Matrix& transform);
+	MovingGeometry* CreateMovingGeometry(const string& name, const Matrix& transform);
 
-
+private:
+	vector<StaticGeometry*> geometry_;
 };
 
 
