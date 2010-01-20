@@ -16,6 +16,9 @@ struct CUSTOMVERTEX
     FLOAT x, y, z, rhw; // The transformed position for the vertex
     DWORD color;        // The vertex color
 };
+typedef CUSTOMVERTEX Vertex;
+
+
 // Our custom FVF, which describes the layout of the custom vertex structure
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZRHW|D3DFVF_DIFFUSE)
 
@@ -31,7 +34,7 @@ private:
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
 	GraphicsLayer(const GraphicsLayer&);
-	GraphicsLayer& operator= (const GraphicsLayer); 
+	GraphicsLayer& operator= (const GraphicsLayer&); 
 
 public:
 	~GraphicsLayer() {};	//Destructor

@@ -64,6 +64,8 @@ public:
 	/**
 	 * @brief setter for the mesh
 	 *
+	 * Since this is the class for static geometry, this setter can only be called once.
+	 *
 	 * @param mesh
 	 *			a pointer to the mesh for this geometry
 	 */
@@ -119,9 +121,6 @@ inline const LPD3DXMESH StaticGeometry::GetMesh() const{
 	return mesh_;
 }
 
-inline void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
-	mesh_ = mesh;
-}
 
 inline const vector<D3DMATERIAL9*>& StaticGeometry::Materials() const{
 	return materials_;
