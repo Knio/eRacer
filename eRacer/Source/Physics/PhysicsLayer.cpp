@@ -14,7 +14,7 @@ NxReal debugMode = 0.0;
 
 NxVec3 gDefaultGravity((NxReal)0,(NxReal)-9.8,(NxReal)0);
 
-PhysicsLayer::PhysicsLayer(){
+PhysicsLayer::PhysicsLayer() : gScene(NULL) {
 }
 
 PhysicsLayer::~PhysicsLayer(){
