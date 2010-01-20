@@ -7,12 +7,13 @@
  */
 
 #include "../Core/Consts.h"
+extern Constants CONSTS;
+
 #include "PhysicsLayer.h"
 
 // Debugging globals
 NxReal debugMode = 0.0;
 
-NxVec3 gDefaultGravity((NxReal)0,(NxReal)-9.8,(NxReal)0);
 
 PhysicsLayer::PhysicsLayer() : gScene(NULL) {
 }
@@ -80,9 +81,9 @@ void PhysicsLayer::SetParameters()
     // Create the scene
     NxSceneDesc sceneDesc;
  	sceneDesc.simType				= NX_SIMULATION_SW;
-    sceneDesc.gravity               = gDefaultGravity;
+	sceneDesc.gravity               = NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Y);
 
-    gScene = gPhysicsSDK->createScene(sceneDesc);	
+    gScene = gPhysicsSDK->createScene(sceneDesc);
 
 	if(!gScene)
 	{ 
