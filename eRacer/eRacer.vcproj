@@ -44,7 +44,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Cooking\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Cooking\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
@@ -445,10 +445,6 @@
 				</File>
 				<File
 					RelativePath=".\Source\Core\matrix.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\Module.h"
 					>
 				</File>
 				<File

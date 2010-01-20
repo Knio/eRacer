@@ -5,7 +5,6 @@
 /* Includes the header in the wrapper code */
 #include "..\Core\Event.h"
 #include "..\Core\Time.h"
-#include "..\Core\Module.h"
 
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
@@ -27,7 +26,6 @@
 %feature("director") Event;
 %include "..\Core\Event.h"
 %include "..\Core\Time.h"
-%include "..\Core\Module.h"
 
 %include "..\Graphics\Camera.h"
 %include "..\Graphics\StaticGeometry.h"
