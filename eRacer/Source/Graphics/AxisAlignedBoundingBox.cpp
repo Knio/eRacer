@@ -98,6 +98,20 @@ Point3 AxisAlignedBoundingBox::getCorner(BoxCorners boxCorner) const{
 	return ORIGIN;
 }
 
+bool AxisAlignedBoundingBox::cull(const Plane& plane) const{
+		Point3 center = 0.5*(min_+max_);
+		Vector3 toMax = max_-center;
+
+		//project all vertices of the box on the plane
+		//and compute radius of the interval around the center of the box
+		float radius = toMax.x * abs(dot(plane.normal,X))
+						+ toMax.y * abs(dot(plane.normal,Y))
+						+ toMax.z * abs(dot(plane.normal,Z));
+
+		return dot(plane.normal, center)-plane.distance < -radius;
+}
+
+
 };
 
 

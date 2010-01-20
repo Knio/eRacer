@@ -26,18 +26,7 @@ void Spatial::cull(const Camera& camera, vector<const StaticGeometry*>& visibleN
 		return;
 
 	for(int i=0; i<6; i++){
-		const Plane& plane = camera.getPlane(i);
-
-		Point3 boxCenter = 0.5*(worldBoundingVolume_.getMin()+worldBoundingVolume_.getMax());
-		Vector3 toMax = worldBoundingVolume_.getMax()-boxCenter;
-
-		//project all vertices of the box on the plane
-		//and compute radius of the interval around the center of the box
-		float radius = toMax.x * abs(dot(plane.normal,X))
-						+ toMax.y * abs(dot(plane.normal,Y))
-						+ toMax.z * abs(dot(plane.normal,Z));
-
-		if(dot(plane.normal, boxCenter)-plane.distance < -radius)
+		if(worldBoundingVolume_.cull(camera.getPlane(i)))
 			return;
 	}
 

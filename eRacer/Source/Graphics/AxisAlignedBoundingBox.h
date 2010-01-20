@@ -114,6 +114,8 @@ public:
 	 */
 	void set(const Point3& min, const Point3& max);
 
+	bool cull(const Plane& plane) const; 
+
 private:
 	Point3 min_;
 	Point3 max_;
