@@ -1,4 +1,7 @@
 
+#ifndef TIME_H_
+#define TIME_H_
+
 #include <windows.h>
 
 struct Time
@@ -29,3 +32,6 @@ struct Time
 		return delta;
 	}
 };
+
+
+#endif

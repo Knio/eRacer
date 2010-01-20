@@ -3,7 +3,9 @@
 
 struct Constants
 {
-	static float GRAVITY;
+	float PHYS_GRAVITY_X;
+	float PHYS_GRAVITY_Y;
+	float PHYS_GRAVITY_Z;
 };
 
 #endif
