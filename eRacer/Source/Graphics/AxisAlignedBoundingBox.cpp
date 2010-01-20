@@ -68,12 +68,6 @@ void AxisAlignedBoundingBox::merge(const AxisAlignedBoundingBox& newBox){
 		max_.z = newBox.getMax().z;
 }
 
-bool AxisAlignedBoundingBox::intersects(const Plane& plane) const{
-	//TODO implement
-	assert(false);
-	return false;
-}
-
 
 Point3 AxisAlignedBoundingBox::getCorner(BoxCorners boxCorner) const{
 	switch (boxCorner){
