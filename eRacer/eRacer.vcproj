@@ -241,13 +241,6 @@
 				<File
 					RelativePath=".\Source\Input\Keyboard.cpp"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 			</Filter>
 			<Filter
@@ -335,6 +328,14 @@
 				</File>
 				<File
 					RelativePath=".\Source\Game\Module.py"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="IO"
+				>
+				<File
+					RelativePath=".\Source\IO\__init__.py"
 					>
 				</File>
 			</Filter>

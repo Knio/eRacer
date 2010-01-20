@@ -46,8 +46,8 @@ class Main(Game):
     self.logic.Add(TestEntity())
     self.sound.PlaySound2D("Resources/jaguar.wav")
     
-    self.event.Register('QuitEvent', self)
-    self.event.Register('KeyPressedEvent', self)
+    self.event.Register(self.QuitEvent)
+    self.event.Register(self.KeyPressedEvent)
     
     
   def Tick(self, time):
