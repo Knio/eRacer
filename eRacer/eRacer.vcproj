@@ -44,7 +44,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(BOOST_DIR)&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -142,7 +142,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="d3dxof.lib dinput8.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib NxCharacter.lib NxCooking.lib PhysXLoader.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
-				AdditionalLibraryDirectories="./Lib;&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;;&quot;$(PHYSX_DIR)\Bin\win32&quot;;&quot;$(PHYSX_DIR)\Graphics\lib\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\lib\Win32&quot;"
+				AdditionalLibraryDirectories="./Lib;&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;;&quot;$(PHYSX_DIR)\v2.8.1\Bin\win32&quot;;&quot;$(PHYSX_DIR)\v2.8.1\Graphics\lib\win32&quot;;&quot;$(PHYSX_DIR)\v2.8.1\SDKs\lib\Win32&quot;"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -241,13 +241,6 @@
 				<File
 					RelativePath=".\Source\Input\Keyboard.cpp"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 			</Filter>
 			<Filter
