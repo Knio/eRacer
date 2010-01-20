@@ -17,6 +17,7 @@ public:
 
 	virtual void Register(int func, void* obj) { }
 	
+	DEFINE_EVENT(QuitEvent)
 	DEFINE_EVENT(KeyPressedEvent,  int key)
 	DEFINE_EVENT(KeyReleasedEvent, int key)
 	

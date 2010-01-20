@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "../Core/Event.h"
 
 namespace Graphics {
 
@@ -49,7 +50,10 @@ int Window::Poll()
 		DispatchMessage(&msg);
 	}
 	if (msg.message == WM_QUIT)
+	{
+		EVENT(QuitEvent());
 		return 0;
+	}
 	return 1;
 }
 

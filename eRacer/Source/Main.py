@@ -8,6 +8,7 @@ os.environ['PATH'] += ';Lib'
 
 from Game     import Game, Entity
 from Core     import Event
+from IO       import IO
 from Input    import Input
 from Logic    import Logic
 from Sound    import Sound
@@ -27,6 +28,7 @@ class Main(Game):
     
     # graphics must be created first because
     # some other modules need a HWND
+    self.io        = IO(self) 
     self.graphics  = Graphics(self)
     self.input     = Input(self)
     self.logic     = Logic(self)
@@ -44,18 +46,20 @@ class Main(Game):
     self.logic.Add(TestEntity())
     self.sound.PlaySound2D("Resources/jaguar.wav")
     
-
-     
+    self.event.Register('QuitEvent', self)
+    self.event.Register('KeyPressedEvent', self)
+    
+    
   def Tick(self, time):
     Game.Tick(self, time)    
     
-    # testing
+  def KeyPressedEvent(self, key):
     from Input import KEY
-    
-    if self.input[KEY.A]:
-      print 'A'
-    
-    if self.input[KEY.SPACE]:
+    if key == KEY.SPACE:
       self.sound.PlaySound2D("Resources/jaguar.wav")
-
     
+    if key == KEY.ESCAPE:
+      self.event.QuitEvent()
+      
+  def QuitEvent(self):
+    self.state = 0

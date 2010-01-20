@@ -2,6 +2,8 @@ Debug/
 Release/
 doc/*
 eRacer/Doc/*
+eRacer/dist
+eRacer/build
 .moc/*
 .tmp/*
 *.pdf
