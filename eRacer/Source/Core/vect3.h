@@ -42,4 +42,5 @@ Vector3& normalize(Vector3& A);
 Vector3 normalized(const Vector3& A);
 
 
+
 #endif
