@@ -11,6 +11,7 @@
 
 #include "../Core/types.h"
 #include <vector>
+#include <cassert>
 
 using namespace std;
 
@@ -52,7 +53,7 @@ public:
 	 *		A vector of points that should be contained in the bounding volume. 
 	 *		If empty, the bounding box will have zero extent.
 	 */
-	void resizeFromPoints(const vector<Point3>& points);
+	void resizeFromPoints(const std::vector<Point3>& points);
 	
 	/**
 	 * @brief Set the bounding volume to have zero extent.
@@ -103,6 +104,16 @@ public:
 	 */
 	const Point3& getMax() const;
 
+	/**
+	 * @brief Manually set the min and the max of the box
+	 *
+	 * @param min
+	 *			the minimal x,y,z of the box
+	 * @param max
+	 *			the maxiaml x,y,z of the box
+	 */
+	void set(const Point3& min, const Point3& max);
+
 private:
 	Point3 min_;
 	Point3 max_;
@@ -118,6 +129,15 @@ inline const Point3& AxisAlignedBoundingBox::getMin() const {
 inline const Point3& AxisAlignedBoundingBox::getMax() const { 
 	return max_; 
 }
+
+inline void AxisAlignedBoundingBox::set(const Point3& min, const Point3& max){
+	assert(min.x<=max.x);
+	assert(min.y<=max.y);
+	assert(min.z<=max.z);
+	min_ = min;
+	max_ = max;
+}
+
 
 };
 
