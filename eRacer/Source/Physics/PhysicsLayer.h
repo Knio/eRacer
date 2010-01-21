@@ -18,7 +18,7 @@ using namespace std;
 namespace Physics{
 
 /**
-* @breif The physics SDK object that the main game loop will use to store actors and return the results of their collisions
+* @brief The physics SDK object that the main game loop will use to store actors and return the results of their collisions
 */
 class PhysicsLayer{
 public:
