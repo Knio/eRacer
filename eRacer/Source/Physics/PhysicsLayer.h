@@ -3,7 +3,7 @@
  * @brief The Physics Layer is responsible for simulating all physics objects in the scene.
  *
  * @date 16.01.2010
- * @author: John Stuart
+ * @author: John Stuart, Michael Blackadar
  */
 
 #ifndef PHYSICS_LAYER_H
@@ -20,7 +20,7 @@ using namespace std;
 namespace Physics{
 
 /**
-* @breif The physics SDK object that the main game loop will use to store actors and return the results of their collisions
+* @brief The physics SDK object that the main game loop will use to store actors and return the results of their collisions
 */
 class PhysicsLayer{
 public:
@@ -33,44 +33,44 @@ public:
 	 */
 	~PhysicsLayer();
 
-	/*
-	* @breif Initializes the SDK instance
+	/**
+	* @brief Initializes the SDK instance
 	*/
 	void InitSDK();
 
-	/*
-	* @breif Ends the SDK
+	/**
+	* @brief Ends the SDK
 	*/
 	void ReleaseSDK();
 
-	/*
-	* @breif Resets the SDK instance by calling Release and then Init
+	/**
+	* @brief Resets the SDK instance by calling Release and then Init
 	* Must remember to reinitiaize all of the actors, materials ect.
 	*/
 	void ResetSDK();
 
-	/*
-	* @breif Starts the physics simulation
+	/**
+	* @brief Starts the physics simulation
 	*/
 	void StartPhysics(long long gDeltaTime);
 
-	/*
-	* @breif Calculates the physics results and saves the info to the actors
+	/**
+	* @brief Calculates the physics results and saves the info to the actors
 	*/
 	void GetPhysicsResults();
 
-	/*
-	* @breif Reads the parameters needed for the SDK from consts.h
+	/**
+	* @brief Reads the parameters needed for the SDK from consts.h
 	*/
 	void GetSceneParameters();
 
-	/*
-	* @breif Sets the parameters
+	/**
+	* @brief Sets the parameters
 	*/
 	void SetParameters();	
 
-	/*
-	* @breif Method that adds an actor to the scene
+	/**
+	* @brief Method that adds an actor to the scene
 	*
 	* @param actorDesc 
 	*						The physX description of the actor that the scene needs for creation
@@ -79,8 +79,8 @@ public:
 	*/
 	NxActor* AddActor(NxActorDesc actorDesc);
 
-	/*
-	* @breif Method that adds a material to the scene
+	/**
+	* @brief Method that adds a material to the scene
 	*
 	* @param materialDesc 
 	*						The physX description of the material that the scene needs for creation
@@ -89,8 +89,8 @@ public:
 	*/
 	NxMaterial*	AddMaterial(NxMaterialDesc materialDesc);
 
-	/*
-	* @breif Method that returns the Material index in the scene, for the creation of actors with more detail
+	/**
+	* @brief Method that returns the Material index in the scene, for the creation of actors with more detail
 	*
 	* @param material
 	*						The physX material that the index is needed
@@ -99,8 +99,8 @@ public:
 	*/
 	int FindMaterialIndex(NxMaterial* material);
 
-	/*
-	* @breif Method that returns the Material index in the scene, for the creation of actors with more detail, 
+	/**
+	* @brief Method that returns the Material index in the scene, for the creation of actors with more detail, 
 	*		 This is equivalent to calling AddMaterial and FindMaterialIndex, but for human readablilty, it was reduced
 	*
 	* @param materialDesc 
@@ -110,13 +110,13 @@ public:
 	*/
 	int AddMaterialReturnIndex(NxMaterialDesc materialDesc);
 
-	/*
-	* @breif Stars the physics simulation
+	/**
+	* @brief Stars the physics simulation
 	*/
 	void FinalizeSDK(long long gDeltaTime);
 
-	/*
-	* @breif Returns the instance of the scene
+	/**
+	* @brief Returns the instance of the scene
 	*/
 	NxScene* ReturnScene();
 

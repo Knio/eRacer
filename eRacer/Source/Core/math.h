@@ -1,39 +1,68 @@
-#ifndef INC_MATH
-#define INC_MATH
 
+#ifndef VECT3_H_
+#define VECT3_H_
+
+#include <d3dx9math.h>
 #include <limits>
 #include <cfloat>
 
-#define PI      (3.14159265358979323846)
-#define CI      (3.14159265358979323846*2)
-#define EI      (3.14159265358979323846/3)
-#define RI      (3.14159265358979323846/2)
-#define FI      (3.14159265358979323846/4)
-
-#define EE      (2.71828182845904523536)
-
+#define PI D3DX_PI
 #define DEG2RAD(x) (PI*(x)/180.0)
 #define RAD2DEG(x) (180.0*(x)/PI)
 
-#define MAX(x,y) ((x)>(y)?(x):(y))
-#define MIN(x,y) ((x)<(y)?(x):(y))
-
-#define ZERO (FLT_EPSILON)
-
-#define SQ(x) ((x)*(x))
-
-float INF   = std::numeric_limits<float>::infinity();
-float NaN   = std::numeric_limits<float>::quiet_NaN();
-
+const float INF   = std::numeric_limits<float>::infinity();
+const float NaN   = std::numeric_limits<float>::quiet_NaN();
 
 template <typename T>
 bool isnan(T x) { return x != x; }
 
-double normal(double alpha, double x)
-{
-    return pow(EE, -(SQ(x)/(2*SQ(alpha)))) / sqrt(2*PI*alpha);
+
+typedef D3DXVECTOR3 Vector3;
+typedef D3DXVECTOR4 Vector4;
+typedef D3DXVECTOR3 Point3;
+typedef D3DXVECTOR4 Point4;
+typedef D3DXMATRIX  Matrix;
+
+
+const Point3 ORIGIN = Point3(0,0,0); 
+const Vector3 X = Vector3(1,0,0); 
+const Vector3 Y = Vector3(0,1,0); 
+const Vector3 Z = Vector3(0,0,1);
+
+const Matrix IDENTITY = Matrix(1,0,0,0, 
+							   0,1,0,0,
+							   0,0,1,0,
+							   0,0,0,1);
+
+
+
+Vector3 cross(const Vector3 &A, const Vector3 &B);
+float dot(const Vector3 &A, const Vector3 &B);
+
+/**
+ * @brief normalize a vector in-place
+ *
+ * @param A
+ * 			the vector to normalize
+ * @return a reference to the vector - for chaining
+ */
+Vector3& normalize(Vector3& A);
+
+/**
+ * @brief create a normalized version of a vector
+ *
+ * @param A
+ * 			the vector to normalize - will not be changed!
+ * @return a new vector that is the normalized ve rsion of A
+ */
+Vector3 normalized(const Vector3& A);
+
+
+inline float length(const Vector3& v){
+	return D3DXVec3Length(&v);
 }
 
 
+Vector3 transformAffine(const Matrix& T, const Vector3& u);
 
 #endif

@@ -1,8 +1,11 @@
-#pragma SWIG nowarn=454
+#pragma SWIG nowarn=454,503
 %module(directors="1") eRacer
 %{
 
 /* Includes the header in the wrapper code */
+
+#include <d3dx9math.h>
+
 #include "..\Core\Event.h"
 #include "..\Core\Time.h"
 #include "..\Core\Module.h"
@@ -28,8 +31,11 @@
 
 %include "std_string.i"
 
-%feature("director") Event;
 
+%include "..\Core\d3dx.h"
+%include "..\Core\Math.h"
+
+%feature("director") Event;
 %include "..\Core\Event.h"
 %include "..\Core\Time.h"
 %include "..\Core\Module.h"
@@ -53,4 +59,3 @@
 %include "..\Physics\PhysicsLayer.h"
 
 %include "..\Input\Keyboard.h"
-

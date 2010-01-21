@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 # paths to code
@@ -5,6 +6,8 @@ sys.path.append('Release')
 sys.path.append('Source')
 sys.path.append('Source\\Swig')
 
+# set path to load fmod.dll
+os.environ['PATH'] += ';Lib'
 
 from Main import Main
 

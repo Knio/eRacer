@@ -1,6 +1,7 @@
-#include "vect3.h"
+#include "Math.h"
 
 #include <cassert>
+
 
 Vector3 cross(const Vector3 &A, const Vector3 &B)
 {
@@ -25,7 +26,6 @@ Vector3 normalized(const Vector3& A){
 	D3DXVec3Normalize(&result, &A);
 	return result;
 }
-
 
 
 Vector3 transformAffine(const Matrix& T, const Vector3& u){

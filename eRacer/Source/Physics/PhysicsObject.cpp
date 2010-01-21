@@ -10,9 +10,9 @@ PhysicsObject::~PhysicsObject()
 {
 }
 
-void PhysicsObject::SetMass(float f)
+void PhysicsObject::SetMass(float mass)
 {
-	Actor->setMass((NxReal)f);
+	Actor->setMass((NxReal)mass);
 }
 
 float PhysicsObject::GetMass()
@@ -24,15 +24,31 @@ NxVec3 PhysicsObject::GetPosition()
 {
 	return Actor->getGlobalPosition();
 }
+void PhysicsObject::setPosition(NxVec3 pos)
+{
+	Actor->setGlobalPosition(pos);
+}
 
-NxMat33 PhysicsObject::ReturnOrientationMatrix()
+NxMat33 PhysicsObject::getOrientation()
 {
 	return Actor->getGlobalOrientation();
 }
+void PhysicsObject::setOrientation(NxMat33 orient)
+{
+	Actor->setGlobalOrientation(orient);
+}
 
-NxActor* PhysicsObject::ReturnActor()
+NxActor* PhysicsObject::getActor()
 {
 	return Actor;
 }
+NxVec3 PhysicsObject::getVelocity()
+{
+	return Actor->getLinearVelocity();
+}
 
+void PhysicsObject::setVelocity(NxVec3 vel)
+{
+	Actor->setLinearVelocity(vel);
+}
 }

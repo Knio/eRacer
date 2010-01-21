@@ -25,7 +25,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SWIG_DIR)/swig.exe -c++ -python Source/SWIG/swig.i"
+				CommandLine="$(SWIG_DIR)/swig.exe -c++ -python -I&quot;$(DXSDK_DIR)/Include&quot; Source/SWIG/swig.i"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -148,7 +148,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3dxof.lib dinput8.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib NxCharacter.lib NxCooking.lib PhysXLoader.lib winmm.lib"
+				AdditionalDependencies="d3dxof.lib dinput8.lib dxguid.lib d3dx9d.lib d3d9.lib python26.lib NxCharacter.lib NxCooking.lib PhysXLoader.lib"
 				OutputFile="$(OutDir)\_$(ProjectName).pyd"
 				AdditionalLibraryDirectories="./Lib;&quot;$(DXSDK_DIR)\Lib\x86&quot;;&quot;$(PYTHON_DIR)\libs\&quot;;&quot;$(PHYSX_DIR)\Bin\win32&quot;;&quot;$(PHYSX_DIR)\Graphics\lib\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\lib\Win32&quot;"
 				GenerateDebugInformation="true"
@@ -271,11 +271,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Core\Time.py"
+					RelativePath=".\Source\Core\Math.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Core\vect3.cpp"
+					RelativePath=".\Source\Core\Time.py"
 					>
 				</File>
 			</Filter>
@@ -448,7 +448,11 @@
 				Name="Core"
 				>
 				<File
-					RelativePath=".\Source\Core\consts.h"
+					RelativePath=".\Source\Core\Consts.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\d3dx.h"
 					>
 				</File>
 				<File
@@ -456,11 +460,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Core\math.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\matrix.h"
+					RelativePath=".\Source\Core\Math.h"
 					>
 				</File>
 				<File
@@ -468,19 +468,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Core\point.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Core\Time.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Core\types.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\vect3.h"
+					RelativePath=".\Source\Core\Types.h"
 					>
 				</File>
 			</Filter>

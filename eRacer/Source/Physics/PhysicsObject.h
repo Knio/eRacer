@@ -3,7 +3,7 @@
  * @brief An object under physics simulation.
  *
  * @date 16.01.2010
- * @author: Michael Blackadar
+ * @author: Michael Blackadar, John Stuart
  */
 
 #ifndef PHYSICS_OBJECT_H
@@ -21,19 +21,20 @@ namespace Physics{
 class PhysicsObject{
 public:
 	/**
-	* @breif Constructor stub
+	* @brief Constructor stub
 	*/
 	PhysicsObject();
 	
 	/**
-	* @breif Destructor stub
+	* @brief Destructor stub
 	*/
 	~PhysicsObject();
 
 	/**
 	* @brief Method that sets mass for the physics component
+	* @param mass The mass in kilograms
 	*/
-	void SetMass(float f);
+	void SetMass(float mass);
 
 	/**
 	* @brief Method that returns the mass of the physics component
@@ -41,26 +42,53 @@ public:
 	* @return The mass of the component
 	*/
 	float GetMass();
-
+	/**
+	* @brief Returns the position of the physics object
+	* @return The position of the physics object
+	*/
 	NxVec3 GetPosition();
 
 	/**
-	* @breif Method that returns the orientation matrix of the Actor
+	* @brief Sets the position of the physics object
+	* @param pos The position of the object
+	*/
+	void setPosition(NxVec3 pos);
+
+	/**
+	* @brief Method that returns the orientation matrix of the Actor
 	*
 	* @return The orientation matrix of the Actor
 	*/
-	NxMat33 ReturnOrientationMatrix();
+	NxMat33 getOrientation();
 
 	/**
-	* @brief Returns the actor component of the class
+	* @brief Sets the orientation of the physics object
+	* @param orient The orientation matrix of the object
+	*/
+	void setOrientation(NxMat33 orient);
+
+	/**
+	* @brief Returns the actor component of the physics object
 	*
 	* @return The actor the component
 	*/
-	NxActor* ReturnActor();
+	NxActor* getActor();
+
+	/**
+	* @brief Returns the linear velocity of the physics object
+	* @return The linear velocity of the physics object
+	*/
+	NxVec3 getVelocity();
+
+	/**
+	* @brief Sets the linear velocity of the physics object
+	* @param vel The linear velocity of the object
+	*/
+	void setVelocity(NxVec3 vel);
 
 protected:
 	/**
-	* @breif The PhysX object that is used to control behaviour
+	* @brief The PhysX object that is used to control behaviour
 	*/
 	NxActor* Actor;
 };

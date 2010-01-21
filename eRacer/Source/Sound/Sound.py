@@ -17,4 +17,4 @@ class Sound(Module):
   def Quit(self):
     Module.Quit(self)
     self.sound.StopMusic()
-    #self.sound.Shutdown() # TODO fix me
+    self.sound.Shutdown()

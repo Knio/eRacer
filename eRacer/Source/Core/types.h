@@ -3,9 +3,7 @@
 #define TYPES_H_
 
 #include <d3dx9math.h>
-#include "vect3.h"
-
-#define PI D3DX_PI
+#include "Math.h"
 
 
 struct Plane {
