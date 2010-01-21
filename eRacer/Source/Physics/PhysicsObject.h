@@ -12,6 +12,9 @@
 #include <iostream>
 #include "NxPhysics.h"
 
+using namespace std;
+
+namespace Physics{
 /**
 * @brief Storage of an actor component that physx will use for simulation
 */
@@ -30,28 +33,30 @@ public:
 	/**
 	* @brief Method that sets mass for the physics component
 	*/
-	void setMass(float f);
+	void SetMass(float f);
 
 	/**
 	* @brief Method that returns the mass of the physics component
 	*
 	* @return The mass of the component
 	*/
-	float getMass();
+	float GetMass();
+
+	NxVec3 GetPosition();
 
 	/**
 	* @breif Method that returns the orientation matrix of the Actor
 	*
 	* @return The orientation matrix of the Actor
 	*/
-	NxMat33 returnOrientationMatrix();
+	NxMat33 ReturnOrientationMatrix();
 
 	/**
 	* @brief Returns the actor component of the class
 	*
 	* @return The actor the component
 	*/
-	NxActor* returnActor();
+	NxActor* ReturnActor();
 
 protected:
 	/**
@@ -59,5 +64,6 @@ protected:
 	*/
 	NxActor* Actor;
 };
+}
 
 #endif

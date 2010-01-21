@@ -3,7 +3,7 @@
  * @brief Implementation of the PhysicsLayer class
  *
  * @date 16.01.2010
- * @author: Michael Blackadar
+ * @author: John Stuart
  */
 
 #include "../Core/Consts.h"
@@ -11,9 +11,7 @@ extern Constants CONSTS;
 
 #include "PhysicsLayer.h"
 
-// Debugging globals
-NxReal debugMode = 0.0;
-
+namespace Physics{
 
 PhysicsLayer::PhysicsLayer() : gScene(NULL) {
 }
@@ -64,26 +62,29 @@ void PhysicsLayer::GetPhysicsResults()
 	while (!gScene->fetchResults(NX_RIGID_BODY_FINISHED, false));
 }
 
-void PhysicsLayer::ReadParametersFromFile()
+void PhysicsLayer::GetSceneParameters()
 {
+	// Set the physics parameters
+	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, (NxReal)CONSTS.PHYS_SKIN_WIDTH);
+
+	// Set the debug visualization parameters
+	gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, CONSTS.PHYS_DEBUG_MODE);
+	gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, CONSTS.PHYS_DEBUG_MODE);
+	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, CONSTS.PHYS_DEBUG_MODE);
+
+	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Y));
 }
 
 void PhysicsLayer::SetParameters()
 {
-	// Set the physics parameters
-	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, (NxReal)0.01);
-
-	// Set the debug visualization parameters
-	gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, debugMode);
-	gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, debugMode);
-	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, debugMode);
 
     // Create the scene
     NxSceneDesc sceneDesc;
- 	sceneDesc.simType				= NX_SIMULATION_SW;
-	sceneDesc.gravity               = NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Y);
+ 	sceneDesc.simType = NX_SIMULATION_SW;
 
     gScene = gPhysicsSDK->createScene(sceneDesc);
+
+	GetSceneParameters();
 
 	if(!gScene)
 	{ 
@@ -131,4 +132,49 @@ void PhysicsLayer::FinalizeSDK()
 NxScene* PhysicsLayer::ReturnScene()
 {
 	return gScene;
+}
+
+NxActor* PhysicsLayer::CreateDemoBox()
+{
+	// Create the default material
+	NxMaterialDesc material;
+	material.restitution = 0.5;
+	material.dynamicFriction = 0.5;
+	material.staticFriction = 0.5;
+
+	// Set the box starting height to 3.5m so box starts off falling onto the ground
+	NxReal boxStartHeight = 3.5; 
+
+	// Add a single-shape actor to the scene
+	NxActorDesc actorDesc;
+
+	// The actor has one shape, a box, 1m on a side
+	NxBoxShapeDesc boxDesc;
+	boxDesc.materialIndex = AddMaterialReturnIndex(material);
+	boxDesc.dimensions.set(0.5,0.5,0.5);
+	boxDesc.localPose.t = NxVec3(0, 0, 0);
+
+	actorDesc.shapes.pushBack(&boxDesc);
+	actorDesc.globalPose.t	= NxVec3(0,boxStartHeight,0);	
+	//assert(actorDesc.isValid());
+    return AddActor(actorDesc);
+}
+
+NxActor* PhysicsLayer::CreateDemoPlane()
+{
+	// Create the default material
+	NxMaterialDesc material;
+	material.restitution = 0.5;
+	material.dynamicFriction = 0.5;
+	material.staticFriction = 0.5;
+
+    // Create a plane with default descriptor
+    NxPlaneShapeDesc planeDesc;
+	planeDesc.materialIndex = AddMaterialReturnIndex(material);
+
+    NxActorDesc actorDesc;
+    actorDesc.shapes.pushBack(&planeDesc);
+	return AddActor(actorDesc);
+}
+
 }
