@@ -1,5 +1,7 @@
 #include "PhysicsObject.h"
 
+namespace Physics{
+
 PhysicsObject::PhysicsObject()
 {
 }
@@ -8,22 +10,29 @@ PhysicsObject::~PhysicsObject()
 {
 }
 
-void PhysicsObject::setMass(float f)
+void PhysicsObject::SetMass(float f)
 {
 	Actor->setMass((NxReal)f);
 }
 
-float PhysicsObject::getMass()
+float PhysicsObject::GetMass()
 {
 	return (float)Actor->getMass();
 }
 
-NxMat33 PhysicsObject::returnOrientationMatrix()
+NxVec3 PhysicsObject::GetPosition()
+{
+	return Actor->getGlobalPosition();
+}
+
+NxMat33 PhysicsObject::ReturnOrientationMatrix()
 {
 	return Actor->getGlobalOrientation();
 }
 
-NxActor* PhysicsObject::returnActor()
+NxActor* PhysicsObject::ReturnActor()
 {
 	return Actor;
+}
+
 }

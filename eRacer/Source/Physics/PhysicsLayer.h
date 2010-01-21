@@ -3,7 +3,7 @@
  * @brief The Physics Layer is responsible for simulating all physics objects in the scene.
  *
  * @date 16.01.2010
- * @author: Michael Blackadar
+ * @author: John Stuart
  */
 
 #ifndef PHYSICS_LAYER_H
@@ -12,6 +12,10 @@
 #include <iostream>
 #include <vector>
 #include "NxPhysics.h"
+
+using namespace std;
+
+namespace Physics{
 
 /**
 * @breif The physics SDK object that the main game loop will use to store actors and return the results of their collisions
@@ -54,9 +58,9 @@ public:
 	void GetPhysicsResults();
 
 	/*
-	* @breif Reads the parameters needed for the SDK from the file PhysicsInfo.txt
+	* @breif Reads the parameters needed for the SDK from consts.h
 	*/
-	void ReadParametersFromFile();
+	void GetSceneParameters();
 
 	/*
 	* @breif Sets the parameters
@@ -114,6 +118,10 @@ public:
 	*/
 	NxScene* ReturnScene();
 
+	NxActor* CreateDemoBox();
+
+	NxActor* CreateDemoPlane();
+
 protected:
 	// Physics SDK globals
 	NxPhysicsSDK* gPhysicsSDK;
@@ -123,4 +131,6 @@ protected:
 	NxVec3 gGravity;
 	NxReal skinWidth;
 };
+
+}
 #endif
