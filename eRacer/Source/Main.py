@@ -3,8 +3,6 @@ eRacer game.
 '''
 
 import os
-# set path to load fmod.dll
-os.environ['PATH'] += ';Lib'
 
 from Game     import Game, Entity
 from Core     import Event
