@@ -1,4 +1,5 @@
 #include "PhysicsObject.h"
+#include "Math.h"
 
 namespace Physics{
 
@@ -44,6 +45,7 @@ NxActor* PhysicsObject::getActor()
 }
 NxVec3 PhysicsObject::getVelocity()
 {
+
 	return Actor->getLinearVelocity();
 }
 
