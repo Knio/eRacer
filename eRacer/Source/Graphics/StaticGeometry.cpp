@@ -8,6 +8,11 @@
 
 #include "StaticGeometry.h"
 #include "GraphicsLayer.h"
+#include "d3d9types.h"
+#include <iostream>
+
+
+using namespace std;
 
 namespace Graphics {
 
@@ -30,39 +35,59 @@ void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
 	assert(NULL == mesh_);
 	assert(NULL != mesh);
 	mesh_ = mesh;
-/*
-	Vertex* vertices;
+
+	unsigned int bytesPerVertex = mesh_->GetNumBytesPerVertex();
+	unsigned int positionOffset = -1;
+
+	D3DVERTEXELEMENT9 vertexElement[MAX_FVF_DECL_SIZE];
+	mesh_->GetDeclaration(vertexElement);
+
+	unsigned int i=0;
+	while(i<MAX_FVF_DECL_SIZE && vertexElement[i].Stream != 0xFF){
+		if(D3DDECLUSAGE_POSITION==vertexElement[i].Usage){
+			positionOffset = vertexElement[i].Offset;
+		}
+		i++;
+	}
+	assert(positionOffset>=0);
+
+	unsigned char* vertices;
 		
 	assert(SUCCEEDED(mesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
 
+
 	Point3 min, max;
-	min.x = max.x = vertices->x;
-	min.y = max.y = vertices->y;
-	min.z = max.z = vertices->z;
+	Point3* position = (Point3*)(vertices+positionOffset);
+	min.x = max.x = position->x;
+	min.y = max.y = position->y;
+	min.z = max.z = position->z;
+    
+	vertices+=bytesPerVertex;
+    
+	for (unsigned int i=0; i<mesh_->GetNumVertices(); i++) {
+		position = (Point3*)vertices;
+        if(position->x < min.x)
+			min.x = position->x;
+		else if(position->x > max.x)
+			max.x = position->x;
 
-    for (unsigned int i=0; i<mesh_->GetNumVertices(); i++) {
-        if(vertices->x < min.x)
-			min.x = vertices->x;
-		else if(vertices->x > max.x)
-			max.x = vertices->x;
+		if(position->y < min.y)
+			min.y = position->y;
+		else if(position->y > max.y)
+			max.y = position->y;
 
-		if(vertices->y < min.y)
-			min.y = vertices->y;
-		else if(vertices->y > max.y)
-			max.y = vertices->y;
+		if(position->z < min.z)
+			min.z = position->z;
+		else if(position->z > max.z)
+			max.z = position->z;
 
-		if(vertices->z < min.z)
-			min.z = vertices->z;
-		else if(vertices->z > max.z)
-			max.z = vertices->z;
-
-        vertices++;
+        vertices+=bytesPerVertex;
     }
 
 	mesh_->UnlockVertexBuffer();
 
 	worldBoundingVolume_.set(transformAffine(transform_,min),transformAffine(transform_, max));
-	*/
+	
 }
 
 
