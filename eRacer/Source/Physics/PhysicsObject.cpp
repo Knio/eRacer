@@ -1,5 +1,5 @@
 #include "PhysicsObject.h"
-#include "Math.h"
+#include "..\Core\Math.h"
 
 namespace Physics{
 
