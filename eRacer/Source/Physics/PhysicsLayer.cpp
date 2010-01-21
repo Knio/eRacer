@@ -3,7 +3,7 @@
  * @brief Implementation of the PhysicsLayer class
  *
  * @date 16.01.2010
- * @author: John Stuart
+ * @author: John Stuart, Michael Blackadar
  */
 
 #include "../Core/Consts.h"

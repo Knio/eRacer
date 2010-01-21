@@ -3,7 +3,7 @@
  * @brief An object under physics simulation.
  *
  * @date 16.01.2010
- * @author: Michael Blackadar
+ * @author: Michael Blackadar, John Stuart
  */
 
 #ifndef PHYSICS_OBJECT_H
@@ -21,12 +21,12 @@ namespace Physics{
 class PhysicsObject{
 public:
 	/**
-	* @breif Constructor stub
+	* @brief Constructor stub
 	*/
 	PhysicsObject();
 	
 	/**
-	* @breif Destructor stub
+	* @brief Destructor stub
 	*/
 	~PhysicsObject();
 
@@ -45,7 +45,7 @@ public:
 	NxVec3 GetPosition();
 
 	/**
-	* @breif Method that returns the orientation matrix of the Actor
+	* @brief Method that returns the orientation matrix of the Actor
 	*
 	* @return The orientation matrix of the Actor
 	*/
@@ -60,7 +60,7 @@ public:
 
 protected:
 	/**
-	* @breif The PhysX object that is used to control behaviour
+	* @brief The PhysX object that is used to control behaviour
 	*/
 	NxActor* Actor;
 };
