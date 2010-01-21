@@ -11,7 +11,9 @@
 
 #include <iostream>
 #include <vector>
+
 #include "NxPhysics.h"
+#include "Time.h"
 
 using namespace std;
 
@@ -50,7 +52,7 @@ public:
 	/*
 	* @breif Starts the physics simulation
 	*/
-	void StartPhysics();
+	void StartPhysics(long long gDeltaTime);
 
 	/*
 	* @breif Calculates the physics results and saves the info to the actors
@@ -111,7 +113,7 @@ public:
 	/*
 	* @breif Stars the physics simulation
 	*/
-	void FinalizeSDK();
+	void FinalizeSDK(long long gDeltaTime);
 
 	/*
 	* @breif Returns the instance of the scene
@@ -126,10 +128,6 @@ protected:
 	// Physics SDK globals
 	NxPhysicsSDK* gPhysicsSDK;
 	NxScene* gScene;
-
-	// Physics SDK parameters
-	NxVec3 gGravity;
-	NxReal skinWidth;
 };
 
 }

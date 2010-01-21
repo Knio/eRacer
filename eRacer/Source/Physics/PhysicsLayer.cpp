@@ -13,6 +13,7 @@ extern Constants CONSTS;
 
 namespace Physics{
 
+
 PhysicsLayer::PhysicsLayer() : gScene(NULL) {
 }
 
@@ -46,13 +47,13 @@ void PhysicsLayer::ReleaseSDK()
 	if (gPhysicsSDK)  gPhysicsSDK->release();
 }
 
-void PhysicsLayer::StartPhysics()
+void PhysicsLayer::StartPhysics(long long gDeltaTime)
 {
 	// Update the time step
-	//gDeltaTime = UpdateTime();
+	//gDeltaTime = t.Tick();
 
 	// Start collision and dynamics for delta time since the last frame
-    //gScene->simulate(gDeltaTime);
+    gScene->simulate(gDeltaTime);
 	gScene->flushStream();
 }
 
@@ -120,13 +121,17 @@ int PhysicsLayer::AddMaterialReturnIndex(NxMaterialDesc materialDesc)
 	return FindMaterialIndex(matTemp);
 }
 
-void PhysicsLayer::FinalizeSDK()
+void PhysicsLayer::FinalizeSDK(long long gDeltaTime)
 {
-	// Get the current time
-	//UpdateTime();
-
-	// Start the first frame of the simulation
-	if (gScene)  StartPhysics();
+	if (gScene)  
+	{
+		StartPhysics(gDeltaTime);
+	}
+	else
+	{
+		printf("Error loading scene\n");
+		return;
+	}
 }
 
 NxScene* PhysicsLayer::ReturnScene()
