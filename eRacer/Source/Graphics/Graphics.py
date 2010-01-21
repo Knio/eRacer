@@ -14,13 +14,19 @@ class Graphics(Module):
     self.hinst = self.window.hinst
     self.hinst.disown()
     
-    self.scene = eRacer.Scene()
+    
+    
+    
     
     self.graphics.Init(self.hwnd)
+    self.scene = eRacer.Scene()
+    self.graphics.m_scene = self.scene
+
 
   def Tick(self, time):
     Module.Tick(self, time)
     self.window.Poll()
+    self.graphics.SetCamera()
     self.graphics.RenderFrame()
   
   def Quit(self):

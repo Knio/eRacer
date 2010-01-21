@@ -72,7 +72,7 @@ public:
 	 *			a transformation matrix for the geometry
 	 * @return a pointer to the newly created geometry
 	 */ 
-	MovingGeometry* CreateMovingGeometry(const string& name, const Matrix& transform);
+	MovingGeometry* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
 
 private:
 	vector<StaticGeometry*> geometry_;

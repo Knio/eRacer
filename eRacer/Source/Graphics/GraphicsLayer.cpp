@@ -98,32 +98,41 @@ int GraphicsLayer::Init( HWND hWnd )
 }
 
 //This makes an assumption of 1 texture per model for now
-HRESULT GraphicsLayer::LoadGeometryTest(LPD3DXMESH& pMesh, D3DMATERIAL9*& pMeshMaterials, 
-										LPDIRECT3DTEXTURE9*& pMeshTextures, DWORD& dwNumMaterials, 
-										const char* filePath, const char* textPath )
+
+
+
+int GraphicsLayer::LoadGeometryTest(StaticGeometry &geom, const char* filePath, const char* textPath)
+
 {
     LPD3DXBUFFER pD3DXMtrlBuffer;
 
 	WCHAR wszFilePath[128]; //convert to wide char
 	MultiByteToWideChar(CP_ACP, 0, filePath, -1, wszFilePath,128); 
 
+	LPD3DXMESH *mesh;
+	DWORD dwNumMaterials;
+	
+	
     // Load the mesh from the specified file into device memory
     if( FAILED( D3DXLoadMeshFromX( filePath, D3DXMESH_SYSTEMMEM,
                                    m_pd3dDevice, NULL,
                                    &pD3DXMtrlBuffer, NULL, &dwNumMaterials,
-                                   &pMesh ) ) )
+								   mesh ) ) )
     {
             //MessageBox( NULL, L"Could not find model", L"eRacer.exe", MB_OK );
-            return E_FAIL;
+            assert(false);
     }
+
+	geom.SetMesh(*mesh);
 
     // We need to extract the material properties and texture names from the 
     // pD3DXMtrlBuffer
     D3DXMATERIAL* d3dxMaterials = ( D3DXMATERIAL* )pD3DXMtrlBuffer->GetBufferPointer();
-    pMeshMaterials = new D3DMATERIAL9[dwNumMaterials];
+    D3DMATERIAL9* pMeshMaterials = new D3DMATERIAL9[dwNumMaterials];
+	
     if( pMeshMaterials == NULL )
         return E_OUTOFMEMORY;
-    pMeshTextures = new LPDIRECT3DTEXTURE9[dwNumMaterials];
+    LPDIRECT3DTEXTURE9 *pMeshTextures = new LPDIRECT3DTEXTURE9[dwNumMaterials];
     if( pMeshTextures == NULL )
         return E_OUTOFMEMORY;
 
@@ -147,6 +156,9 @@ HRESULT GraphicsLayer::LoadGeometryTest(LPD3DXMESH& pMesh, D3DMATERIAL9*& pMeshM
 				//MessageBox( NULL, L"Could not find texture", L"eRacer.exe", MB_OK );
             }
         }
+		geom.Materials().push_back(&pMeshMaterials[i]);
+		geom.Textures().push_back(pMeshTextures[i]);
+
     }
 
     // Done with the material buffer
@@ -165,7 +177,7 @@ int GraphicsLayer::RenderFrame()
     if( SUCCEEDED( m_pd3dDevice->BeginScene() ) )
     {
 		vector<StaticGeometry*> visibleObjects;
-		m_scene.GetVisibleNodes(m_camera, visibleObjects);
+		m_scene->GetVisibleNodes(m_camera, visibleObjects);
 		for(vector<StaticGeometry*>::const_iterator object = visibleObjects.begin(); 
 			object!=visibleObjects.end(); object++){
 			//The camera can be set here, but does not need to be

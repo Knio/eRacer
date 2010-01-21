@@ -1,25 +1,19 @@
 from Game import Entity
 
+import eRacer
+
 class Box(Entity):
   def __init__(self, game):
      Entity.__init__(self, game)
      
-     self.pos = Point3(0, 0, 10)
-     self.rot = Vector3(0, 0, 0)
      
-     self.physics = PhysicsObject()
-     self.graphics = game.graphics.GetNode(self.pos, self.rot, moving=True)
      
-     def loaded(mesh):
-     self.graphics.SetMesh(mesh)
+     #self.physics = PhysicsObject()
+     self.graphics = game.graphics.scene.CreateMovingGeometry("test")
      
-     self.game.io.LoadMesh(loaded, "box.obj")
-   
+     game.graphics.graphics.LoadGeometryTest(self.graphics, "Resources/Ship_06.x", "Resources/Ship_06.png")
+     
+     
      
   def Tick(self, time):
-     self.pos = self.physics.GetPos()
-     self.rot = self.physics.GetRot()
-     
-     self.graphics.SetPos(self.pos)
-     self.graphics.SetRot(self.rot)
-     
+     pass

@@ -68,7 +68,8 @@ void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
 
 StaticGeometry::StaticGeometry(const string& name)
 	: Spatial(name),
-	  transform_(IDENTITY)
+	  transform_(IDENTITY),
+	  mesh_(NULL)
 {
 	
 }

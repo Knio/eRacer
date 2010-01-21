@@ -42,12 +42,17 @@ class Main(Game):
     self.AddModule(self.physics)
     self.AddModule(self.graphics)
     
-    # testing stuff
-    self.logic.Add(TestEntity())
-    self.sound.PlaySound2D("Resources/jaguar.wav")
-    
     self.event.Register(self.QuitEvent)
     self.event.Register(self.KeyPressedEvent)
+    
+    
+    # testing stuff
+    self.logic.Add(TestEntity(self))
+    self.sound.PlaySound2D("Resources/jaguar.wav")
+    
+    from Logic.Box import Box
+    self.logic.Add(Box(self))
+    
     
     
   def Tick(self, time):

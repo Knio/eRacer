@@ -22,6 +22,7 @@ const Matrix IDENTITY(1,0,0,0,
 					  0,0,0,1);
 
 
+
 Vector3 cross(const Vector3 &A, const Vector3 &B);
 float dot(const Vector3 &A, const Vector3 &B);
 

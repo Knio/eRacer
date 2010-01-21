@@ -32,6 +32,7 @@ struct CUSTOMVERTEX
 
 class GraphicsLayer
 {
+
 private:
 	static GraphicsLayer *m_pGlobalGLayer;
 
@@ -39,7 +40,7 @@ private:
 	LPDIRECT3DDEVICE9   m_pd3dDevice;	//Our rendering device
 
 	Camera m_camera;
-	Scene m_scene;
+
 
 
 //Test Variables
@@ -57,6 +58,7 @@ protected:
 	int Draw();
 
 public:
+	Scene* m_scene;
 	~GraphicsLayer();	//Destructor
 	int Init( HWND hWnd );
 	//int DrawRaw(CUSTOMVERTEX vertexBuf[], int vertexBufSize); //For testing
@@ -66,8 +68,7 @@ public:
 	int Shutdown();
 	int SetCamera();
 	int SetCamera(const Camera& cam);
-	HRESULT LoadGeometryTest(LPD3DXMESH& pMesh, D3DMATERIAL9*& pMeshMaterials, LPDIRECT3DTEXTURE9*& pMeshTextures, 
-		DWORD& dwNumMaterials, const char* meshPath, const char* texPath );
+	int LoadGeometryTest(StaticGeometry &geom, const char* filePath, const char* textPath); 
 
 	static GraphicsLayer *GetGraphicsInstance()
 	{

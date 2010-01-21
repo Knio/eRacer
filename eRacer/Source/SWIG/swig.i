@@ -23,7 +23,10 @@
 
 /* Parse the header file to generate wrappers */
 
+%include "std_string.i"
+
 %feature("director") Event;
+
 %include "..\Core\Event.h"
 %include "..\Core\Time.h"
 
