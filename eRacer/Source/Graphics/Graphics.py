@@ -9,16 +9,18 @@ class Graphics(Module):
     self.window   = Window("Test")
     self.graphics = eRacer.GraphicsLayer.GetGraphicsInstance()
     
+    # get pointers
+    
     self.hwnd = self.window.hwnd
     self.hwnd.disown()
     self.hinst = self.window.hinst
     self.hinst.disown()
     
-    
-    
-    
-    
     self.graphics.Init(self.hwnd)
+    
+    self.d3d = self.graphics.GetDevice()
+    self.d3d.disown()
+    
     self.scene = eRacer.Scene()
     self.graphics.m_scene = self.scene
 

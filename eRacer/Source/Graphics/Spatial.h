@@ -30,6 +30,9 @@ public:
 	 * @param name
 	 *			a name for this node to facilitate debugging
 	 */
+
+	bool visible;
+
 	Spatial(const string& name);
 
 	/**
@@ -46,11 +49,8 @@ public:
 	 * 			A vector to push all visible nodes to
 	 */
 	void cull(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const;
-	
-
-	void setVisible(bool visible);
-
 	const AxisAlignedBoundingBox& getWorldBoundingVolume() const;
+
 protected:
 	/**
 	 * @brief Pure virtual. Called if the node should not be culled.
@@ -61,16 +61,9 @@ protected:
 	 * 			A vector to push all visible nodes to
 	 */
 	virtual void cullRecursive(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const = 0;
-
-
-	string name_;
-	bool visible_;
+	string name_;	
 	AxisAlignedBoundingBox worldBoundingVolume_;
 };
-
-inline void Spatial::setVisible(bool visible){
-	visible_ = visible;
-}
 
 inline const AxisAlignedBoundingBox& Spatial::getWorldBoundingVolume() const{
 	return worldBoundingVolume_;

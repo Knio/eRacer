@@ -343,6 +343,10 @@
 					RelativePath=".\Source\IO\__init__.py"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\IO\IO.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -410,6 +414,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							CommandLine="$(SWIG_DIR)\swig.exe -c++ -python $(InputPath)&#x0D;&#x0A;"
+							AdditionalDependencies="Sorce\Core\*.h"
 							Outputs="Source\SWIG\$(InputName)_wrap.cxx"
 						/>
 					</FileConfiguration>
@@ -452,6 +457,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\Module.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\point.h"
 					>
 				</File>
@@ -485,6 +494,14 @@
 				</File>
 				<File
 					RelativePath=".\Source\Physics\PhysicsObject.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="IO"
+				>
+				<File
+					RelativePath=".\Source\IO\IO.h"
 					>
 				</File>
 			</Filter>

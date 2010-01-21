@@ -11169,7 +11169,7 @@ Mesh Mesh_Ship_06 {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "..\\Textures\\Ship_06.png";
+    "Ship_06.png";
    }
   }
 
@@ -11179,7 +11179,7 @@ Mesh Mesh_Ship_06 {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "..\\Textures\\Ship_06.png";
+    "Ship_06.png";
    }
   }
 
@@ -11189,7 +11189,7 @@ Mesh Mesh_Ship_06 {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "..\\Textures\\Ship_06.png";
+    "Ship_06.png";
    }
   }
 
@@ -11199,7 +11199,7 @@ Mesh Mesh_Ship_06 {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "..\\Textures\\Ship_06.png";
+    "Ship_06.png";
    }
   }
 
@@ -11209,7 +11209,7 @@ Mesh Mesh_Ship_06 {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "..\\Textures\\Ship_06.png";
+    "Ship_06.png";
    }
   }
 
@@ -11219,7 +11219,7 @@ Mesh Mesh_Ship_06 {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "..\\Textures\\Ship_06.png";
+    "Ship_06.png";
    }
   }
  }

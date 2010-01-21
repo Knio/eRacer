@@ -5,6 +5,9 @@
 /* Includes the header in the wrapper code */
 #include "..\Core\Event.h"
 #include "..\Core\Time.h"
+#include "..\Core\Module.h"
+
+#include "..\IO\IO.h"
 
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
@@ -29,8 +32,14 @@
 
 %include "..\Core\Event.h"
 %include "..\Core\Time.h"
+%include "..\Core\Module.h"
+
+%feature("director") IO;
+%include "..\IO\IO.h"
 
 %include "..\Graphics\Camera.h"
+%include "..\Graphics\AxisAlignedBoundingBox.h"
+%include "..\Graphics\Spatial.h"
 %include "..\Graphics\StaticGeometry.h"
 %include "..\Graphics\MovingGeometry.h"
 %include "..\Graphics\Scene.h"

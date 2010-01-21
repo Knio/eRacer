@@ -28,8 +28,9 @@ class Main(Game):
     
     # graphics must be created first because
     # some other modules need a HWND
-    self.io        = IO(self) 
+    
     self.graphics  = Graphics(self)
+    self.io        = IO(self)
     self.input     = Input(self)
     self.logic     = Logic(self)
     self.sound     = Sound(self)

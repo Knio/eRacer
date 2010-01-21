@@ -1,21 +1,41 @@
 from Game import Module
+import eRacer
 
+import os
 import threading
 import Queue
 
 def asynchronous(func):
   def f(self, callback, *args, **kwargs):
-    self.queue.put_nowait(func, callback, args, kwargs)
+    self.queue.put_nowait((func, callback, args, kwargs))
   return f
+  
+def debug(func):
+  def f(*args, **kwargs):
+    print ('%s(%r, %r) = ' % (func.__name__, args, kwargs)),
+    r = func(*args, **kwargs)
+    print repr(r)
+    return r
+  return f
+  
 
-class IO(Module):
+class IO(Module, eRacer.IO):
   def __init__(self, game):
     Module.__init__(self, game)
+    eRacer.IO.__init__(self, game.graphics.graphics.GetDevice())
+    
+    # work queue
     self.queue = Queue.Queue()
+    
+    # thread
     self.thread = threading.Thread(target=self.work)
     self.thread.setDaemon(True)
     self.thread.start()
-
+    
+    # cache
+    self.defaulttex = eRacer.IO.LoadTexture(self, "Resources/Default.png")
+    self.textures = {}
+    
   def work(self):
     while 1:
       func, callback, args, kwargs = self.queue.get()
@@ -23,5 +43,17 @@ class IO(Module):
       callback(r)
 
   @asynchronous
-  def LoadMesh(self, name):
-    pass
+  def LoadMeshAsync(self, node, name):
+    return self.LoadMesh(node, name)
+    
+  @debug
+  def LoadTexture(self, name):
+    if name:
+      name = os.path.join('Resources', name)
+    if not name in self.textures:
+      r = eRacer.IO.LoadTexture(self, name)
+      if not r:
+        return self.defaulttex
+      self.textures[name] = r
+    
+    return self.textures[name]

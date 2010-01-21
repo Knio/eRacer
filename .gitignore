@@ -4,6 +4,7 @@ doc/*
 eRacer/Doc/*
 eRacer/dist
 eRacer/build
+Thumbs.db
 .moc/*
 .tmp/*
 *.pdf

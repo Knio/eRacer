@@ -235,26 +235,6 @@ int GraphicsLayer::RenderFrame(const StaticGeometry& r)
 
 int GraphicsLayer::Shutdown()
 {
-	//Free model and texture information
-	if( NULL != m_pMeshMaterials )
-        delete[] m_pMeshMaterials;
-	m_pMeshMaterials = NULL;
-
-    if( NULL != m_pMeshTextures )
-    {
-        for( DWORD i = 0; i < m_dwNumMaterials; i++ )
-        {
-            if( m_pMeshTextures[i] )
-                m_pMeshTextures[i]->Release();
-        }
-        delete[] m_pMeshTextures;
-		m_pMeshTextures = NULL;
-    }
-
-    if( NULL != m_pMesh)
-        m_pMesh->Release();
-	m_pMesh = NULL;
-
 	//Release the Devce
     if( NULL != m_pd3dDevice )
         m_pd3dDevice->Release();

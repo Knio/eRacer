@@ -21,7 +21,11 @@ Scene::~Scene(){
 }
 
 void Scene::GetVisibleNodes(const Camera& camera, vector<StaticGeometry*>& visibleNodes) const {
-	visibleNodes = geometry_;
+	for (vector<StaticGeometry*>::const_iterator i = geometry_.begin(); i != geometry_.end(); i++)
+	{
+		if ((*i)->visible)
+			visibleNodes.push_back(*i);
+	}
 }
 
 MovingGeometry* Scene::CreateMovingGeometry(const string& name, const Matrix& transform) {

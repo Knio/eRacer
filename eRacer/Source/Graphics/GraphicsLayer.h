@@ -41,16 +41,6 @@ private:
 
 	Camera m_camera;
 
-
-
-//Test Variables
-	LPDIRECT3DVERTEXBUFFER9 m_pVB;		//Buffer to hold Vertices, stopgap for now
-	int m_VBSize;						//Number of elements in the Vertex Buffer
-	LPD3DXMESH          m_pMesh; // Our mesh object in sysmem
-	D3DMATERIAL9*       m_pMeshMaterials; // Materials for our mesh
-	LPDIRECT3DTEXTURE9* m_pMeshTextures; // Textures for our mesh
-	DWORD               m_dwNumMaterials;   // Number of mesh materials
-
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
 	GraphicsLayer(const GraphicsLayer&);
@@ -63,6 +53,7 @@ public:
 	int Init( HWND hWnd );
 	//int DrawRaw(CUSTOMVERTEX vertexBuf[], int vertexBufSize); //For testing
 
+	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
 	int RenderFrame();
 	int RenderFrame(const StaticGeometry& r);
 	int Shutdown();

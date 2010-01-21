@@ -13,7 +13,7 @@ namespace Graphics {
 
 Spatial::Spatial(const string& name)
 	: name_(name),
-	  visible_(true)
+	  visible(true)
 {
 	
 }
@@ -22,7 +22,7 @@ Spatial::~Spatial(){
 }
 
 void Spatial::cull(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const{
-	if(!visible_)
+	if(!visible)
 		return;
 
 	for(int i=0; i<6; i++){
