@@ -68,9 +68,9 @@ void PhysicsLayer::GetSceneParameters()
 	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, (NxReal)CONSTS.PHYS_SKIN_WIDTH);
 
 	// Set the debug visualization parameters
-	gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE, CONSTS.PHYS_DEBUG_MODE);
-	gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES, CONSTS.PHYS_DEBUG_MODE);
-	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES, CONSTS.PHYS_DEBUG_MODE);
+	gPhysicsSDK->setParameter(NX_VISUALIZATION_SCALE,			(float)CONSTS.PHYS_DEBUG_MODE);
+	gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES,	(float)CONSTS.PHYS_DEBUG_MODE);
+	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES,			(float)CONSTS.PHYS_DEBUG_MODE);
 
 	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Y));
 }
