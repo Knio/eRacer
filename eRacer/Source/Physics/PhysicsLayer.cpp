@@ -1,11 +1,3 @@
-/**
- * @file PhysicsLayer.cpp
- * @brief Implementation of the PhysicsLayer class
- *
- * @date 16.01.2010
- * @author: John Stuart, Michael Blackadar
- */
-
 #include "../Core/Consts.h"
 extern Constants CONSTS;
 

@@ -3,7 +3,7 @@
  * @brief The Physics Layer is responsible for simulating all physics objects in the scene.
  *
  * @date 16.01.2010
- * @author: John Stuart
+ * @author: John Stuart, Michael Blackadar
  */
 
 #ifndef PHYSICS_LAYER_H
@@ -31,43 +31,43 @@ public:
 	 */
 	~PhysicsLayer();
 
-	/*
+	/**
 	* @brief Initializes the SDK instance
 	*/
 	void InitSDK();
 
-	/*
+	/**
 	* @brief Ends the SDK
 	*/
 	void ReleaseSDK();
 
-	/*
+	/**
 	* @brief Resets the SDK instance by calling Release and then Init
 	* Must remember to reinitiaize all of the actors, materials ect.
 	*/
 	void ResetSDK();
 
-	/*
+	/**
 	* @brief Starts the physics simulation
 	*/
 	void StartPhysics();
 
-	/*
+	/**
 	* @brief Calculates the physics results and saves the info to the actors
 	*/
 	void GetPhysicsResults();
 
-	/*
+	/**
 	* @brief Reads the parameters needed for the SDK from consts.h
 	*/
 	void GetSceneParameters();
 
-	/*
+	/**
 	* @brief Sets the parameters
 	*/
 	void SetParameters();	
 
-	/*
+	/**
 	* @brief Method that adds an actor to the scene
 	*
 	* @param actorDesc 
@@ -77,7 +77,7 @@ public:
 	*/
 	NxActor* AddActor(NxActorDesc actorDesc);
 
-	/*
+	/**
 	* @brief Method that adds a material to the scene
 	*
 	* @param materialDesc 
@@ -87,7 +87,7 @@ public:
 	*/
 	NxMaterial*	AddMaterial(NxMaterialDesc materialDesc);
 
-	/*
+	/**
 	* @brief Method that returns the Material index in the scene, for the creation of actors with more detail
 	*
 	* @param material
@@ -97,7 +97,7 @@ public:
 	*/
 	int FindMaterialIndex(NxMaterial* material);
 
-	/*
+	/**
 	* @brief Method that returns the Material index in the scene, for the creation of actors with more detail, 
 	*		 This is equivalent to calling AddMaterial and FindMaterialIndex, but for human readablilty, it was reduced
 	*
@@ -108,12 +108,12 @@ public:
 	*/
 	int AddMaterialReturnIndex(NxMaterialDesc materialDesc);
 
-	/*
+	/**
 	* @brief Stars the physics simulation
 	*/
 	void FinalizeSDK();
 
-	/*
+	/**
 	* @brief Returns the instance of the scene
 	*/
 	NxScene* ReturnScene();
