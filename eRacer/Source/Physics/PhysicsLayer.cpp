@@ -33,26 +33,25 @@ void PhysicsLayer::ReleaseSDK()
 {
 	if (gScene)
 	{
-		GetPhysicsResults();  // Make sure to fetchResults() before shutting down
+		gScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
 		gPhysicsSDK->releaseScene(*gScene);
 	}
 	if (gPhysicsSDK)  gPhysicsSDK->release();
 }
 
-void PhysicsLayer::StartPhysics(long long gDeltaTime)
+void PhysicsLayer::UpdatePhysics(Time t)
 {
-	// Update the time step
-	//gDeltaTime = t.Tick();
-
 	// Start collision and dynamics for delta time since the last frame
-    gScene->simulate(gDeltaTime);
+	gScene->simulate(float(t.delta) / Time::RESOLUTION);
 	gScene->flushStream();
 }
 
 void PhysicsLayer::GetPhysicsResults()
 {
 	// Get results from gScene->simulate(gDeltaTime)
-	while (!gScene->fetchResults(NX_RIGID_BODY_FINISHED, false));
+	while (!gScene->fetchResults(NX_RIGID_BODY_FINISHED, true))
+		assert(false);
+		//printf("Waiting for physics..\n");
 }
 
 void PhysicsLayer::GetSceneParameters()
@@ -113,11 +112,11 @@ int PhysicsLayer::AddMaterialReturnIndex(NxMaterialDesc materialDesc)
 	return FindMaterialIndex(matTemp);
 }
 
-void PhysicsLayer::FinalizeSDK(long long gDeltaTime)
+void PhysicsLayer::FinalizeSDK()
 {
 	if (gScene)  
 	{
-		StartPhysics(gDeltaTime);
+		UpdatePhysics(Time());
 	}
 	else
 	{

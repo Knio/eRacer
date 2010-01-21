@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "NxPhysics.h"
-#include "Time.h"
+#include "..\Core\Time.h"
 
 using namespace std;
 
@@ -52,7 +52,7 @@ public:
 	/**
 	* @brief Starts the physics simulation
 	*/
-	void StartPhysics(long long gDeltaTime);
+	void UpdatePhysics(Time t);
 
 	/**
 	* @brief Calculates the physics results and saves the info to the actors
@@ -113,7 +113,7 @@ public:
 	/**
 	* @brief Stars the physics simulation
 	*/
-	void FinalizeSDK(long long gDeltaTime);
+	void FinalizeSDK();
 
 	/**
 	* @brief Returns the instance of the scene
