@@ -14,7 +14,7 @@ struct Time
 	
 	Time() : start(GetTime()), current(GetTime()), delta(0) {  }
 
-	long long GetTime()
+	static long long GetTime()
 	{
 		LARGE_INTEGER clockSpeed;
 		LARGE_INTEGER tick;

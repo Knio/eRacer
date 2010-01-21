@@ -13,9 +13,9 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <mmsystem.h>
-#pragma warning( disable : 4996 ) // disable deprecated warning 
-#include <strsafe.h>
-#pragma warning( default : 4996 )
+#pragma warning( disable : 4996 4995 ) // disable deprecated warning 
+//#include <strsafe.h>
+#pragma warning( default : 4996 4995 )
 #include "Camera.h"
 #include "StaticGeometry.h"
 #include "Scene.h"

@@ -7,13 +7,11 @@
  */
 
 #include "MovingGeometry.h"
-#include <cstdio>
 namespace Graphics {
 
 MovingGeometry::MovingGeometry(const string& name)
 	: StaticGeometry(name)
 {
-	printf("%p\n", mesh_);
 }
 MovingGeometry::~MovingGeometry(){
 	

@@ -1,3 +1,4 @@
+#include "../Core/Time.h"
 #include "GraphicsLayer.h"
 
 namespace Graphics {
@@ -49,7 +50,7 @@ int GraphicsLayer::SetCamera()
 {
 	//Simple camera for testing
     D3DXMATRIXA16 matWorld;
-    D3DXMatrixRotationY( &matWorld, timeGetTime() / 1000.0f );
+	D3DXMatrixRotationY( &matWorld, Time::GetTime() / 1000000.0f );
     m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 
     D3DXVECTOR3 vEyePt( 0.0f, 3.0f,-10.0f );
@@ -97,33 +98,30 @@ int GraphicsLayer::Init( HWND hWnd )
     return S_OK;
 }
 
-//This makes an assumption of 1 texture per model for now
-
-
 
 int GraphicsLayer::LoadGeometryTest(StaticGeometry &geom, const char* filePath, const char* textPath)
-
+//This makes an assumption of 1 texture per model for now
 {
     LPD3DXBUFFER pD3DXMtrlBuffer;
 
 	WCHAR wszFilePath[128]; //convert to wide char
 	MultiByteToWideChar(CP_ACP, 0, filePath, -1, wszFilePath,128); 
 
-	LPD3DXMESH *mesh;
+	LPD3DXMESH mesh;
 	DWORD dwNumMaterials;
 	
 	
     // Load the mesh from the specified file into device memory
-    if( FAILED( D3DXLoadMeshFromX( filePath, D3DXMESH_SYSTEMMEM,
+    if( D3D_OK != D3DXLoadMeshFromX( filePath, D3DXMESH_SYSTEMMEM,
                                    m_pd3dDevice, NULL,
                                    &pD3DXMtrlBuffer, NULL, &dwNumMaterials,
-								   mesh ) ) )
+								   &mesh ) )
     {
             //MessageBox( NULL, L"Could not find model", L"eRacer.exe", MB_OK );
             assert(false);
     }
 
-	geom.SetMesh(*mesh);
+	geom.SetMesh(mesh);
 
     // We need to extract the material properties and texture names from the 
     // pD3DXMtrlBuffer
@@ -198,8 +196,9 @@ int GraphicsLayer::RenderFrame()
 	return S_OK;
 }
 
-//This function is a stop gap until caching by lists is completed
+
 int GraphicsLayer::RenderFrame(const StaticGeometry& r)
+//This function is a stop gap until caching by lists is completed
 {
 	// Clear the backbuffer and the zbuffer
     m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
