@@ -9,6 +9,7 @@ PDIRECT3DTEXTURE9 IO::LoadTexture(const char* file)
 		file, 
 		&t
 	);
+	if (r != D3D_OK) return (PDIRECT3DTEXTURE9)-1;
 	return t;
 }
 
@@ -43,7 +44,6 @@ int IO::LoadMesh(Graphics::StaticGeometry &geom, const char* file)
 
 		geom.Materials().push_back(&m2[i]);
 		geom.Textures() .push_back(t);
-
     }
 
     // Done with the material buffer

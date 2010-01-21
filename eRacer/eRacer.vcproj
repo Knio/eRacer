@@ -25,6 +25,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="$(SWIG_DIR)/swig.exe -c++ -python Source/SWIG/swig.i"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -105,9 +106,12 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="$(SWIG_DIR)/swig.exe -c++ -python Source/SWIG/swig.i"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				CommandLine=""
+				Outputs=""
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -122,11 +126,14 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
+				MinimalRebuild="true"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
+				EnableEnhancedInstructionSet="2"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -423,8 +430,8 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="$(SWIG_DIR)\swig.exe -c++ -python $(InputPath)&#x0D;&#x0A;"
-							Outputs="Source\SWIG\$(InputName)_wrap.cxx;Source\SWIG\$(InputName)_wrap.h"
+							CommandLine=""
+							Outputs=""
 						/>
 					</FileConfiguration>
 				</File>

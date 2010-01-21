@@ -22,7 +22,7 @@ def debug(func):
 class IO(Module, eRacer.IO):
   def __init__(self, game):
     Module.__init__(self, game)
-    eRacer.IO.__init__(self, game.graphics.graphics.GetDevice())
+    eRacer.IO.__init__(self, game.graphics.d3d)
     
     # work queue
     self.queue = Queue.Queue()
@@ -46,13 +46,15 @@ class IO(Module, eRacer.IO):
   def LoadMeshAsync(self, node, name):
     return self.LoadMesh(node, name)
     
-  @debug
+  #@debug
   def LoadTexture(self, name):
     if name:
       name = os.path.join('Resources', name)
     if not name in self.textures:
       r = eRacer.IO.LoadTexture(self, name)
-      if not r:
+      r.disown()
+      if not self.valid(r):
+        print 'Failed to load texture "%s", using default' % name
         return self.defaulttex
       self.textures[name] = r
     
