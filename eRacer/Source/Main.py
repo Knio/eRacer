@@ -16,7 +16,8 @@ from Physics  import Physics
 class TestEntity(Entity):
   def Tick(self, time):
     pass
-    print 'Hi! %10r %10r %10r' % (time.elapsed, time.delta, time.Fps())
+    # quick fps counter
+    #print 'Hi! %10r %10r %10r' % (time.elapsed, time.delta, time.Fps())
 
 class Main(Game):
   def __init__(self):
