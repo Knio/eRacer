@@ -35,7 +35,7 @@ public:
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 * 			- default: (0,1,0)
 	 */
-	Camera(const Point3& position = ORIGIN, const Point3& lookAt = Point3(0,0,1), const Vector3& approxUp=Vector3(0,1,0));
+	Camera(const Point3& position = Point3(0, 0, -1), const Point3& lookAt = Point3(0,0,0), const Vector3& approxUp=Vector3(0,1,0));
 
 	/**
 	 * @brief Destructor stub.
@@ -56,7 +56,7 @@ public:
 	 * 			a vector that approximates the up direction. The actual up vector
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 */
-	void setFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp);
+	void SetFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp);
 
 	/**
 	 * @brief set position
@@ -67,7 +67,7 @@ public:
 	 * @param position
 	 * 			the eye point of the camera
 	 */
-	void setPosition(const Point3& position);
+	void SetPosition(const Point3& position);
 
 	/**
 	 * @brief set point where the camera should look at
@@ -78,7 +78,7 @@ public:
 	 * @param lookAt
 	 * 			the point the camera should point at
 	 */
-	void setLookAt(const Point3& lookAt);
+	void SetLookAt(const Point3& lookAt);
 
 	/**
 	 * @brief set the up vector
@@ -89,7 +89,7 @@ public:
 	 * @param approxUp
 	 * 			an approximation of the up vector
 	 */
-	void setUp(const Vector3& approxUp);
+	void SetUp(const Vector3& approxUp);
 
 	/**
 	 * @brief set distance to near plane
@@ -100,7 +100,7 @@ public:
 	 * @param near
 	 * 			the distance to the near plane - must be positive
 	 */
-	void setNear(float near);
+	void SetNear(float near);
 
 	/**
 	 * @brief set the distance to the far plane
@@ -111,7 +111,7 @@ public:
 	 * @param far
 	 * 			the distance to the far plane - must be positive and greater than near
 	 */
-	void setFar(float far);
+	void SetFar(float far);
 
 	/**
 	 * @brief set the aspect ratio (height/width)
@@ -120,7 +120,7 @@ public:
 	 * 			the ratio between the height and the width of the view frustum - must
 	 * 			be positive
 	 */
-	void setAspectRatio(float aspectRatio);
+	void SetAspectRatio(float aspectRatio);
 
 	/**
 	 * @brief set the field of view in y direction in radiants
@@ -129,7 +129,7 @@ public:
 	 * 			the field of view in y direction in radiants - must be positive and
 	 * 			smaller than PI (180 degrees)
 	 */
-	void setFovY(float fovY);
+	void SetFovY(float fovY);
 
 	/**
 	 * @brief get the view matrix
@@ -138,7 +138,7 @@ public:
 	 *
 	 * @return the view matrix
 	 */
-	const Matrix& getViewMatrix() const;
+	const Matrix& GetViewMatrix() const;
 
 	/**
 	 * @brief get the projection matrix
@@ -147,7 +147,7 @@ public:
 	 *
 	 * @return the projection matrix
 	 */
-	const Matrix& getProjectionMatrix() const;
+	const Matrix& GetProjectionMatrix() const;
 
 	/**
 	 * @brief get the specified plane limiting the view frustum
@@ -164,17 +164,19 @@ public:
 	 * 			The index of the plane to return
 	 * @return the specified plane
 	 */
-	const Plane& getPlane(int planeIndex) const;
+	const Plane& GetPlane(int planeIndex) const;
 private:
-	void updateView();
-	void updateProjection();
-	void updatePlanes();
+	void UpdateView();
+	void UpdateProjection();
+	void UpdatePlanes();
+	void UpdateUp();
 
 	Matrix viewMatrix_;
 	Matrix projectionMatrix_;
 
 	Point3 position_;
 	Point3 lookAt_;
+	Vector3 approxup_;
 	Vector3 up_;
 
 	float near_;
@@ -185,42 +187,47 @@ private:
 	Plane planes_[6];
 };
 
-inline void Camera::setFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp){
+inline void Camera::SetFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp){
 	position_ = position;
 	lookAt_ = lookAt;
-	setUp(approxUp);
+	SetUp(approxUp);
 
-	updateView();
+	UpdateView();
 }
 
 
-inline void Camera::setPosition(const Point3& position){
+inline void Camera::SetPosition(const Point3& position){
 	position_ = position;
 
 	//adjust up so that it is perpendicular to view direction
-	setUp(up_);
+	UpdateUp();
 
-	updateView();
+	UpdateView();
 }
 
-inline void Camera::setLookAt(const Point3& lookAt){
+inline void Camera::SetLookAt(const Point3& lookAt){
 	lookAt_ = lookAt;
 
 	//adjust up so that it is perpendicular to view direction
-	setUp(up_);
+	UpdateUp();
 
-	updateView();
+	UpdateView();
 }
 
-inline void Camera::setUp(const Vector3& approxUp){
-	up_ = approxUp;
+
+inline void Camera::SetUp(const Vector3& approxUp)
+{ 
+	approxup_ = approxUp; UpdateUp(); 
+}
+inline void Camera::UpdateUp(){
+	up_ = approxup_;
 	Vector3 viewDirection = lookAt_ - position_;
 	normalize(viewDirection);
 	normalize(up_);
-	up_ = cross(cross(viewDirection, approxUp),viewDirection);
+	up_ = cross(cross(viewDirection, up_),viewDirection);
 }
 
-inline void Camera::updateView(){
+inline void Camera::UpdateView(){
 	D3DXMatrixLookAtLH(&viewMatrix_,
 	                      &position_,
 	                      &lookAt_,
@@ -229,31 +236,33 @@ inline void Camera::updateView(){
 }
 
 
-inline void Camera::setNear(float nea){
+inline void Camera::SetNear(float nea){
 	assert(nea>0);
 	near_ = nea;
 }
 
-inline void Camera::setFar(float fa){
+inline void Camera::SetFar(float fa){
 	assert(fa>0);
 	assert(fa>=near_);
 	far_ = fa;
 }
 
 
-inline void Camera::setAspectRatio(float aspectRatio){
+inline void Camera::SetAspectRatio(float aspectRatio){
 	assert(aspectRatio>0);
 	aspectRatio_ = aspectRatio;
 }
 
-inline void Camera::setFovY(float fovY){
+inline void Camera::SetFovY(float fovY){
 	assert(fovY>0);
 	assert(fovY<PI);
 	fovY_ = fovY;
+	UpdateProjection();
+	
 }
 
 
-inline void Camera::updateProjection(){
+inline void Camera::UpdateProjection(){
 	   D3DXMatrixPerspectiveFovLH(&projectionMatrix_,
 	                              fovY_,
 	                              aspectRatio_,
@@ -261,10 +270,10 @@ inline void Camera::updateProjection(){
 	                              far_ );
 }
 
-inline const Matrix& Camera::getViewMatrix() const{
+inline const Matrix& Camera::GetViewMatrix() const{
 	return viewMatrix_;
 }
-inline const Matrix& Camera::getProjectionMatrix() const{
+inline const Matrix& Camera::GetProjectionMatrix() const{
 	return projectionMatrix_;
 }
 

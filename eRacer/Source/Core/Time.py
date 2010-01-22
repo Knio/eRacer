@@ -16,3 +16,8 @@ class Time(eRacer.Time):
     return self.RESOLUTION \
      * float(len(self.buffer)-1) \
      / (self.buffer[(self.pos-1) % 10] - self.buffer[self.pos])
+     
+  def get_seconds(self):
+    return float(self.elapsed) / self.RESOLUTION
+    
+  seconds = property(get_seconds)

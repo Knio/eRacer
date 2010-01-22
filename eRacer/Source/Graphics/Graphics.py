@@ -23,12 +23,18 @@ class Graphics(Module):
     
     self.scene = eRacer.Scene()
     self.graphics.m_scene = self.scene
+    self.camera = None
 
+  def SetCamera(self, camera):
+    self.camera = camera
 
   def Tick(self, time):
     Module.Tick(self, time)
     self.window.Poll()
-    self.graphics.SetCamera()
+    if self.camera:
+        self.graphics.SetCamera(self.camera.camera)
+    else:
+        self.graphics.SetCamera()
     self.graphics.RenderFrame()
   
   def Quit(self):

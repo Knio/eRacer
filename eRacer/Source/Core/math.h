@@ -1,6 +1,6 @@
 
-#ifndef VECT3_H_
-#define VECT3_H_
+#ifndef MATH_H_
+#define MATH_H_
 
 #include <d3dx9math.h>
 #include <limits>
@@ -34,6 +34,11 @@ const Matrix IDENTITY = Matrix(1,0,0,0,
 							   0,0,1,0,
 							   0,0,0,1);
 
+
+#pragma warning( disable : 4996 4995 ) // disable deprecated warning 
+#include <strsafe.h>
+
+void debug(Matrix &m);
 
 
 Vector3 cross(const Vector3 &A, const Vector3 &B);
