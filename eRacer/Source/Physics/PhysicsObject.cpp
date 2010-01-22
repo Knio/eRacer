@@ -1,5 +1,4 @@
 #include "PhysicsObject.h"
-#include "..\Core\Math.h"
 
 namespace Physics{
 
@@ -21,36 +20,49 @@ float PhysicsObject::GetMass()
 	return (float)Actor->getMass();
 }
 
-NxVec3 PhysicsObject::GetPosition()
+Vector3 PhysicsObject::GetPosition()
 {
-	return Actor->getGlobalPosition();
-}
-void PhysicsObject::setPosition(NxVec3 pos)
-{
-	Actor->setGlobalPosition(pos);
+	NxVec3 v = Actor->getGlobalPosition();
+	return Vector3(v.x, v.y, v.z);
 }
 
-NxMat33 PhysicsObject::getOrientation()
+void PhysicsObject::SetPosition(Vector3 pos)
 {
-	return Actor->getGlobalOrientation();
-}
-void PhysicsObject::setOrientation(NxMat33 orient)
-{
-	Actor->setGlobalOrientation(orient);
+	NxVec3 v(pos.x, pos.y, pos.z);
+	Actor->setGlobalPosition(v);
 }
 
-NxActor* PhysicsObject::getActor()
+Matrix PhysicsObject::GetOrientation()
+{
+	NxMat33 m = Actor->getGlobalOrientation();
+	return Matrix(m(0, 0), m(0, 1), m(0, 2), 0,
+				  m(1, 0), m(1, 1), m(1, 2), 0,
+				  m(2, 0), m(2, 1), m(2, 2), 0,
+				  0, 0, 0, 1);
+}
+
+void PhysicsObject::SetOrientation(Matrix orient)
+{
+	NxMat33 m(NxVec3(orient._11, orient._12, orient._13),
+			  NxVec3(orient._21, orient._22, orient._23),
+			  NxVec3(orient._31, orient._32, orient._33));
+	Actor->setGlobalOrientation(m);
+}
+
+NxActor* PhysicsObject::GetActor()
 {
 	return Actor;
 }
-NxVec3 PhysicsObject::getVelocity()
-{
 
-	return Actor->getLinearVelocity();
+Vector3 PhysicsObject::GetVelocity()
+{
+	NxVec3 v = Actor->getLinearVelocity();
+	return Vector3(v.x, v.y, v.z);
 }
 
-void PhysicsObject::setVelocity(NxVec3 vel)
+void PhysicsObject::SetVelocity(Vector3 vel)
 {
-	Actor->setLinearVelocity(vel);
+	NxVec3 v(vel.x, vel.y, vel.z);
+	Actor->setLinearVelocity(v);
 }
 }

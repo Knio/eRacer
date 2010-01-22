@@ -11,8 +11,7 @@
 
 #include <iostream>
 #include "NxPhysics.h"
-
-using namespace std;
+#include "..\Core\Math.h"
 
 namespace Physics{
 /**
@@ -42,49 +41,50 @@ public:
 	* @return The mass of the component
 	*/
 	float GetMass();
+
 	/**
 	* @brief Returns the position of the physics object
 	* @return The position of the physics object
 	*/
-	NxVec3 GetPosition();
+	Vector3 GetPosition();
 
 	/**
 	* @brief Sets the position of the physics object
 	* @param pos The position of the object
 	*/
-	void setPosition(NxVec3 pos);
+	void SetPosition(Vector3 pos);
 
 	/**
 	* @brief Method that returns the orientation matrix of the Actor
 	*
 	* @return The orientation matrix of the Actor
 	*/
-	NxMat33 getOrientation();
+	Matrix GetOrientation();
 
 	/**
 	* @brief Sets the orientation of the physics object
 	* @param orient The orientation matrix of the object
 	*/
-	void setOrientation(NxMat33 orient);
+	void SetOrientation(Matrix orient);
 
 	/**
 	* @brief Returns the actor component of the physics object
 	*
 	* @return The actor the component
 	*/
-	NxActor* getActor();
+	NxActor* GetActor();
 
 	/**
 	* @brief Returns the linear velocity of the physics object
 	* @return The linear velocity of the physics object
 	*/
-	NxVec3 getVelocity();
+	Vector3 GetVelocity();
 
 	/**
 	* @brief Sets the linear velocity of the physics object
 	* @param vel The linear velocity of the object
 	*/
-	void setVelocity(NxVec3 vel);
+	void SetVelocity(Vector3 vel);
 
 protected:
 	/**
