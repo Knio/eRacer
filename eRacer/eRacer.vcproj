@@ -25,7 +25,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SWIG_DIR)/swig.exe -c++ -python -I&quot;$(DXSDK_DIR)/Include&quot; Source/SWIG/swig.i"
+				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python Source/SWIG/swig.i"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -106,7 +106,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SWIG_DIR)/swig.exe -c++ -python Source/SWIG/swig.i"
+				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python Source/SWIG/swig.i"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
