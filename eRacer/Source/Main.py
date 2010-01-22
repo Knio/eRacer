@@ -16,7 +16,7 @@ from Physics  import Physics
 class TestEntity(Entity):
   def Tick(self, time):
     pass
-    #print 'Hi! %10r %10r %10r' % (time.elapsed, time.delta, time.Fps())
+    print 'Hi! %10r %10r %10r' % (time.elapsed, time.delta, time.Fps())
 
 class Main(Game):
   def __init__(self):
@@ -49,10 +49,15 @@ class Main(Game):
     self.logic.Add(TestEntity(self))
     self.sound.PlaySound2D("Resources/jaguar.wav")
     
+    # space ship
     from Logic.Box import Box
     self.logic.Add(Box(self))
     
-    
+    # camera
+    from Logic.Camera import Camera
+    camera = Camera(self)
+    self.logic.Add(camera)
+    self.graphics.SetCamera(camera)
     
   def Tick(self, time):
     Game.Tick(self, time)    

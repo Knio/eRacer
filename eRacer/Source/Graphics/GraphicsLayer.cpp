@@ -26,8 +26,8 @@ int GraphicsLayer::SetCamera(const Camera& cam)
 {
 	m_camera = cam;
 
-	Matrix tmpView = cam.getViewMatrix();
-	Matrix tmpProj = cam.getProjectionMatrix();
+	Matrix tmpView = cam.GetViewMatrix();
+	Matrix tmpProj = cam.GetProjectionMatrix();
 
 	D3DXMATRIXA16 matView;
     D3DXMATRIXA16 matProj;
@@ -53,7 +53,7 @@ int GraphicsLayer::SetCamera()
 	D3DXMatrixRotationY( &matWorld, Time::GetTime() / 1000000.0f );
     m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
 
-    D3DXVECTOR3 vEyePt( 0.0f, 3.0f,-10.0f );
+    D3DXVECTOR3 vEyePt( 0.0f, 10.0f,-10.0f );
     D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
     D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );
     D3DXMATRIXA16 matView;
@@ -81,6 +81,7 @@ int GraphicsLayer::Init( HWND hWnd )
     d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
     d3dpp.EnableAutoDepthStencil = TRUE;
     d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	// Create the D3DDevice
     if( FAILED( m_pD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,

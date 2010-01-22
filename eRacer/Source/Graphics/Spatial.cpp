@@ -26,7 +26,7 @@ void Spatial::cull(const Camera& camera, vector<const StaticGeometry*>& visibleN
 		return;
 
 	for(int i=0; i<6; i++){
-		if(worldBoundingVolume_.cull(camera.getPlane(i)))
+		if(worldBoundingVolume_.cull(camera.GetPlane(i)))
 			return;
 	}
 

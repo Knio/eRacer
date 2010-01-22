@@ -16,15 +16,16 @@ Camera::Camera(const Point3& position, const Point3& lookAt, const Vector3& appr
 	  near_(1.0f),
 	  far_(100.0f),
 	  aspectRatio_(0.75f),
-	  fovY_(PI*0.25f)
+	  fovY_(PI*0.25f),
+	  approxup_(approxUp)
 {
-	setUp(approxUp);
+	SetUp(approxup_);
 }
 
 Camera::~Camera() {
 }
 
-void Camera::updatePlanes(){
+void Camera::UpdatePlanes(){
 	Matrix combinedMatrix = viewMatrix_*projectionMatrix_;
 
 	// Left clipping plane
@@ -65,7 +66,7 @@ void Camera::updatePlanes(){
 	planes_[5].distance = combinedMatrix._44 - combinedMatrix._43;
 }
 
-const Plane& Camera::getPlane(int planeIndex) const {
+const Plane& Camera::GetPlane(int planeIndex) const {
 	assert(0 <= planeIndex);
 	assert(planeIndex < 6);
 	return planes_[planeIndex];

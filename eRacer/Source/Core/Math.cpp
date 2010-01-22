@@ -2,6 +2,15 @@
 
 #include <cassert>
 
+void debug(Matrix &m)
+{
+	printf("%6.2f %6.2f %6.2f %6.2f\n%6.2f %6.2f %6.2f %6.2f\n%6.2f %6.2f %6.2f %6.2f\n%6.2f %6.2f %6.2f %6.2f\n",
+		m._11, m._12, m._13, m._14, 
+		m._21, m._22, m._23, m._24, 
+		m._31, m._32, m._43, m._34, 
+		m._41, m._42, m._43, m._44);
+		
+}
 
 Vector3 cross(const Vector3 &A, const Vector3 &B)
 {
