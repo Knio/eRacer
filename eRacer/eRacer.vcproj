@@ -311,6 +311,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Plane.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Physics\Plane.cpp"
 					>
 				</File>
@@ -505,6 +509,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Physics\PhysicsObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Plane.h"
 					>
 				</File>
 				<File

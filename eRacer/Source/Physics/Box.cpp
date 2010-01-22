@@ -1,4 +1,5 @@
 #include "Box.h"
+
 namespace Physics{
 Box::Box(bool dynamic, float mass, PhysicsLayer* pL, Point3 pos, Matrix orient, Vector3 dimensions){
 	PhysicsObject::dynamic = dynamic;
@@ -22,7 +23,7 @@ Box::Box(bool dynamic, float mass, PhysicsLayer* pL, Point3 pos, Matrix orient, 
 	
 	CreateActor(actorDesc);
 }
-Box::~Box(){
 
+Box::~Box(){
 }
 }
