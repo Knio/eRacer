@@ -20,9 +20,11 @@ namespace Physics{
 class PhysicsObject{
 public:
 	/**
-	* @brief Constructor stub
+	* @brief Constructor stub.
+	* @param dynamic Whether the object can be moved or not.
+	* @param mass The mass of the object in kilograms. Set as 0 for static objects.
 	*/
-	PhysicsObject();
+	PhysicsObject(bool dynamic = true, float mass = 0);
 	
 	/**
 	* @brief Destructor stub
@@ -30,15 +32,15 @@ public:
 	~PhysicsObject();
 
 	/**
-	* @brief Method that sets mass for the physics component
+	* @brief Method that sets mass for the physics component. Object must be dynamic or nothing happens.
 	* @param mass The mass in kilograms
 	*/
 	void SetMass(float mass);
 
 	/**
-	* @brief Method that returns the mass of the physics component
+	* @brief Method that returns the mass of the physics component. Will be 0 if the object is static.
 	*
-	* @return The mass of the component
+	* @return The mass of the component in kilograms
 	*/
 	float GetMass();
 
@@ -49,48 +51,56 @@ public:
 	Vector3 GetPosition();
 
 	/**
-	* @brief Sets the position of the physics object
-	* @param pos The position of the object
+	* @brief Sets the position of the physics object. Object must be dynamic.
+	* @param pos The position of the object.
 	*/
 	void SetPosition(Vector3 pos);
 
 	/**
-	* @brief Method that returns the orientation matrix of the Actor
+	* @brief Method that returns the orientation matrix of the physics object.
 	*
-	* @return The orientation matrix of the Actor
+	* @return The orientation matrix of the physics object.
 	*/
 	Matrix GetOrientation();
 
 	/**
-	* @brief Sets the orientation of the physics object
-	* @param orient The orientation matrix of the object
+	* @brief Sets the orientation of the physics object. Object must be dynamic.
+	* @param orient The orientation matrix of the object.
 	*/
 	void SetOrientation(Matrix orient);
 
 	/**
-	* @brief Returns the actor component of the physics object
+	* @brief Returns the actor component of the physics object.
 	*
-	* @return The actor the component
+	* @return The actor component.
 	*/
 	NxActor* GetActor();
 
 	/**
-	* @brief Returns the linear velocity of the physics object
-	* @return The linear velocity of the physics object
+	* @brief Returns the linear velocity of the physics object. Will return (0, 0, 0) if object is static.
+	* @return The linear velocity of the physics object.
 	*/
 	Vector3 GetVelocity();
 
 	/**
-	* @brief Sets the linear velocity of the physics object
-	* @param vel The linear velocity of the object
+	* @brief Sets the linear velocity of the physics object. Object must be dynamic.
+	* @param vel The linear velocity of the object.
 	*/
 	void SetVelocity(Vector3 vel);
 
+	/**
+	* @brief Checks if the object is movable or not
+	* @return The state of the object
+	*/
+	bool isDynamic();
+
 protected:
 	/**
-	* @brief The PhysX object that is used to control behaviour
+	* @brief The PhysX object that is used to control behaviour.
 	*/
 	NxActor* Actor;
+	bool dynamic;
+	float mass; 
 };
 }
 
