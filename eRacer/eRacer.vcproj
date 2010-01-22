@@ -295,6 +295,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Physics\Box.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Physics\Physics.py"
 					>
 				</File>
@@ -304,6 +308,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Physics\PhysicsObject.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\Plane.cpp"
 					>
 				</File>
 			</Filter>
@@ -488,11 +496,19 @@
 				Name="Physics"
 				>
 				<File
+					RelativePath=".\Source\Physics\Box.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Physics\PhysicsLayer.h"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Physics\PhysicsObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\Plane.h"
 					>
 				</File>
 			</Filter>
