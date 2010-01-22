@@ -5,8 +5,9 @@ extern Constants CONSTS;
 
 namespace Physics{
 
-
+PhysicsLayer* PhysicsLayer::g_PhysicsLayer = NULL;
 PhysicsLayer::PhysicsLayer() : gScene(NULL) {
+	g_PhysicsLayer = this;
 }
 
 PhysicsLayer::~PhysicsLayer(){

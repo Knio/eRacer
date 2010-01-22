@@ -2,11 +2,10 @@
 
 namespace Physics{
 
-PhysicsObject::PhysicsObject(bool dynamic, float mass, PhysicsLayer* pL)
+PhysicsObject::PhysicsObject(bool dynamic, float mass)
 {
 	PhysicsObject::dynamic = dynamic;
 	PhysicsObject::mass = (dynamic ? mass : 0);
-	pLayer = pL;
 }
 
 PhysicsObject::~PhysicsObject()
@@ -94,6 +93,6 @@ bool PhysicsObject::isDynamic(){
 
 void PhysicsObject::CreateActor(NxActorDesc actorDesc)
 {
-	Actor = pLayer->AddActor(actorDesc);
+	Actor = PhysicsLayer::g_PhysicsLayer->AddActor(actorDesc);
 }
 }

@@ -1,10 +1,10 @@
 #include "Box.h"
 
 namespace Physics{
-Box::Box(bool dynamic, float mass, PhysicsLayer* pL, Point3 pos, Matrix orient, Vector3 dimensions){
+Box::Box(bool dynamic, float mass, Point3 pos, Matrix orient, Vector3 dimensions){
+	
 	PhysicsObject::dynamic = dynamic;
 	PhysicsObject::mass = (dynamic ? mass : 0);
-	PhysicsObject::pLayer = pL;
 
 	// Add a single-shape actor to the scene
 	NxActorDesc actorDesc;
