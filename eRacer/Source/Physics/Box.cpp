@@ -12,11 +12,15 @@ Box::Box(bool dynamic, float mass, PhysicsLayer* pL, Point3 pos, Matrix orient, 
 	NxBoxShapeDesc boxDesc;
 	boxDesc.dimensions.set(dimensions.x,dimensions.y,dimensions.z);
 	boxDesc.localPose.t = NxVec3(0, 0, 0);
+	NxBodyDesc bodyDesc;
 
 	actorDesc.shapes.pushBack(&boxDesc);
-	actorDesc.globalPose.t	= NxVec3(pos.x, pos.y, pos.z);	
+	actorDesc.body			= &bodyDesc;
+	actorDesc.density		= 10.0f;
+	actorDesc.globalPose.t	= NxVec3(pos.x, pos.y, pos.z);
+	actorDesc.globalPose.t	= NxVec3(pos.x, 20, pos.z);	
 	
-	PhysicsObject::CreateActor(actorDesc);
+	CreateActor(actorDesc);
 }
 Box::~Box(){
 

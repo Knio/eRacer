@@ -7,11 +7,10 @@ class Physics(Module):
     self.physics = eRacer.PhysicsLayer()
     self.physics.InitSDK()
     self.physics.SetParameters()
-    self.physics.GetSceneParameters()
+    self.physics.FinalizeSDK()
     
   def Start(self):
     Module.Start(self)
-    self.physics.FinalizeSDK()
     
   def Tick(self, time):
     Module.Tick(self, time)

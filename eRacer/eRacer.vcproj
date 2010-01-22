@@ -332,6 +332,18 @@
 				</File>
 			</Filter>
 			<Filter
+				Name="IO"
+				>
+				<File
+					RelativePath=".\Source\IO\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\IO\IO.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
 				Name="Game"
 				>
 				<File
@@ -348,18 +360,6 @@
 				</File>
 				<File
 					RelativePath=".\Source\Game\Module.py"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="IO"
-				>
-				<File
-					RelativePath=".\Source\IO\__init__.py"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\IO\IO.cpp"
 					>
 				</File>
 			</Filter>
