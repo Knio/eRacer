@@ -1,12 +1,12 @@
 from Game import Entity
-
+from Main import Main
 import eRacer
 
 class Box(Entity):
   def __init__(self, game):
     Entity.__init__(self, game)
 
-    #self.physics = PhysicsObject()
+    self.box = eRacer.Box(True, 20, game.physics.physics)
     self.graphics = game.graphics.scene.CreateMovingGeometry("test")
     self.graphics.visible = False
         
@@ -20,4 +20,5 @@ class Box(Entity):
 
     
   def Tick(self, time):
-     pass
+     pos = self.box.GetPosition()
+     print pos.x , pos.y, pos.z

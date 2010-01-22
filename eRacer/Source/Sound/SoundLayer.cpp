@@ -1,5 +1,7 @@
 #include "SoundLayer.h"
 
+namespace Sound {
+
 SoundLayer* SoundLayer::m_pGlobalSoundLayer = NULL;
 
 SoundLayer::SoundLayer() : m_fmodule(NULL)
@@ -120,3 +122,5 @@ int SoundLayer::PlaySound2D(const char* name)
 	int chan = FSOUND_PlaySound(FSOUND_FREE, m_SoundCache2D[name]);
 	return 0;
 }
+
+};

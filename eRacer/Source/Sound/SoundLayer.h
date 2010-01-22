@@ -25,6 +25,9 @@
 
 using namespace std;
 
+namespace Sound {
+
+
 class SoundLayer
 {
 private:
@@ -130,4 +133,5 @@ inline SoundLayer *Sound()
 	return SoundLayer::GetInstance();
 }
 
+};
 #endif

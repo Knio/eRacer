@@ -12,6 +12,9 @@
 #include <iostream>
 #include "NxPhysics.h"
 #include "..\Core\Math.h"
+#include "PhysicsLayer.h"
+
+class PhysicsLayer;
 
 namespace Physics{
 /**
@@ -24,7 +27,7 @@ public:
 	* @param dynamic Whether the object can be moved or not.
 	* @param mass The mass of the object in kilograms. Set as 0 for static objects.
 	*/
-	PhysicsObject(bool dynamic = true, float mass = 0);
+	PhysicsObject(bool dynamic = true, float mass = 0, PhysicsLayer* pL = NULL);
 	
 	/**
 	* @brief Destructor stub
@@ -94,11 +97,14 @@ public:
 	*/
 	bool isDynamic();
 
+	void CreateActor(NxActorDesc actorDesc);
+
 protected:
 	/**
 	* @brief The PhysX object that is used to control behaviour.
 	*/
 	NxActor* Actor;
+	PhysicsLayer* pLayer;
 	bool dynamic;
 	float mass; 
 };
