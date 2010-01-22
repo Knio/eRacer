@@ -7,11 +7,6 @@ GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
 
 GraphicsLayer::GraphicsLayer()
 {
-
-	//m_pMeshMaterials = NULL;
-	//m_pMeshTextures = NULL;
-	//m_pMesh = NULL;
-
 }
 
 GraphicsLayer::~GraphicsLayer()
@@ -117,7 +112,6 @@ int GraphicsLayer::LoadGeometryTest(StaticGeometry &geom, const char* filePath, 
                                    &pD3DXMtrlBuffer, NULL, &dwNumMaterials,
 								   &mesh ) )
     {
-            //MessageBox( NULL, L"Could not find model", L"eRacer.exe", MB_OK );
             assert(false);
     }
 
@@ -151,7 +145,7 @@ int GraphicsLayer::LoadGeometryTest(StaticGeometry &geom, const char* filePath, 
 													textPath,
                                                     &pMeshTextures[i] ) ) )
             {
-				//MessageBox( NULL, L"Could not find texture", L"eRacer.exe", MB_OK );
+				assert(false);
             }
         }
 		geom.Materials().push_back(&pMeshMaterials[i]);
@@ -187,43 +181,6 @@ int GraphicsLayer::RenderFrame()
 			}
 		}
 
-        // End the scene
-        m_pd3dDevice->EndScene();
-    }
-
-    // Present the backbuffer contents to the display
-    m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
-	return S_OK;
-}
-
-
-int GraphicsLayer::RenderFrame(const StaticGeometry& r)
-//This function is a stop gap until caching by lists is completed
-{
-	// Clear the backbuffer and the zbuffer
-    m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
-
-    // Begin the scene
-	//In the future this will be done inside a loop to handle each shader/effect
-    if( SUCCEEDED( m_pd3dDevice->BeginScene() ) )
-    {
-        //The camera can be set here, but does not need to be
-        // Meshes are divided into subsets, one for each material. Render them in a loop
-		for(unsigned int i = 0; i<r.Materials().size(); i++){
-			m_pd3dDevice->SetMaterial( r.Materials()[i]);
-			m_pd3dDevice->SetTexture(0, r.Textures()[i]);
-			r.GetMesh()->DrawSubset(i);
-		}
-	/*
-        for( DWORD i = 0; i < r->m_dwNumMaterials; i++ )
-        {
-            // Set the material and texture for this subset
-            m_pd3dDevice->SetMaterial( &r->m_pMeshMaterials[i] );
-            m_pd3dDevice->SetTexture( 0, r->m_pMeshTextures[i] );
-            // Draw the mesh subset
-            r->m_pMesh->DrawSubset( i );
-        }
-*/
         // End the scene
         m_pd3dDevice->EndScene();
     }

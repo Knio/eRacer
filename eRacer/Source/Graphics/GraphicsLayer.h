@@ -13,22 +13,11 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <mmsystem.h>
-#pragma warning( disable : 4996 4995 ) // disable deprecated warning 
-//#include <strsafe.h>
-#pragma warning( default : 4996 4995 )
 #include "Camera.h"
 #include "StaticGeometry.h"
 #include "Scene.h"
 
 namespace Graphics {
-
-struct CUSTOMVERTEX
-{
-    FLOAT x, y, z, rhw; // The transformed position for the vertex
-    DWORD color;        // The vertex color
-};
-// Our custom FVF, which describes the layout of the custom vertex structure
-#define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZRHW|D3DFVF_DIFFUSE)
 
 class GraphicsLayer
 {
@@ -51,11 +40,9 @@ public:
 	Scene* m_scene;
 	~GraphicsLayer();	//Destructor
 	int Init( HWND hWnd );
-	//int DrawRaw(CUSTOMVERTEX vertexBuf[], int vertexBufSize); //For testing
 
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
 	int RenderFrame();
-	int RenderFrame(const StaticGeometry& r);
 	int Shutdown();
 	int SetCamera();
 	int SetCamera(const Camera& cam);
