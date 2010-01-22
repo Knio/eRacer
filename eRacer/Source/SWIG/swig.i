@@ -24,6 +24,7 @@
 #include "..\Physics\PhysicsLayer.h"
 #include "..\Physics\PhysicsObject.h"
 #include "..\Physics\Box.h"
+#include "..\Physics\Plane.h"
 
 #include "..\Input\Keyboard.h"
 
@@ -61,5 +62,6 @@
 %include "..\Physics\PhysicsLayer.h"
 %include "..\Physics\PhysicsObject.h"
 %include "..\Physics\Box.h"
+%include "..\Physics\Plane.h"
 
 %include "..\Input\Keyboard.h"

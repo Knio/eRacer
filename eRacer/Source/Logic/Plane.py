@@ -6,7 +6,7 @@ class Plane(Entity):
   def __init__(self, game):
     Entity.__init__(self, game)
 
-    self.physics = eRacer.Plane(True, 0, eRacer.D3DXVECTOR3(0,1,0), 0)
+    self.physics = eRacer.Plane(True, 0, 0, eRacer.D3DXVECTOR3(0,1,0))
     self.graphics = game.graphics.scene.CreateMovingGeometry("plane")
     self.graphics.visible = False
         
