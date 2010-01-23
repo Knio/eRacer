@@ -41,26 +41,6 @@ int GraphicsLayer::SetCamera(const Camera& cam)
 	return 0;
 }
 
-int GraphicsLayer::SetCamera()
-{
-	//Simple camera for testing
-    D3DXMATRIXA16 matWorld;
-	D3DXMatrixRotationY( &matWorld, Time::GetTime() / 1000000.0f );
-    m_pd3dDevice->SetTransform( D3DTS_WORLD, &matWorld );
-
-    D3DXVECTOR3 vEyePt( 0.0f, 10.0f,-10.0f );
-    D3DXVECTOR3 vLookatPt( 0.0f, 0.0f, 0.0f );
-    D3DXVECTOR3 vUpVec( 0.0f, 1.0f, 0.0f );
-    D3DXMATRIXA16 matView;
-    D3DXMatrixLookAtLH( &matView, &vEyePt, &vLookatPt, &vUpVec );
-    m_pd3dDevice->SetTransform( D3DTS_VIEW, &matView );
-
-    D3DXMATRIXA16 matProj;
-    D3DXMatrixPerspectiveFovLH( &matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f );
-    m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
-	return 0;
-}
-
 int GraphicsLayer::Init( HWND hWnd ) 
 {
     // Create the D3D object.
@@ -94,71 +74,6 @@ int GraphicsLayer::Init( HWND hWnd )
     return S_OK;
 }
 
-
-int GraphicsLayer::LoadGeometryTest(StaticGeometry &geom, const char* filePath, const char* textPath)
-//This makes an assumption of 1 texture per model for now
-{
-    LPD3DXBUFFER pD3DXMtrlBuffer;
-
-	WCHAR wszFilePath[128]; //convert to wide char
-	MultiByteToWideChar(CP_ACP, 0, filePath, -1, wszFilePath,128); 
-
-	LPD3DXMESH mesh;
-	DWORD dwNumMaterials;
-	
-	
-    // Load the mesh from the specified file into device memory
-    if( D3D_OK != D3DXLoadMeshFromX( filePath, D3DXMESH_SYSTEMMEM,
-                                   m_pd3dDevice, NULL,
-                                   &pD3DXMtrlBuffer, NULL, &dwNumMaterials,
-								   &mesh ) )
-    {
-            assert(false);
-    }
-
-	geom.SetMesh(mesh);
-
-    // We need to extract the material properties and texture names from the 
-    // pD3DXMtrlBuffer
-    D3DXMATERIAL* d3dxMaterials = ( D3DXMATERIAL* )pD3DXMtrlBuffer->GetBufferPointer();
-    D3DMATERIAL9* pMeshMaterials = new D3DMATERIAL9[dwNumMaterials];
-	
-    if( pMeshMaterials == NULL )
-        return E_OUTOFMEMORY;
-    LPDIRECT3DTEXTURE9 *pMeshTextures = new LPDIRECT3DTEXTURE9[dwNumMaterials];
-    if( pMeshTextures == NULL )
-        return E_OUTOFMEMORY;
-
-    for( DWORD i = 0; i < dwNumMaterials; i++ )
-    {
-        // Copy the material
-        pMeshMaterials[i] = d3dxMaterials[i].MatD3D;
-
-        // Set the ambient color for the material (D3DX does not do this)
-        pMeshMaterials[i].Ambient = pMeshMaterials[i].Diffuse;
-
-        pMeshTextures[i] = NULL;
-        if( d3dxMaterials[i].pTextureFilename != NULL &&
-            lstrlenA( d3dxMaterials[i].pTextureFilename ) > 0 )
-        {
-            // Create the texture
-            if( FAILED( D3DXCreateTextureFromFileA( m_pd3dDevice,
-													textPath,
-                                                    &pMeshTextures[i] ) ) )
-            {
-				assert(false);
-            }
-        }
-		geom.Materials().push_back(&pMeshMaterials[i]);
-		geom.Textures().push_back(pMeshTextures[i]);
-
-    }
-
-    // Done with the material buffer
-    pD3DXMtrlBuffer->Release();
-
-    return S_OK;
-}
 
 int GraphicsLayer::RenderFrame()
 {

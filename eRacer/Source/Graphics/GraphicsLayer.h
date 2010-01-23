@@ -44,9 +44,7 @@ public:
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
 	int RenderFrame();
 	int Shutdown();
-	int SetCamera();
 	int SetCamera(const Camera& cam);
-	int LoadGeometryTest(StaticGeometry &geom, const char* filePath, const char* textPath); 
 
 	static GraphicsLayer *GetGraphicsInstance()
 	{
