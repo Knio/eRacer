@@ -16,10 +16,9 @@ Camera::Camera(const Point3& position, const Point3& lookAt, const Vector3& appr
 	  near_(1.0f),
 	  far_(100.0f),
 	  aspectRatio_(0.75f),
-	  fovY_(PI*0.25f),
-	  approxup_(approxUp)
+	  fovY_(PI*0.25f)
 {
-	SetUp(approxup_);
+	SetUp(approxUp_);
 }
 
 Camera::~Camera() {

@@ -176,7 +176,7 @@ private:
 
 	Point3 position_;
 	Point3 lookAt_;
-	Vector3 approxup_;
+	Vector3 approxUp_;
 	Vector3 up_;
 
 	float near_;
@@ -217,10 +217,11 @@ inline void Camera::SetLookAt(const Point3& lookAt){
 
 inline void Camera::SetUp(const Vector3& approxUp)
 { 
-	approxup_ = approxUp; UpdateUp(); 
+	approxUp_ = approxUp; 
+	UpdateUp(); 
 }
 inline void Camera::UpdateUp(){
-	up_ = approxup_;
+	up_ = approxUp_;
 	Vector3 viewDirection = lookAt_ - position_;
 	normalize(viewDirection);
 	normalize(up_);
