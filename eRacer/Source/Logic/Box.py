@@ -22,4 +22,4 @@ class Box(Entity):
   def Tick(self, time):
      pos = self.box.GetPosition()
      #self.graphics.SetPosition(pos)
-     print pos.x , pos.y, pos.z
+     #print pos.x , pos.y, pos.z
