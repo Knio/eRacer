@@ -45,10 +45,11 @@ Vector3 normalized(const Vector3& A){
 
 Vector3 transformedAffine(const Matrix& T, const Vector3& u){
 	//Make sure the matrix is affine
-	assert(0 == T._41);
-	assert(0 == T._42);
-	assert(0 == T._43);
+	assert(0 == T._14);
+	assert(0 == T._24);
+	assert(0 == T._34);
 	assert(1 == T._44);
+
 
 	Vector4 temp;
 	D3DXVec3Transform(&temp, &u, &T);
@@ -61,9 +62,9 @@ Vector3 transformedAffine(const Matrix& T, const Vector3& u){
 
 const Vector3& transformAffine(const Matrix& T, Vector3& u){
 	//Make sure the matrix is affine
-	assert(0 == T._41);
-	assert(0 == T._42);
-	assert(0 == T._43);
+	assert(0 == T._14);
+	assert(0 == T._24);
+	assert(0 == T._34);
 	assert(1 == T._44);
 
 	Vector4 temp;
@@ -76,8 +77,8 @@ const Vector3& transformAffine(const Matrix& T, Vector3& u){
 Matrix CreateMatrix(const Point3& position, const Matrix& orientation)
 {
 	Matrix r = orientation;
-	r._14 = position.x;
-	r._24 = position.y;
-	r._34 = position.z;
+	r._41 = position.x;
+	r._42 = position.y;
+	r._43 = position.z;
 	return r;
 }

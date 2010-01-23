@@ -7,7 +7,7 @@ class Box(Entity):
     Entity.__init__(self, game)
 
     self.box = eRacer.Box(True, 20)
-    self.graphics = game.graphics.scene.CreateMovingGeometry("test")
+    self.graphics = game.graphics.scene.CreateMovingGeometry("Box")
     self.graphics.visible = False
     self.graphics.SetTransform(eRacer.CreateMatrix(eRacer.D3DXVECTOR3(0, 10, 0)))
         
