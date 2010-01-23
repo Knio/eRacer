@@ -13,7 +13,7 @@ PDIRECT3DTEXTURE9 IO::LoadTexture(const char* file)
 	return t;
 }
 
-int IO::LoadMesh(Graphics::Geometry &geom, const char* file)
+int IO::LoadMesh(Graphics::Geometry* geom, const char* file)
 {
 	LPD3DXBUFFER materialsbuffer;
 	LPD3DXMESH mesh;
@@ -42,14 +42,14 @@ int IO::LoadMesh(Graphics::Geometry &geom, const char* file)
 		// Set the ambient color for the material (D3DX does not do this)
         m2[i].Ambient = m2[i].Diffuse;
 
-		geom.Materials().push_back(&m2[i]);
-		geom.Textures().push_back(t);
+		geom->Materials().push_back(&m2[i]);
+		geom->Textures().push_back(t);
     }
 
     // Done with the material buffer
     materialsbuffer->Release();
 
-	geom.SetMesh(mesh);
+	geom->SetMesh(mesh);
 	return 0;
 };
 
