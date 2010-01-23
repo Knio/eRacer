@@ -99,8 +99,7 @@ protected:
 	 */
 	Geometry(const string& name);
 
-	void UpdateModelBounds(AxisAlignedBoundingBox& modelBounds);
-	void UpdateWorldBounds(const AxisAlignedBoundingBox& modelBounds,AxisAlignedBoundingBox& worldBounds);
+	void UpdateBounds();
 
 
 	Matrix transform_;

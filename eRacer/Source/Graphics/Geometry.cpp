@@ -34,7 +34,7 @@ void Geometry::cullRecursive(const Camera&, vector<const Geometry*>& visibleNode
 
 
 
-void Geometry::UpdateModelBounds(AxisAlignedBoundingBox& modelBounds){
+void Geometry::UpdateBounds(){
 	unsigned int bytesPerVertex = mesh_->GetNumBytesPerVertex();
 	unsigned int positionOffset = -1;
 
@@ -56,40 +56,36 @@ void Geometry::UpdateModelBounds(AxisAlignedBoundingBox& modelBounds){
 
 
 	Point3 min, max;
-	Point3* position = (Point3*)(vertices+positionOffset);
-	min.x = max.x = position->x;
-	min.y = max.y = position->y;
-	min.z = max.z = position->z;
+	Point3 position = transformedAffine(transform_,*(Point3*)(vertices+positionOffset));
+	min.x = max.x = position.x;
+	min.y = max.y = position.y;
+	min.z = max.z = position.z;
     
 	vertices+=bytesPerVertex;
     
 	for (unsigned int i=0; i<mesh_->GetNumVertices(); i++) {
-		position = (Point3*)vertices;
-        if(position->x < min.x)
-			min.x = position->x;
-		else if(position->x > max.x)
-			max.x = position->x;
+		position = transformedAffine(transform_,*(Point3*)vertices);
+        if(position.x < min.x)
+			min.x = position.x;
+		else if(position.x > max.x)
+			max.x = position.x;
 
-		if(position->y < min.y)
-			min.y = position->y;
-		else if(position->y > max.y)
-			max.y = position->y;
+		if(position.y < min.y)
+			min.y = position.y;
+		else if(position.y > max.y)
+			max.y = position.y;
 
-		if(position->z < min.z)
-			min.z = position->z;
-		else if(position->z > max.z)
-			max.z = position->z;
+		if(position.z < min.z)
+			min.z = position.z;
+		else if(position.z > max.z)
+			max.z = position.z;
 
         vertices+=bytesPerVertex;
     }
 
 	mesh_->UnlockVertexBuffer();
 
-	modelBounds.set(min, max);
-}
-
-void Geometry::UpdateWorldBounds(const AxisAlignedBoundingBox& modelBounds,AxisAlignedBoundingBox& worldBounds){
-	worldBounds.set(transformedAffine(transform_,modelBounds.getMin()),transformedAffine(transform_, modelBounds.getMax()));
+	worldBoundingVolume_.set(min, max);
 }
 
 
