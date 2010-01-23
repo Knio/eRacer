@@ -181,7 +181,7 @@ int GraphicsLayer::RenderFrame()
 				(*object)->GetMesh()->DrawSubset(i);
 			}
 		}
-
+		
         // End the scene
         m_pd3dDevice->EndScene();
     }
