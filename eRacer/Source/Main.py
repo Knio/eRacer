@@ -55,7 +55,7 @@ class Main(Game):
     from Logic.Plane import Plane
     
     self.logic.Add(Box(self))
-    self.logic.Add(Plane(self))
+    #self.logic.Add(Plane(self))
     
     
     # camera

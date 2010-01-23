@@ -16,10 +16,10 @@ class Box(Entity):
         return
       self.graphics.visible = True
       
-    #game.io.LoadMeshAsync(load, self.graphics, "Resources/Ship_06.x")   
-    game.io.LoadMeshAsync(load, self.graphics, "Resources/MeshFromOBJ.x")
+    game.io.LoadMeshAsync(load, self.graphics, "Resources/Ship_06.x")   
+    #game.io.LoadMeshAsync(load, self.graphics, "Resources/MeshFromOBJ.x")
     
   def Tick(self, time):
      pos = self.box.GetPosition()
-     self.graphics.SetPosition(pos)
+     #self.graphics.SetPosition(pos)
      print pos.x , pos.y, pos.z
