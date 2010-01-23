@@ -92,7 +92,7 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
 	// set the transform
 	// TODO unset it after!
 	// is this even the right matrix?
-	m_pd3dDevice->SetTransform( D3DTS_WORLD, &(geometry->GetTransform()) );
+	m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &(geometry->GetTransform()) );
 	
 
 	for(unsigned int i = 0; i<geometry->Materials().size(); i++){

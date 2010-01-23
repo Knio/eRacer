@@ -9,12 +9,14 @@ class Camera(Entity):
   	self.camera = eRacer.Camera()
   	
   	self.camera.SetFar(100)
-  	self.camera.SetFovY(math.pi/3.0)
+  	self.camera.SetFovY(math.pi/4.0)
   	self.camera.SetAspectRatio(8./6.)
   	
   	
   def Tick(self, time):
     Entity.Tick(self, time)
+    
+    # spin around a circle of radius 10, looking at the origin
     pos = eRacer.D3DXVECTOR3(
       math.cos(time.seconds), 
       0.5, 
