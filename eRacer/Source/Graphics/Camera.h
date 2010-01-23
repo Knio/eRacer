@@ -252,6 +252,7 @@ inline void Camera::SetFar(float fa){
 inline void Camera::SetAspectRatio(float aspectRatio){
 	assert(aspectRatio>0);
 	aspectRatio_ = aspectRatio;
+	UpdateProjection();
 }
 
 inline void Camera::SetFovY(float fovY){

@@ -53,7 +53,9 @@ class Main(Game):
     # space ship
     from Logic.Box   import Box
     from Logic.Plane import Plane
+    from Logic.Ship  import Ship
     
+    self.logic.Add(Ship(self))
     self.logic.Add(Box(self))
     #self.logic.Add(Plane(self))
     

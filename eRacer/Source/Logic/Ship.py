@@ -2,11 +2,11 @@ from Game import Entity
 from Main import Main
 import eRacer
 
-class Box(Entity):
+class Ship(Entity):
   def __init__(self, game):
     Entity.__init__(self, game)
-
-    self.box = eRacer.Box(True, 20)
+    
+    # no physics yet..
     self.graphics = game.graphics.scene.CreateMovingGeometry("test")
     self.graphics.visible = False
         
@@ -14,13 +14,9 @@ class Box(Entity):
       if r:
         print 'Failed to load mesh!!'
         return
-      print 'Loaded mesh'
       self.graphics.visible = True
       
-    game.io.LoadMeshAsync(load, self.graphics, "Resources/box.x")   
-    #game.io.LoadMeshAsync(load, self.graphics, "Resources/MeshFromOBJ.x")
+    game.io.LoadMeshAsync(load, self.graphics, "Resources/Ship_06.x")   
     
   def Tick(self, time):
-     pos = self.box.GetPosition()
-     #self.graphics.SetPosition(pos)
-     #print pos.x , pos.y, pos.z
+    pass
