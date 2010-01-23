@@ -16,7 +16,7 @@ class Plane(Entity):
         return
       self.graphics.visible = True
       
-    game.io.LoadMeshAsync(load, self.graphics, "Resources/plane.x")   
+    game.io.LoadMeshAsync(load, self.graphics, "plane.x")   
 
     
   def Tick(self, time):

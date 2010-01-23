@@ -1,5 +1,8 @@
 from Game import Module
 import eRacer
+import os
+
+PATH = 'Resources/Sounds'
 
 class Sound(Module):
   def __init__(self, game):
@@ -7,8 +10,8 @@ class Sound(Module):
     self.sound = eRacer.Sound()
     self.sound.Init()
 
-  def PlaySound2D(self, *args):
-    self.sound.PlaySound2D(*args)
+  def PlaySound2D(self, file):
+    self.sound.PlaySound2D(os.path.join(PATH,file))
 
   def Tick(self, time):
     Module.Tick(self, time)

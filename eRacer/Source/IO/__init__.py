@@ -5,6 +5,10 @@ import os
 import threading
 import Queue
 
+j = os.path.join
+MODELPATH = 'Resources/Models'
+TEXPATH   = 'Resources/Textures'
+
 def asynchronous(func):
   def f(self, callback, *args, **kwargs):
     self.queue.put_nowait((func, callback, args, kwargs))
@@ -18,6 +22,7 @@ def debug(func):
     return r
   return f
   
+
 
 class IO(Module, eRacer.IO):
   def __init__(self, game):
@@ -33,7 +38,7 @@ class IO(Module, eRacer.IO):
     self.thread.start()
     
     # cache
-    self.defaulttex = eRacer.IO.LoadTexture(self, "Resources/Default.png")
+    self.defaulttex = eRacer.IO.LoadTexture(self, j(TEXPATH, "Default.png"))
     self.textures = {}
     
   def work(self):
@@ -44,12 +49,12 @@ class IO(Module, eRacer.IO):
 
   @asynchronous
   def LoadMeshAsync(self, node, name):
-    return self.LoadMesh(node, name)
+    return self.LoadMesh(node, j(MODELPATH,name))
     
   #@debug
   def LoadTexture(self, name):
     if name:
-      name = os.path.join('Resources', name)
+      name = j(TEXPATH, name)
     if not name in self.textures:
       r = eRacer.IO.LoadTexture(self, name)
       r.disown()

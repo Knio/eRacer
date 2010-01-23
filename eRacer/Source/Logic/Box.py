@@ -17,8 +17,7 @@ class Box(Entity):
       print 'Loaded mesh'
       self.graphics.visible = True
       
-    game.io.LoadMeshAsync(load, self.graphics, "Resources/box.x")   
-    #game.io.LoadMeshAsync(load, self.graphics, "Resources/MeshFromOBJ.x")
+    game.io.LoadMeshAsync(load, self.graphics, "box.x")   
     
   def Tick(self, time):
      pos = self.box.GetPosition()
