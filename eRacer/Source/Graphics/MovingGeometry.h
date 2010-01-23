@@ -54,7 +54,6 @@ public:
 	 */
 	virtual void SetMesh(const LPD3DXMESH mesh);
 private:
-	AxisAlignedBoundingBox modelBoundingVolume_;
 };
 
 

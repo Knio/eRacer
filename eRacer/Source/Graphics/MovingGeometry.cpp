@@ -19,7 +19,8 @@ MovingGeometry::~MovingGeometry(){
 
 void MovingGeometry::SetTransform(const  Matrix& transform){
 	transform_ = transform;
-	UpdateWorldBounds(modelBoundingVolume_, worldBoundingVolume_);
+	if(NULL != mesh_)
+		UpdateBounds();
 }
 
 
@@ -29,7 +30,6 @@ void MovingGeometry::SetMesh(const LPD3DXMESH mesh){
 	assert(NULL != mesh);
 	mesh_ = mesh;
 	
-	UpdateModelBounds(modelBoundingVolume_);
-	UpdateWorldBounds(modelBoundingVolume_, worldBoundingVolume_);
+	UpdateBounds();
 }
 };

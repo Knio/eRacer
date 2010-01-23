@@ -1,5 +1,4 @@
 from Game import Entity
-from Main import Main
 import eRacer
 
 class Plane(Entity):

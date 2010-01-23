@@ -31,8 +31,7 @@ void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
 	assert(NULL != mesh);
 	mesh_ = mesh;
 	
-	UpdateModelBounds(worldBoundingVolume_);
-	UpdateWorldBounds(worldBoundingVolume_, worldBoundingVolume_);
+	UpdateBounds();
 }
 
 

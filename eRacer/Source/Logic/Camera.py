@@ -16,13 +16,13 @@ class Camera(Entity):
   def Tick(self, time):
     Entity.Tick(self, time)
     
-    # spin around a circle of radius 10, looking at the origin
+    # spin around a circle, looking at the origin
     pos = eRacer.D3DXVECTOR3(
       math.cos(time.seconds), 
       0.5, 
       math.sin(time.seconds)
     )
-    pos *= 10
+    pos *= 20
     
     view = self.camera.GetViewMatrix()
     proj = self.camera.GetProjectionMatrix()

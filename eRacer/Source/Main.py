@@ -13,11 +13,12 @@ from Sound    import Sound
 from Graphics import Graphics
 from Physics  import Physics
 
-class TestEntity(Entity):
-  def Tick(self, time):
-    pass
-    # quick fps counter
-    #print 'Hi! %10r %10r %10r' % (time.elapsed, time.delta, time.Fps())
+
+# testing entities
+from Logic.Box   import Box
+from Logic.Plane import Plane
+from Logic.Ship  import Ship
+
 
 class Main(Game):
   def __init__(self):
@@ -47,17 +48,12 @@ class Main(Game):
     
     
     # testing stuff
-    self.logic.Add(TestEntity(self))
     self.sound.PlaySound2D("jaguar.wav")
     
     # space ship
-    from Logic.Box   import Box
-    from Logic.Plane import Plane
-    from Logic.Ship  import Ship
-    
-    #self.logic.Add(Ship(self))
-    self.logic.Add(Box(self))
-    #self.logic.Add(Plane(self))
+    self.logic.Add(Ship(self))
+    self.logic.Add(Plane(self))
+    self.boxcount = 0
     
     
     # camera
@@ -67,7 +63,11 @@ class Main(Game):
     self.graphics.SetCamera(camera)
     
   def Tick(self, time):
-    Game.Tick(self, time)    
+    Game.Tick(self, time) 
+    
+    if time.seconds > self.boxcount:
+      self.boxcount += 1
+      self.logic.Add(Box(self))   
     
   def KeyPressedEvent(self, key):
     from Input import KEY
@@ -75,7 +75,8 @@ class Main(Game):
       self.sound.PlaySound2D("jaguar.wav")
     
     if key == KEY.ESCAPE:
-      self.event.QuitEvent()
+      self.event.QuitEvent()   
+      
       
   def QuitEvent(self):
     self.state = 0
