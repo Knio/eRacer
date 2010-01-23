@@ -20,6 +20,7 @@ class Box(Entity):
     game.io.LoadMeshAsync(load, self.graphics, "box.x")   
     
   def Tick(self, time):
-     pos = self.box.GetPosition()
-     #self.graphics.SetPosition(pos)
-     #print pos.x , pos.y, pos.z
+    Entity.Tick(self, time)
+    pos = self.box.GetPosition()
+    #self.graphics.SetPosition(pos)
+    #print pos.x , pos.y, pos.z
