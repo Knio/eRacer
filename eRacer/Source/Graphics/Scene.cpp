@@ -20,7 +20,7 @@ Scene::Scene()
 Scene::~Scene(){
 }
 
-void Scene::GetVisibleNodes(const Camera& camera, vector<Geometry*>& visibleNodes) const {
+void Scene::GetVisibleGeometry(const Camera& camera, vector<Geometry*>& visibleNodes) const {
 	for (vector<Geometry*>::const_iterator i = geometry_.begin(); i != geometry_.end(); i++)
 	{
 		if ((*i)->visible)

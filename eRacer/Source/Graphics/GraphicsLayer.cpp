@@ -75,36 +75,45 @@ int GraphicsLayer::Init( HWND hWnd )
 }
 
 
-int GraphicsLayer::RenderFrame()
+void GraphicsLayer::RenderFrame()
 {
 	// Clear the backbuffer and the zbuffer
     m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
 
     // Begin the scene
 	//In the future this will be done inside a loop to handle each shader/effect
-    if( SUCCEEDED( m_pd3dDevice->BeginScene() ) )
-    {
-		vector<Geometry*> visibleObjects;
-		m_scene->GetVisibleNodes(m_camera, visibleObjects);
-		for(vector<Geometry*>::const_iterator object = visibleObjects.begin(); 
-			object!=visibleObjects.end(); object++){
-			//The camera can be set here, but does not need to be
-			// Meshes are divided into subsets, one for each material. Render them in a loop
-			for(unsigned int i = 0; i<(*object)->Materials().size(); i++){
-				m_pd3dDevice->SetMaterial( (*object)->Materials()[i]);
-				m_pd3dDevice->SetTexture(0, (*object)->Textures()[i]);
-				(*object)->GetMesh()->DrawSubset(i);
-			}
-		}
+    assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
+
+	vector<Geometry*> visibleGeometry;
+	m_scene->GetVisibleGeometry(m_camera, visibleGeometry);
+
+	for(vector<Geometry*>::const_iterator geometry = visibleGeometry.begin(); 
+		geometry!=visibleGeometry.end(); geometry++){
+			RenderGeometry(*geometry);
+	}
 		
-        // End the scene
-        m_pd3dDevice->EndScene();
-    }
+    // End the scene
+    m_pd3dDevice->EndScene();
 
     // Present the backbuffer contents to the display
     m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
-	return S_OK;
 }
+
+void GraphicsLayer::RenderGeometry(const Geometry* geometry){
+	//there need to be the same number of textures and materials
+	assert(geometry->Textures().size()==geometry->Materials().size());
+	// Meshes are divided into subsets, one for each material. Render them in a loop
+	for(unsigned int i = 0; i<geometry->Materials().size(); i++){
+		m_pd3dDevice->SetMaterial( geometry->Materials()[i]);
+		m_pd3dDevice->SetTexture(0, geometry->Textures()[i]);
+		
+		//make sure the mesh has been initialized at this point
+		assert(NULL != geometry->GetMesh());
+
+		geometry->GetMesh()->DrawSubset(i);
+	}
+}
+
 
 int GraphicsLayer::Shutdown()
 {

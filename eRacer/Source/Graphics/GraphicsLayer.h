@@ -42,7 +42,8 @@ public:
 	int Init( HWND hWnd );
 
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
-	int RenderFrame();
+	void RenderFrame();
+	void RenderGeometry(const Geometry* geometry);
 	int Shutdown();
 	int SetCamera(const Camera& cam);
 

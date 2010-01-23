@@ -45,7 +45,7 @@ public:
 	 *			the list the visible geometry nodes are appended to 
 	 *
 	 */
-	void GetVisibleNodes(const Camera& camera, vector<Geometry*>& visibleNodes) const;
+	void GetVisibleGeometry(const Camera& camera, vector<Geometry*>& visibleNodes) const;
 
 	/**
 	 * @brief Factory method to create new non-moving geometry in the scene
