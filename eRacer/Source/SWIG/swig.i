@@ -14,6 +14,7 @@
 
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
+#include "..\Graphics\Geometry.h"
 #include "..\Graphics\StaticGeometry.h"
 #include "..\Graphics\MovingGeometry.h"
 #include "..\Graphics\GraphicsLayer.h"
@@ -49,6 +50,7 @@
 %include "..\Graphics\Camera.h"
 %include "..\Graphics\AxisAlignedBoundingBox.h"
 %include "..\Graphics\Spatial.h"
+%include "..\Graphics\Geometry.h"
 %include "..\Graphics\StaticGeometry.h"
 %include "..\Graphics\MovingGeometry.h"
 %include "..\Graphics\Scene.h"
