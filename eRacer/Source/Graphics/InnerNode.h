@@ -43,7 +43,7 @@ public:
 	 * 
 	 * @see Spatial::cullRecursive
 	 */
-	virtual void cullRecursive(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const;
+	virtual void cullRecursive(const Camera& camera, vector<const Geometry*>& visibleNodes) const;
 
 	/**
 	 * @brief add a child to this node

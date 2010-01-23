@@ -24,7 +24,7 @@ InnerNode::~InnerNode(){
 	}
 }
 
-void InnerNode::cullRecursive(const Camera& camera, vector<const StaticGeometry*>& visibleNodes) const{
+void InnerNode::cullRecursive(const Camera& camera, vector<const Geometry*>& visibleNodes) const{
 	for(vector<Spatial*>::const_iterator i = children_.begin();
 		i != children_.end(); i++){
 		(*i)->cull(camera,visibleNodes);

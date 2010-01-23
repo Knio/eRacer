@@ -169,9 +169,9 @@ int GraphicsLayer::RenderFrame()
 	//In the future this will be done inside a loop to handle each shader/effect
     if( SUCCEEDED( m_pd3dDevice->BeginScene() ) )
     {
-		vector<StaticGeometry*> visibleObjects;
+		vector<Geometry*> visibleObjects;
 		m_scene->GetVisibleNodes(m_camera, visibleObjects);
-		for(vector<StaticGeometry*>::const_iterator object = visibleObjects.begin(); 
+		for(vector<Geometry*>::const_iterator object = visibleObjects.begin(); 
 			object!=visibleObjects.end(); object++){
 			//The camera can be set here, but does not need to be
 			// Meshes are divided into subsets, one for each material. Render them in a loop
