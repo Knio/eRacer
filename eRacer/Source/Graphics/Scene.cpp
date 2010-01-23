@@ -30,7 +30,7 @@ void Scene::GetVisibleGeometry(const Camera& camera, vector<Geometry*>& visibleN
 
 MovingGeometry* Scene::CreateMovingGeometry(const string& name, const Matrix& transform) {
 	MovingGeometry* result = new MovingGeometry(name);
-	result->setTransform(transform);
+	result->SetTransform(transform);
 	geometry_.push_back(result);
 	return result;
 }

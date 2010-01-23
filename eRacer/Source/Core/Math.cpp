@@ -4,10 +4,16 @@
 
 void debug(Matrix &m)
 {
-	printf("%6.2f %6.2f %6.2f %6.2f\n%6.2f %6.2f %6.2f %6.2f\n%6.2f %6.2f %6.2f %6.2f\n%6.2f %6.2f %6.2f %6.2f\n",
+	printf(
+"\
+%6.2f %6.2f %6.2f %6.2f\n\
+%6.2f %6.2f %6.2f %6.2f\n\
+%6.2f %6.2f %6.2f %6.2f\n\
+%6.2f %6.2f %6.2f %6.2f\n\
+\n",
 		m._11, m._12, m._13, m._14, 
 		m._21, m._22, m._23, m._24, 
-		m._31, m._32, m._43, m._34, 
+		m._31, m._32, m._33, m._34, 
 		m._41, m._42, m._43, m._44);
 		
 }
@@ -65,4 +71,13 @@ const Vector3& transformAffine(const Matrix& T, Vector3& u){
 
 	memcpy(&u, &temp, sizeof(Vector3));
 	return u;
+}
+
+Matrix CreateMatrix(const Point3& position, const Matrix& orientation)
+{
+	Matrix r = orientation;
+	r._14 = position.x;
+	r._24 = position.y;
+	r._34 = position.z;
+	return r;
 }

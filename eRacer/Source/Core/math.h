@@ -72,4 +72,8 @@ Vector3 transformedAffine(const Matrix& T, const Vector3& u);
 const Vector3& transformAffine(const Matrix& T, Vector3& u);
 
 
+
+
+Matrix CreateMatrix(const Point3& position=ORIGIN, const Matrix& orientation=IDENTITY);
+
 #endif

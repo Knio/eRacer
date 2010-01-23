@@ -42,7 +42,7 @@ public:
 	 * @param transform
 	 *			the new transform from model space to world space for this geometry
 	 */
-	void setTransform(const Matrix& transform);
+	void SetTransform(const Matrix& transform);
 
 	/**
 	 * @brief setter for the mesh

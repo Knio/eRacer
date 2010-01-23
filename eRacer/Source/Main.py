@@ -48,7 +48,7 @@ class Main(Game):
     
     # testing stuff
     self.logic.Add(TestEntity(self))
-    self.sound.PlaySound2D("Resources/jaguar.wav")
+    self.sound.PlaySound2D("jaguar.wav")
     
     # space ship
     from Logic.Box   import Box
@@ -56,8 +56,8 @@ class Main(Game):
     from Logic.Ship  import Ship
     
     self.logic.Add(Ship(self))
-    #self.logic.Add(Box(self))
-    #self.logic.Add(Plane(self))
+    self.logic.Add(Box(self))
+    self.logic.Add(Plane(self))
     
     
     # camera
@@ -72,7 +72,7 @@ class Main(Game):
   def KeyPressedEvent(self, key):
     from Input import KEY
     if key == KEY.SPACE:
-      self.sound.PlaySound2D("Resources/jaguar.wav")
+      self.sound.PlaySound2D("jaguar.wav")
     
     if key == KEY.ESCAPE:
       self.event.QuitEvent()

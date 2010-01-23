@@ -9,6 +9,7 @@ class Box(Entity):
     self.box = eRacer.Box(True, 20)
     self.graphics = game.graphics.scene.CreateMovingGeometry("test")
     self.graphics.visible = False
+    self.graphics.SetTransform(eRacer.CreateMatrix(eRacer.D3DXVECTOR3(0, 10, 0)))
         
     def load(r):
       if r:
@@ -22,5 +23,15 @@ class Box(Entity):
   def Tick(self, time):
     Entity.Tick(self, time)
     pos = self.box.GetPosition()
-    #self.graphics.SetPosition(pos)
-    #print pos.x , pos.y, pos.z
+    rot = self.box.GetOrientation()
+    
+    eRacer.debug(rot)
+    print
+    
+    matrix = eRacer.CreateMatrix(pos, rot)
+    
+    eRacer.debug(matrix)
+    print
+    
+    self.graphics.SetTransform(matrix)
+    
