@@ -19,7 +19,6 @@ Box::Box(bool dynamic, float mass, Point3 pos, Matrix orient, Vector3 dimensions
 	actorDesc.body			= &bodyDesc;
 	actorDesc.density		= 10.0f;
 	actorDesc.globalPose.t	= NxVec3(pos.x, pos.y, pos.z);
-	actorDesc.globalPose.t	= NxVec3(pos.x, 20, pos.z);	
 	
 	CreateActor(actorDesc);
 }

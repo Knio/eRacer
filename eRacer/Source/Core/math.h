@@ -70,4 +70,8 @@ inline float length(const Vector3& v){
 
 Vector3 transformAffine(const Matrix& T, const Vector3& u);
 
+
+
+Matrix CreateMatrix(const Point3& position=ORIGIN, const Matrix& orientation=IDENTITY);
+
 #endif

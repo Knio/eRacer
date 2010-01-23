@@ -17,7 +17,7 @@ MovingGeometry::~MovingGeometry(){
 	
 }
 
-void MovingGeometry::setTransform(const  Matrix& transform){
+void MovingGeometry::SetTransform(const  Matrix& transform){
 	transform_ = transform;
 	UpdateWorldBounds(modelBoundingVolume_, worldBoundingVolume_);
 }

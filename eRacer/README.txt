@@ -42,4 +42,9 @@ RUNNING
 To run the program, run eRacer/run.py with python.
 
 
+CONTROLS
+
+Spacebar - RAWR!
+
+
 

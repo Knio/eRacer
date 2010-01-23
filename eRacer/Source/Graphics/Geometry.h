@@ -50,7 +50,8 @@ public:
 	 * @return a const pointer to the mesh
 	 */
 	const LPD3DXMESH GetMesh() const;
-	
+	const Matrix& GetTransform() const { return transform_; }
+
 	/**
 	 * @brief setter for the mesh. Has to be implemented by subclasses
 	 *

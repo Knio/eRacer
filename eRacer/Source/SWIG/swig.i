@@ -54,8 +54,6 @@
 %include "..\Graphics\StaticGeometry.h"
 %include "..\Graphics\MovingGeometry.h"
 %include "..\Graphics\Scene.h"
-%include "..\Graphics\StaticGeometry.h"
-%include "..\Graphics\MovingGeometry.h"
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
 
