@@ -44,7 +44,7 @@ int GraphicsLayer::Init( HWND hWnd )
 
 	// Create the D3DDevice
     if( FAILED( m_pD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
-                                      D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+                                      D3DCREATE_HARDWARE_VERTEXPROCESSING,
                                       &d3dpp, &m_pd3dDevice ) ) )
     {
         return E_FAIL;
