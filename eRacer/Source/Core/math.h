@@ -68,6 +68,8 @@ inline float length(const Vector3& v){
 }
 
 
-Vector3 transformAffine(const Matrix& T, const Vector3& u);
+Vector3 transformedAffine(const Matrix& T, const Vector3& u);
+const Vector3& transformAffine(const Matrix& T, Vector3& u);
+
 
 #endif

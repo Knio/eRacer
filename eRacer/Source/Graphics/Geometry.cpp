@@ -89,7 +89,7 @@ void Geometry::UpdateModelBounds(AxisAlignedBoundingBox& modelBounds){
 }
 
 void Geometry::UpdateWorldBounds(const AxisAlignedBoundingBox& modelBounds,AxisAlignedBoundingBox& worldBounds){
-	worldBounds.set(transformAffine(transform_,modelBounds.getMin()),transformAffine(transform_, modelBounds.getMax()));
+	worldBounds.set(transformedAffine(transform_,modelBounds.getMin()),transformedAffine(transform_, modelBounds.getMax()));
 }
 
 

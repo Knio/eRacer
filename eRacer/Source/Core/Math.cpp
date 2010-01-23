@@ -37,7 +37,7 @@ Vector3 normalized(const Vector3& A){
 }
 
 
-Vector3 transformAffine(const Matrix& T, const Vector3& u){
+Vector3 transformedAffine(const Matrix& T, const Vector3& u){
 	//Make sure the matrix is affine
 	assert(0 == T._41);
 	assert(0 == T._42);
@@ -51,4 +51,18 @@ Vector3 transformAffine(const Matrix& T, const Vector3& u){
 	memcpy(&result, &temp, sizeof(Vector3));
 	return result;
 
+}
+
+const Vector3& transformAffine(const Matrix& T, Vector3& u){
+	//Make sure the matrix is affine
+	assert(0 == T._41);
+	assert(0 == T._42);
+	assert(0 == T._43);
+	assert(1 == T._44);
+
+	Vector4 temp;
+	D3DXVec3Transform(&temp, &u, &T);
+
+	memcpy(&u, &temp, sizeof(Vector3));
+	return u;
 }
