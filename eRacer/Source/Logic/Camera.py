@@ -14,14 +14,16 @@ class Camera(Entity):
   	
   	
   def Tick(self, time):
-  	Entity.Tick(self, time)
-  	pos = eRacer.D3DXVECTOR3(math.cos(time.seconds), 0.5, math.sin(time.seconds))
-	pos *= 10
-  	eye = eRacer.D3DXVECTOR3(0, 0, 0)
-  	
-  	view = self.camera.GetViewMatrix()
-  	proj = self.camera.GetProjectionMatrix()
-
-  	self.camera.SetPosition(pos)
-
-  	
+    Entity.Tick(self, time)
+    pos = eRacer.D3DXVECTOR3(
+      math.cos(time.seconds), 
+      0.5, 
+      math.sin(time.seconds)
+    )
+    pos *= 10
+    
+    view = self.camera.GetViewMatrix()
+    proj = self.camera.GetProjectionMatrix()
+    
+    self.camera.SetPosition(pos)
+    
