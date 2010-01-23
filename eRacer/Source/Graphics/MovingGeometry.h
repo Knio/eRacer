@@ -24,9 +24,24 @@ namespace Graphics {
 class MovingGeometry : public Geometry
 {
 public:
+	/**
+	 * @brief Constructor.
+	 */
 	MovingGeometry(const string& name);
+	
+	/**
+	 * @brief Destructor stub.
+	 */
 	virtual ~MovingGeometry();
 
+	/**
+	 * @brief setter for the world transform of this geometry
+	 *
+	 * This method will also update world bounding box
+	 *
+	 * @param transform
+	 *			the new transform from model space to world space for this geometry
+	 */
 	void setTransform(const Matrix& transform);
 
 	/**
