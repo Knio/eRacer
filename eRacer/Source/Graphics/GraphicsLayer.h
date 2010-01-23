@@ -1,10 +1,10 @@
-//-----------------------------------------------------------------------------
-// File: GraphicsLayer.h
-// Jan 9, 2010 
-//
-// GraphicsLayer wraps DirectX calls for flexble rendering
-// Wallsocket Studios
-//-----------------------------------------------------------------------------
+/**
+ * @file GraphicsLayer.h
+ * @brief Definition of the GraphicsLayer class
+ *
+ * @date 09.01.2010
+ * @author Don Ha
+ */
 
 #pragma once
 #ifndef GRAPHICSLAYER_H
@@ -19,6 +19,10 @@
 
 namespace Graphics {
 
+
+/**
+ * @brief wraps DirectX calls for flexble rendering
+ */
 class GraphicsLayer
 {
 
@@ -34,7 +38,8 @@ protected:
 	GraphicsLayer();	//Constructor, Singleton 
 	GraphicsLayer(const GraphicsLayer&);
 	GraphicsLayer& operator= (const GraphicsLayer); 
-	int Draw();
+
+	void RenderGeometry(const Geometry* geometry);
 
 public:
 	Scene* m_scene;
@@ -43,9 +48,8 @@ public:
 
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
 	void RenderFrame();
-	void RenderGeometry(const Geometry* geometry);
 	int Shutdown();
-	int SetCamera(const Camera& cam);
+	void SetCamera(const Camera& cam);
 
 	static GraphicsLayer *GetGraphicsInstance()
 	{

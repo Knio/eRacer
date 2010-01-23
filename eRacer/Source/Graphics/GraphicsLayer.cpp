@@ -17,28 +17,12 @@ GraphicsLayer::~GraphicsLayer()
 	}
 }
 
-int GraphicsLayer::SetCamera(const Camera& cam)
+void GraphicsLayer::SetCamera(const Camera& cam)
 {
 	m_camera = cam;
 
-	Matrix tmpView = cam.GetViewMatrix();
-	Matrix tmpProj = cam.GetProjectionMatrix();
-
-	D3DXMATRIXA16 matView;
-    D3DXMATRIXA16 matProj;
-
-	//Copy the matrix for now
-	for (int i = 0; i<16; i++) {
-		matView[i] = tmpView[i];
-		matProj[i] = tmpProj[i];
-	}
-
-    //D3DXMatrixPerspectiveFovLH( &matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f );
-
-	m_pd3dDevice->SetTransform( D3DTS_VIEW, &matView );
-	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &matProj );
-
-	return 0;
+	m_pd3dDevice->SetTransform( D3DTS_VIEW, &cam.GetViewMatrix() );
+	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &cam.GetProjectionMatrix() );
 }
 
 int GraphicsLayer::Init( HWND hWnd ) 
