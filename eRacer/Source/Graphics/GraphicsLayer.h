@@ -48,7 +48,7 @@ public:
 
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
 	void RenderFrame();
-	int Shutdown();
+	void Shutdown();
 	void SetCamera(const Camera& cam);
 
 	static GraphicsLayer *GetGraphicsInstance()

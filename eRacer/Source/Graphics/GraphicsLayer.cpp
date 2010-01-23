@@ -99,7 +99,7 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
 }
 
 
-int GraphicsLayer::Shutdown()
+void GraphicsLayer::Shutdown()
 {
 	//Release the Devce
     if( NULL != m_pd3dDevice )
@@ -109,8 +109,6 @@ int GraphicsLayer::Shutdown()
     if( NULL != m_pD3D)
         m_pD3D->Release();
 	m_pD3D = NULL;
-
-	return S_OK;
 }
 
 };
