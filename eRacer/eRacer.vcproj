@@ -359,6 +359,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Game\Game.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Game\Game.py"
 					>
 				</File>
@@ -480,10 +484,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Core\Module.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Core\Time.h"
 					>
 				</File>
@@ -525,6 +525,18 @@
 				>
 				<File
 					RelativePath=".\Source\IO\IO.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Game"
+				>
+				<File
+					RelativePath=".\Source\Game\Game.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Game\Module.h"
 					>
 				</File>
 			</Filter>

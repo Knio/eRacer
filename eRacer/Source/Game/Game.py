@@ -5,9 +5,11 @@ A Game object that manages modules
 '''
 
 from Core import Time
+import eRacer
 
-class Game(object):
+class Game(eRacer.Game):
   def __init__(self):
+    eRacer.Game.__init__(self)
     self.modules = []
     self.namedmodules = {}
     self.time = Time()
