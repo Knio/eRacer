@@ -24,7 +24,6 @@ class Module(eRacer.Module):
     '''
     pass
     print 'Initializing module %s' % self.__class__.__name__    
-
     
   def Start(self):
     '''

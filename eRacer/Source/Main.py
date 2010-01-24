@@ -47,6 +47,9 @@ class Main(Game):
     self.event.Register(self.KeyPressedEvent)
     
     
+  def Init(self):
+    Game.Init(self)
+
     # testing stuff
     self.sound.PlaySound2D("jaguar.wav")
     
@@ -55,12 +58,12 @@ class Main(Game):
     self.logic.Add(Plane(self))
     self.boxcount = 0
     
-    
     # camera
     from Logic.Camera import Camera
     camera = Camera(self)
     self.logic.Add(camera)
-    self.graphics.SetCamera(camera)
+    self.graphics.SetCamera(camera)    
+
     
   def Tick(self, time):
     Game.Tick(self, time) 

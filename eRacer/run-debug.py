@@ -16,6 +16,7 @@ def run():
   m = None
   try:
     m = Main()
+    m.Init()
     m.Run()
   except:
     if m: m.Quit()

@@ -14,7 +14,6 @@ class Box(Entity):
       if r:
         print 'Failed to load mesh!!'
         return
-      print 'Loaded mesh'
       self.graphics.visible = True
       
     game.io.LoadMeshAsync(load, self.graphics, "skybox.x")   

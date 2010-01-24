@@ -10,17 +10,15 @@ sys.path.append('.')
 # set path to load fmod.dll
 os.environ['PATH'] += ';Lib'
 
-print sys.path
-print os.environ['PATH']
-
-
-
+#print sys.path
+#print os.environ['PATH']
 
 def run():
   m = None
   try:
     from Main import Main
     m = Main()
+    m.Init()
     m.Run()
   except:
     if m: m.Quit()

@@ -4,7 +4,6 @@ class Event(eRacer.Event):
   def __init__(self, game):
     eRacer.Event.__init__(self)
     self.listeners = {}
-    print 'Init!'
 
   def Register(self, obj, event=None):
     print 'Register', event, obj

@@ -16,6 +16,7 @@ class Game(eRacer.Game):
     self.state = 0
 
   def AddModule(self, module, name=None):
+    print 'Adding module %r' % module
     self.modules.append(module)
     if name:
       self.namedmodules[name] = module
@@ -29,10 +30,12 @@ class Game(eRacer.Game):
     except KeyError: raise AttributeError
 
   def Init(self):
+    print 'Game::Init'
     for i in self.modules:
       i.Init()
 
   def Run(self):  
+    print 'Game::Run'
     self.Start()  
     while self.state:
       t = self.time.Tick()
@@ -40,6 +43,7 @@ class Game(eRacer.Game):
     self.Quit()
 
   def Start(self):
+    print 'Game::Start'
     for i in self.modules:
       i.Start()
     self.state = 1
@@ -49,7 +53,7 @@ class Game(eRacer.Game):
       i.Tick(time)
       
   def Quit(self):
-    print 'Quitting game'
+    print 'Game::Quit'
     for i in self.modules:
       i.Quit()
 

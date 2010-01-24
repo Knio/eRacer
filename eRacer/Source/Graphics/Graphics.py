@@ -34,7 +34,7 @@ class Graphics(Module):
   def Tick(self, time):
     Module.Tick(self, time)
     self.window.Poll()
-    self.graphics.RenderFrame(self.camera,self.scene)
+    self.graphics.RenderFrame(self.camera.camera, self.scene)
   
   def Quit(self):
     Module.Quit(self)

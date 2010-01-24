@@ -21,8 +21,6 @@ def debug(func):
     print repr(r)
     return r
   return f
-  
-
 
 class IO(Module, eRacer.IO):
   def __init__(self, game):
@@ -38,7 +36,7 @@ class IO(Module, eRacer.IO):
     self.thread.start()
     
     # cache
-    self.defaulttex = eRacer.IO.LoadTexture(self, j(TEXPATH, "Default.png"))
+    self.defaulttex = self._LoadTexture(j(TEXPATH, "Default.png"))
     self.textures = {}
     
   def work(self):
@@ -47,16 +45,17 @@ class IO(Module, eRacer.IO):
       r = func(self, *args, **kwargs)
       callback(r)
 
-  @asynchronous
-  def LoadMeshAsync(self, node, name):
-    return self.LoadMesh(node, j(MODELPATH,name))
+  def LoadMesh(self, node, name):
+    return self._LoadMesh(node, j(MODELPATH,name))
+  
+  LoadMeshAsync = asynchronous(LoadMesh)
     
   #@debug
   def LoadTexture(self, name):
     if name:
       name = j(TEXPATH, name)
     if not name in self.textures:
-      r = eRacer.IO.LoadTexture(self, name)
+      r = self._LoadTexture(name)
       r.disown()
       if not self.valid(r):
         print 'Failed to load texture "%s", using default' % name

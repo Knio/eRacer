@@ -5,7 +5,7 @@
 IO* IO::g_IO = NULL;
 
 
-LPDIRECT3DTEXTURE9 IO::LoadTexture(const char* file)
+LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
 {
 	if (!file) return NULL;
 	PDIRECT3DTEXTURE9 t = NULL;
@@ -18,7 +18,7 @@ LPDIRECT3DTEXTURE9 IO::LoadTexture(const char* file)
 	return t;
 }
 
-int IO::LoadMesh(Graphics::Geometry* geom, const char* file)
+int IO::_LoadMesh(Graphics::Geometry* geom, const char* file)
 {
 	LPD3DXBUFFER materialsbuffer;
 	LPD3DXMESH mesh;
