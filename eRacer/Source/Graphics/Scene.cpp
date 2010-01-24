@@ -14,7 +14,7 @@ namespace Graphics {
 
 Scene::Scene()
 {
-	CreateSkyBox();
+	//CreateSkyBox();
 }
 
 

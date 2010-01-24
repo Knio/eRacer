@@ -20,10 +20,13 @@ class Graphics(Module):
     
     self.d3d = self.graphics.GetDevice()
     self.d3d.disown()
-    
+        
     self.scene = eRacer.Scene()
     self.graphics.m_scene = self.scene
     self.camera = None
+
+  def Start(self):
+    self.scene.CreateSkyBox()
 
   def SetCamera(self, camera):
     self.camera = camera
