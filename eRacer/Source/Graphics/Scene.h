@@ -76,12 +76,13 @@ public:
 	 */ 
 	MovingGeometry* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
 
+	void LoadSkyBox(const std::string& filename);
 
 	const Geometry& GetSkyBox() const;
 
 private:
 	vector<Geometry*> geometry_;
-	MovingGeometry* skyBox_;
+	MovingGeometry skyBox_;
 };
 
 

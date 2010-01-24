@@ -13,12 +13,9 @@ namespace Graphics {
 
 
 Scene::Scene()
+	: skyBox_("SkyBox")
 {
-	const float SKYBOX_SIZE = 3;
-		skyBox_ = new MovingGeometry("SkyBox");
 
-		IO::GetInstance()->LoadMesh(skyBox_, "Resources/Models/skybox.x");
-		skyBox_->SetTransform(CreateMatrix(SKYBOX_SIZE,SKYBOX_SIZE,SKYBOX_SIZE));
 }
 
 
@@ -46,8 +43,17 @@ StaticGeometry* Scene::CreateStaticGeometry(const string& name, const Matrix& tr
 }
 
 
+void Scene::LoadSkyBox(const std::string& filename){
+	const float SKYBOX_SIZE = 3;
+
+	//we might want to make IO use strings in future...
+	IO::GetInstance()->LoadMesh(&skyBox_, filename.c_str());
+	skyBox_.SetTransform(CreateMatrix(SKYBOX_SIZE,SKYBOX_SIZE,SKYBOX_SIZE));
+}
+
+
 const Geometry& Scene::GetSkyBox() const{
-	return *skyBox_;
+	return skyBox_;
 }
 
 
