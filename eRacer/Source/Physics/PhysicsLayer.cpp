@@ -43,20 +43,6 @@ void PhysicsLayer::ReleaseSDK()
 
 void PhysicsLayer::UpdatePhysics(Time t)
 {
-
-	//// Debugging
- //   NxU32 nbActors = gScene->getNbActors();
-	//NxActor** actors = gScene->getActors();
-
-	//while (nbActors--)
- //   {
- //       NxActor* actor = *actors++;
-	//	actor->setGlobalPosition(NxVec3(0.0,0.5 + float(t.delta) / Time::RESOLUTION,0.0));
- //   }
-
-	//printf("%d", gScene->getNbActors());
-
-	// Start collision and dynamics for delta time since the last frame
 	gScene->simulate(float(t.delta) / Time::RESOLUTION);
 	gScene->flushStream();
 }
@@ -88,7 +74,7 @@ void PhysicsLayer::SetParameters()
 
     // Create the scene
     NxSceneDesc sceneDesc;
- 	sceneDesc.simType = NX_SIMULATION_SW;
+ 	sceneDesc.simType = NX_SIMULATION_HW;
 
     gScene = gPhysicsSDK->createScene(sceneDesc);
 
