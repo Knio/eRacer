@@ -3,18 +3,15 @@
 
 
 IO* IO::g_IO = NULL;
-const string IO::TEXTURE_FOLDER = "Resources/Textures/";
 
 
 LPDIRECT3DTEXTURE9 IO::LoadTexture(const char* file)
 {
-	assert(NULL != file);
-
-	string fullPath = IO::TEXTURE_FOLDER+file;
+	if (!file) return NULL;
 	PDIRECT3DTEXTURE9 t = NULL;
 	HRESULT r = D3DXCreateTextureFromFileA(
 		d3dd,
-		fullPath.c_str(), 
+		file,
 		&t
 	);
 	if (FAILED(r)) return (PDIRECT3DTEXTURE9)-1;

@@ -3,22 +3,16 @@
 
 #include <string>
 #include "..\Graphics\Geometry.h"
-#include "..\Graphics\GraphicsLayer.h"
 
 using namespace std;
 
 class IO 
 {
 	static IO* g_IO;
-
-	LPDIRECT3DDEVICE9 d3dd;
-
-	IO();
   public:
-	static const string TEXTURE_FOLDER;
-
 	static IO* GetInstance(); 
 
+	LPDIRECT3DDEVICE9 d3dd;  
 	IO(LPDIRECT3DDEVICE9 d) { g_IO = this; d3dd = d; }
 	virtual ~IO() {}
 	// TODO this should return a tuple (mesh, materials, textures)
@@ -28,14 +22,8 @@ class IO
 };
 
 inline IO* IO::GetInstance(){
-	if(NULL == g_IO)
-		g_IO = new IO();
+	assert(g_IO);
 	return g_IO;
 }
-
-inline IO::IO(){
-	d3dd = Graphics::GraphicsLayer::GetGraphicsInstance()->GetDevice();
-}
-
 
 #endif
