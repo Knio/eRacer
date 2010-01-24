@@ -2,9 +2,11 @@
 Main subsystem interface
 '''
 
+import eRacer
 
-class Module(object):
+class Module(eRacer.Module):
   def __init__(self, game):
+    eRacer.Module.__init__(self)
     self.game = game
     self.objects = []
     
