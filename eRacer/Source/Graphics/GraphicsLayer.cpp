@@ -1,5 +1,7 @@
-#include "../Core/Time.h"
 #include "GraphicsLayer.h"
+
+#include "../Core/Time.h"
+#include "Math.h"
 
 namespace Graphics {
 
@@ -17,12 +19,10 @@ GraphicsLayer::~GraphicsLayer()
 	}
 }
 
-void GraphicsLayer::SetCamera(const Camera& cam)
+void GraphicsLayer::SetCamera(const Camera& camera)
 {
-	m_camera = cam;
-
-	m_pd3dDevice->SetTransform( D3DTS_VIEW, &cam.GetViewMatrix() );
-	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &cam.GetProjectionMatrix() );
+	m_pd3dDevice->SetTransform( D3DTS_VIEW, &camera.GetViewMatrix() );
+	m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &camera.GetProjectionMatrix() );
 }
 
 int GraphicsLayer::Init( HWND hWnd ) 
@@ -59,23 +59,27 @@ int GraphicsLayer::Init( HWND hWnd )
 }
 
 
-void GraphicsLayer::RenderFrame()
+void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
 {
 	// Clear the backbuffer and the zbuffer
     m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
+
+	SetCamera(camera);
+
+	vector<Geometry*> visibleGeometry;
+	scene.GetVisibleGeometry(camera, visibleGeometry);
 
     // Begin the scene
 	//In the future this will be done inside a loop to handle each shader/effect
     assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
 
-	vector<Geometry*> visibleGeometry;
-	m_scene->GetVisibleGeometry(m_camera, visibleGeometry);
 
 	for(vector<Geometry*>::const_iterator geometry = visibleGeometry.begin(); 
 		geometry!=visibleGeometry.end(); geometry++){
 			RenderGeometry(*geometry);
 	}
-		
+	RenderSkyBox(camera, scene.GetSkyBox());
+
     // End the scene
     m_pd3dDevice->EndScene();
 
@@ -105,6 +109,30 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
 		assert(NULL != geometry->GetMesh());
 
 		geometry->GetMesh()->DrawSubset(i);
+	}
+}
+
+void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
+
+	//there need to be the same number of textures and materials
+	assert(skyBox.Textures().size()==skyBox.Materials().size());
+	// Meshes are divided into subsets, one for each material. Render them in a loop
+	
+	// set the transform
+
+	Matrix transform = CreateMatrix(camera.GetPosition());
+	transform*=skyBox.GetTransform();
+	m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
+	
+
+	for(unsigned int i = 0; i<skyBox.Materials().size(); i++){
+		m_pd3dDevice->SetMaterial( skyBox.Materials()[i]);
+		m_pd3dDevice->SetTexture(0, skyBox.Textures()[i]);
+		
+		//make sure the mesh has been initialized at this point
+		assert(NULL != skyBox.GetMesh());
+
+		skyBox.GetMesh()->DrawSubset(i);
 	}
 }
 

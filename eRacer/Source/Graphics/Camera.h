@@ -69,6 +69,8 @@ public:
 	 */
 	void SetPosition(const Point3& position);
 
+	const Point3& GetPosition() const;
+
 	/**
 	 * @brief set point where the camera should look at
 	 *
@@ -203,6 +205,10 @@ inline void Camera::SetPosition(const Point3& position){
 	UpdateUp();
 
 	UpdateView();
+}
+
+inline const Point3& Camera::GetPosition() const{
+	return position_;
 }
 
 inline void Camera::SetLookAt(const Point3& lookAt){

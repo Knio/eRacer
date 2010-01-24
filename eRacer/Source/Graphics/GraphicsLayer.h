@@ -32,14 +32,14 @@ private:
 	LPDIRECT3D9			m_pD3D;			//Used to create the D3DDevice
 	LPDIRECT3DDEVICE9   m_pd3dDevice;	//Our rendering device
 
-	Camera m_camera;
-
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
 	GraphicsLayer(const GraphicsLayer&);
 	GraphicsLayer& operator= (const GraphicsLayer); 
 
 	void RenderGeometry(const Geometry* geometry);
+	void RenderSkyBox(const Camera& camera, const Geometry& skyBox);
+	void SetCamera(const Camera& camera);
 
 public:
 	Scene* m_scene;
@@ -47,9 +47,8 @@ public:
 	int Init( HWND hWnd );
 
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
-	void RenderFrame();
+	void RenderFrame(const Camera& camera, const Scene& scene);
 	void Shutdown();
-	void SetCamera(const Camera& cam);
 
 	static GraphicsLayer *GetGraphicsInstance()
 	{

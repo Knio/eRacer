@@ -14,7 +14,11 @@ namespace Graphics {
 
 Scene::Scene()
 {
-	//CreateSkyBox();
+	const float SKYBOX_SIZE = 3;
+		skyBox_ = new MovingGeometry("SkyBox");
+
+		IO::GetInstance()->LoadMesh(skyBox_, "Resources/Models/skybox.x");
+		skyBox_->SetTransform(CreateMatrix(SKYBOX_SIZE,SKYBOX_SIZE,SKYBOX_SIZE));
 }
 
 
@@ -42,16 +46,8 @@ StaticGeometry* Scene::CreateStaticGeometry(const string& name, const Matrix& tr
 }
 
 
-MovingGeometry* Scene::CreateSkyBox(){
-	const float SKYBOX_SIZE = 3;
-
-	MovingGeometry* result = new MovingGeometry("SkyBox");
-
-	IO::GetInstance()->LoadMesh(result, "Resources/Models/skybox.x");
-	result->SetTransform(CreateMatrix(SKYBOX_SIZE,SKYBOX_SIZE,SKYBOX_SIZE));
-
-	geometry_.push_back(result);
-	return result; 
+const Geometry& Scene::GetSkyBox() const{
+	return *skyBox_;
 }
 
 

@@ -77,10 +77,11 @@ public:
 	MovingGeometry* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
 
 
-	MovingGeometry* CreateSkyBox();
+	const Geometry& GetSkyBox() const;
 
 private:
 	vector<Geometry*> geometry_;
+	MovingGeometry* skyBox_;
 };
 
 
