@@ -16,15 +16,16 @@ setup(
   name='eRacer',
   version='1.0',
   console=['run.py'],
-  zipfile='eRacer.data',
+  #zipfile='eRacer.data',
   options={
     'py2exe': {
       'includes':[
         'ctypes',
+        'zlib',
         'eRacer',
       ],
       'packages':[
-        'Source'
+        #'Source'
       ],
       'bundle_files': 3,
       'compressed': True,

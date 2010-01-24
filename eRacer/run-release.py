@@ -5,16 +5,21 @@ import time
 sys.path.append(os.path.join(sys.path[0], 'Source'))
 sys.path.append(os.path.join(sys.path[0], 'Release'))
 sys.path.append(os.path.join(sys.path[0], 'Source\\Swig'))
+sys.path.append('.')
 
 # set path to load fmod.dll
 os.environ['PATH'] += ';Lib'
 
-from Main import Main
+print sys.path
+print os.environ['PATH']
+
+
 
 
 def run():
   m = None
   try:
+    from Main import Main
     m = Main()
     m.Run()
   except:
