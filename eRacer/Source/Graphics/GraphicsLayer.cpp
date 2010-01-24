@@ -84,7 +84,8 @@ void GraphicsLayer::RenderFrame()
 }
 
 void GraphicsLayer::RenderGeometry(const Geometry* geometry){
-	
+	assert(NULL != geometry);
+
 	//there need to be the same number of textures and materials
 	assert(geometry->Textures().size()==geometry->Materials().size());
 	// Meshes are divided into subsets, one for each material. Render them in a loop

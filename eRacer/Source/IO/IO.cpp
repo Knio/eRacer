@@ -1,6 +1,8 @@
 #include "IO.h"
 
-PDIRECT3DTEXTURE9 IO::LoadTexture(const char* file)
+IO* IO::g_IO = NULL;
+
+LPDIRECT3DTEXTURE9 IO::LoadTexture(const char* file)
 {
 	if (!file) return NULL;
 	PDIRECT3DTEXTURE9 t = NULL;
@@ -28,7 +30,7 @@ int IO::LoadMesh(Graphics::Geometry* geom, const char* file)
 		&nmaterials,
 		&mesh
 	);
-	if (r != D3D_OK) assert(false);
+	assert(SUCCEEDED(r));
 	
 	D3DXMATERIAL* m1 = ( D3DXMATERIAL* )materialsbuffer->GetBufferPointer();
 	D3DMATERIAL9* m2 = new D3DMATERIAL9[nmaterials];

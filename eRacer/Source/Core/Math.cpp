@@ -105,6 +105,13 @@ Matrix CreateMatrix(const Point3& position, float yaw, float pitch, float roll, 
 	return *D3DXMatrixMultiply(&result, &m1, &m2);
 }
 
+Matrix CreateMatrix(float scaleX, float scaleY, float scaleZ){
+	Matrix result;
+	D3DXMatrixScaling(&result,scaleX,scaleY,scaleZ);
+	return result;
+}
+
+
 void ExtractPosition(const Matrix& matrix, Point3& position){
 	position.x = matrix._41;
 	position.y = matrix._42;
@@ -138,6 +145,7 @@ void ExtractAngleAxis(const Matrix& matrix, float& angle, Vector3& axis){
 	assert(D3DXMatrixDecompose(&scale,&rotation,&translation, &matrix));
 	D3DXQuaternionToAxisAngle(&rotation,&axis, &angle);
 }
+
 
 
 void Decompose(const Matrix& matrix, Point3& position, Matrix& rotation, float& scaleX, float& scaleY, float& scaleZ){

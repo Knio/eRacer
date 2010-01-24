@@ -7,13 +7,14 @@
  */
 
 #include "Scene.h"
+#include "../IO/IO.h"
 
 namespace Graphics {
 
 
 Scene::Scene()
 {
-	
+	//CreateSkyBox();
 }
 
 
@@ -39,5 +40,19 @@ StaticGeometry* Scene::CreateStaticGeometry(const string& name, const Matrix& tr
 	geometry_.push_back(result);
 	return result;
 }
+
+
+MovingGeometry* Scene::CreateSkyBox(){
+	const float SKYBOX_SIZE = 3;
+
+	MovingGeometry* result = new MovingGeometry("SkyBox");
+
+	IO::GetInstance()->LoadMesh(result, "Resources/Models/ship_06.x");
+	result->SetTransform(CreateMatrix(SKYBOX_SIZE,SKYBOX_SIZE,SKYBOX_SIZE));
+
+	geometry_.push_back(result);
+	return result; 
+}
+
 
 };

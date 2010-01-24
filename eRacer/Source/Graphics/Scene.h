@@ -13,6 +13,8 @@
 #include "StaticGeometry.h"
 #include "MovingGeometry.h"
 
+
+
 using namespace std;
 
 namespace Graphics {
@@ -73,6 +75,9 @@ public:
 	 * @return a pointer to the newly created geometry
 	 */ 
 	MovingGeometry* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
+
+
+	MovingGeometry* CreateSkyBox();
 
 private:
 	vector<Geometry*> geometry_;
