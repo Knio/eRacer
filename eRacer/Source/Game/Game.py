@@ -28,6 +28,10 @@ class Game(eRacer.Game):
       return self.namedmodules[name]
     except KeyError: raise AttributeError
 
+  def Init(self):
+    for i in self.modules:
+      i.Init()
+
   def Run(self):  
     self.Start()  
     while self.state:

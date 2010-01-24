@@ -16,6 +16,15 @@ class Module(eRacer.Module):
     '''
     self.objects.append(obj)
     
+  def Init(self):
+    '''
+    Initialize this module.
+    Here you can assume that all of the
+    game subsystems have been constructed
+    '''
+    pass
+    print 'Initializing module %s' % self.__class__.__name__    
+
     
   def Start(self):
     '''
