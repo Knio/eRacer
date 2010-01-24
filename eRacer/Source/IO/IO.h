@@ -9,11 +9,14 @@ using namespace std;
 class IO 
 {
 	static IO* g_IO;
+  protected:
+	IO(LPDIRECT3DDEVICE9 d) { g_IO = this; d3dd = d; }
+
   public:
 	static IO* GetInstance(); 
 
 	LPDIRECT3DDEVICE9 d3dd;  
-	IO(LPDIRECT3DDEVICE9 d) { g_IO = this; d3dd = d; }
+	
 	virtual ~IO() {}
 	// TODO this should return a tuple (mesh, materials, textures)
 	virtual int LoadMesh(Graphics::Geometry* geom, const char* file);
