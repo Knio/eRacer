@@ -3,14 +3,18 @@
 
 
 IO* IO::g_IO = NULL;
+const string IO::TEXTURE_FOLDER = "Resources/Textures/";
+
 
 LPDIRECT3DTEXTURE9 IO::LoadTexture(const char* file)
 {
-	if (!file) return NULL;
+	assert(NULL != file);
+
+	string fullPath = IO::TEXTURE_FOLDER+file;
 	PDIRECT3DTEXTURE9 t = NULL;
 	HRESULT r = D3DXCreateTextureFromFileA(
 		d3dd,
-		file, 
+		fullPath.c_str(), 
 		&t
 	);
 	if (FAILED(r)) return (PDIRECT3DTEXTURE9)-1;
@@ -33,7 +37,6 @@ int IO::LoadMesh(Graphics::Geometry* geom, const char* file)
 		&mesh
 	);
 	assert(SUCCEEDED(r));
-	printf("number of materials: %d\n", nmaterials);
 
 	D3DXMATERIAL* m1 = ( D3DXMATERIAL* )materialsbuffer->GetBufferPointer();
 	D3DMATERIAL9* m2 = new D3DMATERIAL9[nmaterials];

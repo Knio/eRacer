@@ -1,8 +1,11 @@
 #ifndef IO_H_
 #define IO_H_
 
+#include <string>
 #include "..\Graphics\Geometry.h"
 #include "..\Graphics\GraphicsLayer.h"
+
+using namespace std;
 
 class IO 
 {
@@ -12,6 +15,8 @@ class IO
 
 	IO();
   public:
+	static const string TEXTURE_FOLDER;
+
 	static IO* GetInstance(); 
 
 	IO(LPDIRECT3DDEVICE9 d) { g_IO = this; d3dd = d; }
