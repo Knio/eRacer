@@ -101,6 +101,7 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
 		m_pd3dDevice->SetTexture(0, geometry->Textures()[i]);
 		
 		//make sure the mesh has been initialized at this point
+		assert(NULL != geometry);
 		assert(NULL != geometry->GetMesh());
 
 		geometry->GetMesh()->DrawSubset(i);

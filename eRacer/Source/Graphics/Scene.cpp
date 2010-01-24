@@ -14,7 +14,7 @@ namespace Graphics {
 
 Scene::Scene()
 {
-	CreateSkyBox();
+	//CreateSkyBox();
 }
 
 
@@ -47,7 +47,7 @@ MovingGeometry* Scene::CreateSkyBox(){
 
 	MovingGeometry* result = new MovingGeometry("SkyBox");
 
-	IO::GetInstance()->LoadMesh(result, "Resources/Models/ship_06.x");
+	IO::GetInstance()->LoadMesh(result, "Resources/Models/skybox.x");
 	result->SetTransform(CreateMatrix(SKYBOX_SIZE,SKYBOX_SIZE,SKYBOX_SIZE));
 
 	geometry_.push_back(result);

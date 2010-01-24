@@ -303,10 +303,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Logic\Box.py"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Physics\Physics.py"
 					>
 				</File>
@@ -328,6 +324,10 @@
 				>
 				<File
 					RelativePath=".\Source\Logic\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Logic\Box.py"
 					>
 				</File>
 				<File
