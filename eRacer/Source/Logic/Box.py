@@ -16,7 +16,7 @@ class Box(Entity):
         return
       self.graphics.visible = True
       
-    game.io.LoadMeshAsync(load, self.graphics, "ship_06.x")   
+    game.io.LoadMeshAsync(load, self.graphics, "box.x")   
     
   def Tick(self, time):
     Entity.Tick(self, time)
