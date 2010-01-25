@@ -59,7 +59,11 @@ int GraphicsLayer::Init( HWND hWnd )
 	//for testing, do not cull anything
 	assert(SUCCEEDED(m_pd3dDevice->SetRenderState(D3DRS_CULLMODE,D3DCULL_NONE)));
 
-    return S_OK;
+	assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_LINEAR)));
+	assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR)));
+
+	
+	return S_OK;
 }
 
 
