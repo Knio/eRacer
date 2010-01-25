@@ -46,6 +46,7 @@ class IO(Module, eRacer.IO):
       callback(r)
 
   def LoadMesh(self, node, name):
+    #print 'Loading mesh %s' % j(MODELPATH,name)
     return self._LoadMesh(node, j(MODELPATH,name))
   
   LoadMeshAsync = asynchronous(LoadMesh)
