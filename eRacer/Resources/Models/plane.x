@@ -46,11 +46,24 @@ Mesh {
  10.000000; 0.000000; -10.000000;;
 1;
 4; 0, 3, 2, 1;;
-  MeshMaterialList {
-    0;
-    1;
-    0;;
-    }  //End of MeshMaterialList
+MeshMaterialList { //just one 1024x1024 folding-carton-texture
+	1; 1; 0;;
+	Material {
+	1.0; 1.0; 1.0; 1.0;; // R = 1.0, G = 1.0, B = 1.0
+	0.0;
+	0.0; 0.0; 0.0;;
+	0.0; 0.0; 0.0;;
+	TextureFilename { "eracer_logo.png"; }
+} //end of Material
+} //end of MaterialList
+MeshTextureCoords {
+4;
+1.0; 1.0;   //right back
+0.0; 1.0;  //left back
+0.0; 0.0; //left front
+1.0; 0.0;  //left  back
+}
+
   MeshNormals {
 4;
     0.000000; 1.000000; 0.000000;,
