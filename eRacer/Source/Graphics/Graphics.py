@@ -26,6 +26,7 @@ class Graphics(Module):
     self.camera = None
 
   def Init(self):
+    Module.Init(self)
     self.scene.LoadSkyBox('skybox.x')
 
   def SetCamera(self, camera):
