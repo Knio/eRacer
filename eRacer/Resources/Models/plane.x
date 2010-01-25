@@ -58,10 +58,10 @@ MeshMaterialList { //just one 1024x1024 folding-carton-texture
 } //end of MaterialList
 MeshTextureCoords {
 4;
-1.0; 1.0;   //right back
-0.0; 1.0;  //left back
-0.0; 0.0; //left front
-1.0; 0.0;  //left  back
+0.0; 1.0; 
+1.0; 1.0; 
+1.0; 0.0;
+0.0; 0.0;
 }
 
   MeshNormals {
