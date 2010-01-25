@@ -29,7 +29,10 @@ int GraphicsLayer::Init( HWND hWnd )
 {
     // Create the D3D object.
     if( NULL == ( m_pD3D = Direct3DCreate9( D3D_SDK_VERSION ) ) )
-        return E_FAIL;
+	{
+        assert(false);
+		return E_FAIL;
+	}
 
     // Set up the structure used to create the D3DDevice. Since we are now
     // using more complex geometry, we will create a device with a zbuffer.
@@ -47,7 +50,8 @@ int GraphicsLayer::Init( HWND hWnd )
                                       D3DCREATE_HARDWARE_VERTEXPROCESSING,
                                       &d3dpp, &m_pd3dDevice ) ) )
     {
-        return E_FAIL;
+        assert(false);
+		return E_FAIL;
     }
 
 	// Turn on the zbuffer

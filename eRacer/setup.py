@@ -15,7 +15,7 @@ print sys.path
 setup(
   name='eRacer',
   version='1.0',
-  console=['run.py'],
+  console=['run-release.py'],
   #zipfile='eRacer.data',
   options={
     'py2exe': {
@@ -29,7 +29,7 @@ setup(
       ],
       'bundle_files': 3,
       'compressed': True,
-      'dist_dir':'T:/dist'
+      #'dist_dir':'T:/dist'
     }
   },
   data_files=[(i, glob.glob(i+'/*')) for i in glob.glob('Resources/*')]

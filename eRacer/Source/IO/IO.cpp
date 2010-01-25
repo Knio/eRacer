@@ -33,7 +33,11 @@ int IO::_LoadMesh(Graphics::Geometry* geom, const char* file)
 		&nmaterials,
 		&mesh
 	);
-	assert(SUCCEEDED(r));
+	if (!SUCCEEDED(r))
+	{
+		printf("Failed to load mesh '%s' (%d)", file, r);
+		assert(false);
+	}
 
 	D3DXMATERIAL* m1 = ( D3DXMATERIAL* )materialsbuffer->GetBufferPointer();
 	D3DMATERIAL9* m2 = new D3DMATERIAL9[nmaterials];

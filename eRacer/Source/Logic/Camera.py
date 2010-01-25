@@ -19,7 +19,7 @@ class Camera(Entity):
     # spin around a circle, looking at the origin
     pos = eRacer.D3DXVECTOR3(
       math.cos(time.seconds), 
-      0.5, 
+      math.sin(time.seconds)+1, 
       math.sin(time.seconds)
     )
     pos *= 20
