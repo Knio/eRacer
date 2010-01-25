@@ -85,27 +85,6 @@ void Geometry::UpdateBounds(){
 
 	mesh_->UnlockVertexBuffer();
 
-	/*
-	unsigned short* indices;
-
-	assert(SUCCEEDED(mesh_->LockIndexBuffer(D3DLOCK_READONLY,(LPVOID*) &indices)));
-
-	int nFaces = mesh_->GetNumFaces();
-	cout << nFaces << endl;
-	for (unsigned int i=0; i<mesh_->GetNumFaces(); i++) {
-		cout << i << ": " << (int)(*indices) << endl;
-		indices++;
-		cout << i << ": " << (int)(*indices) << endl;
-		indices++;
-		cout << i << ": " << (int)(*indices) << endl;
-		indices++;
-    }
-
-	mesh_->UnlockIndexBuffer();
-
-	*/
-
-
 	worldBoundingVolume_.set(min, max);
 }
 
