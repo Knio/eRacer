@@ -51,10 +51,14 @@ int GraphicsLayer::Init( HWND hWnd )
     }
 
 	// Turn on the zbuffer
-    m_pd3dDevice->SetRenderState( D3DRS_ZENABLE, TRUE );
+    assert(SUCCEEDED(m_pd3dDevice->SetRenderState( D3DRS_ZENABLE, TRUE )));
 
     // Turn on ambient lighting 
-    m_pd3dDevice->SetRenderState( D3DRS_AMBIENT, 0xffffffff );
+    assert(SUCCEEDED(m_pd3dDevice->SetRenderState( D3DRS_AMBIENT, 0xffffffff )));
+
+	//for testing, do not cull anything
+	assert(SUCCEEDED(m_pd3dDevice->SetRenderState(D3DRS_CULLMODE,D3DCULL_NONE)));
+
     return S_OK;
 }
 
@@ -120,8 +124,8 @@ void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
 	
 	// set the transform
 
-	Matrix transform = CreateMatrix(camera.GetPosition());
-	transform*=skyBox.GetTransform();
+	Matrix transform = skyBox.GetTransform();
+	transform*=CreateMatrix(camera.GetPosition());
 	m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
 	
 

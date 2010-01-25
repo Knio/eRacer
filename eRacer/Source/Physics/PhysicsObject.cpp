@@ -32,6 +32,7 @@ float PhysicsObject::GetMass()
 
 Vector3 PhysicsObject::GetPosition()
 {
+	assert(NULL != Actor);
 	NxVec3 v = Actor->getGlobalPosition();
 	return Vector3(v.x, v.y, v.z);
 }
