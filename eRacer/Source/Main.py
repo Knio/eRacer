@@ -13,6 +13,7 @@ from Sound    import Sound
 from Graphics import Graphics
 from Physics  import Physics
 
+import eRacer
 
 # testing entities
 from Logic.Box   import Box
@@ -42,6 +43,8 @@ class Main(Game):
     self.AddModule(self.sound)
     self.AddModule(self.physics)
     self.AddModule(self.graphics)
+    if hasattr(eRacer, 'TestModule'):
+        self.test = eRacer.TestModule();
     
     self.event.Register(self.QuitEvent)
     self.event.Register(self.KeyPressedEvent)

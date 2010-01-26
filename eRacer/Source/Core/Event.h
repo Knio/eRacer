@@ -58,7 +58,7 @@ Event registration and dispatching is implemented in Event.py
 #include <assert.h>
 
 #define EVENT(x) Event::GetInstance()->x
-#define REGISTER(obj, evt) EVENT(Register(obj, "evt"))
+#define REGISTER(obj, evt) EVENT(Register(obj, #evt))
 
 #define DEFINE_EVENT(name, ...) \
 	virtual int name(__VA_ARGS__) { assert(false); return -1; } 
@@ -73,16 +73,17 @@ public:
 		return g_Event;	
 	}
 	virtual ~Event() { }
-protected:
+private:
 	static Event* g_Event;
-	Event() { g_Event = this; }
+protected:
+	Event() { if (!g_Event) g_Event = this;	}
 
 public:
 	/* 
 	The following methods are implemented in Event.py 
 	If the C++ implementations get executed, it is an error
 	*/
-	virtual void Register() { assert(false); }
+	virtual void Register(Event* obj, char* name) { assert(false); }
 	/* define event types here */
 	DEFINE_EVENT(QuitEvent)
 	DEFINE_EVENT(KeyPressedEvent,  int key)
