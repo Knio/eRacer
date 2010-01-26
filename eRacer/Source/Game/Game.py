@@ -8,12 +8,12 @@ from Core import Time
 import eRacer
 
 class Game(eRacer.Game):
-  def __init__(self):
-    eRacer.Game.__init__(self)
+  def __init__(self):    
     self.modules = []
     self.namedmodules = {}
     self.time = Time()
     self.state = 0
+    eRacer.Game.__init__(self)
 
   def AddModule(self, module, name=None):
     print 'Adding module %r' % module

@@ -13,6 +13,7 @@ from Sound    import Sound
 from Graphics import Graphics
 from Physics  import Physics
 
+import eRacer
 
 # testing entities
 from Logic.Box   import Box
@@ -23,7 +24,6 @@ from Logic.Ship  import Ship
 class Main(Game):
   def __init__(self):
     Game.__init__(self)
-    
     self.event = Event(self)
     
     # graphics must be created first because
@@ -42,6 +42,8 @@ class Main(Game):
     self.AddModule(self.sound)
     self.AddModule(self.physics)
     self.AddModule(self.graphics)
+    if hasattr(eRacer, 'TestModule'):
+        self.test = eRacer.TestModule();
     
     self.event.Register(self.QuitEvent)
     self.event.Register(self.KeyPressedEvent)

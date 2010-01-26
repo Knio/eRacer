@@ -29,4 +29,3 @@ class Event(eRacer.Event):
       return f
 
     return object.__getattribute__(self, attr)
-

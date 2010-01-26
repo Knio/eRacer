@@ -42,6 +42,10 @@
 // Input
 #include "..\Input\Keyboard.h"
 
+
+// Test
+#include "..\Test\Test.h"
+
 %}
 
 /* 
@@ -99,3 +103,7 @@ These are the classes that get exposed to Python
 
 // Input
 %include "..\Input\Keyboard.h"
+
+
+// Test
+%include "..\Test\Test.h"
