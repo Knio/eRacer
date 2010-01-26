@@ -28,8 +28,9 @@ public:
 		return g_Game; 
 	}
 
-protected:
+private:
 	static Game* g_Game;
+protected:
 	Game() { g_Game = this; }
 
 public:

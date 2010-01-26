@@ -24,7 +24,6 @@ from Logic.Ship  import Ship
 class Main(Game):
   def __init__(self):
     Game.__init__(self)
-    
     self.event = Event(self)
     
     # graphics must be created first because
