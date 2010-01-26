@@ -44,7 +44,7 @@
 
 
 // Test
-#include "..\Test\Test.h"
+//#include "..\Test\Test.h"
 
 %}
 
@@ -106,4 +106,4 @@ These are the classes that get exposed to Python
 
 
 // Test
-%include "..\Test\Test.h"
+//%include "..\Test\Test.h"

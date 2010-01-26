@@ -65,7 +65,7 @@ void PhysicsLayer::GetSceneParameters()
 	gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES,	(float)CONSTS.PHYS_DEBUG_MODE);
 	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES,			(float)CONSTS.PHYS_DEBUG_MODE);
 
-	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, -9.81, CONSTS.PHYS_GRAVITY_Y));
+	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, -9.81f, CONSTS.PHYS_GRAVITY_Y));
 	//gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Z));
 }
 
