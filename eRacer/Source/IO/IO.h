@@ -41,11 +41,12 @@ public:
 	/** Check if a mesh is valid */
 	static bool valid(Mesh &m) { return m.n != -1; }
 
-
+	// private
 	Mesh _LoadMesh(const char* file);
 	void _SetMesh(Graphics::Geometry* geom, Mesh &Mesh);
 	LPDIRECT3DTEXTURE9 _LoadTexture(const char* file);	
-
+	void _FreeTexture(LPDIRECT3DTEXTURE9 t);
+	void _FreeMesh(Mesh &m);
 };
 
 inline IO* IO::GetInstance(){
@@ -54,3 +55,4 @@ inline IO* IO::GetInstance(){
 }
 
 #endif
+

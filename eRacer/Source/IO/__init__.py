@@ -67,9 +67,19 @@ class IO(Module, eRacer.IO):
       name = j(TEXPATH, name)
     if not name in self.textures:
       r = self._LoadTexture(name)
+      r.disown()
       if not self.valid(r):
         print 'Failed to load texture "%s", using default' % name
         return self.defaulttex
       self.textures[name] = r
     
     return self.textures[name]
+    
+  def Quit(self):
+    Module.Quit(self)
+    for k,t in self.textures.items():
+      self._FreeTexture(t)
+    self.textures = {}
+    for k,m in self.meshes.items():
+      self._FreeMesh(m)
+    self.meshes = {}

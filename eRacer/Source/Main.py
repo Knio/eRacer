@@ -39,6 +39,7 @@ class Main(Game):
     self.physics   = Physics(self)
     
     # order that modules will be ticked in the main loop
+    self.AddModule(self.io)
     self.AddModule(self.input)
     self.AddModule(self.logic)
     self.AddModule(self.sound)

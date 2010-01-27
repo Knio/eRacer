@@ -42,6 +42,7 @@ Mesh IO::_LoadMesh(const char* file)
 
 	D3DXMATERIAL* m1 = ( D3DXMATERIAL* )materialsbuffer->GetBufferPointer();
 	mesh.materials = new D3DMATERIAL9[mesh.n];
+	mesh.textures  = new PDIRECT3DTEXTURE9[mesh.n];
 	for(DWORD i=0; i<mesh.n; i++)
     {
 		// Copy the material
@@ -54,6 +55,18 @@ Mesh IO::_LoadMesh(const char* file)
     // Done with the material buffer
     materialsbuffer->Release();
 	return mesh;
+}
+
+
+void IO::_FreeTexture(LPDIRECT3DTEXTURE9 t)
+{
+	if (t)	t->Release();
+}
+void IO::_FreeMesh(Mesh &m)
+{
+	delete [] m.materials;
+	delete [] m.textures;
+	m.mesh->Release();
 }
 
 // This could probably be done by Geometry
