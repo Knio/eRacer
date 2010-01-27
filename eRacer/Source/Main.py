@@ -30,7 +30,6 @@ class Main(Game):
     
     # graphics must be created first because
     # some other modules need the HWND or D3DDEVICE
-    
     self.graphics  = Graphics(self)
     self.io        = IO(self)
     self.input     = Input(self)
