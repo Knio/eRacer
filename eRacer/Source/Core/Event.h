@@ -52,6 +52,12 @@ public:
 
 Event registration and dispatching is implemented in Event.py
 
+If you get an error in this file, it is because:
+
+1) you REGISTERED for an event, but did not implement a callback
+2) you REGISTERED or sent an EVENT without DEFINE_EVENTing it
+3) you called REGISTER or EVENT before the Event singleton was initialized.
+
 */
 
 
@@ -88,6 +94,7 @@ public:
 	DEFINE_EVENT(QuitEvent)
 	DEFINE_EVENT(KeyPressedEvent,  int key)
 	DEFINE_EVENT(KeyReleasedEvent, int key)
+	DEFINE_EVENT(ReloadConstsEvent)
 	
 };
 

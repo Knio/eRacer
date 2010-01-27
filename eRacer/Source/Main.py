@@ -5,7 +5,8 @@ eRacer game.
 import os
 
 from Game     import Game, Entity
-from Core     import Event
+from Core     import Event, Config
+
 from IO       import IO
 from Input    import Input
 from Logic    import Logic
@@ -24,7 +25,8 @@ from Logic.Ship  import Ship
 class Main(Game):
   def __init__(self):
     Game.__init__(self)
-    self.event = Event(self)
+    self.config = Config()
+    self.event  = Event(self)
     
     # graphics must be created first because
     # some other modules need the HWND or D3DDEVICE
@@ -81,6 +83,10 @@ class Main(Game):
     
     if key == KEY.ESCAPE:
       self.event.QuitEvent()   
+      
+    if key == KEY.R:
+      self.config.read()
+      self.event.ReloadConstsEvent()
       
       
   def QuitEvent(self):
