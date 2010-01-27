@@ -16,7 +16,7 @@ PhysicsLayer::~PhysicsLayer(){
 
 void PhysicsLayer::InitSDK()
 {
-	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION, NULL, NULL);
+	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
     if (!gPhysicsSDK)  
 	{
 		printf("SDK instance not initialized\n");
@@ -74,7 +74,7 @@ void PhysicsLayer::SetParameters()
 
     // Create the scene
     NxSceneDesc sceneDesc;
- 	sceneDesc.simType = NX_SIMULATION_HW;
+ 	sceneDesc.simType = NX_SIMULATION_SW;
 
     gScene = gPhysicsSDK->createScene(sceneDesc);
 
