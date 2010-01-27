@@ -67,14 +67,14 @@ public:
 	/**
 	* @brief Reads the parameters needed for the SDK from CONSTS
 	*/
-	void SetupSceneParameters();
+	void SetupParameters();
 
 	int ReloadConstsEvent();
 
 	/**
 	* @brief Sets the parameters
 	*/
-	void SetParameters();	
+	void InitScene();	
 
 	/**
 	* @brief Method that adds an actor to the scene

@@ -54,11 +54,11 @@ void PhysicsLayer::GetPhysicsResults()
 
 int PhysicsLayer::ReloadConstsEvent()
 {
-	if (gScene) SetupSceneParameters();
+	if (gScene) SetupParameters();
 	return 0;
 }
 
-void PhysicsLayer::SetupSceneParameters()
+void PhysicsLayer::SetupParameters()
 {
 	// Set the physics parameters
 	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, (NxReal)CONSTS.PHYS_SKIN_WIDTH);
@@ -71,7 +71,7 @@ void PhysicsLayer::SetupSceneParameters()
 	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Z));
 }
 
-void PhysicsLayer::SetParameters()
+void PhysicsLayer::InitScene()
 {
 
     // Create the scene
@@ -90,7 +90,7 @@ void PhysicsLayer::SetParameters()
 			assert(false);
 		}
 	}
-	SetupSceneParameters();
+	SetupParameters();
 }
 
 NxActor* PhysicsLayer::AddActor(NxActorDesc actorDesc)
