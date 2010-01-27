@@ -20,7 +20,7 @@ void PhysicsLayer::InitSDK()
     if (!gPhysicsSDK)  
 	{
 		printf("SDK instance not initialized\n");
-		return;
+		assert(false);
 	}
 }
 
@@ -50,9 +50,8 @@ void PhysicsLayer::UpdatePhysics(Time t)
 void PhysicsLayer::GetPhysicsResults()
 {
 	// Get results from gScene->simulate(gDeltaTime)
-	while (!gScene->fetchResults(NX_RIGID_BODY_FINISHED, true))
+	if (!gScene->fetchResults(NX_RIGID_BODY_FINISHED, true))
 		assert(false);
-		//printf("Waiting for physics..\n");
 }
 
 void PhysicsLayer::GetSceneParameters()
@@ -66,7 +65,7 @@ void PhysicsLayer::GetSceneParameters()
 	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES,			(float)CONSTS.PHYS_DEBUG_MODE);
 
 	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, -9.81f, CONSTS.PHYS_GRAVITY_Y));
-	//gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Z));
+	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Z));
 }
 
 void PhysicsLayer::SetParameters()

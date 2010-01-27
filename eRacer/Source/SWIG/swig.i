@@ -8,6 +8,7 @@
 #include <d3dx9math.h>
 #include "..\Core\Event.h"
 #include "..\Core\Time.h"
+#include "..\Core\Consts.h"
 
 
 //Game
@@ -64,6 +65,8 @@ These are the classes that get exposed to Python
 %feature("director") Event;
 %include "..\Core\Event.h"
 %include "..\Core\Time.h"
+%include "..\Core\Consts.h"
+
 
 
 // Game
