@@ -16,7 +16,7 @@ class Proxy(object):
         delattr(object.__getattribute__(self, "_obj"), name)
     def __setattr__(self, name, value):
     	if name == '_obj':
-    		return setattr(self, name, value)
+    		return object.__setattr__(self, name, value)
         setattr(object.__getattribute__(self, "_obj"), name, value)
     
     def __nonzero__(self):
