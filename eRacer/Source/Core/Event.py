@@ -4,15 +4,22 @@ class Event(eRacer.Event):
   def __init__(self, game):
     eRacer.Event.__init__(self)
     self.listeners = {}
+    print 'Initialized Event manager'
 
   def Register(self, obj, event=None):
     print 'Register', event, obj
-    if callable(obj):
-      event = obj.__name__
-      func = obj
-    else:
-      func = getattr(obj, event)
-    self.listeners.setdefault(event, []).append(func)
+    try:
+      if callable(obj):
+        event = obj.__name__
+        func = obj
+      else:
+        func = getattr(obj, event)
+      self.listeners.setdefault(event, []).append(func)
+    except:
+      print 'Error registering event!'
+      import traceback
+      traceback.print_exc()
+      
 
   def __getattribute__(self, attr):
     if attr.endswith('Event'):
