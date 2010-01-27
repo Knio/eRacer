@@ -1,7 +1,4 @@
-from Game import Entity
-import eRacer
-import math
-
+from Core.Globals import *
 
 class Camera(Entity):
   def __init__(self, game):

@@ -1,5 +1,4 @@
-from Game import Entity
-import eRacer
+from Core.Globals import *
 
 class Ship(Entity):
   def __init__(self, game):
@@ -7,7 +6,7 @@ class Ship(Entity):
     
     # no physics yet..
     self.graphics = game.graphics.scene.CreateMovingGeometry("test")
-    self.graphics.SetTransform(eRacer.CreateMatrix(eRacer.D3DXVECTOR3(10,3,4)))
+    self.graphics.SetTransform(eRacer.CreateMatrix(Vector3(10,3,4)))
     self.graphics.visible = False
         
     def load(r):
