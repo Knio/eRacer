@@ -55,7 +55,7 @@ void PhysicsLayer::GetPhysicsResults()
 		//printf("Waiting for physics..\n");
 }
 
-void PhysicsLayer::GetSceneParameters()
+void PhysicsLayer::SetupSceneParameters()
 {
 	// Set the physics parameters
 	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, (NxReal)CONSTS.PHYS_SKIN_WIDTH);
@@ -74,11 +74,9 @@ void PhysicsLayer::SetParameters()
 
     // Create the scene
     NxSceneDesc sceneDesc;
- 	sceneDesc.simType = NX_SIMULATION_SW;
+ 	sceneDesc.simType = NX_SIMULATION_HW;
 
     gScene = gPhysicsSDK->createScene(sceneDesc);
-
-	GetSceneParameters();
 
 	if(!gScene)
 	{ 
@@ -90,6 +88,7 @@ void PhysicsLayer::SetParameters()
 			return;
 		}
 	}
+	SetupSceneParameters();
 }
 
 NxActor* PhysicsLayer::AddActor(NxActorDesc actorDesc)

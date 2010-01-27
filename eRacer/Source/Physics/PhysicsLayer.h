@@ -64,7 +64,7 @@ public:
 	/**
 	* @brief Reads the parameters needed for the SDK from consts.h
 	*/
-	void GetSceneParameters();
+	void SetupSceneParameters();
 
 	/**
 	* @brief Sets the parameters
