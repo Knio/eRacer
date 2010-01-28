@@ -18,7 +18,7 @@
 #include <windows.h>
 #include "fmod.h"
 #include "fmod_errors.h"
-#include "..\Core\types.h"
+#include "Core\types.h"
 
 #undef min
 #undef max

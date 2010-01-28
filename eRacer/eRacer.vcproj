@@ -45,7 +45,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Source\;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -127,7 +127,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Source\;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
@@ -251,6 +251,18 @@
 				Name="Input"
 				>
 				<File
+					RelativePath=".\Source\Input\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Input\Input.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Input\KEY.py"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Input\Keyboard.cpp"
 					>
 				</File>
@@ -260,6 +272,10 @@
 				>
 				<File
 					RelativePath=".\Source\Core\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\Config.py"
 					>
 				</File>
 				<File
@@ -275,6 +291,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\Globals.py"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\Math.cpp"
 					>
 				</File>
@@ -282,10 +302,22 @@
 					RelativePath=".\Source\Core\Time.py"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Core\Util.py"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sound"
 				>
+				<File
+					RelativePath=".\Source\Sound\__init__.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Sound\Sound.py"
+					>
+				</File>
 				<File
 					RelativePath=".\Source\Sound\SoundLayer.cpp"
 					>

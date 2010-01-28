@@ -2,7 +2,7 @@
 #define IO_H_
 
 #include <string>
-#include "..\Graphics\Geometry.h"
+#include "Graphics\Geometry.h"
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 #include "Window.h"
-#include "../Core/Event.h"
+#include "Core/Event.h"
 
 namespace Graphics {
 

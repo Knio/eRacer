@@ -1,9 +1,9 @@
 #ifndef TEST_H_
 #define TEST_H_
 
-#include "../Core/Event.h"
-#include "../Game/Module.h"
-#include "../Game/Game.h"
+#include "Core/Event.h"
+#include "Game/Module.h"
+#include "Game/Game.h"
 
 class TestModule : public Module, public Listener
 {
@@ -36,7 +36,7 @@ public:
 	}
 	void Tick(Time& t)
 	{
-		// frame happened. t.delta is the time advancement in microseconds
+		// frame happened. t contains the time advancement in microseconds
 	}
 	void Quit()
 	{

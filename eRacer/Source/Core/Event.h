@@ -23,7 +23,7 @@ event names must end in "Event"
 
 To send an event: anywhere, call
 
-#include "../Core/Event.h"
+#include "Core/Event.h"
 ...
 EVENT(KeyPressedEvent(key));
 

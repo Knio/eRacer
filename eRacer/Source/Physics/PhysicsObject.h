@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include "NxPhysics.h"
-#include "..\Core\Math.h"
+#include "Core\Math.h"
 #include "PhysicsLayer.h"
 
 class PhysicsLayer;

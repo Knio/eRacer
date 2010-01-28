@@ -1,6 +1,6 @@
 #include "GraphicsLayer.h"
 
-#include "../Core/Time.h"
+#include "Core/Time.h"
 #include "Math.h"
 
 namespace Graphics {

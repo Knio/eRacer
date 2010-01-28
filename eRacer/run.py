@@ -5,7 +5,6 @@ def run():
     from Main import Main
     from Core import Globals
     m = Main()
-    Globals.game._obj = m
     m.Init()
     m.Run()
   except:

@@ -13,9 +13,9 @@
 #include <vector>
 
 #include "NxPhysics.h"
-#include "../Core/Time.h"
-#include "../Core/Event.h"
-#include "../Core/Consts.h"
+#include "Core/Time.h"
+#include "Core/Event.h"
+#include "Core/Consts.h"
 
 
 using namespace std;

@@ -2,10 +2,11 @@
 eRacer game.
 '''
 
-import os
+from Core.Globals import *
 
-from Game     import Game, Entity
-from Core     import Event, Config
+from Game     import Game
+from Core     import Event
+from Core     import Config
 
 from IO       import IO
 from Input    import Input
@@ -13,8 +14,6 @@ from Logic    import Logic
 from Sound    import Sound
 from Graphics import Graphics
 from Physics  import Physics
-
-import eRacer
 
 # testing entities
 from Logic.Box   import Box

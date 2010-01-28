@@ -41,7 +41,7 @@ void PhysicsLayer::ReleaseSDK()
 
 void PhysicsLayer::UpdatePhysics(Time t)
 {
-	gScene->simulate(float(t.delta) / Time::RESOLUTION);
+	gScene->simulate(float(t.game_delta) / Time::RESOLUTION);
 	gScene->flushStream();
 }
 

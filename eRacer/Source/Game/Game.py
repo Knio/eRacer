@@ -5,10 +5,12 @@ A Game object that manages modules
 '''
 
 from Core import Time
+import Core.Globals
 import eRacer
 
 class Game(eRacer.Game):
-  def __init__(self):    
+  def __init__(self):
+    Core.Globals.__game = self
     self.modules = []
     self.namedmodules = {}
     self.time = Time()
@@ -20,14 +22,6 @@ class Game(eRacer.Game):
     self.modules.append(module)
     if name:
       self.namedmodules[name] = module
-
-  def __getattr__(self, name):
-    '''
-    getter for named modules
-    '''
-    try:
-      return self.namedmodules[name]
-    except KeyError: raise AttributeError
 
   def Init(self):
     print 'Game::Init'
