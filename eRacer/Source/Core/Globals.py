@@ -23,5 +23,6 @@ class Vector4(eRacer.D3DXVECTOR4):
 Point3 = Vector3
 Point4 = Vector4
 
+Matrix = eRacer.CreateMatrix
 
 

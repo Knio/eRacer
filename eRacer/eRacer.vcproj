@@ -335,6 +335,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Physics\Convert.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Physics\Physics.py"
 					>
 				</File>
@@ -549,6 +553,10 @@
 				>
 				<File
 					RelativePath=".\Source\Physics\Box.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\Convert.h"
 					>
 				</File>
 				<File
