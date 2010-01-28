@@ -25,4 +25,8 @@ Point4 = Vector4
 
 Matrix = eRacer.CreateMatrix
 
-
+dot       = eRacer.dot
+cross     = eRacer.cross
+normalize = eRacer.normalize
+mul1      = eRacer.mul1
+mul0      = eRacer.mul0

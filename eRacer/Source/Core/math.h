@@ -68,6 +68,9 @@ inline float length(const Vector3& v){
 }
 
 
+Vector3 mul0(const Matrix &m, const Vector3 &v);
+Point3	mul1(const Matrix &m, const Point3  &v);
+
 Vector3 transformedAffine(const Matrix& T, const Vector3& u);
 const Vector3& transformAffine(const Matrix& T, Vector3& u);
 

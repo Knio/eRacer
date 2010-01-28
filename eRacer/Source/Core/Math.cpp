@@ -43,6 +43,34 @@ Vector3 normalized(const Vector3& A){
 }
 
 
+Vector3 mul0(const Matrix &m, const Vector3 &v)
+{
+	//Make sure the matrix is affine
+	assert(0 == m._14);
+	assert(0 == m._24);
+	assert(0 == m._34);
+	assert(1 == m._44);
+	Vector3 r;
+	D3DXVec3TransformNormal(&r, &v, &m);
+	return r;
+}
+
+Point3	mul1(const Matrix &m, const Point3  &v)
+{
+	//Make sure the matrix is affine
+	assert(0 == m._14);
+	assert(0 == m._24);
+	assert(0 == m._34);
+	assert(1 == m._44);
+
+	Vector4 t;
+	D3DXVec3Transform(&t, &v, &m);
+
+	Vector3 r;
+	memcpy(&r, &t, sizeof(Vector3));
+	return r;
+}
+
 Vector3 transformedAffine(const Matrix& T, const Vector3& u){
 	//Make sure the matrix is affine
 	assert(0 == T._14);

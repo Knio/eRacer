@@ -101,7 +101,7 @@ public:
 
 	void CreateActor(NxActorDesc actorDesc);
 
-	Vector3 GetLocalPointVelocity(const Point3 &pos)
+	Vector3 GetPointVelocity(const Point3 &pos)
 	{
 		return NxVec3_Vector3(Actor->getLocalPointVelocity(Vector3_NxVec3(pos)));
 	}

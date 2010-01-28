@@ -59,8 +59,6 @@ Matrix PhysicsObject::GetTransform()
 	);
 }
 
-
-
 void PhysicsObject::SetOrientation(const Matrix &o)
 {
 	assert(isDynamic());
