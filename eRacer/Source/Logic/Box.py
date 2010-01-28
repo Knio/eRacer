@@ -19,9 +19,11 @@ class Box(Entity):
     
   def Tick(self, time):
     Entity.Tick(self, time)
-    pos = self.box.GetPosition()
-    rot = self.box.GetOrientation()
+    #pos = self.box.GetPosition()
+    #rot = self.box.GetOrientation()
 
-    matrix = eRacer.CreateMatrix(pos, rot)
-    self.graphics.SetTransform(matrix)
+    #matrix = eRacer.CreateMatrix(pos, rot)
+    #self.graphics.SetTransform(matrix)
+        
+    self.graphics.SetTransform(self.box.GetTransform())
     

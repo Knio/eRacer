@@ -21,6 +21,16 @@ public:
 		// other submodules may NOT be initialized yet, so if you depend on them, 
 		// do it in Init()
 
+
+		// random shit
+		/*
+		Matrix m;
+		D3DXMatrixTranslation(&m, 10, 1, -3);
+		debug(m);
+		debug(CreateMatrix(Vector3(10,1,-3)));
+		*/
+
+
 	}
 	~TestModule() {}
 

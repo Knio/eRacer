@@ -44,21 +44,27 @@ void PhysicsObject::SetPosition(const Vector3 &pos)
 
 Matrix PhysicsObject::GetOrientation()
 {
-	NxMat33 m = Actor->getGlobalOrientation();
-	return Matrix(m(0, 0), m(0, 1), m(0, 2), 0,
-				  m(1, 0), m(1, 1), m(1, 2), 0,
-				  m(2, 0), m(2, 1), m(2, 2), 0,
-				  0, 0, 0, 1);
+	return NxMat33_Matrix(Actor->getGlobalOrientation());
 }
 
-void PhysicsObject::SetOrientation(const Matrix &orient)
+Matrix PhysicsObject::GetTransform()
 {
-	if(isDynamic()){
-		NxMat33 m(NxVec3(orient._11, orient._12, orient._13),
-				  NxVec3(orient._21, orient._22, orient._23),
-				  NxVec3(orient._31, orient._32, orient._33));
-		Actor->setGlobalOrientation(m);
-	}
+	NxMat33 m = Actor->getGlobalOrientation();
+	NxVec3  p = Actor->getGlobalPosition();
+	return Matrix(
+		m(0, 0), 	m(1, 0), 	m(2, 0), 	0,
+		m(0, 1), 	m(1, 1), 	m(2, 1), 	0,
+		m(0, 2), 	m(1, 2), 	m(2, 2), 	0,
+		p.x, 			p.y, 			p.z, 			1
+	);
+}
+
+
+
+void PhysicsObject::SetOrientation(const Matrix &o)
+{
+	assert(isDynamic());
+	Actor->setGlobalOrientation(Matrix_NxMat33(o));
 }
 
 NxActor* PhysicsObject::GetActor()

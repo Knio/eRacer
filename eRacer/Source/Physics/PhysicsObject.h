@@ -66,7 +66,8 @@ public:
 	* @return The orientation matrix of the physics object.
 	*/
 	Matrix GetOrientation();
-
+	
+	Matrix GetTransform();
 	/**
 	* @brief Sets the orientation of the physics object. Object must be dynamic.
 	* @param orient The orientation matrix of the object.
