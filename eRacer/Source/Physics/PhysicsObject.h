@@ -28,7 +28,7 @@ public:
 	* @param dynamic Whether the object can be moved or not.
 	* @param mass The mass of the object in kilograms. Set as 0 for static objects.
 	*/
-	PhysicsObject(bool dynamic = true, float mass = 0);
+	PhysicsObject();
 	
 	/**
 	* @brief Destructor stub
@@ -116,7 +116,6 @@ protected:
 	* @brief The PhysX object that is used to control behaviour.
 	*/
 	NxActor* Actor;
-	bool dynamic;
 };
 }
 

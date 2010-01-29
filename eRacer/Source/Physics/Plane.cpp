@@ -1,8 +1,7 @@
 #include "Plane.h"
 namespace Physics{
 
-Plane::Plane(bool dynamic, float mass, float distOrigin, Vector3 normal){
-	PhysicsObject::dynamic = dynamic;
+Plane::Plane(float distOrigin, Vector3 normal){
 
 	NxMaterialDesc material;
 	material.restitution = 0.5;

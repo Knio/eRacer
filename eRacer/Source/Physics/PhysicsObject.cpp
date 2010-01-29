@@ -2,15 +2,12 @@
 
 namespace Physics{
 
-PhysicsObject::PhysicsObject(bool dynamic, float mass)
+PhysicsObject::PhysicsObject()
 {
-	PhysicsObject::dynamic = dynamic;
-	
 }
 
 PhysicsObject::~PhysicsObject()
 {
-	
 }
 
 void PhysicsObject::SetMass(float mass)
@@ -92,7 +89,7 @@ void PhysicsObject::SetVelocity(const Vector3 &vel)
 }
 
 bool PhysicsObject::isDynamic(){
-	return dynamic = Actor->isDynamic();
+	return Actor->isDynamic();
 }
 
 NxActor* PhysicsObject::CreateActor(NxActorDesc actorDesc)
