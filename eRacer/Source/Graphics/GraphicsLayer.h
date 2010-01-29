@@ -16,6 +16,7 @@
 #include "Camera.h"
 #include "StaticGeometry.h"
 #include "Scene.h"
+#include "FontManager.h"
 
 namespace Graphics {
 
@@ -31,6 +32,7 @@ private:
 
 	LPDIRECT3D9			m_pD3D;			//Used to create the D3DDevice
 	LPDIRECT3DDEVICE9   m_pd3dDevice;	//Our rendering device
+	FontManager			m_fontManager;
 
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
@@ -46,6 +48,7 @@ public:
 	~GraphicsLayer();	//Destructor
 	int Init( HWND hWnd );
 
+	void WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color);
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
 	void RenderFrame(const Camera& camera, const Scene& scene);
 	void Shutdown();

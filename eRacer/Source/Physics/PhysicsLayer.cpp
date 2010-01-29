@@ -1,13 +1,11 @@
-#include "../Core/Consts.h"
-extern Constants CONSTS;
-
 #include "PhysicsLayer.h"
-
+extern Constants CONSTS;
 namespace Physics{
 
 PhysicsLayer* PhysicsLayer::g_PhysicsLayer = NULL;
 PhysicsLayer::PhysicsLayer() : gScene(NULL) {
 	g_PhysicsLayer = this;
+	REGISTER(this, ReloadConstsEvent);
 }
 
 PhysicsLayer::~PhysicsLayer(){
@@ -16,11 +14,11 @@ PhysicsLayer::~PhysicsLayer(){
 
 void PhysicsLayer::InitSDK()
 {
-	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION, NULL, NULL);
+	gPhysicsSDK = NxCreatePhysicsSDK(NX_PHYSICS_SDK_VERSION);
     if (!gPhysicsSDK)  
 	{
 		printf("SDK instance not initialized\n");
-		return;
+		assert(false);
 	}
 }
 
@@ -43,19 +41,24 @@ void PhysicsLayer::ReleaseSDK()
 
 void PhysicsLayer::UpdatePhysics(Time t)
 {
-	gScene->simulate(float(t.delta) / Time::RESOLUTION);
+	gScene->simulate(float(t.game_delta) / Time::RESOLUTION);
 	gScene->flushStream();
 }
 
 void PhysicsLayer::GetPhysicsResults()
 {
 	// Get results from gScene->simulate(gDeltaTime)
-	while (!gScene->fetchResults(NX_RIGID_BODY_FINISHED, true))
+	if (!gScene->fetchResults(NX_RIGID_BODY_FINISHED, true))
 		assert(false);
-		//printf("Waiting for physics..\n");
 }
 
-void PhysicsLayer::GetSceneParameters()
+int PhysicsLayer::ReloadConstsEvent()
+{
+	if (gScene) SetupParameters();
+	return 0;
+}
+
+void PhysicsLayer::SetupParameters()
 {
 	// Set the physics parameters
 	gPhysicsSDK->setParameter(NX_SKIN_WIDTH, (NxReal)CONSTS.PHYS_SKIN_WIDTH);
@@ -65,11 +68,10 @@ void PhysicsLayer::GetSceneParameters()
 	gPhysicsSDK->setParameter(NX_VISUALIZE_COLLISION_SHAPES,	(float)CONSTS.PHYS_DEBUG_MODE);
 	gPhysicsSDK->setParameter(NX_VISUALIZE_ACTOR_AXES,			(float)CONSTS.PHYS_DEBUG_MODE);
 
-	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, -9.81, CONSTS.PHYS_GRAVITY_Y));
-	//gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Z));
+	gScene->setGravity(NxVec3(CONSTS.PHYS_GRAVITY_X, CONSTS.PHYS_GRAVITY_Y, CONSTS.PHYS_GRAVITY_Z));
 }
 
-void PhysicsLayer::SetParameters()
+void PhysicsLayer::InitScene()
 {
 
     // Create the scene
@@ -78,8 +80,6 @@ void PhysicsLayer::SetParameters()
 
     gScene = gPhysicsSDK->createScene(sceneDesc);
 
-	GetSceneParameters();
-
 	if(!gScene)
 	{ 
 		sceneDesc.simType			= NX_SIMULATION_SW; 
@@ -87,9 +87,10 @@ void PhysicsLayer::SetParameters()
 		if(!gScene) 
 		{
 			printf("scene instance not initialized\n");
-			return;
+			assert(false);
 		}
 	}
+	SetupParameters();
 }
 
 NxActor* PhysicsLayer::AddActor(NxActorDesc actorDesc)
@@ -123,7 +124,7 @@ void PhysicsLayer::FinalizeSDK()
 	else
 	{
 		printf("Error loading scene\n");
-		return;
+		assert(false);
 	}
 }
 

@@ -9,7 +9,7 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include "../Core/types.h"
+#include "Core/types.h"
 #include <cassert>
 
 namespace Graphics {

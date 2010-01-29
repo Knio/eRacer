@@ -38,6 +38,7 @@ class IO(Module, eRacer.IO):
     # cache
     self.defaulttex = self._LoadTexture(j(TEXPATH, "Default.png"))
     self.textures = {}
+    self.meshes   = {}
     
   def work(self):
     while 1:
@@ -46,7 +47,17 @@ class IO(Module, eRacer.IO):
       callback(r)
 
   def LoadMesh(self, node, name):
-    return self._LoadMesh(node, j(MODELPATH,name))
+    name = j(MODELPATH,name)
+    if not name in self.meshes:
+      r = self._LoadMesh(name)
+      if not self.valid(r):
+        print 'Failed to load mesh "%s"' % name
+        return -1
+      self.meshes[name] = r
+
+    mesh = self.meshes[name]    
+    self._SetMesh(node, mesh)
+    return 0
   
   LoadMeshAsync = asynchronous(LoadMesh)
     
@@ -63,3 +74,12 @@ class IO(Module, eRacer.IO):
       self.textures[name] = r
     
     return self.textures[name]
+    
+  def Quit(self):
+    Module.Quit(self)
+    for k,t in self.textures.items():
+      self._FreeTexture(t)
+    self.textures = {}
+    for k,m in self.meshes.items():
+      self._FreeMesh(m)
+    self.meshes = {}

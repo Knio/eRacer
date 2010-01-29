@@ -6,7 +6,7 @@
  * @author: Don Ha
  */
 
-#include "../Core/Event.h"
+#include "Core/Event.h"
 #include "Keyboard.h"
 
 int Keyboard::Init(HWND hWnd, HINSTANCE hInstance)

@@ -1,6 +1,6 @@
 #include "GraphicsLayer.h"
 
-#include "../Core/Time.h"
+#include "Core/Time.h"
 #include "Math.h"
 
 namespace Graphics {
@@ -29,7 +29,10 @@ int GraphicsLayer::Init( HWND hWnd )
 {
     // Create the D3D object.
     if( NULL == ( m_pD3D = Direct3DCreate9( D3D_SDK_VERSION ) ) )
-        return E_FAIL;
+	{
+        assert(false);
+		return E_FAIL;
+	}
 
     // Set up the structure used to create the D3DDevice. Since we are now
     // using more complex geometry, we will create a device with a zbuffer.
@@ -47,8 +50,12 @@ int GraphicsLayer::Init( HWND hWnd )
                                       D3DCREATE_HARDWARE_VERTEXPROCESSING,
                                       &d3dpp, &m_pd3dDevice ) ) )
     {
-        return E_FAIL;
+        assert(false);
+		return E_FAIL;
     }
+
+	//Init the font manager
+	m_fontManager.Init(m_pd3dDevice);
 
 	// Turn on the zbuffer
     assert(SUCCEEDED(m_pd3dDevice->SetRenderState( D3DRS_ZENABLE, TRUE )));
@@ -88,11 +95,17 @@ void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
 	}
 	RenderSkyBox(camera, scene.GetSkyBox());
 
+	m_fontManager.Draw();
     // End the scene
     m_pd3dDevice->EndScene();
 
     // Present the backbuffer contents to the display
     m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+}
+
+void GraphicsLayer::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color)
+{
+	m_fontManager.WriteString(msg, fontName, size, pos, color);
 }
 
 void GraphicsLayer::RenderGeometry(const Geometry* geometry){
@@ -155,6 +168,8 @@ void GraphicsLayer::Shutdown()
     if( NULL != m_pD3D)
         m_pD3D->Release();
 	m_pD3D = NULL;
+
+	m_fontManager.Shutdown();
 }
 
 };

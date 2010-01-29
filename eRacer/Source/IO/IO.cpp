@@ -18,11 +18,12 @@ LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
 	return t;
 }
 
-int IO::_LoadMesh(Graphics::Geometry* geom, const char* file)
+
+
+Mesh IO::_LoadMesh(const char* file)
 {
 	LPD3DXBUFFER materialsbuffer;
-	LPD3DXMESH mesh;
-	DWORD nmaterials;
+	Mesh mesh;
 	HRESULT r = D3DXLoadMeshFromX(
 		file, 
 		D3DXMESH_SYSTEMMEM,
@@ -30,31 +31,56 @@ int IO::_LoadMesh(Graphics::Geometry* geom, const char* file)
 		NULL,
 		&materialsbuffer, 
 		NULL, 
-		&nmaterials,
-		&mesh
+		&mesh.n,
+		&mesh.mesh
 	);
-	assert(SUCCEEDED(r));
+	if (!SUCCEEDED(r))
+	{
+		mesh.n = -1;
+		return mesh;
+	}
 
 	D3DXMATERIAL* m1 = ( D3DXMATERIAL* )materialsbuffer->GetBufferPointer();
-	D3DMATERIAL9* m2 = new D3DMATERIAL9[nmaterials];
-	PDIRECT3DTEXTURE9 t;
-	for(DWORD i=0; i<nmaterials; i++)
+	mesh.materials = new D3DMATERIAL9[mesh.n];
+	mesh.textures  = new PDIRECT3DTEXTURE9[mesh.n];
+	for(DWORD i=0; i<mesh.n; i++)
     {
 		// Copy the material
-		m2[i] = m1[i].MatD3D;
-		t = LoadTexture(m1[i].pTextureFilename);
+		mesh.materials[i]	= m1[i].MatD3D;
+		mesh.textures[i]	= LoadTexture(m1[i].pTextureFilename);
         
 		// Set the ambient color for the material (D3DX does not do this)
-        m2[i].Ambient = m2[i].Diffuse;
-
-		geom->Materials().push_back(&m2[i]);
-		geom->Textures().push_back(t);
+		mesh.materials[i].Ambient = mesh.materials[i].Diffuse;
     }
-
     // Done with the material buffer
     materialsbuffer->Release();
+	return mesh;
+}
 
-	geom->SetMesh(mesh);
-	return 0;
-};
+
+void IO::_FreeTexture(LPDIRECT3DTEXTURE9 t)
+{
+	if (t)	t->Release();
+}
+void IO::_FreeMesh(Mesh &m)
+{
+	delete [] m.materials;
+	delete [] m.textures;
+	m.mesh->Release();
+}
+
+// This could probably be done by Geometry
+void IO::_SetMesh(Graphics::Geometry *geom, Mesh &mesh)
+{
+	// TODO clear these std::vectors?
+	assert(!geom->Materials().size());
+	assert(!geom->Textures().size());
+
+	geom->SetMesh(mesh.mesh);
+	for(DWORD i=0; i<mesh.n; i++)
+	{
+		geom->Materials().push_back(&mesh.materials[i]);
+		geom->Textures().push_back(mesh.textures[i]);
+	}
+}
 

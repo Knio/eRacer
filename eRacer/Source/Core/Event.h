@@ -23,7 +23,7 @@ event names must end in "Event"
 
 To send an event: anywhere, call
 
-#include "../Core/Event.h"
+#include "Core/Event.h"
 ...
 EVENT(KeyPressedEvent(key));
 
@@ -52,13 +52,19 @@ public:
 
 Event registration and dispatching is implemented in Event.py
 
+If you get an error in this file, it is because:
+
+1) you REGISTERED for an event, but did not implement a callback
+2) you REGISTERED or sent an EVENT without DEFINE_EVENTing it
+3) you called REGISTER or EVENT before the Event singleton was initialized.
+
 */
 
 
 #include <assert.h>
 
 #define EVENT(x) Event::GetInstance()->x
-#define REGISTER(obj, evt) EVENT(Register(obj, "evt"))
+#define REGISTER(obj, evt) EVENT(Register(obj, #evt))
 
 #define DEFINE_EVENT(name, ...) \
 	virtual int name(__VA_ARGS__) { assert(false); return -1; } 
@@ -73,20 +79,22 @@ public:
 		return g_Event;	
 	}
 	virtual ~Event() { }
-protected:
+private:
 	static Event* g_Event;
-	Event() { g_Event = this; }
+protected:
+	Event() { if (!g_Event) g_Event = this;	}
 
 public:
 	/* 
 	The following methods are implemented in Event.py 
 	If the C++ implementations get executed, it is an error
 	*/
-	virtual void Register() { assert(false); }
+	virtual void Register(Event* obj, char* name) { assert(false); }
 	/* define event types here */
 	DEFINE_EVENT(QuitEvent)
 	DEFINE_EVENT(KeyPressedEvent,  int key)
 	DEFINE_EVENT(KeyReleasedEvent, int key)
+	DEFINE_EVENT(ReloadConstsEvent)
 	
 };
 

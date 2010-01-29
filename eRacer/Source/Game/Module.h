@@ -10,7 +10,7 @@ Interface for all subsystems in the game.
 */
 
 
-#include "../Core/Time.h"
+#include "Core/Time.h"
 
 class Module
 {

@@ -11,7 +11,8 @@
 
 #include <iostream>
 #include "NxPhysics.h"
-#include "..\Core\Math.h"
+#include "Core\Math.h"
+#include "Convert.h"
 #include "PhysicsLayer.h"
 
 class PhysicsLayer;
@@ -57,7 +58,7 @@ public:
 	* @brief Sets the position of the physics object. Object must be dynamic.
 	* @param pos The position of the object.
 	*/
-	void SetPosition(Vector3 pos);
+	void SetPosition(const Vector3 &pos);
 
 	/**
 	* @brief Method that returns the orientation matrix of the physics object.
@@ -65,12 +66,13 @@ public:
 	* @return The orientation matrix of the physics object.
 	*/
 	Matrix GetOrientation();
-
+	
+	Matrix GetTransform();
 	/**
 	* @brief Sets the orientation of the physics object. Object must be dynamic.
 	* @param orient The orientation matrix of the object.
 	*/
-	void SetOrientation(Matrix orient);
+	void SetOrientation(const Matrix &orient);
 
 	/**
 	* @brief Returns the actor component of the physics object.
@@ -89,7 +91,7 @@ public:
 	* @brief Sets the linear velocity of the physics object. Object must be dynamic.
 	* @param vel The linear velocity of the object.
 	*/
-	void SetVelocity(Vector3 vel);
+	void SetVelocity(const Vector3 &vel);
 
 	/**
 	* @brief Checks if the object is movable or not
@@ -98,6 +100,15 @@ public:
 	bool isDynamic();
 
 	void CreateActor(NxActorDesc actorDesc);
+
+	Vector3 GetPointVelocity(const Point3 &pos)
+	{
+		return NxVec3_Vector3(Actor->getLocalPointVelocity(Vector3_NxVec3(pos)));
+	}
+	void AddForce(const Vector3 &force, const Point3 &pos)
+	{
+		return Actor->addLocalForceAtLocalPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
+	}
 
 protected:
 	/**

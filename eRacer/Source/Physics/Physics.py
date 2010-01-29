@@ -6,7 +6,7 @@ class Physics(Module):
     Module.__init__(self, game)
     self.physics = eRacer.PhysicsLayer()
     self.physics.InitSDK()
-    self.physics.SetParameters()
+    self.physics.InitScene()
     self.physics.FinalizeSDK()
     
   def Start(self):

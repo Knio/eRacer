@@ -1,7 +1,4 @@
-from Game import Entity
-import eRacer
-import math
-
+from Core.Globals import *
 
 class Camera(Entity):
   def __init__(self, game):
@@ -17,10 +14,11 @@ class Camera(Entity):
     Entity.Tick(self, time)
     
     # spin around a circle, looking at the origin
+    t = time.seconds / 10
     pos = eRacer.D3DXVECTOR3(
-      math.cos(time.seconds), 
-      math.sin(time.seconds)+1, 
-      math.sin(time.seconds)
+      math.cos(t), 
+      math.sin(t)*0.5+1, 
+      math.sin(t)
     )
     pos *= 20
     

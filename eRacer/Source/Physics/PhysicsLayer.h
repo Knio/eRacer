@@ -13,7 +13,10 @@
 #include <vector>
 
 #include "NxPhysics.h"
-#include "..\Core\Time.h"
+#include "Core/Time.h"
+#include "Core/Event.h"
+#include "Core/Consts.h"
+
 
 using namespace std;
 
@@ -22,7 +25,7 @@ namespace Physics{
 /**
 * @brief The physics SDK object that the main game loop will use to store actors and return the results of their collisions
 */
-class PhysicsLayer
+	class PhysicsLayer   : public Listener
 {
 public:
 	static PhysicsLayer *g_PhysicsLayer;
@@ -62,14 +65,16 @@ public:
 	void GetPhysicsResults();
 
 	/**
-	* @brief Reads the parameters needed for the SDK from consts.h
+	* @brief Reads the parameters needed for the SDK from CONSTS
 	*/
-	void GetSceneParameters();
+	void SetupParameters();
+
+	int ReloadConstsEvent();
 
 	/**
 	* @brief Sets the parameters
 	*/
-	void SetParameters();	
+	void InitScene();	
 
 	/**
 	* @brief Method that adds an actor to the scene

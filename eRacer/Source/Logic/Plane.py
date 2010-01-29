@@ -1,5 +1,4 @@
-from Game import Entity
-import eRacer
+from Core.Globals import *
 
 class Plane(Entity):
   def __init__(self, game):

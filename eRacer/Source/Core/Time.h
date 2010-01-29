@@ -9,10 +9,19 @@ struct Time
 	static const long long RESOLUTION = 1000000;
 	long long start;
 	long long current;
-	long long elapsed;
-	long long delta;
+	long long game_total;
+	long long wall_total;
+	long long game_delta;
+	long long wall_delta;
 	
-	Time() : start(GetTime()), current(GetTime()), delta(0) {  }
+	Time() : 
+		start(GetTime()), 
+		current(GetTime()), 
+		game_total(0),
+		wall_total(0),
+		game_delta(0),
+		wall_delta(0)
+		{  }
 
 	static long long GetTime()
 	{
@@ -23,13 +32,15 @@ struct Time
 		return (long long)(RESOLUTION * tick.QuadPart / clockSpeed.QuadPart);
 	}
 
-	long long Tick() 
+	long long Tick(float speed=1.0)
 	{
 		long long time = GetTime();
-		delta = time - current;
-		elapsed = time - start;
+		wall_delta = time - current;
+		game_delta = (long long)(speed * wall_delta);
+		wall_total += wall_delta;
+		game_total += game_delta;
 		current = time;
-		return delta;
+		return game_delta;
 	}
 };
 

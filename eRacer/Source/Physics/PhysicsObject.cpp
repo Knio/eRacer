@@ -10,11 +10,12 @@ PhysicsObject::PhysicsObject(bool dynamic, float mass)
 
 PhysicsObject::~PhysicsObject()
 {
+	
 }
 
 void PhysicsObject::SetMass(float mass)
 {
-	if(Actor->isDynamic()){
+	if(isDynamic()){
 		PhysicsObject::mass = mass;
 		Actor->setMass((NxReal)mass);
 	}
@@ -22,12 +23,10 @@ void PhysicsObject::SetMass(float mass)
 
 float PhysicsObject::GetMass()
 {
-	if(Actor->isDynamic()){
+	if(isDynamic())
 		return PhysicsObject::mass = (float)Actor->getMass();
-	}
-	else{
+	else
 		return 0;
-	}
 }
 
 Vector3 PhysicsObject::GetPosition()
@@ -37,31 +36,33 @@ Vector3 PhysicsObject::GetPosition()
 	return Vector3(v.x, v.y, v.z);
 }
 
-void PhysicsObject::SetPosition(Vector3 pos)
+void PhysicsObject::SetPosition(const Vector3 &pos)
 {
-	if(Actor->isDynamic()){
-		NxVec3 v(pos.x, pos.y, pos.z);
-		Actor->setGlobalPosition(v);
-	}
+	assert(isDynamic());
+	Actor->setGlobalPosition(Vector3_NxVec3(pos));
 }
 
 Matrix PhysicsObject::GetOrientation()
 {
-	NxMat33 m = Actor->getGlobalOrientation();
-	return Matrix(m(0, 0), m(0, 1), m(0, 2), 0,
-				  m(1, 0), m(1, 1), m(1, 2), 0,
-				  m(2, 0), m(2, 1), m(2, 2), 0,
-				  0, 0, 0, 1);
+	return NxMat33_Matrix(Actor->getGlobalOrientation());
 }
 
-void PhysicsObject::SetOrientation(Matrix orient)
+Matrix PhysicsObject::GetTransform()
 {
-	if(Actor->isDynamic()){
-		NxMat33 m(NxVec3(orient._11, orient._12, orient._13),
-				  NxVec3(orient._21, orient._22, orient._23),
-				  NxVec3(orient._31, orient._32, orient._33));
-		Actor->setGlobalOrientation(m);
-	}
+	NxMat33 m = Actor->getGlobalOrientation();
+	NxVec3  p = Actor->getGlobalPosition();
+	return Matrix(
+		m(0, 0), 	m(1, 0), 	m(2, 0), 	0,
+		m(0, 1), 	m(1, 1), 	m(2, 1), 	0,
+		m(0, 2), 	m(1, 2), 	m(2, 2), 	0,
+		p.x, 			p.y, 			p.z, 			1
+	);
+}
+
+void PhysicsObject::SetOrientation(const Matrix &o)
+{
+	assert(isDynamic());
+	Actor->setGlobalOrientation(Matrix_NxMat33(o));
 }
 
 NxActor* PhysicsObject::GetActor()
@@ -71,21 +72,16 @@ NxActor* PhysicsObject::GetActor()
 
 Vector3 PhysicsObject::GetVelocity()
 {
-	if(Actor->isDynamic()){
-		NxVec3 v = Actor->getLinearVelocity();
-		return Vector3(v.x, v.y, v.z);
-	}
-	else{
+	if(isDynamic())
+		return NxVec3_Vector3(Actor->getLinearVelocity());
+	else
 		return Vector3(0, 0, 0);
-	}
 }
 
-void PhysicsObject::SetVelocity(Vector3 vel)
+void PhysicsObject::SetVelocity(const Vector3 &vel)
 {
-	if(Actor->isDynamic()){
-		NxVec3 v(vel.x, vel.y, vel.z);
-		Actor->setLinearVelocity(v);
-	}
+	assert(isDynamic());
+	Actor->setLinearVelocity(Vector3_NxVec3(vel));
 }
 
 bool PhysicsObject::isDynamic(){
@@ -96,4 +92,6 @@ void PhysicsObject::CreateActor(NxActorDesc actorDesc)
 {
 	Actor = PhysicsLayer::g_PhysicsLayer->AddActor(actorDesc);
 }
+
+
 }

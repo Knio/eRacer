@@ -2,9 +2,17 @@
 #define IO_H_
 
 #include <string>
-#include "..\Graphics\Geometry.h"
+#include "Graphics\Geometry.h"
 
 using namespace std;
+
+struct Mesh
+{
+	DWORD				n;
+	LPD3DXMESH			mesh;
+	D3DMATERIAL9*		materials;
+	PDIRECT3DTEXTURE9*	textures;
+};
 
 class IO 
 {
@@ -30,11 +38,15 @@ public:
 	
 	/** Check if a texture is valid */
 	static bool valid(LPDIRECT3DTEXTURE9 t) { return t != (LPDIRECT3DTEXTURE9)-1; }
+	/** Check if a mesh is valid */
+	static bool valid(Mesh &m) { return m.n != -1; }
 
-
-	int _LoadMesh(Graphics::Geometry* geom, const char* file);
+	// private
+	Mesh _LoadMesh(const char* file);
+	void _SetMesh(Graphics::Geometry* geom, Mesh &Mesh);
 	LPDIRECT3DTEXTURE9 _LoadTexture(const char* file);	
-
+	void _FreeTexture(LPDIRECT3DTEXTURE9 t);
+	void _FreeMesh(Mesh &m);
 };
 
 inline IO* IO::GetInstance(){
@@ -43,3 +55,4 @@ inline IO* IO::GetInstance(){
 }
 
 #endif
+

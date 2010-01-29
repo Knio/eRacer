@@ -6,10 +6,10 @@ void debug(Matrix &m)
 {
 	printf(
 "\
-%6.2f %6.2f %6.2f %6.2f\n\
-%6.2f %6.2f %6.2f %6.2f\n\
-%6.2f %6.2f %6.2f %6.2f\n\
-%6.2f %6.2f %6.2f %6.2f\n\
+_11 = %6.2f, _12 = %6.2f _13 = %6.2f _14 = %6.2f\n\
+_21 = %6.2f, _22 = %6.2f _23 = %6.2f _24 = %6.2f\n\
+_31 = %6.2f, _32 = %6.2f _33 = %6.2f _34 = %6.2f\n\
+_41 = %6.2f, _42 = %6.2f _43 = %6.2f _44 = %6.2f\n\
 \n",
 		m._11, m._12, m._13, m._14, 
 		m._21, m._22, m._23, m._24, 
@@ -42,6 +42,34 @@ Vector3 normalized(const Vector3& A){
 	return result;
 }
 
+
+Vector3 mul0(const Matrix &m, const Vector3 &v)
+{
+	//Make sure the matrix is affine
+	assert(0 == m._14);
+	assert(0 == m._24);
+	assert(0 == m._34);
+	assert(1 == m._44);
+	Vector3 r;
+	D3DXVec3TransformNormal(&r, &v, &m);
+	return r;
+}
+
+Point3	mul1(const Matrix &m, const Point3  &v)
+{
+	//Make sure the matrix is affine
+	assert(0 == m._14);
+	assert(0 == m._24);
+	assert(0 == m._34);
+	assert(1 == m._44);
+
+	Vector4 t;
+	D3DXVec3Transform(&t, &v, &m);
+
+	Vector3 r;
+	memcpy(&r, &t, sizeof(Vector3));
+	return r;
+}
 
 Vector3 transformedAffine(const Matrix& T, const Vector3& u){
 	//Make sure the matrix is affine
