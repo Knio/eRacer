@@ -67,6 +67,7 @@ public:
 	*/
 	Matrix GetOrientation();
 	
+	void SetTransform(const Matrix &m);
 	Matrix GetTransform();
 	/**
 	* @brief Sets the orientation of the physics object. Object must be dynamic.

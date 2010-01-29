@@ -10,7 +10,8 @@ import eRacer
 
 class Game(eRacer.Game):
   def __init__(self):
-    Core.Globals.__game = self
+    Core.Globals._set_game(self)
+    print Core.Globals.game()
     self.modules = []
     self.namedmodules = {}
     self.time = Time()

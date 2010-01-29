@@ -5,10 +5,15 @@ import math
 import eRacer
 
 from Core 	import Event, Util
-from Game	  import Module, Entity
+from Game  	import Module, Entity
+from Input 	import KEY
 
 # global game object
 __game = None
+def _set_game(g):
+  global __game
+  __game = g;
+  
 def game():
   return __game
 
@@ -22,6 +27,14 @@ class Vector4(eRacer.D3DXVECTOR4):
 
 Point3 = Vector3
 Point4 = Vector4
+
+ORIGIN 		= eRacer.cvar.ORIGIN
+IDENTITY 	= eRacer.cvar.IDENTITY
+X       = eRacer.cvar.X
+Y       = eRacer.cvar.Y
+Z       = eRacer.cvar.Z
+
+
 
 Matrix = eRacer.CreateMatrix
 

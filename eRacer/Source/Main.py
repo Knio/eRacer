@@ -16,9 +16,11 @@ from Graphics import Graphics
 from Physics  import Physics
 
 # testing entities
-from Logic.Box   import Box
-from Logic.Plane import Plane
-from Logic.Ship  import Ship
+from Logic.Box      import Box
+from Logic.Plane    import Plane
+from Logic.Ship     import Ship
+from Logic.Vehicle  import Vehicle
+
 
 
 class Main(Game):
@@ -60,6 +62,9 @@ class Main(Game):
     self.logic.Add(Ship(self))
     self.logic.Add(Plane(self))
     self.boxcount = 0
+    
+    # car
+    self.logic.Add(Vehicle(self))
     
     # camera
     from Logic.Camera import Camera

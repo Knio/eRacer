@@ -39,5 +39,6 @@ class Graphics(Module):
   
   def Quit(self):
     Module.Quit(self)
+    self.graphics.Shutdown()
     # TODO close window
     

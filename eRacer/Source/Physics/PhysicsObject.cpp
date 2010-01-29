@@ -47,6 +47,13 @@ Matrix PhysicsObject::GetOrientation()
 	return NxMat33_Matrix(Actor->getGlobalOrientation());
 }
 
+void PhysicsObject::SetTransform(const Matrix &m)
+{
+	SetPosition(Vector3(m._41, m._42, m._43));
+	SetOrientation(m);
+}
+
+
 Matrix PhysicsObject::GetTransform()
 {
 	NxMat33 m = Actor->getGlobalOrientation();
