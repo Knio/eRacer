@@ -100,7 +100,7 @@ public:
 	*/
 	bool isDynamic();
 
-	void CreateActor(NxActorDesc actorDesc);
+	NxActor* CreateActor(NxActorDesc actorDesc);
 
 	Vector3 GetPointVelocity(const Point3 &pos)
 	{
@@ -117,7 +117,6 @@ protected:
 	*/
 	NxActor* Actor;
 	bool dynamic;
-	float mass; 
 };
 }
 

@@ -5,7 +5,7 @@ namespace Physics{
 PhysicsObject::PhysicsObject(bool dynamic, float mass)
 {
 	PhysicsObject::dynamic = dynamic;
-	PhysicsObject::mass = (dynamic ? mass : 0);
+	
 }
 
 PhysicsObject::~PhysicsObject()
@@ -16,15 +16,15 @@ PhysicsObject::~PhysicsObject()
 void PhysicsObject::SetMass(float mass)
 {
 	if(isDynamic()){
-		PhysicsObject::mass = mass;
 		Actor->setMass((NxReal)mass);
+		Actor->updateMassFromShapes(0, mass);
 	}
 }
 
 float PhysicsObject::GetMass()
 {
 	if(isDynamic())
-		return PhysicsObject::mass = (float)Actor->getMass();
+		return (float)Actor->getMass();
 	else
 		return 0;
 }
@@ -95,9 +95,10 @@ bool PhysicsObject::isDynamic(){
 	return dynamic = Actor->isDynamic();
 }
 
-void PhysicsObject::CreateActor(NxActorDesc actorDesc)
+NxActor* PhysicsObject::CreateActor(NxActorDesc actorDesc)
 {
 	Actor = PhysicsLayer::g_PhysicsLayer->AddActor(actorDesc);
+	return Actor;
 }
 
 

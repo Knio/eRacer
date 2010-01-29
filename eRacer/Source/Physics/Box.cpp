@@ -4,7 +4,6 @@ namespace Physics{
 Box::Box(bool dynamic, float mass, Point3 pos, Matrix orient, Vector3 dimensions){
 	
 	PhysicsObject::dynamic = dynamic;
-	PhysicsObject::mass = (dynamic ? mass : 0);
 
 	NxMaterialDesc material;
 	material.restitution = 0.5;
@@ -28,7 +27,7 @@ Box::Box(bool dynamic, float mass, Point3 pos, Matrix orient, Vector3 dimensions
 	actorDesc.density		= 10.0f;
 	actorDesc.globalPose.t	= NxVec3(pos.x, pos.y, pos.z);
 	
-	CreateActor(actorDesc);
+	CreateActor(actorDesc); //->updateMassFromShapes(0, 10);
 }
 
 Box::~Box(){

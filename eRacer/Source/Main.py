@@ -92,6 +92,9 @@ class Main(Game):
       self.config.read()
       self.event.ReloadConstsEvent()
       
+    #if key == KEY.SPACE:
+    #  self.logic.Add(Box(self))   
+      
       
   def QuitEvent(self):
     self.state = 0

@@ -2,8 +2,8 @@ from Core.Globals import *
 
 class Vehicle(Entity):
   MODEL   = "Ship_06.x"
-  #MODEL   = "box2.x"
-  SIZE    = Vector3(1, 0.5, 2) # "radius" (double for length)
+  MODEL   = "box2.x"
+  SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels on object
     Point3(-1, 0,  2), # front left
     Point3( 1, 0,  2), # front right
@@ -69,10 +69,6 @@ class Vehicle(Entity):
       rot = Matrix(ORIGIN, self.TURN*d, Y)
       tx  = rot * tx
       phys.SetTransform(tx)
-    
-      
-
-
     
     for wheel in self.WHEELS:
       # position of wheel in world space
