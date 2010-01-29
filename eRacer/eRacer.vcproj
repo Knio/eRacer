@@ -207,6 +207,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\FontManager.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Geometry.cpp"
 					>
 				</File>
@@ -434,6 +438,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\Camera.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\FontManager.h"
 					>
 				</File>
 				<File

@@ -4,6 +4,7 @@
 #include "Core/Event.h"
 #include "Game/Module.h"
 #include "Game/Game.h"
+#include "Graphics/GraphicsLayer.h"
 
 class TestModule : public Module, public Listener
 {
@@ -46,6 +47,9 @@ public:
 	}
 	void Tick(Time& t)
 	{
+		Graphics::GraphicsModule()->WriteString("Hello, World", "MS Gothic", 25, Vector3(300, 300, 0), Vector3(1.0f, 0.0f, 1.0f));
+		Graphics::GraphicsModule()->WriteString("I'm small", "MS Gothic", 15, Vector3(100, 100, 0), Vector3(1.0f, 1.0f, 1.0f));
+		Graphics::GraphicsModule()->WriteString("Courier font", "Courier", 55, Vector3(100, 500, 0), Vector3(0.5f, 0.7f, 0.9f));
 		// frame happened. t contains the time advancement in microseconds
 	}
 	void Quit()
