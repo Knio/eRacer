@@ -13,7 +13,7 @@ class Camera(Entity):
   def Tick(self, time):
     Entity.Tick(self, time)
 
-class CircelingCamera(Camera):
+class CirclingCamera(Camera):
   def __init__(self, game):
     Camera.__init__(self, game)
     
@@ -39,3 +39,5 @@ class ChasingCamera(Camera):
   
   def Tick(self, time):
     Camera.Tick(self, time)
+    
+    

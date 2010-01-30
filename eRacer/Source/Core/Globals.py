@@ -5,7 +5,6 @@ import math
 import eRacer
 
 from Core 	import Event, Util
-from Game  	import Module, Entity
 from Input 	import KEY
 
 # global game object
@@ -43,3 +42,5 @@ cross     = eRacer.cross
 normalize = eRacer.normalize
 mul1      = eRacer.mul1
 mul0      = eRacer.mul0
+
+from Game  	import Module, Entity
