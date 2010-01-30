@@ -102,11 +102,29 @@ public:
 
 	NxActor* CreateActor(NxActorDesc actorDesc);
 
+	/** returns the WORLD velocity of a point in LOCAL space */
 	Vector3 GetPointVelocity(const Point3 &pos)
 	{
 		return NxVec3_Vector3(Actor->getLocalPointVelocity(Vector3_NxVec3(pos)));
 	}
-	void AddForce(const Vector3 &force, const Point3 &pos)
+	
+	/** adds a WORLD force at a LOCAL position */
+	void AddWorldForceAtWorldPos(const Vector3 &force, const Point3 &pos)
+	{
+		return Actor->addForceAtPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
+	}	
+	/** adds a WORLD force at a LOCAL position */
+	void AddWorldForceAtLocalPos(const Vector3 &force, const Point3 &pos)
+	{
+		return Actor->addForceAtLocalPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
+	}
+	/** adds a LOCAL force at a WORLD position */
+	void AddLocalForceAtWorldPos(const Vector3 &force, const Point3 &pos)
+	{
+		return Actor->addLocalForceAtPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
+	}
+	/** adds a LOCAL force at a LOCAL position */
+	void AddLocalForceAtLocalPos(const Vector3 &force, const Point3 &pos)
 	{
 		return Actor->addLocalForceAtLocalPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
 	}

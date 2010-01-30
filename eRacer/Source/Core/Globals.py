@@ -34,7 +34,7 @@ X       = eRacer.cvar.X
 Y       = eRacer.cvar.Y
 Z       = eRacer.cvar.Z
 
-
+CONSTS = eRacer.Constants().g_Constants
 
 Matrix = eRacer.CreateMatrix
 
