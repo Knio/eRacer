@@ -386,6 +386,10 @@
 					RelativePath=".\Source\Logic\Ship.py"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Logic\Vehicle.py"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="IO"

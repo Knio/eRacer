@@ -90,7 +90,7 @@ void PhysicsLayer::InitScene()
 			assert(false);
 		}
 	}
-	gScene->setTiming(1.0/200, 10);
+	gScene->setTiming(1.0f/200, 10);
 	SetupParameters();
 }
 
