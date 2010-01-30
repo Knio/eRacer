@@ -16,9 +16,11 @@ from Graphics import Graphics
 from Physics  import Physics
 
 # testing entities
-from Logic.Box   import Box
-from Logic.Plane import Plane
-from Logic.Ship  import Ship
+from Logic.Box      import Box
+from Logic.Plane    import Plane
+from Logic.Ship     import Ship
+from Logic.Vehicle  import Vehicle
+
 
 
 class Main(Game):
@@ -59,16 +61,21 @@ class Main(Game):
     # space ship
     self.logic.Add(Ship(self))
     self.logic.Add(Plane(self))
-    self.boxcount = 0
+    self.boxcount = 5
+    
+    vehicle = Vehicle(self)
+    # car
+    self.logic.Add(vehicle)
     
     # camera
-    from Logic.Camera import Camera
-    camera = Camera(self)
+    from Logic.Camera import ChasingCamera
+    camera = ChasingCamera(self, vehicle)
     self.logic.Add(camera)
     self.graphics.SetCamera(camera)    
 
     
   def Tick(self, time):
+    #self.simspeed = 0.2
     Game.Tick(self, time) 
     
     if time.seconds > self.boxcount:
@@ -86,6 +93,9 @@ class Main(Game):
     if key == KEY.R:
       self.config.read()
       self.event.ReloadConstsEvent()
+      
+    #if key == KEY.SPACE:
+    #  self.logic.Add(Box(self))   
       
       
   def QuitEvent(self):

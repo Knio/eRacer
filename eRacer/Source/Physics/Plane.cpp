@@ -1,9 +1,7 @@
 #include "Plane.h"
 namespace Physics{
 
-Plane::Plane(bool dynamic, float mass, float distOrigin, Vector3 normal){
-	PhysicsObject::dynamic = dynamic;
-	PhysicsObject::mass = (dynamic ? mass : 0);
+Plane::Plane(float distOrigin, Vector3 normal){
 
 	NxMaterialDesc material;
 	material.restitution = 0.5;
@@ -17,9 +15,11 @@ Plane::Plane(bool dynamic, float mass, float distOrigin, Vector3 normal){
 
 	planeDesc.d = distOrigin;
 	planeDesc.normal = NxVec3(normal.x, normal.y, normal.z);
-    NxActorDesc actorDesc;
-    actorDesc.shapes.pushBack(&planeDesc);
-	CreateActor(actorDesc);
+	NxActorDesc actorDesc;
+	//actorDesc.density   = 10.0f;
+	actorDesc.shapes.pushBack(&planeDesc);
+	CreateActor(actorDesc); //->updateMassFromShapes(0, 10);
+
 }
 
 Plane::~Plane(){

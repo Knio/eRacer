@@ -4,7 +4,7 @@ class Plane(Entity):
   def __init__(self, game):
     Entity.__init__(self, game)
 
-    self.physics = eRacer.Plane(False, 0, 0, eRacer.D3DXVECTOR3(0,1,0))
+    self.physics = eRacer.Plane(0, eRacer.D3DXVECTOR3(0,1,0))
     self.graphics = game.graphics.scene.CreateMovingGeometry("plane")
     self.graphics.visible = False
         
@@ -20,3 +20,5 @@ class Plane(Entity):
      Entity.Tick(self, time)
      pos = self.physics.GetPosition()
      #print pos.x , pos.y, pos.z
+     
+     self.graphics.SetTransform(self.physics.GetTransform())

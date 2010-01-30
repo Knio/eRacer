@@ -28,7 +28,7 @@ public:
 	* @param dynamic Whether the object can be moved or not.
 	* @param mass The mass of the object in kilograms. Set as 0 for static objects.
 	*/
-	PhysicsObject(bool dynamic = true, float mass = 0);
+	PhysicsObject();
 	
 	/**
 	* @brief Destructor stub
@@ -67,6 +67,7 @@ public:
 	*/
 	Matrix GetOrientation();
 	
+	void SetTransform(const Matrix &m);
 	Matrix GetTransform();
 	/**
 	* @brief Sets the orientation of the physics object. Object must be dynamic.
@@ -99,13 +100,31 @@ public:
 	*/
 	bool isDynamic();
 
-	void CreateActor(NxActorDesc actorDesc);
+	NxActor* CreateActor(NxActorDesc actorDesc);
 
+	/** returns the WORLD velocity of a point in LOCAL space */
 	Vector3 GetPointVelocity(const Point3 &pos)
 	{
 		return NxVec3_Vector3(Actor->getLocalPointVelocity(Vector3_NxVec3(pos)));
 	}
-	void AddForce(const Vector3 &force, const Point3 &pos)
+	
+	/** adds a WORLD force at a LOCAL position */
+	void AddWorldForceAtWorldPos(const Vector3 &force, const Point3 &pos)
+	{
+		return Actor->addForceAtPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
+	}	
+	/** adds a WORLD force at a LOCAL position */
+	void AddWorldForceAtLocalPos(const Vector3 &force, const Point3 &pos)
+	{
+		return Actor->addForceAtLocalPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
+	}
+	/** adds a LOCAL force at a WORLD position */
+	void AddLocalForceAtWorldPos(const Vector3 &force, const Point3 &pos)
+	{
+		return Actor->addLocalForceAtPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
+	}
+	/** adds a LOCAL force at a LOCAL position */
+	void AddLocalForceAtLocalPos(const Vector3 &force, const Point3 &pos)
 	{
 		return Actor->addLocalForceAtLocalPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
 	}
@@ -115,8 +134,6 @@ protected:
 	* @brief The PhysX object that is used to control behaviour.
 	*/
 	NxActor* Actor;
-	bool dynamic;
-	float mass; 
 };
 }
 

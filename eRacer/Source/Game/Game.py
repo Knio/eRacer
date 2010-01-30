@@ -10,11 +10,13 @@ import eRacer
 
 class Game(eRacer.Game):
   def __init__(self):
-    Core.Globals.__game = self
+    Core.Globals._set_game(self)
+    print Core.Globals.game()
     self.modules = []
     self.namedmodules = {}
     self.time = Time()
     self.state = 0
+    self.simspeed = 1.0
     eRacer.Game.__init__(self)
 
   def AddModule(self, module, name=None):
@@ -32,7 +34,7 @@ class Game(eRacer.Game):
     print 'Game::Run'
     self.Start()  
     while self.state:
-      t = self.time.Tick()
+      t = self.time.Tick(self.simspeed)
       self.Tick(self.time)
     self.Quit()
 
@@ -42,7 +44,7 @@ class Game(eRacer.Game):
       i.Start()
     self.state = 1
 
-  def Tick(self, time):
+  def Tick(self, time, speed=1.0):
     for i in self.modules:
       i.Tick(time)
       
