@@ -1,5 +1,5 @@
 '''
-Game entiy onbect interface
+Game entity object interface
 '''
 
 class Entity(object):

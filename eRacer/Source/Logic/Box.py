@@ -4,7 +4,7 @@ class Box(Entity):
   def __init__(self, game):
     Entity.__init__(self, game)
 
-    self.box = eRacer.Box(True, 20, Vector3(0, 20, 0))
+    self.physics = eRacer.Box(True, 20, Vector3(0, 20, 0))
     self.graphics = game.graphics.scene.CreateMovingGeometry("Box")
     self.graphics.visible = False
     self.graphics.SetTransform(eRacer.CreateMatrix(Vector3(0, 0.5, 0)))
@@ -19,5 +19,5 @@ class Box(Entity):
     
   def Tick(self, time):
     Entity.Tick(self, time)
-    self.graphics.SetTransform(self.box.GetTransform())
+    self.graphics.SetTransform(self.physics.GetTransform())
     
