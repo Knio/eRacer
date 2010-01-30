@@ -75,7 +75,7 @@ class Main(Game):
 
     
   def Tick(self, time):
-    self.simspeed = 0.2
+    #self.simspeed = 0.2
     Game.Tick(self, time) 
     
     if time.seconds > self.boxcount:

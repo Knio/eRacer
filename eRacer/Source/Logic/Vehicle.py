@@ -80,9 +80,11 @@ class Vehicle(Entity):
       tx  = rot * tx
       phys.SetTransform(tx)
     
+    
+    self.transform = tx
+    return
+    
     eRacer.debug(tx)
-    #self.transform = tx
-    #return
     
     for wheel in self.WHEELS:
       # position of wheel in world space
