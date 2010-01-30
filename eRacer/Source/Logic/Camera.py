@@ -13,6 +13,7 @@ class Camera(Entity):
   def Tick(self, time):
     Entity.Tick(self, time)
 
+
 class CirclingCamera(Camera):
   def __init__(self, game):
     Camera.__init__(self, game)
@@ -39,5 +40,13 @@ class ChasingCamera(Camera):
   
   def Tick(self, time):
     Camera.Tick(self, time)
+    behind = Point3(0,8,-16)
+    eRacer.transformAffine(self.target.transform, behind)
+    self.camera.SetPosition(behind)
+    print "camera position: ", behind.x, behind.y, behind.z
+    targetPosition = Point3()
+    eRacer.ExtractPosition(self.target.transform, targetPosition)
+    
+    self.camera.SetLookAt(targetPosition)
     
     

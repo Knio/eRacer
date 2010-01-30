@@ -63,12 +63,13 @@ class Main(Game):
     self.logic.Add(Plane(self))
     self.boxcount = 0
     
+    vehicle = Vehicle(self)
     # car
-    self.logic.Add(Vehicle(self))
+    self.logic.Add(vehicle)
     
     # camera
-    from Logic.Camera import CirclingCamera
-    camera = CirclingCamera(self)
+    from Logic.Camera import ChasingCamera
+    camera = ChasingCamera(self, vehicle)
     self.logic.Add(camera)
     self.graphics.SetCamera(camera)    
 
