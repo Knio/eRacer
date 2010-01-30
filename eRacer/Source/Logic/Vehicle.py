@@ -88,5 +88,10 @@ class Vehicle(Entity):
       phys.AddForce(Vector3(0, 0, 0), pos)
       
     #tx = Matrix()
-    self.graphics.SetTransform(tx)
+    self.transform = tx
 
+  def set_transform(self, transform):
+    Entity.set_transform(self, transform)
+    self.graphics.SetTransform(self.transform)  
+
+  transform = property(Entity.get_transform, set_transform)   

@@ -4,8 +4,7 @@ import math
 
 import eRacer
 
-from Core 	import Event, Util
-from Input 	import KEY
+
 
 # global game object
 __game = None
@@ -44,3 +43,5 @@ mul1      = eRacer.mul1
 mul0      = eRacer.mul0
 
 from Game  	import Module, Entity
+from Core 	import Event, Util
+from Input 	import KEY

@@ -22,7 +22,7 @@ class Box(Entity):
     self.transform = self.physics.GetTransform()
     
   def set_transform(self, transform):
-    self.transform = transform
+    Entity.set_transform(self, transform)
     self.graphics.SetTransform(self.transform)  
 
   transform = property(Entity.get_transform, set_transform)    
