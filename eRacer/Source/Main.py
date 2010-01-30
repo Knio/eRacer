@@ -61,19 +61,21 @@ class Main(Game):
     # space ship
     self.logic.Add(Ship(self))
     self.logic.Add(Plane(self))
-    self.boxcount = 0
+    self.boxcount = 5
     
+    vehicle = Vehicle(self)
     # car
-    self.logic.Add(Vehicle(self))
+    self.logic.Add(vehicle)
     
     # camera
-    from Logic.Camera import Camera
-    camera = Camera(self)
+    from Logic.Camera import ChasingCamera
+    camera = ChasingCamera(self, vehicle)
     self.logic.Add(camera)
     self.graphics.SetCamera(camera)    
 
     
   def Tick(self, time):
+    self.simspeed = 0.2
     Game.Tick(self, time) 
     
     if time.seconds > self.boxcount:

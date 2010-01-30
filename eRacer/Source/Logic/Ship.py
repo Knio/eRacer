@@ -6,7 +6,7 @@ class Ship(Entity):
     
     # no physics yet..
     self.graphics = game.graphics.scene.CreateMovingGeometry("test")
-    self.graphics.SetTransform(eRacer.CreateMatrix(Vector3(10,3,4)))
+    self.transform = eRacer.CreateMatrix(Vector3(10,3,4))
     self.graphics.visible = False
         
     def load(r):
@@ -19,3 +19,9 @@ class Ship(Entity):
     
   def Tick(self, time):
     pass
+    
+  def set_transform(self, transform):
+    Entity.set_transform(self, transform)
+    self.graphics.SetTransform(self.transform)  
+
+  transform = property(Entity.get_transform, set_transform)      

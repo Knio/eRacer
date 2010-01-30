@@ -6,8 +6,8 @@ class Time(eRacer.Time):
     self.buffer = [0]*10
     self.pos = 0
     
-  def Tick(self):
-    r = eRacer.Time.Tick(self)
+  def Tick(self, speed):
+    r = eRacer.Time.Tick(self, speed)
     self.buffer[self.pos] = self.wall_total;
     self.pos = (self.pos + 1) % len(self.buffer)
     return r

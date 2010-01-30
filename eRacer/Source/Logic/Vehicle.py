@@ -5,13 +5,13 @@ class Vehicle(Entity):
   MODEL   = "box2.x"
   SIZE    = Vector3(1, .5, 2) # "radius" (double for length)
   WHEELS  = [ # location of wheels on object
-    Point3(-1, -1.0,  2), # front left
-    Point3( 1, -1.0,  2), # front right
-    Point3(-1, -1.0, -2), # back left
-    Point3( 1, -1.0, -2), # back right
+    Point3(-1, -0.6,  2), # front left
+    Point3( 1, -0.6,  2), # front right
+    Point3(-1, -0.6, -2), # back left
+    Point3( 1, -0.6, -2), # back right
   ]
   MASS    = 2000.0
-  THRUST  = 5.0e+2 * MASS 
+  THRUST  = 1.0e1 * MASS
   TURN    = 3.0e+0          
   DISPLACEMENT = 0.05  # from wheel rest position
   
@@ -47,6 +47,7 @@ class Vehicle(Entity):
       
     game.io.LoadMeshAsync(load, self.graphics, self.MODEL)   
     
+    
   
   def Tick(self, time):
     Entity.Tick(self, time)
@@ -54,20 +55,18 @@ class Vehicle(Entity):
     phys  = self.physics
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
-
-    #eRacer.debug(tx)
-
+    
     # hack hack hack hack hack
     # do engine/brake/steering/user input forces
     if game().input[KEY.W]:
       # all wheel drive for now
       for wheel in self.WHEELS:
-        phys.AddLocalForceAtLocalPos(Vector3(0, 0, 1) * delta * self.THRUST, wheel)
+        phys.AddLocalForceAtLocalPos(Vector3(0, 0, 1) * self.THRUST, wheel)
     
     if game().input[KEY.S]:
       # all wheel drive for now
       for wheel in self.WHEELS:
-        phys.AddLocalForceAtLocalPos(Vector3(0, 0,-1) * delta * self.THRUST, wheel)
+        phys.AddLocalForceAtLocalPos(Vector3(0, 0,-1) * self.THRUST, wheel)
     
     if game().input[KEY.A]:
       # !!hack!!
@@ -81,17 +80,21 @@ class Vehicle(Entity):
       tx  = rot * tx
       phys.SetTransform(tx)
     
+    eRacer.debug(tx)
+    #self.transform = tx
+    #return
+    
     for wheel in self.WHEELS:
       # position of wheel in world space
-      pos = mul1(tx, wheel)
-
-      # we don't have a road yet, so it is implicitly a plane at y=0
+      pos   = mul1(tx, wheel)
+      axis  = mul0(tx, -Y)
       
+      # we don't have a road yet, so it is implicitly a plane at y=0
       # road normal - assume +Y      
       normal = Vector3(0,1,0)
       
       # cast a ray to the road, get distance
-      dist = pos.y
+      dist = pos.y / -dot(axis, normal)
       #print dist  
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
@@ -100,16 +103,23 @@ class Vehicle(Entity):
       
       # spring force
       force = +normal * disp * self.SPRING_K * self.SPRING_MAGIC
-      print delta, disp, self.SPRING_K, self.SPRING_MAGIC
-      print force.x, force.y, force.z
+      #print delta, disp, self.SPRING_K, self.SPRING_MAGIC
+      #print force.x, force.y, force.z
       phys.AddWorldForceAtLocalPos(force, wheel)
       
       # do shock absorber forces
-      #vel = phys.GetPointVelocity(wheel)
-      #linearvel = dot(vel, normal)
-      #phys.AddWorldForceAtLocalPos(-normal * delta * linearvel * self.DAMPING * self.DAMPING_MAGIC, wheel)
+      if disp:
+        vel = phys.GetPointVelocity(wheel)
+        linearvel = -dot(vel, normal)
+        force = normal * linearvel * self.DAMPING * self.DAMPING_MAGIC
+        phys.AddWorldForceAtLocalPos(force, wheel)
       
       
     #tx = Matrix()
-    self.graphics.SetTransform(tx)
+    self.transform = tx
 
+  def set_transform(self, transform):
+    Entity.set_transform(self, transform)
+    self.graphics.SetTransform(self.transform)  
+
+  transform = property(Entity.get_transform, set_transform)   

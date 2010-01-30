@@ -4,10 +4,6 @@ import math
 
 import eRacer
 
-from Core 	import Event, Util
-from Game  	import Module, Entity
-from Input 	import KEY
-
 # global game object
 __game = None
 def _set_game(g):
@@ -43,3 +39,7 @@ cross     = eRacer.cross
 normalize = eRacer.normalize
 mul1      = eRacer.mul1
 mul0      = eRacer.mul0
+
+from Game  	import Module, Entity
+from Core 	import Event, Util
+from Input 	import KEY
