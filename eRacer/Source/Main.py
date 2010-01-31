@@ -76,12 +76,18 @@ class Main(Game):
     
   def Tick(self, time):
     #self.simspeed = 0.2
-    #_time.sleep(0.010)
-    Game.Tick(self, time) 
+    _time.sleep(0.015)
+    
+    # hack! we need the *current* physics results
+    # to compute stable results
+    self.physics.physics.GetPhysicsResults()
+     
     
     if time.seconds > self.boxcount:
       self.boxcount += 1
       self.logic.Add(Box(self))   
+      
+    Game.Tick(self, time)      
     
   def KeyPressedEvent(self, key):
     from Input import KEY
