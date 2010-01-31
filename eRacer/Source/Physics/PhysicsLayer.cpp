@@ -99,6 +99,11 @@ NxActor* PhysicsLayer::AddActor(NxActorDesc actorDesc)
 	return gScene->createActor(actorDesc);
 }
 
+NxTriangleMesh* PhysicsLayer::CreateTriangleMesh(const NxStream& stream){
+	return gPhysicsSDK->createTriangleMesh(stream);
+}
+
+
 NxMaterial* PhysicsLayer::AddMaterial(NxMaterialDesc materialDesc)
 {
 	return gScene->createMaterial(materialDesc);
@@ -132,49 +137,6 @@ void PhysicsLayer::FinalizeSDK()
 NxScene* PhysicsLayer::ReturnScene()
 {
 	return gScene;
-}
-
-NxActor* PhysicsLayer::CreateDemoBox()
-{
-	// Create the default material
-	NxMaterialDesc material;
-	material.restitution = 0.5;
-	material.dynamicFriction = 0.5;
-	material.staticFriction = 0.5;
-
-	// Set the box starting height to 3.5m so box starts off falling onto the ground
-	NxReal boxStartHeight = 3.5; 
-
-	// Add a single-shape actor to the scene
-	NxActorDesc actorDesc;
-
-	// The actor has one shape, a box, 1m on a side
-	NxBoxShapeDesc boxDesc;
-	boxDesc.materialIndex = AddMaterialReturnIndex(material);
-	boxDesc.dimensions.set(0.5,0.5,0.5);
-	boxDesc.localPose.t = NxVec3(0, 0, 0);
-
-	actorDesc.shapes.pushBack(&boxDesc);
-	actorDesc.globalPose.t	= NxVec3(0,boxStartHeight,0);	
-	//assert(actorDesc.isValid());
-    return AddActor(actorDesc);
-}
-
-NxActor* PhysicsLayer::CreateDemoPlane()
-{
-	// Create the default material
-	NxMaterialDesc material;
-	material.restitution = 0.5;
-	material.dynamicFriction = 0.5;
-	material.staticFriction = 0.5;
-
-    // Create a plane with default descriptor
-    NxPlaneShapeDesc planeDesc;
-	planeDesc.materialIndex = AddMaterialReturnIndex(material);
-
-    NxActorDesc actorDesc;
-    actorDesc.shapes.pushBack(&planeDesc);
-	return AddActor(actorDesc);
 }
 
 }

@@ -86,6 +86,8 @@ public:
 	*/
 	NxActor* AddActor(NxActorDesc actorDesc);
 
+	NxTriangleMesh* CreateTriangleMesh(const NxStream& stream);
+
 	/**
 	* @brief Method that adds a material to the scene
 	*
@@ -127,9 +129,6 @@ public:
 	*/
 	NxScene* ReturnScene();
 
-	NxActor* CreateDemoBox();
-
-	NxActor* CreateDemoPlane();
 
 protected:
 	// Physics SDK globals

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="eRacer"
 	ProjectGUID="{0939ED8C-9AD7-4EBB-811A-8FF10C5AC2BD}"
 	RootNamespace="eRacer"
@@ -45,7 +45,7 @@
 				InlineFunctionExpansion="0"
 				EnableIntrinsicFunctions="false"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Source\;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Source\;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\Tools\NxuStream2&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -127,7 +127,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Source\;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(PYTHON_DIR)\include\&quot;;.\Source\;.\Include\;&quot;$(DXSDK_DIR)\Include\&quot;;&quot;$(PHYSX_DIR)\SDKs\PhysXLoader\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Physics\include&quot;;&quot;$(PHYSX_DIR)\Graphics\include\win32&quot;;&quot;$(PHYSX_DIR)\SDKs\NxCharacter\include&quot;;&quot;$(PHYSX_DIR)\SDKs\Foundation\include&quot;;&quot;$(PHYSX_DIR)\Tools\NxuStream2&quot;;&quot;$(PHYSX_DIR)\SDKs\Cooking\include&quot;"
 				PreprocessorDefinitions="WIN32"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
@@ -358,6 +358,10 @@
 					RelativePath=".\Source\Physics\Plane.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Physics\TriMesh.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Logic"
@@ -581,6 +585,10 @@
 				</File>
 				<File
 					RelativePath=".\Source\Physics\Plane.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\TriMesh.h"
 					>
 				</File>
 			</Filter>
