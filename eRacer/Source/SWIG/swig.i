@@ -39,6 +39,7 @@
 #include "..\Physics\PhysicsObject.h"
 #include "..\Physics\Box.h"
 #include "..\Physics\Plane.h"
+#include "..\Physics\TriMesh.h"
 
 // Input
 #include "..\Input\Keyboard.h"
@@ -102,6 +103,7 @@ These are the classes that get exposed to Python
 %include "..\Physics\PhysicsObject.h"
 %include "..\Physics\Box.h"
 %include "..\Physics\Plane.h"
+%include "..\Physics\TriMesh.h"
 
 
 // Input

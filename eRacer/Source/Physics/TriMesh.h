@@ -15,8 +15,10 @@ namespace Physics{
 
 class TriMesh : public PhysicsObject {
 public:
-	TriMesh(ID3DXMesh& mesh);
+	TriMesh();
 	~TriMesh();
+
+	void Initialize(ID3DXMesh& mesh);
 
 };
 

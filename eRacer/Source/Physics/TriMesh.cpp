@@ -4,7 +4,15 @@
 
 namespace Physics {
 
-	TriMesh::TriMesh(ID3DXMesh& mesh){
+	TriMesh::TriMesh(){
+
+	}
+
+	TriMesh::~TriMesh(){
+	}
+
+
+	void TriMesh::Initialize(ID3DXMesh& mesh){
 		NxTriangleMeshDesc meshDesc;
 		//generate our mesh using the cooking API
 		meshDesc.numTriangles = mesh.GetNumFaces();
@@ -28,6 +36,7 @@ namespace Physics {
 
 		//perform the cooking 
 		NxCookingInterface* cooking = NxGetCookingLib(NX_PHYSICS_SDK_VERSION);
+		cooking->NxInitCooking();
 		
 		NXU::MemoryWriteBuffer writeBuffer;
   		assert(cooking->NxCookTriangleMesh(meshDesc, writeBuffer));
@@ -45,6 +54,7 @@ namespace Physics {
 
 		cooking->NxCloseCooking();
 	}
+
 
 
 }

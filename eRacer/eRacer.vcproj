@@ -391,6 +391,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Logic\Track.py"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Logic\Vehicle.py"
 					>
 				</File>

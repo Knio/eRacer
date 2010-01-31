@@ -50,6 +50,9 @@ public:
 	 * @return a const pointer to the mesh
 	 */
 	const LPD3DXMESH GetMesh() const;
+
+	ID3DXMesh& mesh() { return *mesh_; };
+
 	const Matrix& GetTransform() const { return transform_; }
 
 	/**

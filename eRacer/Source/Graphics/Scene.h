@@ -63,7 +63,7 @@ public:
 	 *
 	 * @see CreateGeometry
 	 */ 
-	StaticGeometry* CreateStaticGeometry(const string& name, const Matrix& transform);
+	StaticGeometry* CreateStaticGeometry(const string& name, const Matrix& transform=IDENTITY);
 
 	/**
 	 * @brief Factory method to create new geometry in the scene
