@@ -14,7 +14,8 @@ class Physics(Module):
     
   def Tick(self, time):
     Module.Tick(self, time)
-    self.physics.GetPhysicsResults()
+    
+    #self.physics.GetPhysicsResults()
     self.physics.UpdatePhysics(time)
     
   def Quit(self):

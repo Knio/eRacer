@@ -22,6 +22,7 @@ class Window
 	void Create(char* title);
 	LRESULT MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	int Poll();
+	void SetTitle(const char *text) { SetWindowText(hwnd, text); }
 };
 #endif
 

@@ -90,8 +90,9 @@ void PhysicsLayer::InitScene()
 			assert(false);
 		}
 	}
-	gScene->setTiming(1.0f/200, 10);
 	SetupParameters();
+	gScene->setTiming(1.0/1000, 100); //, NX_TIMESTEP_VARIABLE);
+	gPhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect ("localhost", 5425);
 }
 
 NxActor* PhysicsLayer::AddActor(NxActorDesc actorDesc)
@@ -117,7 +118,7 @@ int PhysicsLayer::FindMaterialIndex(NxMaterial* material)
 int PhysicsLayer::AddMaterialReturnIndex(NxMaterialDesc materialDesc)
 {
 	NxMaterial* matTemp = AddMaterial(materialDesc);
-
+	assert(matTemp);
 	return FindMaterialIndex(matTemp);
 }
 
