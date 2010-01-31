@@ -92,7 +92,7 @@ void PhysicsLayer::InitScene()
 	}
 	
 	SetupParameters();
-	gScene->setTiming(1.0/1000, 100); //, NX_TIMESTEP_VARIABLE);
+	gScene->setTiming(1.0/500, 100, NX_TIMESTEP_VARIABLE);
 	gPhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect ("localhost", 5425);
 }
 

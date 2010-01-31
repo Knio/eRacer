@@ -145,6 +145,7 @@ void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
 	transform*=CreateMatrix(camera.GetPosition());
 	m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
 	
+	//m_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
 
 	for(unsigned int i = 0; i<skyBox.Materials().size(); i++){
 		m_pd3dDevice->SetMaterial( skyBox.Materials()[i]);

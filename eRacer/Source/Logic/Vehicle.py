@@ -154,6 +154,7 @@ class Vehicle(Entity):
     # no wheels are touching the ground.
     # reset the car
     if not validwheels:
+      print "Crash! resetting car"
       forward = mul0(tx, Z)
       forward = forward - normal * dot(normal, forward)
       pos = Point3()
@@ -162,8 +163,8 @@ class Vehicle(Entity):
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
-    print ''.join('%6.2f' % i for i in ddd),
-    print self.acceleration, self.turning
+    #print ''.join('%6.2f' % i for i in ddd),
+    #print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx
