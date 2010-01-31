@@ -21,7 +21,7 @@ from Logic.Plane    import Plane
 from Logic.Ship     import Ship
 from Logic.Vehicle  import Vehicle
 
-
+import time as _time
 
 class Main(Game):
   def __init__(self):
@@ -76,6 +76,7 @@ class Main(Game):
     
   def Tick(self, time):
     #self.simspeed = 0.2
+    #_time.sleep(0.010)
     Game.Tick(self, time) 
     
     if time.seconds > self.boxcount:

@@ -36,6 +36,7 @@ class Graphics(Module):
     Module.Tick(self, time)
     self.window.Poll()
     self.graphics.RenderFrame(self.camera.camera, self.scene)
+    self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())
   
   def Quit(self):
     Module.Quit(self)

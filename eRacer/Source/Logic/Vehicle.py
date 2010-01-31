@@ -3,24 +3,24 @@ from Core.Globals import *
 class Vehicle(Entity):
   MODEL   = "Ship_06.x"
   MODEL   = "box2.x"
-  SIZE    = Vector3(1, .5, 2) # "radius" (double for length)
+  SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels on object
-    Point3(-1, -0.6,  2), # front left
-    Point3( 1, -0.6,  2), # front right
-    Point3(-1, -0.6, -2), # back left
-    Point3( 1, -0.6, -2), # back right
+    Point3(-2, -1.5,  4), # front left
+    Point3( 2, -1.5,  4), # front right
+    Point3(-2, -1.5, -4), # back left
+    Point3( 2, -1.5, -4), # back right
   ]
-  MASS    = 2000.0
+  MASS    = 5000.0
   THRUST  = 1.0e1 * MASS
   TURN    = 3.0e+0          
-  DISPLACEMENT = 0.05  # from wheel rest position
+  DISPLACEMENT = 0.25  # from wheel rest position
   
   # MASS * G = 4 * K * DISPLACEMENT
   SPRING_K = (MASS * 9.81) / (len(WHEELS) * DISPLACEMENT)
   SPRING_MAGIC  = 1.0 # tuning parameter
   
   DAMPING       = 2.0 * math.sqrt(SPRING_K * MASS)
-  DAMPING_MAGIC = 1.0 # tuning parameter
+  DAMPING_MAGIC = 1.5 # tuning parameter
   
     
   def __init__(self, game):
@@ -81,14 +81,15 @@ class Vehicle(Entity):
       phys.SetTransform(tx)
     
     
-    self.transform = tx
-    return
-    
-    eRacer.debug(tx)
-    
+    #self.transform = tx
+    #return
+    #eRacer.debug(tx)
+    ddd = []
     for wheel in self.WHEELS:
       # position of wheel in world space
       pos   = mul1(tx, wheel)
+      
+      # suspension axis (pointing down from car)
       axis  = mul0(tx, -Y)
       
       # we don't have a road yet, so it is implicitly a plane at y=0
@@ -100,8 +101,14 @@ class Vehicle(Entity):
       #print dist  
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
-        disp = 0 # car is in the air - no force from wheels
-        
+        # whee is in the air - no it will not have any forces
+        ddd.append(-1)
+        continue
+      if disp > 3*self.DISPLACEMENT:
+        ddd.append(-2)
+        # sanity check
+        continue
+      ddd.append(disp)
       
       # spring force
       force = +normal * disp * self.SPRING_K * self.SPRING_MAGIC
@@ -110,13 +117,13 @@ class Vehicle(Entity):
       phys.AddWorldForceAtLocalPos(force, wheel)
       
       # do shock absorber forces
-      if disp:
-        vel = phys.GetPointVelocity(wheel)
-        linearvel = -dot(vel, normal)
-        force = normal * linearvel * self.DAMPING * self.DAMPING_MAGIC
-        phys.AddWorldForceAtLocalPos(force, wheel)
+      vel = phys.GetPointVelocity(wheel)
+      linearvel = -dot(vel, normal)
+      force = normal * linearvel * self.DAMPING * self.DAMPING_MAGIC
+      phys.AddWorldForceAtLocalPos(force, wheel)
       
-      
+    print ''.join('%6.2f' % i for i in ddd)
+    
     #tx = Matrix()
     self.transform = tx
 
