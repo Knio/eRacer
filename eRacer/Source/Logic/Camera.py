@@ -40,7 +40,7 @@ class ChasingCamera(Camera):
   
   def Tick(self, time):
     Camera.Tick(self, time)
-    behind = Point3(0,8,-16)
+    behind = Point3(0,4,-16)
     eRacer.transformAffine(self.target.transform, behind)
     self.camera.SetPosition(behind)
     #print "camera position: ", behind.x, behind.y, behind.z
