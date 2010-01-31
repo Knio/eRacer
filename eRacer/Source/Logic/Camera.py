@@ -5,7 +5,7 @@ class Camera(Entity):
   	Entity.__init__(self, game)
   	self.camera = eRacer.Camera()
   	
-  	self.camera.SetFar(100)
+  	self.camera.SetFar(1000)
   	self.camera.SetFovY(math.pi/4.0)
   	self.camera.SetAspectRatio(8./6.)
   	
