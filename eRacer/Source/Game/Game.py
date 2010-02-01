@@ -33,6 +33,7 @@ class Game(eRacer.Game):
   def Run(self):  
     print 'Game::Run'
     self.Start()  
+    self.time.Zero()
     while self.state:
       t = self.time.Tick(self.simspeed)
       self.Tick(self.time)
