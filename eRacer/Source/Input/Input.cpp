@@ -1,32 +1,42 @@
 /**
- * @file Keyboard.cpp
- * @brief Implementation of the Keyboard class
+ * @file Input.cpp
+ * @brief Implementation of the Input class
  *
  * @date 09.01.2010
- * @author: Don Ha
+ * @author: Don Ha, Ole Rehmsen
  */
 
 #include "Core/Event.h"
 #include "Input.h"
 
+#include <iostream>
+using namespace std;
+
 
 void Input::Init(HWND hWnd, HINSTANCE hInstance)
 {
+	m_BufferFlip = false;
 	assert(SUCCEEDED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_lpdi, NULL)));
 
 	assert(SUCCEEDED(m_lpdi->CreateDevice(GUID_SysKeyboard, &m_lpKeyboard, NULL)));
 	assert(SUCCEEDED(m_lpKeyboard->SetDataFormat(&c_dfDIKeyboard)));
 	assert(SUCCEEDED(m_lpKeyboard->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE)));
-	assert(SUCCEEDED(m_lpKeyboard->Acquire()));
-	assert(SUCCEEDED(m_lpKeyboard->GetDeviceState(sizeof(unsigned char[256]), (void*) currentKeyState())));
+
+	//if this fails, it will be acquired in the keyboard update function
+	//this will lead to the key state not being initialized, and may lead to problems
+	if(SUCCEEDED(m_lpKeyboard->Acquire()))
+		m_lpKeyboard->GetDeviceState(N_KEYS*sizeof(unsigned char), (void*) currentKeyState());
 
 	DIDEVCAPS mouseCapabilities; 
 
 	assert(SUCCEEDED(m_lpdi->CreateDevice(GUID_SysMouse, &m_lpMouse, NULL)));
 	assert(SUCCEEDED(m_lpMouse->SetDataFormat(&c_dfDIMouse2)));
 	assert(SUCCEEDED(m_lpMouse->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE)));
-	assert(SUCCEEDED(m_lpMouse->Acquire()));
-	assert(SUCCEEDED(m_lpMouse->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentMouseState())));
+	
+	//if this fails, it will be acquired in the keyboard update function
+	//this will lead to the mouse state not being initialized, and may lead to problems
+	if(SUCCEEDED(m_lpMouse->Acquire()))
+		m_lpMouse->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentMouseState());
 
 	mouseCapabilities.dwSize = sizeof(mouseCapabilities);
 	m_lpMouse->GetCapabilities(&mouseCapabilities);
@@ -70,8 +80,9 @@ int Input::Update(void)
 
 
 
-	if(DIERR_INPUTLOST == m_lpMouse->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentMouseState()))
+	if(DIERR_INPUTLOST == m_lpMouse->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentMouseState())){
 		m_lpMouse->Acquire();
+	}
 
 	for(int i=0; i<N_MOUSE_BUTTONS; i++)
 	{

@@ -1,9 +1,9 @@
 /**
- * @file Keyboard.h
- * @brief This class provides Keyboard Input through DirectX 8
+ * @file Input.h
+ * @brief Definition of the Input class
  *
  * @date 09.01.2010
- * @author: Don Ha
+ * @author: Don Ha, Ole Rehmsen
  */
 
 #ifndef KEYBOARD_H
@@ -47,7 +47,7 @@ private:
 	unsigned char* oldKeyState() { return m_KeyStates+(!m_BufferFlip)*N_KEYS; }
 
 	DIMOUSESTATE2& currentMouseState() { return m_MouseStates[m_BufferFlip]; }
-	DIMOUSESTATE2& oldMouseState() { return m_MouseStates[m_BufferFlip]; }
+	DIMOUSESTATE2& oldMouseState() { return m_MouseStates[!m_BufferFlip]; }
 
 	void flipBuffers(){ m_BufferFlip = !m_BufferFlip; }
 

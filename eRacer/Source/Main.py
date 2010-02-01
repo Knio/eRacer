@@ -104,7 +104,9 @@ class Main(Game):
       
     #if key == KEY.SPACE:
     #  self.logic.Add(Box(self))   
-      
+
+  def MouseButtonPressedEvent(self, mouseButton):
+	print "Mouse Button ",mouseButton,"pressed"      
       
   def QuitEvent(self):
     self.state = 0
