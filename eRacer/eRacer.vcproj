@@ -603,6 +603,10 @@
 					RelativePath=".\Source\Game\Module.h"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Game\State.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Test"

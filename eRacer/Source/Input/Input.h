@@ -110,8 +110,8 @@ public:
 	~Input() { Shutdown(); }
 };
 
-#define KeyDown(data, n)	(data[n] & 0x80)
-#define KeyUp(data, n)		(!(data[n] & 0x80))
+#define KeyDown(data, n)	(!!(data[n] & 0x80))
+#define KeyUp(data, n)		( !(data[n] & 0x80))
 
 //-----------------------------------------------------------------------------
 // Keyboard Key definitions, for wrapping DirectInput

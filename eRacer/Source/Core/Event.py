@@ -32,7 +32,11 @@ class Event(eRacer.Event):
             import traceback
             print 'Error calling listener callback: %s %r' % (attr, f)
             traceback.print_exc()
+        
+        s = game().state[-1]
+        if hasattr(s, attr): getattr(s, attr)(*args, **kwargs)
         return 0
+        
       return f
 
     return object.__getattribute__(self, attr)

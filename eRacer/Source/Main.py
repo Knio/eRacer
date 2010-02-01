@@ -7,6 +7,7 @@ from Core.Globals import *
 from Game     import Game
 from Core     import Event
 from Core     import Config
+from Game.State  import GameState
 
 from IO       import IO
 from Input    import Input
@@ -15,11 +16,6 @@ from Sound    import Sound
 from Graphics import Graphics
 from Physics  import Physics
 
-# testing entities
-from Logic.Box      import Box
-from Logic.Plane    import Plane
-from Logic.Ship     import Ship
-from Logic.Vehicle  import Vehicle
 
 import time as _time
 
@@ -52,29 +48,12 @@ class Main(Game):
     self.event.Register(self.KeyPressedEvent)
     self.event.Register(self.MouseButtonPressedEvent)
     self.event.Register(self.MouseMovedEvent)
+    self.event.Register(self.GameStateChangeEvent)
     
+    self.states = [GameState()]
     
   def Init(self):
     Game.Init(self)
-
-    # testing stuff
-    self.sound.PlaySound2D("jaguar.wav")
-    
-    # space ship
-    self.logic.Add(Ship(self))
-    self.logic.Add(Plane(self))
-    self.boxcount = 5
-    
-    vehicle = Vehicle(self)
-    # car
-    self.logic.Add(vehicle)
-    
-    # camera
-    from Logic.Camera import FirstPersonCamera
-    camera = FirstPersonCamera(self)
-    self.logic.Add(camera)
-    self.graphics.SetCamera(camera)    
-
     
   def Tick(self, time):
     #self.simspeed = 0.2
@@ -84,12 +63,10 @@ class Main(Game):
     # to compute stable results
     self.physics.physics.GetPhysicsResults()
     
+    self.state[-1].Tick(time)
     
-    if time.seconds > self.boxcount:
-      self.boxcount += 1
-      self.logic.Add(Box(self))   
-      
-    Game.Tick(self, time)      
+    Game.Tick(self, time)
+    
     
   def KeyPressedEvent(self, key):
     from Input import KEY
@@ -102,9 +79,7 @@ class Main(Game):
     if key == KEY.R:
       self.config.read()
       self.event.ReloadConstsEvent()
-      
-    #if key == KEY.SPACE:
-    #  self.logic.Add(Box(self))   
+
 
   def MouseButtonPressedEvent(self, mouseButton):
 	pass

@@ -1,11 +1,11 @@
 from Core.Globals import *
 
 class Box(Entity):
-  def __init__(self, game):
-    Entity.__init__(self, game)
+  def __init__(self, scene):
+    Entity.__init__(self)
 
     self.physics = eRacer.Box(True, 1000, Vector3(0, 20, 0))
-    self.graphics = game.graphics.scene.CreateMovingGeometry("Box")
+    self.graphics = scene.CreateMovingGeometry("Box")
     self.graphics.visible = False
     self.graphics.SetTransform(self.transform)
         
@@ -15,7 +15,7 @@ class Box(Entity):
         return
       self.graphics.visible = True
       
-    game.io.LoadMeshAsync(load, self.graphics, "leather-box.x")   
+    game().io.LoadMeshAsync(load, self.graphics, "leather-box.x")   
     
   def Tick(self, time):
     Entity.Tick(self, time)

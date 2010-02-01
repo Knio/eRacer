@@ -32,8 +32,8 @@ class Vehicle(Entity):
   TURN_ALPHA  = 1.0/5.0
   
   
-  def __init__(self, game):
-    Entity.__init__(self, game)
+  def __init__(self):
+    Entity.__init__(self, scene)
     
     self.physics = eRacer.Box(
       True,       # dynamic
@@ -44,7 +44,7 @@ class Vehicle(Entity):
     )
     print self.physics.GetMass()
     
-    self.graphics = game.graphics.scene.CreateMovingGeometry("vehicle")
+    self.graphics = scene.CreateMovingGeometry("vehicle")
     self.graphics.visible = False
 
     def load(r):
@@ -53,7 +53,7 @@ class Vehicle(Entity):
       else:
         print 'Failed to load mesh!'      
       
-    game.io.LoadMeshAsync(load, self.graphics, self.MODEL)   
+    game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
   
     self.acceleration = 0.
     self.turning      = 0.

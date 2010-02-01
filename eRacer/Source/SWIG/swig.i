@@ -14,6 +14,7 @@
 //Game
 #include "..\Game\Module.h"
 #include "..\Game\Game.h"
+#include "..\Game\State.h"
 
 
 // IO
@@ -74,6 +75,7 @@ These are the classes that get exposed to Python
 %include "..\Game\Module.h"
 %feature("director") Game;
 %include "..\Game\Game.h"
+%include "..\Game\State.h"
 
 
 // IO

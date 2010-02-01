@@ -20,25 +20,22 @@ class Graphics(Module):
     
     self.d3d = self.graphics.GetDevice()
     self.d3d.disown()
-        
-    self.scene = eRacer.Scene()
-    self.graphics.m_scene = self.scene
-    self.camera = None
+    
+    self.views = []
+
 
   def Init(self):
     Module.Init(self)
     
-    # TODO this should be in some 
-    # map-loading code with a progress bar
-    self.scene.LoadSkyBox('skybox2.x')
-
-  def SetCamera(self, camera):
-    self.camera = camera
-
   def Tick(self, time):
     Module.Tick(self, time)
     self.window.Poll()
-    self.graphics.RenderFrame(self.camera.camera, self.scene)
+    
+    
+    while self.views:
+      self.graphics.RenderView(self.views.pop())
+    
+    
     self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())
   
   def Quit(self):
