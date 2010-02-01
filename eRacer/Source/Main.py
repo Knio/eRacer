@@ -50,6 +50,7 @@ class Main(Game):
     
     self.event.Register(self.QuitEvent)
     self.event.Register(self.KeyPressedEvent)
+    self.event.Register(self.MouseButtonPressedEvent)
     
     
   def Init(self):

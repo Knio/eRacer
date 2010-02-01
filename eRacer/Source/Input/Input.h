@@ -12,32 +12,61 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
+#define N_MOUSE_BUTTONS		8
+#define N_KEYS				256
+
 /**
- * @brief DirectX Keyboard Wrapper Class
+ * @brief DirectInput wrapper class
  */
-class Keyboard
+class Input
 {
 private:
 	//Variables
 	LPDIRECTINPUT m_lpdi;
 	LPDIRECTINPUTDEVICE m_lpKeyboard;
-	unsigned char m_KeyState[256];
-	unsigned char m_OldKeyState[256];
+	LPDIRECTINPUTDEVICE m_lpMouse;
+
+	unsigned char		m_KeyStates[2*N_KEYS];
+	DIMOUSESTATE2       m_MouseStates[2];
+
+	bool				m_BufferFlip;
+
+    bool                 m_bInvertedY;          
+    float                m_fSensitivity;        
+    float                m_fCursorX;            
+    float                m_fCursorY;
+    int                  m_iHotSpotX;           
+    int                  m_iHotSpotY;
+    DWORD                m_dwNAxes;              
+    DWORD                m_dwNButtons;           
+    DWORD                m_dwCursorColor;       
+	DWORD                m_dwScreenWidth; 
+    DWORD                m_dwScreenHeight;
+
+	unsigned char* currentKeyState() { return m_KeyStates+m_BufferFlip*N_KEYS; }
+	unsigned char* oldKeyState() { return m_KeyStates+(!m_BufferFlip)*N_KEYS; }
+
+	DIMOUSESTATE2& currentMouseState() { return m_MouseStates[m_BufferFlip]; }
+	DIMOUSESTATE2& oldMouseState() { return m_MouseStates[m_BufferFlip]; }
+
+	void flipBuffers(){ m_BufferFlip = !m_BufferFlip; }
 
 public:
 	//Function Prototypes
-	int Init(	HWND hWnd, HINSTANCE hInstance );
+	void Init(	HWND hWnd, HINSTANCE hInstance );
 	int Update();
 	void Shutdown();
 	bool isKeyPressed(int key);
+	bool isMouseButtonDown(int mouseButton);
 
 	//Constructor + Destructor
-	Keyboard() { }
-	~Keyboard() { Shutdown(); }
+	Input()	
+ { }
+	~Input() { Shutdown(); }
 };
 
-#define KeyDown(data, n)	((data[n] & 0x80) ? true : false)
-#define KeyUp(data, n)		((data[n] & 0x80) ? false : true)
+#define KeyDown(data, n)	(data[n] & 0x80)
+#define KeyUp(data, n)		(!(data[n] & 0x80))
 
 //-----------------------------------------------------------------------------
 // Keyboard Key definitions, for wrapping DirectInput
@@ -182,5 +211,14 @@ public:
 #define KEY_LWIN            DIK_LWIN
 #define KEY_RWIN            DIK_RWIN
 #define KEY_APPS            DIK_APPS
+
+#define MOUSE_LEFTBUTTON   0
+#define MOUSE_RIGHTBUTTON  1
+#define MOUSE_MIDDLEBUTTON 2
+#define MOUSE_4BUTTON      3
+#define MOUSE_5BUTTON      4
+#define MOUSE_6BUTTON      5
+#define MOUSE_7BUTTON      6
+#define MOUSE_8BUTTON      7
 
 #endif
