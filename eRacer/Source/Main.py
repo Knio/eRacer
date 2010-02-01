@@ -70,8 +70,8 @@ class Main(Game):
     self.logic.Add(vehicle)
     
     # camera
-    from Logic.Camera import ChasingCamera
-    camera = ChasingCamera(self, vehicle)
+    from Logic.Camera import FirstPersonCamera
+    camera = FirstPersonCamera(self)
     self.logic.Add(camera)
     self.graphics.SetCamera(camera)    
 
@@ -107,10 +107,12 @@ class Main(Game):
     #  self.logic.Add(Box(self))   
 
   def MouseButtonPressedEvent(self, mouseButton):
-	print "Mouse Button ",mouseButton,"pressed"  
+	pass
+	# print "Mouse Button ",mouseButton,"pressed"  
 	
   def MouseMovedEvent(self, relativeX, relativeY):
-	print "Mouse moved by (",relativeX,",",relativeY,")"  
+	pass
+	# print "Mouse moved by (",relativeX,",",relativeY,")"  
 	    
       
   def QuitEvent(self):

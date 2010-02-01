@@ -61,4 +61,34 @@ class ChasingCamera(Camera):
     
     self.camera.SetLookAt(targetPosition)
     
+class FirstPersonCamera(Camera):
+  def __init__(self, game): 
+    Camera.__init__(self, game)
+    self.position = Point3(0, 50, -1)
+    self.fov      = math.pi/2.1
+    self.game.event.Register(self.KeyPressedEvent)
+    self.game.event.Register(self.MouseMovedEvent)
     
+  def KeyPressedEvent(self, key):
+    from Input import KEY
+    print "first person key pressed"
+    if key == KEY.UP:
+      self.position.z += 2
+    
+    if key == KEY.DOWN:
+      self.position.z -= 2
+      
+    if key == KEY.LEFT:
+      self.position.x -= 2
+      
+    if key == KEY.SPACE:
+      self.position.x += 2
+  
+  def MouseMovedEvent(self, relX, relY):
+    pass
+    
+  def Tick(self, time):
+    Camera.Tick(self, time)
+    
+    self.camera.SetPosition(self.position)
+    # self.camera.SetLookAt(targetPosition)    
