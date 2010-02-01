@@ -29,8 +29,10 @@ setup(
       ],
       'bundle_files': 3,
       'compressed': True,
-      #'dist_dir':'T:/dist'
+      'dist_dir':'T:/dist'
     }
   },
-  data_files=[(i, glob.glob(i+'/*')) for i in glob.glob('Resources/*')]
+  data_files=[
+  ('Config', glob.glob('Config/*')),
+  ] + [(i, glob.glob(i+'/*')) for i in glob.glob('Resources/*')]
 )

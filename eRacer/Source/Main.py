@@ -21,7 +21,7 @@ from Logic.Plane    import Plane
 from Logic.Ship     import Ship
 from Logic.Vehicle  import Vehicle
 
-
+import time as _time
 
 class Main(Game):
   def __init__(self):
@@ -50,6 +50,8 @@ class Main(Game):
     
     self.event.Register(self.QuitEvent)
     self.event.Register(self.KeyPressedEvent)
+    self.event.Register(self.MouseButtonPressedEvent)
+    self.event.Register(self.MouseMovedEvent)
     
     
   def Init(self):
@@ -68,19 +70,26 @@ class Main(Game):
     self.logic.Add(vehicle)
     
     # camera
-    from Logic.Camera import ChasingCamera
-    camera = ChasingCamera(self, vehicle)
+    from Logic.Camera import FirstPersonCamera
+    camera = FirstPersonCamera(self)
     self.logic.Add(camera)
     self.graphics.SetCamera(camera)    
 
     
   def Tick(self, time):
     #self.simspeed = 0.2
-    Game.Tick(self, time) 
+    #_time.sleep(0.02)
+    
+    # hack! we need the *current* physics results
+    # to compute stable results
+    self.physics.physics.GetPhysicsResults()
+    
     
     if time.seconds > self.boxcount:
       self.boxcount += 1
       self.logic.Add(Box(self))   
+      
+    Game.Tick(self, time)      
     
   def KeyPressedEvent(self, key):
     from Input import KEY
@@ -96,7 +105,15 @@ class Main(Game):
       
     #if key == KEY.SPACE:
     #  self.logic.Add(Box(self))   
-      
+
+  def MouseButtonPressedEvent(self, mouseButton):
+	pass
+	# print "Mouse Button ",mouseButton,"pressed"  
+	
+  def MouseMovedEvent(self, relativeX, relativeY):
+	pass
+	# print "Mouse moved by (",relativeX,",",relativeY,")"  
+	    
       
   def QuitEvent(self):
     self.state = 0

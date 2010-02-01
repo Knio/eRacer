@@ -43,7 +43,7 @@ int GraphicsLayer::Init( HWND hWnd )
     d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
     d3dpp.EnableAutoDepthStencil = TRUE;
     d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-	//d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	// Create the D3DDevice
     if( FAILED( m_pD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
@@ -145,6 +145,7 @@ void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
 	transform*=CreateMatrix(camera.GetPosition());
 	m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
 	
+	//m_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
 
 	for(unsigned int i = 0; i<skyBox.Materials().size(); i++){
 		m_pd3dDevice->SetMaterial( skyBox.Materials()[i]);

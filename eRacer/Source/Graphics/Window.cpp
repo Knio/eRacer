@@ -30,7 +30,7 @@ void Window::Create(char* title)
     // Create the application's window
 	window = this;
     hwnd = CreateWindow("eRacer", title,
-                        WS_OVERLAPPEDWINDOW, 100, 20, width, height,
+                        WS_OVERLAPPEDWINDOW, 120, 20, width, height,
                         NULL, NULL, wc.hInstance, NULL );
 	ShowWindow( hwnd, SW_SHOWDEFAULT );
     UpdateWindow( hwnd );

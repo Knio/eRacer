@@ -40,7 +40,7 @@ const Matrix IDENTITY = Matrix(1,0,0,0,
 
 void debug(Matrix &m);
 
-
+float abs(const Vector3 &A);
 Vector3 cross(const Vector3 &A, const Vector3 &B);
 float dot(const Vector3 &A, const Vector3 &B);
 

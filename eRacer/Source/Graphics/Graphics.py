@@ -27,7 +27,10 @@ class Graphics(Module):
 
   def Init(self):
     Module.Init(self)
-    self.scene.LoadSkyBox('skybox.x')
+    
+    # TODO this should be in some 
+    # map-loading code with a progress bar
+    self.scene.LoadSkyBox('skybox2.x')
 
   def SetCamera(self, camera):
     self.camera = camera
@@ -36,6 +39,7 @@ class Graphics(Module):
     Module.Tick(self, time)
     self.window.Poll()
     self.graphics.RenderFrame(self.camera.camera, self.scene)
+    self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())
   
   def Quit(self):
     Module.Quit(self)
