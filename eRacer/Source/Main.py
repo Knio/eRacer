@@ -51,6 +51,7 @@ class Main(Game):
     self.event.Register(self.QuitEvent)
     self.event.Register(self.KeyPressedEvent)
     self.event.Register(self.MouseButtonPressedEvent)
+    self.event.Register(self.MouseMovedEvent)
     
     
   def Init(self):
@@ -106,7 +107,11 @@ class Main(Game):
     #  self.logic.Add(Box(self))   
 
   def MouseButtonPressedEvent(self, mouseButton):
-	print "Mouse Button ",mouseButton,"pressed"      
+	print "Mouse Button ",mouseButton,"pressed"  
+	
+  def MouseMovedEvent(self, relativeX, relativeY):
+	print "Mouse moved by (",relativeX,",",relativeY,")"  
+	    
       
   def QuitEvent(self):
     self.state = 0

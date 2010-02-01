@@ -84,6 +84,10 @@ int Input::Update(void)
 		m_lpMouse->Acquire();
 	}
 
+	if(currentMouseState().lX || currentMouseState().lY)
+		EVENT(MouseMovedEvent(currentMouseState().lX,currentMouseState().lY));
+
+
 	for(int i=0; i<N_MOUSE_BUTTONS; i++)
 	{
 		if (!KeyDown(currentMouseState().rgbButtons, i) && KeyDown(oldMouseState().rgbButtons, i))
