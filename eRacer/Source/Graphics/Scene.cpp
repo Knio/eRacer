@@ -47,7 +47,7 @@ StaticGeometry* Scene::CreateStaticGeometry(const string& name, const Matrix& tr
 
 
 void Scene::LoadSkyBox(const std::string& filename){
-	const float SKYBOX_SIZE = 50;
+	const float SKYBOX_SIZE = 1000;
 
 	//we might want to make IO use strings in future...
 	IO::GetInstance()->LoadMesh(&skyBox_, filename.c_str());

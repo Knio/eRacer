@@ -77,12 +77,12 @@ class Main(Game):
     
   def Tick(self, time):
     #self.simspeed = 0.2
-    _time.sleep(0.015)
+    #_time.sleep(0.02)
     
     # hack! we need the *current* physics results
     # to compute stable results
     self.physics.physics.GetPhysicsResults()
-     
+    
     
     if time.seconds > self.boxcount:
       self.boxcount += 1

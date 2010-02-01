@@ -18,6 +18,11 @@ _41 = %6.2f, _42 = %6.2f _43 = %6.2f _44 = %6.2f\n\
 		
 }
 
+float abs(const Vector3 &A)
+{
+	return sqrt(A.x*A.x + A.y*A.y + A.z*A.z);
+}
+
 Vector3 cross(const Vector3 &A, const Vector3 &B)
 {
 	Vector3 C;

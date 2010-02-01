@@ -2,14 +2,14 @@ from Core.Globals import *
 
 class Camera(Entity):
   def __init__(self, game):
-  	Entity.__init__(self, game)
-  	self.camera = eRacer.Camera()
-  	
-  	self.camera.SetFar(100)
-  	self.camera.SetFovY(math.pi/4.0)
-  	self.camera.SetAspectRatio(8./6.)
-  	
-  	
+    Entity.__init__(self, game)
+    self.camera = eRacer.Camera()
+    
+    self.camera.SetNear(2)
+    self.camera.SetFar(2000) 
+    self.camera.SetFovY(math.pi/4.0)
+    self.camera.SetAspectRatio(8./6.)
+
   def Tick(self, time):
     Entity.Tick(self, time)
 
@@ -29,21 +29,33 @@ class CirclingCamera(Camera):
       math.sin(t)
     )
     pos *= 20
-        
+    
     self.camera.SetPosition(pos)
 
 
 class ChasingCamera(Camera):
   def __init__(self, game, target): 
-       Camera.__init__(self, game)
-       self.target = target
+    Camera.__init__(self, game)
+    self.target   = target
+    self.position = Point3(0, 50, -1)
+    self.fov      = math.pi/2.1
   
   def Tick(self, time):
     Camera.Tick(self, time)
-    behind = Point3(0,8,-16)
-    eRacer.transformAffine(self.target.transform, behind)
-    self.camera.SetPosition(behind)
-    #print "camera position: ", behind.x, behind.y, behind.z
+    
+    vel = length(self.target.physics.GetPointVelocity(ORIGIN))
+    
+    behind = Point3(0,4,-10-vel)
+    behind = eRacer.mul1(self.target.transform, behind)
+    
+    fov = math.pi/2.5/(vel*0.10+1)
+    
+    alpha = math.pow(0.5, float(time.game_delta) / time.RESOLUTION)
+    self.position = self.position*alpha + behind*(1-alpha)
+    self.fov      = self.fov*alpha      + fov*(1-alpha)
+    
+    self.camera.SetPosition(self.position)
+    self.camera.SetFovY(self.fov)
     targetPosition = Point3()
     eRacer.ExtractPosition(self.target.transform, targetPosition)
     
