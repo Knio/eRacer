@@ -97,6 +97,7 @@ public:
 	DEFINE_EVENT(MouseButtonPressedEvent,  int mouseButton)
 	DEFINE_EVENT(MouseButtonReleasedEvent, int mouseButton)
 	DEFINE_EVENT(MouseMovedEvent, long relativeX, long relativeY)
+	DEFINE_EVENT(MouseWheelEvent, long relativeWheel)
 	DEFINE_EVENT(ReloadConstsEvent)
 	
 };

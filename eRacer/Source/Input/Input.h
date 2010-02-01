@@ -31,6 +31,8 @@ private:
 
 	bool				m_BufferFlip;
 
+	//for the future
+	/*
     bool                 m_bInvertedY;          
     float                m_fSensitivity;        
     float                m_fCursorX;            
@@ -42,6 +44,7 @@ private:
     DWORD                m_dwCursorColor;       
 	DWORD                m_dwScreenWidth; 
     DWORD                m_dwScreenHeight;
+	*/
 
 	unsigned char* currentKeyState() { return m_KeyStates+m_BufferFlip*N_KEYS; }
 	unsigned char* oldKeyState() { return m_KeyStates+(!m_BufferFlip)*N_KEYS; }
@@ -51,17 +54,59 @@ private:
 
 	void flipBuffers(){ m_BufferFlip = !m_BufferFlip; }
 
+	HRESULT pollKeyboard();
+	HRESULT pollMouse();
 public:
-	//Function Prototypes
+	/**
+	 * @brief initialize the input wrapper
+	 *
+	 * @param hWnd 
+	 *			a handle to the window
+	 * @param hInstance 
+	 *			a handle to the instance
+	 */
 	void Init(	HWND hWnd, HINSTANCE hInstance );
+
+	/**
+	 * @brief poll the state of the input devices and emit events
+	 *
+	 * @returns 
+	 *		 0 on success or
+	 *		-1 if one of the devices was not ready or lost the connection - just poll again!
+	 */
 	int Update();
+
+	/**
+	 * @brief Clean up
+	 */
 	void Shutdown();
-	bool isKeyPressed(int key);
+
+	/**
+	 * @brief check directly whether a certain key is pressed
+	 *
+	 * @param key
+	 *			the key to check for
+	 * @return true if the key is down, false otherwise
+	 */
+	bool isKeyDown(int key);
+
+	/**
+	 * @brief check directly whether a certain mouse button is pressed
+	 *
+	 * @param mouseButton
+	 *			the mouse button to check for (0-7)
+	 * @return true if the key is down, false otherwise
+	 */
 	bool isMouseButtonDown(int mouseButton);
 
-	//Constructor + Destructor
-	Input()	
- { }
+	/**
+	 * @brief Constructor stub.
+	 */
+	Input()	 { }
+
+	/**
+	 * @brief Destructor - release devices and DirectInput
+	 */
 	~Input() { Shutdown(); }
 };
 

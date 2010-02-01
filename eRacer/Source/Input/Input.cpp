@@ -15,6 +15,7 @@ using namespace std;
 
 void Input::Init(HWND hWnd, HINSTANCE hInstance)
 {
+	//TODO make safe for reinitialisation
 	m_BufferFlip = false;
 	assert(SUCCEEDED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_lpdi, NULL)));
 
@@ -43,64 +44,82 @@ void Input::Init(HWND hWnd, HINSTANCE hInstance)
 
 	assert(mouseCapabilities.dwFlags & DIDC_ATTACHED);
 
-	m_dwNAxes = mouseCapabilities.dwAxes;
-	m_dwNButtons = mouseCapabilities.dwButtons;
+	//m_dwNAxes = mouseCapabilities.dwAxes;
+	//m_dwNButtons = mouseCapabilities.dwButtons;
 
 	flipBuffers();
 
 }
 
-int Input::Update(void)
-{
-	//TODO should we not check instead of always reacquiring?
-	//Reacquire the keyboard on loss. Could potentially infinite loop
-	HRESULT hr = m_lpKeyboard->Acquire();
-	while( hr == DIERR_INPUTLOST )
-		m_lpKeyboard->Acquire();
+HRESULT Input::pollKeyboard(){
+	//poll
+	HRESULT hr = m_lpKeyboard->GetDeviceState(N_KEYS*sizeof(unsigned char), (void*) currentKeyState());
+	
+	switch(hr){
+		case DI_OK:
+			break; //everything is fine
+		case DIERR_INPUTLOST:  
+		case DIERR_NOTACQUIRED:
+			m_lpKeyboard->Acquire(); //get the device back 
+			return hr;
+		case E_PENDING: //not ready yet, maybe next frame
+			return hr;
+		default:
+			assert(hr != DIERR_NOTINITIALIZED);
+	}
 
-	if (FAILED(m_lpKeyboard->GetDeviceState(N_KEYS*sizeof(unsigned char), (void*) currentKeyState())))
-		return -1;
-
-
-	//Events should be triggered here
-
-	for (int i=0;i<N_KEYS;i++)
+	/* emit events */
+	for (unsigned int i=0; i<N_KEYS; i++)
 	{
 		if (!KeyDown(currentKeyState(), i) && KeyDown(oldKeyState(), i))
-		{
-			// a key was released
 			EVENT(KeyReleasedEvent(i));
-		}
-		if (KeyDown(currentKeyState(), i) && !KeyDown(oldKeyState(), i))
-		{
-			// a key was pressed
+		else if (KeyDown(currentKeyState(), i) && !KeyDown(oldKeyState(), i))
 			EVENT(KeyPressedEvent(i));
-		}
 	}
 
-
-
-	if(DIERR_INPUTLOST == m_lpMouse->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentMouseState())){
-		m_lpMouse->Acquire();
+	return DI_OK; 
+}
+HRESULT Input::pollMouse(){
+	HRESULT hr = m_lpMouse->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentMouseState());
+	
+	switch(hr){
+		case DI_OK:
+			break; //everything is fine
+		case DIERR_INPUTLOST:  
+		case DIERR_NOTACQUIRED:
+			m_lpMouse->Acquire(); //get the device back 
+			return hr;
+		case E_PENDING: //not ready yet, maybe next frame
+			return hr;
+		default:
+			assert(hr != DIERR_NOTINITIALIZED);
 	}
 
+	/* emit events */
+	
 	if(currentMouseState().lX || currentMouseState().lY)
 		EVENT(MouseMovedEvent(currentMouseState().lX,currentMouseState().lY));
 
+	if(currentMouseState().lZ)
+		EVENT(MouseWheelEvent(currentMouseState().lY));
 
 	for(int i=0; i<N_MOUSE_BUTTONS; i++)
 	{
 		if (!KeyDown(currentMouseState().rgbButtons, i) && KeyDown(oldMouseState().rgbButtons, i))
-		{
-			// a key was released
 			EVENT(MouseButtonReleasedEvent(i));
-		}
-		if (KeyDown(currentMouseState().rgbButtons, i) && !KeyDown(oldMouseState().rgbButtons, i))
-		{
-			// a key was pressed
+		else if (KeyDown(currentMouseState().rgbButtons, i) && !KeyDown(oldMouseState().rgbButtons, i))
 			EVENT(MouseButtonPressedEvent(i));
-		}
 	}
+
+	return DI_OK; 
+}
+
+
+int Input::Update(void)
+{
+	if(FAILED(pollKeyboard()) || FAILED(pollMouse()))
+		return -1;
+
 	flipBuffers();
 
 	return 0;
@@ -127,7 +146,7 @@ void Input::Shutdown(void)
 }
 
 
-bool Input::isKeyPressed(int key)
+bool Input::isKeyDown(int key)
 {
 	return KeyDown(currentKeyState(), key);
 }
