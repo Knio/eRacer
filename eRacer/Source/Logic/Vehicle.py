@@ -2,7 +2,7 @@ from Core.Globals import *
 
 class Vehicle(Entity):
   MODEL   = "Ship_06.x"
-  MODEL   = "box2.x"
+  #MODEL   = "box2.x"
   SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left
@@ -58,6 +58,7 @@ class Vehicle(Entity):
     self.acceleration = 0.
     self.turning      = 0.
     self.sliding = [False] * len(self.WHEELS)
+    self.crashtime = 0
     
   
   def Tick(self, time):
@@ -86,7 +87,7 @@ class Vehicle(Entity):
     self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*accel
     self.turning      = (alphat)*self.turning      + (1-alphat)*turn
     
-    validwheels = 0
+    crashed = True
     ddd = []
     for i,wheel in enumerate(self.WHEELS):
       # position of wheel in world space
@@ -112,7 +113,7 @@ class Vehicle(Entity):
         # sanity check
         continue
       ddd.append(disp)
-      validwheels += 1
+      crashed = False
       
       # spring force
       downforce = normal * disp * self.SPRING_K * self.SPRING_MAGIC
@@ -153,7 +154,13 @@ class Vehicle(Entity):
       
     # no wheels are touching the ground.
     # reset the car
-    if not validwheels:
+    if not crashed:
+      self.crashtime = 0
+    else:
+      self.crashtime += delta
+      
+    if self.crashtime > 2: # or car stopped?
+      self.crashtime = 0
       print "Crash! resetting car"
       forward = mul0(tx, Z)
       forward = forward - normal * dot(normal, forward)
@@ -171,6 +178,6 @@ class Vehicle(Entity):
 
   def set_transform(self, transform):
     Entity.set_transform(self, transform)
-    self.graphics.SetTransform(self.transform)  
+    self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * transform)
 
   transform = property(Entity.get_transform, set_transform)   
