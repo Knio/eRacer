@@ -34,6 +34,7 @@ CONSTS = eRacer.Constants().g_Constants
 
 Matrix = eRacer.CreateMatrix
 
+length    = eRacer.abs
 dot       = eRacer.dot
 cross     = eRacer.cross
 normalize = eRacer.normalize

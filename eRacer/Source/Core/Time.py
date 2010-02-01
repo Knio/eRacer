@@ -19,5 +19,11 @@ class Time(eRacer.Time):
      
   def get_seconds(self):
     return float(self.game_total) / self.RESOLUTION
+  
+  def Zero(self):
+    self.Tick(1.0)
+    self.game_total = 0
+    self.wall_total = 0
+    self.Tick(1.0)
     
   seconds = property(get_seconds)

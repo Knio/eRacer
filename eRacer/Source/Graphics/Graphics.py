@@ -27,7 +27,10 @@ class Graphics(Module):
 
   def Init(self):
     Module.Init(self)
-    self.scene.LoadSkyBox('skybox.x')
+    
+    # TODO this should be in some 
+    # map-loading code with a progress bar
+    self.scene.LoadSkyBox('skybox2.x')
 
   def SetCamera(self, camera):
     self.camera = camera
