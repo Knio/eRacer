@@ -8,13 +8,10 @@ class Input(Module):
     self.input.Init(game.graphics.hwnd, game.graphics.hinst)
     
   def __getitem__(self, key):
-    return self.input.isKeyPressed(key)
+    return self.input.isKeyDown(key)
     
-  def isKeyPressed(self, key):
-    return self.input.isKeyPressed(key)
-
-  def __getitem__(self, key):
-    return self.input.isKeyPressed(key)
+  def isKeyDown(self, key):
+    return self.input.isKeyDown(key)
     
   def Tick(self, time):
     Module.Tick(self, time)
