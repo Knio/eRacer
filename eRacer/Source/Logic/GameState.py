@@ -4,6 +4,7 @@ from Game.State     import State
 from MenuState  import PauseMenuState
 from Box        import Box
 from Plane      import Plane
+from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera
@@ -33,7 +34,7 @@ class GameState(State):
     game().logic.Add(self.camera)
     
     game().logic.Add(Ship(scene))
-    game().logic.Add(Plane(scene))
+    game().logic.Add(Track(scene))
 
     self.boxcount = 1
     game().time.Zero()
