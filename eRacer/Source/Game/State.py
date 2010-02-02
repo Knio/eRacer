@@ -35,6 +35,9 @@ class MenuState(State):
     
   def Tick(self, time):
     State.Tick(self, time)
+    
+    game().graphics.graphics.WriteString("Push ENTER to begin a new game", "Verdana", 40, Point3(100,100,0))
+    
     game().graphics.scene  = self.scene
     game().graphics.camera = self.camera
     
@@ -88,7 +91,7 @@ class GameState(State):
     
   def Tick(self, time):
     State.Tick(self, time)
-      
+        
     game().graphics.scene  = self.scene
     game().graphics.camera = self.camera
     #game().graphics.views.append(self.view)

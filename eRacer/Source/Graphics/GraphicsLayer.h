@@ -48,7 +48,7 @@ public:
 	~GraphicsLayer();	//Destructor
 	int Init( HWND hWnd );
 
-	void WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color);
+	void WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const RGB &color=WHITE);
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
 	void RenderFrame(const Camera& camera, const Scene& scene);
 	void Shutdown();

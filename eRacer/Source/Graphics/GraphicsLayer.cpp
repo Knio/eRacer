@@ -103,7 +103,7 @@ void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
     m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
 }
 
-void GraphicsLayer::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color)
+void GraphicsLayer::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const RGB &color)
 {
 	m_fontManager.WriteString(msg, fontName, size, pos, color);
 }

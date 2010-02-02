@@ -22,12 +22,26 @@ typedef D3DXVECTOR4 Vector4;
 typedef D3DXVECTOR3 Point3;
 typedef D3DXVECTOR4 Point4;
 typedef D3DXMATRIX  Matrix;
-
+#undef RGB
+typedef D3DXVECTOR3 RGB;
+typedef D3DXVECTOR4 RGBA;
 
 const Point3 ORIGIN = Point3(0,0,0); 
 const Vector3 X = Vector3(1,0,0); 
 const Vector3 Y = Vector3(0,1,0); 
 const Vector3 Z = Vector3(0,0,1);
+
+const RGB RED   = RGB(1,0,0); 
+const RGB GREEN = RGB(0,1,0); 
+const RGB BLUE  = RGB(0,0,1);
+const RGB WHITE = RGB(1,1,1);
+
+/*
+const RGBA RED   = RGBA(1,0,0,1); 
+const RGBA GREEN = RGBA(0,1,0,1); 
+const RGBA BLUE  = RGBA(0,0,1,1);
+const RGBA WHITE = RGBA(1,1,1,1);
+*/
 
 const Matrix IDENTITY = Matrix(1,0,0,0, 
 							   0,1,0,0,
