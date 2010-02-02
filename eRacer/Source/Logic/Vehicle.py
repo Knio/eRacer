@@ -2,7 +2,7 @@ from Core.Globals import *
 
 class Vehicle(Entity):
   MODEL   = "Ship_06.x"
-  #MODEL   = "box2.x"
+  MODEL   = "box2.x"
   SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left
@@ -57,11 +57,32 @@ class Vehicle(Entity):
   
     self.acceleration = 0.
     self.turning      = 0.
+
+    self.newAcceleration = 0.05
+    self.newTurn = 0.
+
     self.sliding = [False] * len(self.WHEELS)
     self.crashtime = 0
     
+    game().event.Register(self.KeyPressedEvent)
+    game().event.Register(self.KeyReleasedEvent)
+
+  def KeyPressedEvent(self,key):
+    if key == KEY.W: self.newAcceleration += 1.0
+    if key == KEY.S: self.newAcceleration -= 1.0
+    if key == KEY.A:  self.newTurn -= 1.0
+    if key == KEY.D:  self.newTurn += 1.0            
+    
+  def KeyReleasedEvent(self,key):
+    if key == KEY.W: self.newAcceleration -= 1.0
+    if key == KEY.S: self.newAcceleration += 1.0
+    if key == KEY.A:  self.newTurn += 1.0
+    if key == KEY.D:  self.newTurn -= 1.0            
+
+    
   
   def Tick(self, time):
+	
     Entity.Tick(self, time)
     
     phys  = self.physics
@@ -72,20 +93,13 @@ class Vehicle(Entity):
 
     # do engine/brake/steering/user input forces    
     
-    accel = 0.05
-    if game().input[KEY.W]: accel = +1.0
-    if game().input[KEY.S]: accel = -1.0
-    
-    turn = 0
-    if game().input[KEY.A]:  turn = -1.0
-    if game().input[KEY.D]:  turn = +1.0    
+
     
     alphaa = math.pow(self.REV_ALPHA,  delta)
     alphat = math.pow(self.TURN_ALPHA, delta)
     
-    
-    self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*accel
-    self.turning      = (alphat)*self.turning      + (1-alphat)*turn
+    self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.newAcceleration
+    self.turning      = (alphat)*self.turning      + (1-alphat)*self.newTurn
     
     crashed = True
     ddd = []

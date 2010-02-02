@@ -54,7 +54,7 @@ class Main(Game):
     
   def Init(self):
     Game.Init(self)
-    
+        
   def Tick(self, time):
     #self.simspeed = 0.2
     #_time.sleep(0.02)
