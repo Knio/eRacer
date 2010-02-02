@@ -4,18 +4,17 @@ eRacer game.
 
 from Core.Globals import *
 
-from Game.Game  import Game
-from Core.Event     import Event
-from Core.Config     import Config
-from Game.State  import GameState, MainMenuState
+from Game.Game          import Game
+from Core.Event         import Event
+from Core.Config        import Config
+from Logic.MenuState    import MainMenuState
 
-from IO       import IO
-from Input.Input    import Input
-from Logic.Logic    import Logic
-from Sound.Sound    import Sound
-from Graphics.Graphics import Graphics
-from Physics.Physics  import Physics
-
+from IO                 import IO
+from Input.Input        import Input
+from Logic.Logic        import Logic
+from Sound.Sound        import Sound
+from Graphics.Graphics  import Graphics
+from Physics.Physics    import Physics
 
 import time as _time
 
@@ -45,7 +44,6 @@ class Main(Game):
         self.test = eRacer.TestModule();
     
     self.event.Register(self.QuitEvent)
-    self.event.Register(self.KeyPressedEvent)
     self.event.Register(self.MouseButtonPressedEvent)
     self.event.Register(self.MouseMovedEvent)
     self.event.Register(self.GameStateChangeEvent)
@@ -56,9 +54,6 @@ class Main(Game):
     Game.Init(self)
         
   def Tick(self, time):
-    #self.simspeed = 0.2
-    #_time.sleep(0.02)
-    
     # hack! we need the *current* physics results
     # to compute stable results
     self.physics.physics.GetPhysicsResults()
@@ -66,19 +61,6 @@ class Main(Game):
     self.states[-1].Tick(time)
     Game.Tick(self, time)
     
-    
-  def KeyPressedEvent(self, key):
-    from Input import KEY
-    if key == KEY.SPACE:
-      self.sound.PlaySound2D("jaguar.wav")
-    
-    if key == KEY.ESCAPE:
-      self.event.QuitEvent()   
-      
-    if key == KEY.R:
-      self.config.read()
-      self.event.ReloadConstsEvent()
-
 
   def MouseButtonPressedEvent(self, mouseButton):
     pass
@@ -91,7 +73,6 @@ class Main(Game):
       
   def QuitEvent(self):
     self.state = 0
-
-
+    
   def GameStateChangeEvent(self, state):
-    self.PushState(state)
+    pass

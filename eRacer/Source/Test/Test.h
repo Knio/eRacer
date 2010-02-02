@@ -64,7 +64,7 @@ public:
 	// event callbacks
 	int KeyPressedEvent(int key)
 	{
-		printf("A key was pressed in C++! (%d)\n", key);
+		//printf("A key was pressed in C++! (%d)\n", key);
 		return 0;
 	}
 

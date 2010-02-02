@@ -22,7 +22,7 @@ Box::Box(bool dynamic, float mass, Point3 pos, Matrix orient, Vector3 dimensions
 	boxDesc.localPose.t = NxVec3(0, 0, 0);
 	actorDesc.shapes.pushBack(&boxDesc);
 	assert(boxDesc.isValid());
-	std::cout << "Dynamic: " << dynamic << std::endl;
+	
 	NxBodyDesc bodyDesc;
 	if(dynamic){
 		bodyDesc.mass = mass;

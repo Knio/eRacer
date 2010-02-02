@@ -42,7 +42,6 @@ class Vehicle(Entity):
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
-    print self.physics.GetMass()
     
     self.graphics = scene.CreateMovingGeometry("vehicle")
     self.graphics.visible = False
@@ -68,14 +67,14 @@ class Vehicle(Entity):
     game().event.Register(self.KeyReleasedEvent)
 
   def KeyPressedEvent(self,key):
-    if key == KEY.W: self.newAcceleration += 1.0
-    if key == KEY.S: self.newAcceleration -= 1.0
+    if key == KEY.W:  self.newAcceleration += 1.0
+    if key == KEY.S:  self.newAcceleration -= 1.0
     if key == KEY.A:  self.newTurn -= 1.0
     if key == KEY.D:  self.newTurn += 1.0            
     
   def KeyReleasedEvent(self,key):
-    if key == KEY.W: self.newAcceleration -= 1.0
-    if key == KEY.S: self.newAcceleration += 1.0
+    if key == KEY.W:  self.newAcceleration -= 1.0
+    if key == KEY.S:  self.newAcceleration += 1.0
     if key == KEY.A:  self.newTurn += 1.0
     if key == KEY.D:  self.newTurn -= 1.0            
 

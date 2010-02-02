@@ -1,3 +1,8 @@
+/**
+
+Interface defination for game states
+
+*/
 #ifndef STATE_H_
 #define STATE_H_
 
@@ -9,7 +14,8 @@ public:
 	State() {};
 	virtual ~State() {};
 	virtual void Tick(Time &t) { }
-
+	virtual void Activate() {}
+	virtual void Deactivate() {}
 };
 
 
