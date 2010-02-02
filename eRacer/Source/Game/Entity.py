@@ -6,8 +6,7 @@ from Core.Globals import *
 
 
 class Entity(object):
-  def __init__(self, game):
-	self.game = game
+  def __init__(self):
 	self.__transform = Matrix()
 	
     

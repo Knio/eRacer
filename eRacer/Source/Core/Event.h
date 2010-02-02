@@ -62,6 +62,7 @@ If you get an error in this file, it is because:
 
 
 #include <assert.h>
+#include "Game/State.h"
 
 #define EVENT(x) Event::GetInstance()->x
 #define REGISTER(obj, evt) EVENT(Register(obj, #evt))
@@ -99,6 +100,7 @@ public:
 	DEFINE_EVENT(MouseMovedEvent, long relativeX, long relativeY)
 	DEFINE_EVENT(MouseWheelEvent, long relativeWheel)
 	DEFINE_EVENT(ReloadConstsEvent)
+	DEFINE_EVENT(GameStateChangeEvent, State* state)
 	
 };
 

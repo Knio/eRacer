@@ -38,6 +38,7 @@ class Module(eRacer.Module):
     time in microseconds since last update
     calls .tick
     '''
+    #print 'Ticking module %s' % self.__class__.__name__
     for i in self.objects:
       i.Tick(time)
     

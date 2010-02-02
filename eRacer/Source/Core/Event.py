@@ -1,3 +1,4 @@
+from Core.Globals import game
 import eRacer
 
 class Event(eRacer.Event):
@@ -32,7 +33,14 @@ class Event(eRacer.Event):
             import traceback
             print 'Error calling listener callback: %s %r' % (attr, f)
             traceback.print_exc()
-        return 0
+        try:        
+          s = game().states[-1]
+          if hasattr(s, attr): getattr(s, attr)(*args, **kwargs)
+        except:
+          import traceback
+          print 'Error calling state top'
+          traceback.print_exc()
+        return 0        
       return f
 
     return object.__getattribute__(self, attr)

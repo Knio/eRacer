@@ -32,8 +32,8 @@ class Vehicle(Entity):
   TURN_ALPHA  = 1.0/5.0
   
   
-  def __init__(self, game):
-    Entity.__init__(self, game)
+  def __init__(self, scene):
+    Entity.__init__(self)
     
     self.physics = eRacer.Box(
       True,       # dynamic
@@ -42,9 +42,8 @@ class Vehicle(Entity):
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
-    print self.physics.GetMass()
     
-    self.graphics = game.graphics.scene.CreateMovingGeometry("vehicle")
+    self.graphics = scene.CreateMovingGeometry("vehicle")
     self.graphics.visible = False
 
     def load(r):
@@ -53,14 +52,36 @@ class Vehicle(Entity):
       else:
         print 'Failed to load mesh!'      
       
-    game.io.LoadMeshAsync(load, self.graphics, self.MODEL)   
+    game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
   
     self.acceleration = 0.
     self.turning      = 0.
+
+    self.newAcceleration = 0.05
+    self.newTurn = 0.
+
     self.sliding = [False] * len(self.WHEELS)
+    self.crashtime = 0
+    
+    game().event.Register(self.KeyPressedEvent)
+    game().event.Register(self.KeyReleasedEvent)
+
+  def KeyPressedEvent(self,key):
+    if key == KEY.W:  self.newAcceleration += 1.0
+    if key == KEY.S:  self.newAcceleration -= 1.0
+    if key == KEY.A:  self.newTurn -= 1.0
+    if key == KEY.D:  self.newTurn += 1.0            
+    
+  def KeyReleasedEvent(self,key):
+    if key == KEY.W:  self.newAcceleration -= 1.0
+    if key == KEY.S:  self.newAcceleration += 1.0
+    if key == KEY.A:  self.newTurn += 1.0
+    if key == KEY.D:  self.newTurn -= 1.0            
+
     
   
   def Tick(self, time):
+	
     Entity.Tick(self, time)
     
     phys  = self.physics
@@ -71,22 +92,15 @@ class Vehicle(Entity):
 
     # do engine/brake/steering/user input forces    
     
-    accel = 0.05
-    if game().input[KEY.W]: accel = +1.0
-    if game().input[KEY.S]: accel = -1.0
-    
-    turn = 0
-    if game().input[KEY.A]:  turn = -1.0
-    if game().input[KEY.D]:  turn = +1.0    
+
     
     alphaa = math.pow(self.REV_ALPHA,  delta)
     alphat = math.pow(self.TURN_ALPHA, delta)
     
+    self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.newAcceleration
+    self.turning      = (alphat)*self.turning      + (1-alphat)*self.newTurn
     
-    self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*accel
-    self.turning      = (alphat)*self.turning      + (1-alphat)*turn
-    
-    validwheels = 0
+    crashed = True
     ddd = []
     for i,wheel in enumerate(self.WHEELS):
       # position of wheel in world space
@@ -112,7 +126,7 @@ class Vehicle(Entity):
         # sanity check
         continue
       ddd.append(disp)
-      validwheels += 1
+      crashed = False
       
       # spring force
       downforce = normal * disp * self.SPRING_K * self.SPRING_MAGIC
@@ -153,7 +167,13 @@ class Vehicle(Entity):
       
     # no wheels are touching the ground.
     # reset the car
-    if not validwheels:
+    if not crashed:
+      self.crashtime = 0
+    else:
+      self.crashtime += delta
+      
+    if self.crashtime > 2: # or car stopped?
+      self.crashtime = 0
       print "Crash! resetting car"
       forward = mul0(tx, Z)
       forward = forward - normal * dot(normal, forward)
@@ -171,6 +191,6 @@ class Vehicle(Entity):
 
   def set_transform(self, transform):
     Entity.set_transform(self, transform)
-    self.graphics.SetTransform(self.transform)  
+    self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * transform)
 
   transform = property(Entity.get_transform, set_transform)   

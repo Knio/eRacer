@@ -4,23 +4,17 @@ eRacer game.
 
 from Core.Globals import *
 
-from Game     import Game
-from Core     import Event
-from Core     import Config
+from Game.Game          import Game
+from Core.Event         import Event
+from Core.Config        import Config
+from Logic.MenuState    import MainMenuState
 
-from IO       import IO
-from Input    import Input
-from Logic    import Logic
-from Sound    import Sound
-from Graphics import Graphics
-from Physics  import Physics
-
-# testing entities
-from Logic.Box      import Box
-from Logic.Plane    import Plane
-from Logic.Ship     import Ship
-from Logic.Vehicle  import Vehicle
-from Logic.Track	import Track
+from IO                 import IO
+from Input.Input        import Input
+from Logic.Logic        import Logic
+from Sound.Sound        import Sound
+from Graphics.Graphics  import Graphics
+from Physics.Physics    import Physics
 
 import time as _time
 
@@ -50,71 +44,35 @@ class Main(Game):
         self.test = eRacer.TestModule();
     
     self.event.Register(self.QuitEvent)
-    self.event.Register(self.KeyPressedEvent)
     self.event.Register(self.MouseButtonPressedEvent)
     self.event.Register(self.MouseMovedEvent)
+    self.event.Register(self.GameStateChangeEvent)
     
+    self.PushState(MainMenuState())    
     
   def Init(self):
     Game.Init(self)
 
-    # testing stuff
-    self.sound.PlaySound2D("jaguar.wav")
-    
-    # space ship
-    self.logic.Add(Ship(self))
-    self.logic.Add(Track(self))
-    self.boxcount = 5
-    
-    vehicle = Vehicle(self)
-    # car
-    self.logic.Add(vehicle)
-    
-    # camera
-    from Logic.Camera import ChasingCamera
-    camera = ChasingCamera(self, vehicle)
-    self.logic.Add(camera)
-    self.graphics.SetCamera(camera)    
-
-    
   def Tick(self, time):
-    #self.simspeed = 0.2
-    #_time.sleep(0.02)
-    
     # hack! we need the *current* physics results
     # to compute stable results
     self.physics.physics.GetPhysicsResults()
     
+    self.states[-1].Tick(time)
+    Game.Tick(self, time)
     
-    if time.seconds > self.boxcount:
-      self.boxcount += 1
-      self.logic.Add(Box(self))   
-      
-    Game.Tick(self, time)      
-    
-  def KeyPressedEvent(self, key):
-    from Input import KEY
-    if key == KEY.SPACE:
-      self.sound.PlaySound2D("jaguar.wav")
-    
-    if key == KEY.ESCAPE:
-      self.event.QuitEvent()   
-      
-    if key == KEY.R:
-      self.config.read()
-      self.event.ReloadConstsEvent()
-      
-    #if key == KEY.SPACE:
-    #  self.logic.Add(Box(self))   
 
   def MouseButtonPressedEvent(self, mouseButton):
-	pass
-	# print "Mouse Button ",mouseButton,"pressed"  
-	
+    pass
+    # print "Mouse Button ",mouseButton,"pressed"  
+
   def MouseMovedEvent(self, relativeX, relativeY):
-	pass
-	# print "Mouse moved by (",relativeX,",",relativeY,")"  
+    pass
+    # print "Mouse moved by (",relativeX,",",relativeY,")"  
 	    
       
   def QuitEvent(self):
     self.state = 0
+    
+  def GameStateChangeEvent(self, state):
+    pass

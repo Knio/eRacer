@@ -1,20 +1,10 @@
-from Game import Module
-import eRacer
+from Core.Globals import *
 
 class Input(Module):
   def __init__(self, game):
     Module.__init__(self, game)
     self.input = eRacer.Input()
-    self.input.Init(game.graphics.hwnd, game.graphics.hinst)
-    
-  def __getitem__(self, key):
-    return self.input.isKeyPressed(key)
-    
-  def isKeyDown(self, key):
-    return self.input.isKeyDown(key)
-
-  def __getitem__(self, key):
-    return self.input.isKeyDown(key)
+    self.input.Init(game.graphics.hwnd, game.graphics.hinst) 
     
   def Tick(self, time):
     Module.Tick(self, time)

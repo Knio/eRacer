@@ -2,8 +2,8 @@
 def run():
   m = None
   try:
-    from Main import Main
     from Core import Globals
+    from Main import Main
     m = Main()
     m.Init()
     m.Run()
