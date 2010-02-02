@@ -59,9 +59,9 @@ HRESULT Keyboard::Update(void)
 	/* emit events */
 	for (unsigned int i=0; i<N_KEYS; i++)
 	{
-		if (!KeyDown(currentState(), i) && KeyDown(oldState(), i))
+		if (Up(currentState(), i) && Down(oldState(), i))
 			EVENT(KeyReleasedEvent(i));
-		else if (KeyDown(currentState(), i) && !KeyDown(oldState(), i))
+		else if (Down(currentState(), i) && Up(oldState(), i))
 			EVENT(KeyPressedEvent(i));
 	}
 
@@ -82,7 +82,8 @@ void Keyboard::Shutdown(void)
 
 bool Keyboard::isKeyDown(int key)
 {
-	return KeyDown(oldState(), key);
+	//old states, because buffers have been swapped already
+	return Down(oldState(), key);
 }
 
 };

@@ -75,9 +75,9 @@ HRESULT Mouse::Update(void)
 
 	for(int i=0; i<N_MOUSE_BUTTONS; i++)
 	{
-		if (!KeyDown(currentState().rgbButtons, i) && KeyDown(oldState().rgbButtons, i))
+		if (Up(currentState().rgbButtons, i) && Down(oldState().rgbButtons, i))
 			EVENT(MouseButtonReleasedEvent(i));
-		else if (KeyDown(currentState().rgbButtons, i) && !KeyDown(oldState().rgbButtons, i))
+		else if (Down(currentState().rgbButtons, i) && Up(oldState().rgbButtons, i))
 			EVENT(MouseButtonPressedEvent(i));
 	}
 
@@ -100,7 +100,8 @@ void Mouse::Shutdown(void)
 
 bool Mouse::isButtonDown(int button)
 {
-	return KeyDown(oldState().rgbButtons,button);
+	//old states because buffers have been swapped already
+	return Down(oldState().rgbButtons,button);
 } 
 
 }

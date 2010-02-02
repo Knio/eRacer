@@ -1,3 +1,10 @@
+/**
+ * @file Input.cpp
+ * @brief Implementation of the Input class
+ *
+ * @date 01.02.2010
+ * @author: Ole Rehmsen
+ */
 
 #include "Input.h"
 

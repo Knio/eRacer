@@ -25,7 +25,7 @@ namespace Physics{
 /**
 * @brief The physics SDK object that the main game loop will use to store actors and return the results of their collisions
 */
-	class PhysicsLayer   : public Listener
+class PhysicsLayer   : public Listener
 {
 public:
 	static PhysicsLayer *g_PhysicsLayer;
