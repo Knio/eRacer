@@ -1,3 +1,4 @@
+from Core.Globals import game
 import eRacer
 
 class Event(eRacer.Event):
@@ -24,17 +25,22 @@ class Event(eRacer.Event):
   def __getattribute__(self, attr):
     if attr.endswith('Event'):
       def f(*args, **kwargs):
-        # print '%s%r%r' % (attr, args, kwargs)
-        for f in self.listeners.get(attr, []):
-          try:
-            f(*args, **kwargs)
-          except:
-            import traceback
-            print 'Error calling listener callback: %s %r' % (attr, f)
-            traceback.print_exc()
-        
-        s = game().state[-1]
-        if hasattr(s, attr): getattr(s, attr)(*args, **kwargs)
+        try:
+          # print '%s%r%r' % (attr, args, kwargs)
+          for f in self.listeners.get(attr, []):
+            try:
+              f(*args, **kwargs)
+            except:
+              import traceback
+              print 'Error calling listener callback: %s %r' % (attr, f)
+              traceback.print_exc()
+          
+          s = game().states[-1]
+          if hasattr(s, attr): getattr(s, attr)(*args, **kwargs)
+        except:
+          import traceback
+          print 'dsfdsfdsfs'
+          traceback.print_exc()
         return 0
         
       return f

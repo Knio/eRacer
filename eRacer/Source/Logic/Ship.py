@@ -1,11 +1,11 @@
 from Core.Globals import *
 
 class Ship(Entity):
-  def __init__(self, game):
-    Entity.__init__(self, game)
+  def __init__(self, scene):
+    Entity.__init__(self)
     
     # no physics yet..
-    self.graphics = game.graphics.scene.CreateMovingGeometry("test")
+    self.graphics = scene.CreateMovingGeometry("test")
     self.transform = eRacer.CreateMatrix(Vector3(10,3,4))
     self.graphics.visible = False
         
@@ -15,7 +15,7 @@ class Ship(Entity):
         return
       self.graphics.visible = True
       
-    game.io.LoadMeshAsync(load, self.graphics, "Ship_06.x")   
+    game().io.LoadMeshAsync(load, self.graphics, "Ship_06.x")   
     
   def Tick(self, time):
     pass

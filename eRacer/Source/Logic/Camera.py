@@ -1,8 +1,8 @@
 from Core.Globals import *
 
 class Camera(Entity):
-  def __init__(self, game):
-    Entity.__init__(self, game)
+  def __init__(self):
+    Entity.__init__(self)
     self.camera = eRacer.Camera()
     
     self.camera.SetNear(2)
@@ -15,8 +15,8 @@ class Camera(Entity):
 
 
 class CirclingCamera(Camera):
-  def __init__(self, game):
-    Camera.__init__(self, game)
+  def __init__(self):
+    Camera.__init__(self)
     
   def Tick(self, time):
     Camera.Tick(self, time)
@@ -34,8 +34,8 @@ class CirclingCamera(Camera):
 
 
 class ChasingCamera(Camera):
-  def __init__(self, game, target): 
-    Camera.__init__(self, game)
+  def __init__(self, target): 
+    Camera.__init__(self)
     self.target   = target
     self.position = Point3(0, 50, -1)
     self.fov      = math.pi/2.1
@@ -62,12 +62,12 @@ class ChasingCamera(Camera):
     self.camera.SetLookAt(targetPosition)
     
 class FirstPersonCamera(Camera):
-  def __init__(self, game): 
-    Camera.__init__(self, game)
+  def __init__(self): 
+    Camera.__init__(self)
     self.position = Point3(0, 50, -1)
     self.fov      = math.pi/2.1
-    self.game.event.Register(self.KeyPressedEvent)
-    self.game.event.Register(self.MouseMovedEvent)
+    game().event.Register(self.KeyPressedEvent)
+    game().event.Register(self.MouseMovedEvent)
     
   def KeyPressedEvent(self, key):
     from Input import KEY

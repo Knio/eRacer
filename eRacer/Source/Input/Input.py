@@ -1,5 +1,4 @@
-from Game import Module
-import eRacer
+from Core.Globals import *
 
 class Input(Module):
   def __init__(self, game):

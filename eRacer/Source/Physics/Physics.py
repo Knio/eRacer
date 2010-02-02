@@ -1,4 +1,4 @@
-from Game import Module
+from Game.Module import Module
 import eRacer
 
 class Physics(Module):

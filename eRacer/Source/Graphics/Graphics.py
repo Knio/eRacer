@@ -1,5 +1,5 @@
-from Game     import Module
-from Window   import Window
+from Game.Module    import Module
+from Window         import Window
 import eRacer
 
 class Graphics(Module):
@@ -21,7 +21,9 @@ class Graphics(Module):
     self.d3d = self.graphics.GetDevice()
     self.d3d.disown()
     
-    self.views = []
+    #self.views = []
+    self.scene = None
+    self.camera = None
 
 
   def Init(self):
@@ -31,9 +33,13 @@ class Graphics(Module):
     Module.Tick(self, time)
     self.window.Poll()
     
+    #print self.camera, self.scene
+    self.graphics.RenderFrame(self.camera.camera, self.scene)
+    self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())
     
-    while self.views:
-      self.graphics.RenderView(self.views.pop())
+    
+    #while self.views:
+    #  self.graphics.RenderView(self.views.pop())
     
     
     self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())

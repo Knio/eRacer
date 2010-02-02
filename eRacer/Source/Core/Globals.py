@@ -41,6 +41,11 @@ normalize = eRacer.normalize
 mul1      = eRacer.mul1
 mul0      = eRacer.mul0
 
-from Game  	import Module, Entity
-from Core 	import Event, Util
-from Input 	import KEY
+from Game.Module  	import Module
+from Game.Entity    import Entity
+
+from Core.Event 	  import Event
+from Input          import KEY
+
+
+

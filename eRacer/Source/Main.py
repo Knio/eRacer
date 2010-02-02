@@ -4,17 +4,17 @@ eRacer game.
 
 from Core.Globals import *
 
-from Game     import Game
-from Core     import Event
-from Core     import Config
-from Game.State  import GameState
+from Game.Game  import Game
+from Core.Event     import Event
+from Core.Config     import Config
+from Game.State  import GameState, MainMenuState
 
 from IO       import IO
-from Input    import Input
-from Logic    import Logic
-from Sound    import Sound
-from Graphics import Graphics
-from Physics  import Physics
+from Input.Input    import Input
+from Logic.Logic    import Logic
+from Sound.Sound    import Sound
+from Graphics.Graphics import Graphics
+from Physics.Physics  import Physics
 
 
 import time as _time
@@ -50,7 +50,7 @@ class Main(Game):
     self.event.Register(self.MouseMovedEvent)
     self.event.Register(self.GameStateChangeEvent)
     
-    self.states = [GameState()]
+    self.PushState(MainMenuState())    
     
   def Init(self):
     Game.Init(self)
@@ -63,8 +63,7 @@ class Main(Game):
     # to compute stable results
     self.physics.physics.GetPhysicsResults()
     
-    self.state[-1].Tick(time)
-    
+    self.states[-1].Tick(time)
     Game.Tick(self, time)
     
     
@@ -82,13 +81,17 @@ class Main(Game):
 
 
   def MouseButtonPressedEvent(self, mouseButton):
-	pass
-	# print "Mouse Button ",mouseButton,"pressed"  
-	
+    pass
+    # print "Mouse Button ",mouseButton,"pressed"  
+
   def MouseMovedEvent(self, relativeX, relativeY):
-	pass
-	# print "Mouse moved by (",relativeX,",",relativeY,")"  
+    pass
+    # print "Mouse moved by (",relativeX,",",relativeY,")"  
 	    
       
   def QuitEvent(self):
     self.state = 0
+
+
+  def GameStateChangeEvent(self, state):
+    self.PushState(state)

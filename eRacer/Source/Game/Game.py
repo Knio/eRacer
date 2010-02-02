@@ -4,7 +4,7 @@ A Game object that manages modules
 
 '''
 
-from Core import Time
+from Core.Time import Time
 import Core.Globals
 import eRacer
 
@@ -17,7 +17,15 @@ class Game(eRacer.Game):
     self.time = Time()
     self.state = 0
     self.simspeed = 1.0
+    self.states = [None]
     eRacer.Game.__init__(self)
+    
+  def PushState(self, state):
+    state.parent = self.states[-1]
+    self.states.append(state)
+    
+  def PopState(self):
+    return self.states.pop()
 
   def AddModule(self, module, name=None):
     print 'Adding module %r' % module
