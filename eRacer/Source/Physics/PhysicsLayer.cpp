@@ -39,7 +39,7 @@ void PhysicsLayer::ReleaseSDK()
 }
 
 
-void PhysicsLayer::UpdatePhysics(Time t)
+void PhysicsLayer::UpdatePhysics(const Time& t)
 {
 	gScene->simulate(float(t.game_delta) / Time::RESOLUTION);
 	gScene->flushStream();
@@ -96,12 +96,12 @@ void PhysicsLayer::InitScene()
 	gPhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect ("localhost", 5425);
 }
 
-NxActor* PhysicsLayer::AddActor(NxActorDesc actorDesc)
+NxActor* PhysicsLayer::AddActor(const NxActorDesc& actorDesc)
 {
 	return gScene->createActor(actorDesc);
 }
 
-NxMaterial* PhysicsLayer::AddMaterial(NxMaterialDesc materialDesc)
+NxMaterial* PhysicsLayer::AddMaterial(const NxMaterialDesc& materialDesc)
 {
 	return gScene->createMaterial(materialDesc);
 }
@@ -111,7 +111,7 @@ int PhysicsLayer::FindMaterialIndex(NxMaterial* material)
 	return material->getMaterialIndex();
 }
 
-int PhysicsLayer::AddMaterialReturnIndex(NxMaterialDesc materialDesc)
+int PhysicsLayer::AddMaterialReturnIndex(const NxMaterialDesc& materialDesc)
 {
 	NxMaterial* matTemp = AddMaterial(materialDesc);
 	assert(matTemp);

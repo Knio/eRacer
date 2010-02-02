@@ -92,7 +92,7 @@ bool PhysicsObject::isDynamic(){
 	return Actor->isDynamic();
 }
 
-NxActor* PhysicsObject::CreateActor(NxActorDesc actorDesc)
+NxActor* PhysicsObject::CreateActor(const NxActorDesc& actorDesc)
 {
 	Actor = PhysicsLayer::g_PhysicsLayer->AddActor(actorDesc);
 	return Actor;

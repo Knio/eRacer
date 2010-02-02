@@ -5,7 +5,7 @@ namespace Physics{
 class Box : public PhysicsObject
 {
 public:
-	Box(bool dynamic = true, float mass = 0, Point3 pos = ORIGIN, Matrix orient = IDENTITY, Vector3 dimensions = Vector3(1, 1, 1));
+	Box(bool dynamic = true, float mass = 0, const Point3& pos = ORIGIN, const Matrix& orient = IDENTITY, const Vector3& dimensions = Vector3(1, 1, 1));
 	~Box();
 
 };

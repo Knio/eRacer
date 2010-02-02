@@ -1,7 +1,7 @@
 #include "Plane.h"
 namespace Physics{
 
-Plane::Plane(float distOrigin, Vector3 normal){
+Plane::Plane(float distOrigin, const Vector3& normal){
 
 	NxMaterialDesc material;
 	material.restitution = 0.5;

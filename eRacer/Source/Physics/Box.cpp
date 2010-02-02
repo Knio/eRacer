@@ -2,7 +2,7 @@
 #include <iostream>
 
 namespace Physics{
-Box::Box(bool dynamic, float mass, Point3 pos, Matrix orient, Vector3 dimensions){
+Box::Box(bool dynamic, float mass, const Point3& pos, const Matrix& orient, const Vector3& dimensions){
 	
 
 	NxMaterialDesc material;

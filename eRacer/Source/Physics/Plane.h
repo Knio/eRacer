@@ -5,7 +5,7 @@ namespace Physics{
 class Plane : public PhysicsObject{
 public:
 
-	Plane(float distOrigin = 0, Vector3 normal = Vector3(0, 1, 0));
+	Plane(float distOrigin = 0, const Vector3& normal = Vector3(0, 1, 0));
 	~Plane();
 
 };
