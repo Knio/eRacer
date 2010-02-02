@@ -34,12 +34,12 @@ public:
 	/**
 	 * @brief Constructor stub.
 	 */
-	Mouse()	: m_pDevice(NULL) { }
+	Mouse();
 
 	/**
 	 * @brief Destructor - release devices and DirectInput
 	 */
-	~Mouse() { Shutdown(); }
+	~Mouse();
 
 	/**
 	 * @brief initialize a mouse
@@ -48,18 +48,15 @@ public:
 	 *			a handle to the window
 	 * @param directInput 
 	 *			a pointer to the DirectInput interface
+	 * @throws runtime_error 
+	 *			if the mouse is not registered, not attached or we are out of memory
 	 */
-	void Init(HWND hWnd, IDirectInput* directInput);
+	void Init(HWND hWnd, IDirectInput8* directInput);
 
 	/**
 	 * @brief poll the state of of the mouse and emit events
-	 *
-	 * @returns 
-	 *		 0 on success or
-	 *		-1 if the mouse was not ready or lost the connection - just poll again!
 	 */
-	//TODO update documentation
-	HRESULT Update();
+	void Update();
 
 	/**
 	 * @brief Clean up
@@ -75,8 +72,9 @@ public:
 	 */
 	bool isButtonDown(int mouseButton);
 private:
-	//Variables
-	LPDIRECTINPUTDEVICE m_pDevice;
+	bool initialized_;
+
+	IDirectInputDevice8* m_pDevice;
 
 	DIMOUSESTATE2       m_States[2];
 	bool				m_BufferFlip;

@@ -21,7 +21,7 @@ namespace Input{
 class Keyboard
 {
 private:
-	LPDIRECTINPUTDEVICE m_pDevice;
+	IDirectInputDevice8* m_pDevice;
 
 	unsigned char		m_States[2*N_KEYS];
 	bool				m_BufferFlip;
@@ -40,7 +40,7 @@ public:
 	 * @param directInput 
 	 *			a pointer to the DirectInput Interface
 	 */
-	void Init(HWND hWnd, IDirectInput* directInput);
+	void Init(HWND hWnd, IDirectInput8* directInput);
 
 	/**
 	 * @brief poll the state of the input devices and emit events

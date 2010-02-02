@@ -15,7 +15,7 @@ using namespace std;
 
 namespace Input {
 
-void Keyboard::Init(HWND hWnd, IDirectInput* directInput)
+void Keyboard::Init(HWND hWnd, IDirectInput8* directInput)
 {
 	//for now, make sure this can only be called once
 	assert(NULL == m_pDevice);

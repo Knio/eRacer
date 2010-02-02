@@ -55,7 +55,7 @@ public:
 	void Shutdown();
 
 private:
-	IDirectInput* directInput_;
+	IDirectInput8* directInput_;
 	Mouse* mouse_;
 	Keyboard* keyboard_;
 
