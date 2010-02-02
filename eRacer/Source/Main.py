@@ -70,8 +70,8 @@ class Main(Game):
     self.logic.Add(vehicle)
     
     # camera
-    from Logic.Camera import FirstPersonCamera
-    camera = FirstPersonCamera(self)
+    from Logic.Camera import ChasingCamera
+    camera = ChasingCamera(self,vehicle)
     self.logic.Add(camera)
     self.graphics.SetCamera(camera)    
 

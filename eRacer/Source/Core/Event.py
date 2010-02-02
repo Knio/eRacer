@@ -24,7 +24,7 @@ class Event(eRacer.Event):
   def __getattribute__(self, attr):
     if attr.endswith('Event'):
       def f(*args, **kwargs):
-        # print '%s%r%r' % (attr, args, kwargs)
+        print '%s%r%r' % (attr, args, kwargs)
         for f in self.listeners.get(attr, []):
           try:
             f(*args, **kwargs)

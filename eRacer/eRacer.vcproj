@@ -270,6 +270,14 @@
 					RelativePath=".\Source\Input\KEY.py"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Input\Keyboard.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Input\Mouse.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Core"
@@ -486,6 +494,14 @@
 				>
 				<File
 					RelativePath=".\Source\Input\Input.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Input\Keyboard.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Input\Mouse.h"
 					>
 				</File>
 			</Filter>
