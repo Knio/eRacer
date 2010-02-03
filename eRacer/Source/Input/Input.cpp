@@ -9,55 +9,38 @@
 #include "Input.h"
 
 #include <cassert>
+#include <stdexcept>
 
-#include "Mouse.h"
-#include "Keyboard.h"
-#include "Gamepad.h"
-
+using namespace std;
 
 namespace Input {
 
 Input::Input()
-: mouse_(NULL), keyboard_(NULL), gamepad_(NULL)
 {
 }
 
 void Input::Init(HWND hWnd,HINSTANCE hInstance){
-	//TODO use exceptions
-	assert(SUCCEEDED(DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, NULL)));
+	HRESULT hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, NULL);
 	
-	mouse_ = new Mouse();
-	mouse_->Init(hWnd, directInput_);
+	assert(DIERR_BETADIRECTINPUTVERSION != hr);
+	assert(DIERR_INVALIDPARAM != hr);
+	assert(DIERR_OLDDIRECTINPUTVERSION != hr);
 
-	keyboard_ = new Keyboard();
-	keyboard_->Init(hWnd, directInput_);
-	
-	gamepad_ = new Gamepad();
-	gamepad_->Init(hWnd,directInput_);
+	if(DIERR_OUTOFMEMORY == hr)
+		throw runtime_error("Could not create DirectInput object - out of memory!");
+
+	mouse_.Init(hWnd, directInput_);
+	keyboard_.Init(hWnd, directInput_);
+	gamepad_.Init(hWnd, directInput_);
 }
 
 void Input::Update(){
-	mouse_->Update();
-	keyboard_->Update();
-	gamepad_->Update();
+	mouse_.Update();
+	keyboard_.Update();
+	gamepad_.Update();
 }
 
 void Input::Shutdown(){
-	if(NULL != mouse_){
-		delete mouse_;
-		mouse_ = NULL;
-	}
-
-	if(NULL != keyboard_){
-		delete keyboard_;
-		keyboard_ = NULL;
-	}
-
-	if(NULL != gamepad_){
-		delete gamepad_;
-		gamepad_ = NULL;
-	}
-
 }
 
 

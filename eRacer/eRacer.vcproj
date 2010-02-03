@@ -259,6 +259,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Input\Device.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Input\Gamepad.cpp"
 					>
 				</File>
@@ -496,6 +500,10 @@
 			<Filter
 				Name="Input"
 				>
+				<File
+					RelativePath=".\Source\Input\Device.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Source\Input\Gamepad.h"
 					>

@@ -15,30 +15,47 @@ using namespace std;
 
 namespace Input {
 
+Keyboard::Keyboard() : Device() {
+}
+
+Keyboard::~Keyboard() { 
+	Shutdown(); 
+}
+
+
 void Keyboard::Init(HWND hWnd, IDirectInput8* directInput)
 {
-	//for now, make sure this can only be called once
-	assert(NULL == m_pDevice);
+	Device::Init(hWnd, directInput);
 
-	m_BufferFlip = false;
-	
-	assert(SUCCEEDED(directInput->CreateDevice(GUID_SysKeyboard, &m_pDevice, NULL)));
+	HRESULT hr = directInput->CreateDevice(GUID_SysKeyboard, &m_pDevice, NULL);
+
+	assert(hr != DIERR_INVALIDPARAM);
+	assert(hr != DIERR_NOINTERFACE);
+	assert(hr != DIERR_NOTINITIALIZED);
+	if(DIERR_DEVICENOTREG == hr)
+		throw runtime_error("Could not create mouse device - device not registered!");
+	if(DIERR_OUTOFMEMORY == hr)
+		throw runtime_error("Could not create mouse device - out of memory!");
+
 	assert(SUCCEEDED(m_pDevice->SetDataFormat(&c_dfDIKeyboard)));
 	assert(SUCCEEDED(m_pDevice->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE)));
 
 	//if this fails, it will be acquired in the keyboard update function
-	//this will lead to the key state not being initialized, and may lead to problems
-	if(SUCCEEDED(m_pDevice->Acquire()))
+	hr = m_pDevice->Acquire();
+	assert(DIERR_INVALIDPARAM != hr);
+	assert(DIERR_NOTINITIALIZED != hr);
+	if(SUCCEEDED(hr))
 		m_pDevice->GetDeviceState(N_KEYS*sizeof(unsigned char), (void*) currentState());
 	else
 		memset(currentState(),0,N_KEYS);
-	
 
 	flipBuffers();
+	initialized_=true;
 }
 
-HRESULT Keyboard::Update(void)
+void Keyboard::Update(void)
 {
+	Device::Update();
 
 	//poll
 	HRESULT hr = m_pDevice->GetDeviceState(N_KEYS*sizeof(unsigned char), (void*) currentState());
@@ -49,11 +66,12 @@ HRESULT Keyboard::Update(void)
 		case DIERR_INPUTLOST:  
 		case DIERR_NOTACQUIRED:
 			m_pDevice->Acquire(); //get the device back 
-			return hr;
+			return;
 		case E_PENDING: //not ready yet, maybe next frame
-			return hr;
+			return;
 		default:
 			assert(hr != DIERR_NOTINITIALIZED);
+			assert(hr != DIERR_INVALIDPARAM);
 	}
 
 	/* emit events */
@@ -66,19 +84,7 @@ HRESULT Keyboard::Update(void)
 	}
 
 	flipBuffers();
-
-	return DI_OK; 
 }
-
-void Keyboard::Shutdown(void)
-{
-	if (NULL != m_pDevice) {
-		m_pDevice->Unacquire();
-		m_pDevice->Release();
-		m_pDevice = NULL;
-	}
-}
-
 
 bool Keyboard::isKeyDown(int key)
 {

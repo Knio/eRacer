@@ -11,19 +11,15 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
-
-#define Down(state, index)	(!!(state[index] & 0x80))
-#define Up(state, index)	(!(state[index] & 0x80))
-
+#include "Mouse.h"
+#include "Keyboard.h"
+#include "Gamepad.h"
 
 /**
  * @brief namespace for the input module
  */
 namespace Input {
 
-class Mouse;
-class Keyboard;
-class Gamepad;
 
 /**
  * @brief main class of the input module. Manages devices.
@@ -57,9 +53,9 @@ public:
 
 private:
 	IDirectInput8* directInput_;
-	Mouse* mouse_;
-	Keyboard* keyboard_;
-	Gamepad* gamepad_;
+	Mouse mouse_;
+	Keyboard keyboard_;
+	Gamepad gamepad_;
 
 };
 

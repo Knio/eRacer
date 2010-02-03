@@ -10,16 +10,11 @@
 
 #include "Core/Event.h"
 
-#include <iostream>
-#include <stdexcept>
-using namespace std;
-
 namespace Input {
 
 Mouse::Mouse()	
-: m_pDevice(NULL),
-  m_BufferFlip(false),
-  initialized_(false){ 
+: Device()
+{ 
 
 }
 
@@ -31,8 +26,7 @@ Mouse::~Mouse() {
 
 void Mouse::Init(HWND hWnd, IDirectInput8* directInput)
 {
-	//for now, make sure this can  only be called once
-	assert(!initialized_);
+	Device::Init(hWnd, directInput);
 
 	HRESULT hr = directInput->CreateDevice(GUID_SysMouse, &m_pDevice, NULL);
 
@@ -49,8 +43,6 @@ void Mouse::Init(HWND hWnd, IDirectInput8* directInput)
 	assert(SUCCEEDED(m_pDevice->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE)));
 	
 	//if this fails, it will be acquired in the keyboard update function
-	//this will lead to the mouse state not being initialized, and may lead to problems
-	
 	hr = m_pDevice->Acquire();
 	assert(DIERR_INVALIDPARAM != hr);
 	assert(DIERR_NOTINITIALIZED != hr);
@@ -77,7 +69,8 @@ void Mouse::Init(HWND hWnd, IDirectInput8* directInput)
 
 void Mouse::Update(void)
 {
-	assert(initialized_);
+	Device::Update();
+
 	HRESULT hr = m_pDevice->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentState());
 	
 	switch(hr){
@@ -112,17 +105,6 @@ void Mouse::Update(void)
 
 	flipBuffers();
 }
-
-void Mouse::Shutdown(void)
-{
-	if(NULL != m_pDevice)
-	{
-		m_pDevice->Unacquire();
-		m_pDevice->Release();
-		m_pDevice = NULL;
-	}
-}
-
 
 
 bool Mouse::isButtonDown(int button)
