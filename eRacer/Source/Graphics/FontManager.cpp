@@ -1,6 +1,9 @@
 #include "FontManager.h"
 
+
+
 namespace Graphics {
+	const float FontManager::FONT_SIZE = 128.0;
 
 	StringRenderable::StringRenderable()
 	{
@@ -56,7 +59,7 @@ namespace Graphics {
 			ID3DXFont* newFont = NULL;
 			//WCHAR wszFontName[128]; //convert to wide char
 			//MultiByteToWideChar(CP_ACP, 0, fontName, -1, wszFontName,128); 
-			D3DXCreateFont( m_pd3dDevice, 25, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
+			D3DXCreateFont( m_pd3dDevice, FONT_SIZE, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
 									 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
                                      fontName, &newFont );
 
@@ -75,9 +78,9 @@ namespace Graphics {
 		s.m_strTextBuffer = msg;
 		s.m_color = D3DXCOLOR(color.x, color.y, color.z, 1.0f);
 		s.m_renderArea = rc;
-		D3DXMatrixScaling(&s.m_scaling, size/25.0f, size/25.0f, 1.0f);
+		D3DXMatrixScaling(&s.m_scaling, size/FONT_SIZE, size/FONT_SIZE, 1.0f);
 		D3DXMATRIX tmp;
-		D3DXMatrixTranslation(&tmp, -pos.x*size/25.0f + pos.x, -pos.y*size/25.0f + pos.y, 0.0f);
+		D3DXMatrixTranslation(&tmp, -pos.x*size/FONT_SIZE + pos.x, -pos.y*size/FONT_SIZE + pos.y, 0.0f);
 		D3DXMatrixMultiply(&s.m_scaling, &s.m_scaling, &tmp);
 
 		m_strList.push_back(s);

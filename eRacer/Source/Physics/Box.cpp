@@ -42,4 +42,21 @@ Box::Box(bool dynamic, float mass, const Point3& pos, const Matrix& orient, cons
 
 Box::~Box(){
 }
+//give wheel positions in local space, a vector to overwrite
+//returns distance to the shape, and the normal of that shape
+float Box::RaycastDown(const Point3& susAttachPos, Vector3& norm){
+	Matrix toGlobal = GetTransform();
+	Vector3 vec = mul0(toGlobal, -Y);
+	normalize(vec);
+	
+	NxRay ray(Vector3_NxVec3(mul1(toGlobal, susAttachPos)),  Vector3_NxVec3(vec));
+	
+	NxScene *scene = PhysicsLayer::g_PhysicsLayer->ReturnScene();
+	NxRaycastHit hit;
+	NxShape* hitShape = scene->raycastClosestShape(ray, NX_ALL_SHAPES, hit);
+	norm = NxVec3_Vector3(hit.worldNormal);
+	normalize(norm);
+	
+	return hit.distance;
+}
 }
