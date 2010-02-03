@@ -23,6 +23,7 @@ namespace Input {
 
 class Mouse;
 class Keyboard;
+class Gamepad;
 
 /**
  * @brief main class of the input module. Manages devices.
@@ -58,6 +59,7 @@ private:
 	IDirectInput8* directInput_;
 	Mouse* mouse_;
 	Keyboard* keyboard_;
+	Gamepad* gamepad_;
 
 };
 

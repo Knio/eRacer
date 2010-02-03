@@ -13,9 +13,8 @@
 #include <dinput.h>
 #include "..\Core\Math.h"
 
-/**
- * @brief DirectX Gamepad Wrapper Class
- */
+
+namespace Input{
 
 typedef enum GamepadButton {
 	BUTTON_A,
@@ -35,6 +34,9 @@ typedef enum GamepadAnalog {
 	STICK_RIGHT
 };
 
+/**
+ * @brief DirectX Gamepad Wrapper Class
+ */
 class Gamepad
 {
 private:
@@ -42,8 +44,8 @@ private:
 	DIJOYSTATE2 m_oldPadState;
 
 public:
-	LPDIRECTINPUT8 m_lpdi;
 	LPDIRECTINPUTDEVICE8 m_lpGamepad;
+	IDirectInput8* m_lpdi;
 
 	Gamepad() { }
 	~Gamepad() { Shutdown(); }
@@ -52,11 +54,11 @@ public:
  * @brief Initialization
  * @param hwnd
  *			Handle to the window to listen to
- * @param hInstance
- * 			Instance of the window
+ * @param directInput
+ * 			a pointer to the DirectInput object
  * @return An error code. When debugging you can check it to see what went wrong.
  */
-	int Init(	HWND hWnd, HINSTANCE hInstance );
+	int Init(	HWND hWnd, IDirectInput8* directInput);
 
 /**
  * @brief Call Update every frame to poll the device
@@ -87,4 +89,6 @@ public:
 	bool isButtonPressed(const GamepadButton &button);
 };
 
+
+};
 #endif

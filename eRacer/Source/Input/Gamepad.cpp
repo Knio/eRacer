@@ -9,6 +9,8 @@
 //#include "Core/Event.h"
 #include "Gamepad.h"
 
+namespace Input{
+
 
 BOOL CALLBACK enumCallback(const DIDEVICEINSTANCE* instance, VOID* context)
 {
@@ -47,14 +49,12 @@ BOOL CALLBACK enumAxisCallback(const DIDEVICEOBJECTINSTANCE* instance, VOID* con
 	return DIENUM_CONTINUE;
 }
 
-int Gamepad::Init(HWND hWnd, HINSTANCE hInstance)
+int Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 {
+	m_lpdi = directInput;
 	m_lpGamepad = NULL;
 
 	HRESULT hr;
-
-	if (FAILED(DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_lpdi, NULL)))
-		return -1;
 
 	// Look for the first simple joystick we can find.
 	if (FAILED(hr = m_lpdi->EnumDevices(DI8DEVCLASS_GAMECTRL, enumCallback, this, DIEDFL_ATTACHEDONLY))) {
@@ -72,7 +72,6 @@ int Gamepad::Init(HWND hWnd, HINSTANCE hInstance)
 		return hr;
 	}
 
-	//if (FAILED(hr = m_lpGamepad->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND))) {
 	if (FAILED(hr = m_lpGamepad->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_BACKGROUND))) {
 		return hr;
 	}
@@ -159,3 +158,5 @@ void Gamepad::Shutdown(void)
 		m_lpdi = NULL;
 	}
 }
+
+};
