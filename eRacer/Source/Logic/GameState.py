@@ -41,7 +41,6 @@ class GameState(State):
     
   def Tick(self, time):
     State.Tick(self, time)
-    print time.game_delta
     game().graphics.scene  = self.scene
     game().graphics.camera = self.camera
     #game().graphics.views.append(self.view)
