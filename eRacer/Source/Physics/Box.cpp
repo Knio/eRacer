@@ -42,4 +42,32 @@ Box::Box(bool dynamic, float mass, const Point3& pos, const Matrix& orient, cons
 
 Box::~Box(){
 }
+//give wheel positions in local space
+float Box::RaycastDown(const Point3& susAttachPos){
+	Matrix toGlobal = GetTransform();
+	Vector3 vec = mul0(toGlobal, -Y);
+	normalize(vec);
+	
+	NxRay ray(Vector3_NxVec3(mul1(toGlobal, susAttachPos)),  Vector3_NxVec3(vec));
+	
+	NxScene *scene = PhysicsLayer::g_PhysicsLayer->ReturnScene();
+	NxRaycastHit hit;
+	NxShape* hitShape = scene->raycastClosestShape(ray, NX_ALL_SHAPES, hit);
+	
+	if(hitShape->isTriangleMesh()){
+
+
+
+	}
+	else if(hitShape->isPlane()){
+
+
+
+	}
+	else{
+		//not plane or mesh
+	}
+
+	return hit.distance;
+}
 }
