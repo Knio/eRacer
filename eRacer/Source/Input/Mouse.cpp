@@ -28,22 +28,16 @@ void Mouse::Init(HWND hWnd, IDirectInput8* directInput)
 {
 	Device::Init(hWnd, directInput);
 
-	HRESULT hr = directInput->CreateDevice(GUID_SysMouse, &m_pDevice, NULL);
+	handleCreateDeviceReturnCode(directInput->CreateDevice(GUID_SysMouse, &m_pDevice, NULL));
 
-	assert(hr != DIERR_INVALIDPARAM);
-	assert(hr != DIERR_NOINTERFACE);
-	assert(hr != DIERR_NOTINITIALIZED);
-	if(DIERR_DEVICENOTREG == hr)
-		throw runtime_error("Could not create mouse device - device not registered!");
-	if(DIERR_OUTOFMEMORY == hr)
-		throw runtime_error("Could not create mouse device - out of memory!");
+
 
 	assert(SUCCEEDED(m_pDevice->SetDataFormat(&c_dfDIMouse2)));
 
 	assert(SUCCEEDED(m_pDevice->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE)));
 	
 	//if this fails, it will be acquired in the keyboard update function
-	hr = m_pDevice->Acquire();
+	HRESULT hr = m_pDevice->Acquire();
 	assert(DIERR_INVALIDPARAM != hr);
 	assert(DIERR_NOTINITIALIZED != hr);
 	if(SUCCEEDED(hr))

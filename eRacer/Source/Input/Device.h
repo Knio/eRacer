@@ -33,12 +33,12 @@ public:
 	Device();
 
 	/**
-	 * @brief Destructor - release devices and DirectInput
+	 * @brief Destructor stub.
 	 */
 	virtual ~Device();
 
 	/**
-	 * @brief initialize a mouse
+	 * @brief initialize a devices. Should be overriden by the subclasses
 	 *
 	 * @param hWnd 
 	 *			a handle to the window
@@ -50,12 +50,14 @@ public:
 	virtual void Init(HWND hWnd, IDirectInput8* directInput);
 
 	/**
-	 * @brief poll the state of of the mouse and emit events
+	 * @brief poll the state of the device and emit events
+	 *
+	 * Should be overriden by base classes. Can only be called once
 	 */
 	virtual void Update();
 
 	/**
-	 * @brief Clean up
+	 * @brief Clean up, release device
 	 */
 	virtual void Shutdown();
 
@@ -67,6 +69,7 @@ protected:
 
 
 	void flipBuffers(){ m_BufferFlip = !m_BufferFlip; }
+	void handleCreateDeviceReturnCode(HRESULT returnCode);
 };
 
 

@@ -44,5 +44,15 @@ void Device::Shutdown(void)
 	}
 }
 
+void Device::handleCreateDeviceReturnCode(HRESULT returnCode){
+	assert(returnCode != DIERR_INVALIDPARAM);
+	assert(returnCode != DIERR_NOINTERFACE);
+	assert(returnCode != DIERR_NOTINITIALIZED);
+	if(DIERR_DEVICENOTREG == returnCode)
+		throw runtime_error("Could not create device - device not registered!");
+	if(DIERR_OUTOFMEMORY == returnCode)
+		throw runtime_error("Could not create device - out of memory!");
+}
+
 
 };
