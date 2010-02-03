@@ -25,7 +25,7 @@ namespace Physics{
 /**
 * @brief The physics SDK object that the main game loop will use to store actors and return the results of their collisions
 */
-	class PhysicsLayer   : public Listener
+class PhysicsLayer   : public Listener
 {
 public:
 	static PhysicsLayer *g_PhysicsLayer;
@@ -57,7 +57,7 @@ public:
 	/**
 	* @brief Starts the physics simulation
 	*/
-	void UpdatePhysics(Time t);
+	void UpdatePhysics(const Time& t);
 
 	/**
 	* @brief Calculates the physics results and saves the info to the actors
@@ -84,7 +84,7 @@ public:
 	*
 	* @return A pointer to the created actor in the scene
 	*/
-	NxActor* AddActor(NxActorDesc actorDesc);
+	NxActor* AddActor(const NxActorDesc& actorDesc);
 
 	NxTriangleMesh* CreateTriangleMesh(const NxStream& stream);
 
@@ -96,7 +96,7 @@ public:
 	*
 	* @return A pointer to the created material returned from the scene
 	*/
-	NxMaterial*	AddMaterial(NxMaterialDesc materialDesc);
+	NxMaterial*	AddMaterial(const NxMaterialDesc& materialDesc);
 
 	/**
 	* @brief Method that returns the Material index in the scene, for the creation of actors with more detail
@@ -117,7 +117,7 @@ public:
 	*
 	* @return The index in the scene of the material needed for the actor
 	*/
-	int AddMaterialReturnIndex(NxMaterialDesc materialDesc);
+	int AddMaterialReturnIndex(const NxMaterialDesc& materialDesc);
 
 	/**
 	* @brief Stars the physics simulation

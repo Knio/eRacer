@@ -100,7 +100,7 @@ public:
 	*/
 	bool isDynamic();
 
-	NxActor* CreateActor(NxActorDesc actorDesc);
+	NxActor* CreateActor(const NxActorDesc& actorDesc);
 
 	/** returns the WORLD velocity of a point in LOCAL space */
 	Vector3 GetPointVelocity(const Point3 &pos)

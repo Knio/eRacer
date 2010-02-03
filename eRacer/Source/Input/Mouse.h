@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Input.h"
+#include "Device.h"
 
 namespace Input {
 
@@ -28,18 +28,18 @@ enum MouseButtons {
 /**
  * @brief Mouse wrapper class
  */
-class Mouse
+class Mouse : public Device
 {
 public:
 	/**
 	 * @brief Constructor stub.
 	 */
-	Mouse()	: m_pDevice(NULL) { }
+	Mouse();
 
 	/**
 	 * @brief Destructor - release devices and DirectInput
 	 */
-	~Mouse() { Shutdown(); }
+	virtual ~Mouse();
 
 	/**
 	 * @brief initialize a mouse
@@ -48,23 +48,16 @@ public:
 	 *			a handle to the window
 	 * @param directInput 
 	 *			a pointer to the DirectInput interface
+	 * @throws runtime_error 
+	 *			if the mouse is not registered, not attached or we are out of memory
 	 */
-	void Init(HWND hWnd, IDirectInput* directInput);
+	virtual void Init(HWND hWnd, IDirectInput8* directInput);
 
 	/**
 	 * @brief poll the state of of the mouse and emit events
-	 *
-	 * @returns 
-	 *		 0 on success or
-	 *		-1 if the mouse was not ready or lost the connection - just poll again!
 	 */
-	//TODO update documentation
-	HRESULT Update();
+	virtual void Update();
 
-	/**
-	 * @brief Clean up
-	 */
-	void Shutdown();
 
 	/**
 	 * @brief check directly whether a certain mouse button is pressed
@@ -75,11 +68,7 @@ public:
 	 */
 	bool isButtonDown(int mouseButton);
 private:
-	//Variables
-	LPDIRECTINPUTDEVICE m_pDevice;
-
 	DIMOUSESTATE2       m_States[2];
-	bool				m_BufferFlip;
 
 	//for the future
 	/*
@@ -98,8 +87,6 @@ private:
 
 	DIMOUSESTATE2& currentState() { return m_States[m_BufferFlip]; }
 	DIMOUSESTATE2& oldState() { return m_States[!m_BufferFlip]; }
-
-	void flipBuffers(){ m_BufferFlip = !m_BufferFlip; }
 };
 
 

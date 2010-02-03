@@ -10,46 +10,61 @@
 
 #include "Core/Event.h"
 
-#include <iostream>
-using namespace std;
-
 namespace Input {
 
-void Mouse::Init(HWND hWnd, IDirectInput* directInput)
+Mouse::Mouse()	
+: Device()
+{ 
+
+}
+
+Mouse::~Mouse() { 
+	Shutdown(); 
+}
+
+
+
+void Mouse::Init(HWND hWnd, IDirectInput8* directInput)
 {
-	//for now, make sure this can only be called once
-	assert(NULL == m_pDevice);
+	Device::Init(hWnd, directInput);
 
-	m_BufferFlip = false;
+	handleCreateDeviceReturnCode(directInput->CreateDevice(GUID_SysMouse, &m_pDevice, NULL));
 
-	DIDEVCAPS mouseCapabilities; 
 
-	assert(SUCCEEDED(directInput->CreateDevice(GUID_SysMouse, &m_pDevice, NULL)));
+
 	assert(SUCCEEDED(m_pDevice->SetDataFormat(&c_dfDIMouse2)));
+
 	assert(SUCCEEDED(m_pDevice->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE)));
 	
 	//if this fails, it will be acquired in the keyboard update function
-	//this will lead to the mouse state not being initialized, and may lead to problems
-	if(SUCCEEDED(m_pDevice->Acquire()))
+	HRESULT hr = m_pDevice->Acquire();
+	assert(DIERR_INVALIDPARAM != hr);
+	assert(DIERR_NOTINITIALIZED != hr);
+	if(SUCCEEDED(hr))
 		m_pDevice->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentState());
 	else
 		memset(&currentState(),0,sizeof(DIMOUSESTATE2));
 
+	DIDEVCAPS mouseCapabilities; 
 	mouseCapabilities.dwSize = sizeof(mouseCapabilities);
-	m_pDevice->GetCapabilities(&mouseCapabilities);
+	assert(SUCCEEDED(m_pDevice->GetCapabilities(&mouseCapabilities)));
 
-	assert(mouseCapabilities.dwFlags & DIDC_ATTACHED);
+	if(!(mouseCapabilities.dwFlags & DIDC_ATTACHED))
+		throw runtime_error("Mouse is not attached!");
 
 	//m_dwNAxes = mouseCapabilities.dwAxes;
 	//m_dwNButtons = mouseCapabilities.dwButtons;
 
 	flipBuffers();
+	initialized_=true;
 
 }
 
 
-HRESULT Mouse::Update(void)
+void Mouse::Update(void)
 {
+	Device::Update();
+
 	HRESULT hr = m_pDevice->GetDeviceState(sizeof(DIMOUSESTATE2), (LPVOID)&currentState());
 	
 	switch(hr){
@@ -58,11 +73,12 @@ HRESULT Mouse::Update(void)
 		case DIERR_INPUTLOST:  
 		case DIERR_NOTACQUIRED:
 			m_pDevice->Acquire(); //get the device back 
-			return hr;
+			return; //and try next time again
 		case E_PENDING: //not ready yet, maybe next frame
-			return hr;
+			return;
 		default:
 			assert(hr != DIERR_NOTINITIALIZED);
+			assert(hr != DIERR_INVALIDPARAM);
 	}
 
 	/* emit events */
@@ -75,32 +91,20 @@ HRESULT Mouse::Update(void)
 
 	for(int i=0; i<N_MOUSE_BUTTONS; i++)
 	{
-		if (!KeyDown(currentState().rgbButtons, i) && KeyDown(oldState().rgbButtons, i))
+		if (Up(currentState().rgbButtons, i) && Down(oldState().rgbButtons, i))
 			EVENT(MouseButtonReleasedEvent(i));
-		else if (KeyDown(currentState().rgbButtons, i) && !KeyDown(oldState().rgbButtons, i))
+		else if (Down(currentState().rgbButtons, i) && Up(oldState().rgbButtons, i))
 			EVENT(MouseButtonPressedEvent(i));
 	}
 
 	flipBuffers();
-
-	return DI_OK; 
 }
-
-void Mouse::Shutdown(void)
-{
-	if(NULL != m_pDevice)
-	{
-		m_pDevice->Unacquire();
-		m_pDevice->Release();
-		m_pDevice = NULL;
-	}
-}
-
 
 
 bool Mouse::isButtonDown(int button)
 {
-	return KeyDown(oldState().rgbButtons,button);
+	//old states because buffers have been swapped already
+	return Down(oldState().rgbButtons,button);
 } 
 
 }

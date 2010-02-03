@@ -43,7 +43,11 @@
 #include "..\Physics\TriMesh.h"
 
 // Input
+#include "..\Input\Mouse.h"
+#include "..\Input\Keyboard.h"
+#include "..\Input\Gamepad.h"
 #include "..\Input\Input.h"
+
 
 
 // Test
@@ -109,7 +113,11 @@ These are the classes that get exposed to Python
 
 
 // Input
+%include "..\Input\Mouse.h"
+%include "..\Input\Keyboard.h"
+%include "..\Input\Gamepad.h"
 %include "..\Input\Input.h"
+
 
 
 // Test

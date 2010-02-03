@@ -8,29 +8,24 @@
 
 #pragma once
 
-#include "Input.h"
-
-//TODO should be constant
-#define N_KEYS				256
+#include "Device.h"
 
 namespace Input{
 
 /**
  * @brief Keyboard wrapper class
  */
-class Keyboard
+class Keyboard : public Device
 {
+public:
+	static const unsigned int N_KEYS = 256;
+
 private:
-	LPDIRECTINPUTDEVICE m_pDevice;
-
 	unsigned char		m_States[2*N_KEYS];
-	bool				m_BufferFlip;
-
 
 	unsigned char* currentState() { return m_States+m_BufferFlip*N_KEYS; }
 	unsigned char* oldState() { return m_States+(!m_BufferFlip)*N_KEYS; }
 
-	void flipBuffers(){ m_BufferFlip = !m_BufferFlip; }
 public:
 	/**
 	 * @brief initialize a keyboard
@@ -39,23 +34,15 @@ public:
 	 *			a handle to the window
 	 * @param directInput 
 	 *			a pointer to the DirectInput Interface
+	 * @throws runtime_error 
+	 *			if the mouse is not registered, not attached or we are out of memory
 	 */
-	void Init(HWND hWnd, IDirectInput* directInput);
+	virtual void Init(HWND hWnd, IDirectInput8* directInput);
 
 	/**
 	 * @brief poll the state of the input devices and emit events
-	 *
-	 * @returns 
-	 *		 0 on success or
-	 *		-1 if one of the devices was not ready or lost the connection - just poll again!
 	 */
-	//TODO update doc
-	HRESULT Update();
-
-	/**
-	 * @brief Clean up
-	 */
-	void Shutdown();
+	virtual void Update();
 
 	/**
 	 * @brief check directly whether a certain key is pressed
@@ -69,12 +56,12 @@ public:
 	/**
 	 * @brief Constructor stub.
 	 */
-	Keyboard() : m_pDevice(NULL) { }
+	Keyboard();
 
 	/**
 	 * @brief Destructor - release devices and DirectInput
 	 */
-	~Keyboard() { Shutdown(); }
+	virtual ~Keyboard();
 };
 
 
