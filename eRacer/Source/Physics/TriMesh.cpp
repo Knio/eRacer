@@ -23,20 +23,20 @@ namespace Physics {
 	void TriMesh::Init(ID3DXMesh& mesh){
 		NxTriangleMeshDesc meshDesc;
 		//generate our mesh using the cooking API
-		meshDesc.numTriangles = mesh.GetNumFaces();
-		meshDesc.numVertices = mesh.GetNumVertices();
-		meshDesc.pointStrideBytes  = mesh.GetNumBytesPerVertex();
-		meshDesc.triangleStrideBytes = 3*sizeof(unsigned short);                          
+		meshDesc.numTriangles 				= mesh.GetNumFaces();
+		meshDesc.numVertices 					= mesh.GetNumVertices();
+		meshDesc.pointStrideBytes  		= mesh.GetNumBytesPerVertex();
+		meshDesc.triangleStrideBytes 	= 3*sizeof(unsigned short);
 		meshDesc.flags = NX_MF_16_BIT_INDICES;
 
 		void* points;
 		void* triangles;
 		
 		assert(SUCCEEDED(mesh.LockVertexBuffer(D3DLOCK_READONLY, &points)));
-		assert(SUCCEEDED(mesh.LockIndexBuffer(D3DLOCK_READONLY, &triangles)));
-
-		meshDesc.points = points;
-		meshDesc.triangles = triangles;
+		assert(SUCCEEDED(mesh.LockIndexBuffer( D3DLOCK_READONLY, &triangles)));
+		
+		meshDesc.points 		= points;
+		meshDesc.triangles 	= triangles;
 
 		NxTriangleMeshShapeDesc meshShapeDesc;
 		//meshShapeDesc.shapeFlags |= NX_SF_FEATURE_INDICES;

@@ -43,8 +43,8 @@ int GraphicsLayer::Init( HWND hWnd )
     d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
     d3dpp.EnableAutoDepthStencil = TRUE;
     d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-
+    d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	
 	// Create the D3DDevice
     if( FAILED( m_pD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
                                       D3DCREATE_HARDWARE_VERTEXPROCESSING,
@@ -88,7 +88,7 @@ void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
 	//In the future this will be done inside a loop to handle each shader/effect
     assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
 
-
+	
 	for(vector<Geometry*>::const_iterator geometry = visibleGeometry.begin(); 
 		geometry!=visibleGeometry.end(); geometry++){
 			RenderGeometry(*geometry);

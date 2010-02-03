@@ -35,6 +35,7 @@ class GameState(State):
     
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
+    game().logic.Add(Plane(scene))    
 
     self.boxcount = 1
     game().time.Zero()
@@ -48,7 +49,7 @@ class GameState(State):
     #game().graphics.views.append(self.view)
     
     if time.seconds > self.boxcount:
-      self.boxcount += 1
+      self.boxcount += max(self.boxcount+1, 20)
       game().logic.Add(Box(self.scene))
       
     

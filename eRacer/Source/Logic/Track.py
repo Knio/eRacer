@@ -13,9 +13,10 @@ class Track(Entity):
         print 'Failed to load mesh!!'
         return
       self.graphics.visible = True
-      self.physics.Initialize(self.graphics.mesh());
+      self.physics.Init(self.graphics.mesh());
       
     game().io.LoadMeshAsync(load, self.graphics, "simple_track.x")   
+    
     
   def Tick(self, time):
      Entity.Tick(self, time)
