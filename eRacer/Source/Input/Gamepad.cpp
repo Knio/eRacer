@@ -6,7 +6,7 @@
 * @author: Don Ha
 */
 
-//#include "Core/Event.h"
+#include "Core/Event.h"
 #include "Gamepad.h"
 
 namespace Input{
@@ -120,30 +120,54 @@ int Gamepad::Update(void)
 		return hr;
 	}
 
+	for(unsigned int i=0; i<N_GAMEPAD_BUTTONS; i++)
+	{
+		if (GamepadUp(m_padState.rgbButtons, i) && GamepadDown(m_oldPadState.rgbButtons, i))
+			EVENT(GamepadButtonReleasedEvent(i));
+		else if (GamepadDown(m_padState.rgbButtons, i) && GamepadUp(m_oldPadState.rgbButtons, i))
+			EVENT(GamepadButtonPressedEvent(i));
+	}
+
+	if(hasStick1Changed()){
+		EVENT(GamepadStick1ChangedAbsoluteEvent(m_padState.lX,m_padState.lY,m_padState.lZ));
+		EVENT(GamepadStick1ChangedRelativeEvent(m_oldPadState.lX-m_padState.lX,m_oldPadState.lY-m_padState.lY,m_oldPadState.lZ-m_padState.lZ));
+	}
+
+	if(hasStick2Changed()){
+		EVENT(GamepadStick1ChangedAbsoluteEvent(m_padState.lRx,m_padState.lRy,m_padState.lRz));
+		EVENT(GamepadStick1ChangedRelativeEvent(m_oldPadState.lRx-m_padState.lRx,m_oldPadState.lRy-m_padState.lRy,m_oldPadState.lRz-m_padState.lRz));
+	}
+
+	
+
 	return S_OK;
 }
 
 bool Gamepad::isButtonPressed(const GamepadButton &button)
 {
-	return (m_padState.rgbButtons[button] > 0);
+	return GamepadDown(m_padState.rgbButtons,button);
 }
 
-Vector3 Gamepad::getControlStickState(const GamepadAnalog &stick)
+Vector3 Gamepad::getStick1State()
 {
 	Vector3 joyState;
 	
-	if (STICK_LEFT == stick) {
-		joyState.x = (float) m_padState.lX;
-		joyState.y = (float) m_padState.lY;
-		joyState.z = (float) m_padState.lZ;
-	}
-	else if (STICK_RIGHT == stick) {
-		joyState.x = (float) m_padState.lRx;
-		joyState.y = (float) m_padState.lRy;
-		joyState.z = (float) m_padState.lRz;
-	}
+	joyState.x = (float) m_padState.lX;
+	joyState.y = (float) m_padState.lY;
+	joyState.z = (float) m_padState.lZ;
 
 	return joyState;
+}
+
+Vector3 Gamepad::getStick2State(){
+	Vector3 joyState;
+	
+	joyState.x = (float) m_padState.lRx;
+	joyState.y = (float) m_padState.lRy;
+	joyState.z = (float) m_padState.lRz;
+
+	return joyState;
+	
 }
 
 
@@ -158,5 +182,14 @@ void Gamepad::Shutdown(void)
 		m_lpdi = NULL;
 	}
 }
+
+bool Gamepad::hasStick1Changed() const{
+	return m_padState.lX != m_oldPadState.lX || m_padState.lY != m_oldPadState.lY || m_padState.lZ != m_oldPadState.lZ;
+}
+
+bool Gamepad::hasStick2Changed() const{
+	return m_padState.lRx != m_oldPadState.lRx || m_padState.lRy != m_oldPadState.lRy || m_padState.lRz != m_oldPadState.lRz;
+}
+
 
 };

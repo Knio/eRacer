@@ -41,7 +41,7 @@ class GameState(State):
     
   def Tick(self, time):
     State.Tick(self, time)
-    print time.game_delta
+    #print time.game_delta
     game().graphics.scene  = self.scene
     game().graphics.camera = self.camera
     #game().graphics.views.append(self.view)
@@ -65,5 +65,21 @@ class GameState(State):
     
     if key == KEY.R:
       game().config.read()
-      game().event.ReloadConstsEvent()    
+      game().event.ReloadConstsEvent()        
+      
+  def GamepadButtonPressedEvent(self, button):
+    
+    #if key == KEY.W:  game().event.PlayerAccelerateEvent(+1);
+    #if key == KEY.S:  game().event.PlayerAccelerateEvent(-1);
+    #if key == KEY.A:  game().event.PlayerTurnEvent(-1);
+    #if key == KEY.D:  game().event.PlayerTurnEvent(+1);
+    if button == eRacer.BUTTON_START:
+      game().PushState(PauseMenuState())
+
+    # if key == KEY.SPACE:
+    #  game().sound.PlaySound2D("jaguar.wav")          
+    
+    # if key == KEY.R:
+    #  game().config.read()
+    #  game().event.ReloadConstsEvent()        
 
