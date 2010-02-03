@@ -13,6 +13,10 @@
 #include <dinput.h>
 #include "..\Core\Math.h"
 
+#define GamepadDown(state, index)	(state[index] > 0)
+#define GamepadUp(state, index)		(state[index] == 0)
+
+
 
 namespace Input{
 
@@ -26,12 +30,15 @@ typedef enum GamepadButton {
 	BUTTON_BACK,
 	BUTTON_START,
 	BUTTON_LS,
-	BUTTON_RS
+	BUTTON_RS,
+	N_GAMEPAD_BUTTONS
 };
+
 
 typedef enum GamepadAnalog {
 	STICK_LEFT,
-	STICK_RIGHT
+	STICK_RIGHT,
+	N_GAMEPAD_STICKS
 };
 
 /**
@@ -42,6 +49,9 @@ class Gamepad
 private:
 	DIJOYSTATE2 m_padState;
 	DIJOYSTATE2 m_oldPadState;
+
+	bool hasStick1Changed() const;
+	bool hasStick2Changed() const;
 
 public:
 	LPDIRECTINPUTDEVICE8 m_lpGamepad;
@@ -73,12 +83,17 @@ public:
 
 
 /**
- * @brief Get the controlstick state using GamepadAnalog sticks
- * @param stick
- *			Choose left or right
- * @return A Vector holding axis readings, between -1000 and 1000.
+ * @brief Get the state of the left analog stick
+ * @return A Vector3 holding axis readings, between -1000 and 1000 each.
  */
-	Vector3 getControlStickState(const GamepadAnalog &stick);
+	Vector3 getStick1State();
+
+/**
+ * @brief Get the state of the left analog stick
+ * @return A Vector3 holding axis readings, between -1000 and 1000 each.
+ */
+	Vector3 getStick2State();
+
 
 /**
  * @brief Get the Button state using GamepadButtons sticks

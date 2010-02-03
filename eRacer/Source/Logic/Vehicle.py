@@ -112,13 +112,18 @@ class Vehicle(Entity):
       # suspension axis (pointing down from car)
       axis  = mul0(tx, -Y)
       
+      #raycast down
+      normal = Vector3()
+      suspensionpoint = Vector3(wheel.x, wheel.y + 0.5, wheel.z)
+      dist = phys.RaycastDown(suspensionpoint, normal) - 0.5
+      
       # we don't have a road yet, so it is implicitly a plane at y=0
       # road normal - assume +Y      
-      normal = Vector3(0,1,0)
+      #normal = Vector3(0,1,0)
       
       # cast a ray to the road, get distance
-      dist = pos.y / -dot(axis, normal)
-      #print dist  
+     # dist = pos.y / -dot(axis, normal)
+      print dist  
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
         # whee is in the air - no it will not have any forces

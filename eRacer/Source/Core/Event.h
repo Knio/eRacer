@@ -95,10 +95,21 @@ public:
 	DEFINE_EVENT(QuitEvent)
 	DEFINE_EVENT(KeyPressedEvent,  int key)
 	DEFINE_EVENT(KeyReleasedEvent, int key)
+
 	DEFINE_EVENT(MouseButtonPressedEvent,  int mouseButton)
 	DEFINE_EVENT(MouseButtonReleasedEvent, int mouseButton)
 	DEFINE_EVENT(MouseMovedEvent, long relativeX, long relativeY)
 	DEFINE_EVENT(MouseWheelEvent, long relativeWheel)
+
+	DEFINE_EVENT(GamepadButtonPressedEvent,  int gamepadButton)
+	DEFINE_EVENT(GamepadButtonReleasedEvent, int gamepadButton)
+	DEFINE_EVENT(GamepadStick1ChangedAbsoluteEvent, long x, long y, long z);
+	DEFINE_EVENT(GamepadStick2ChangedAbsoluteEvent, long x, long y, long z)
+	DEFINE_EVENT(GamepadStick1ChangedRelativeEvent, long x, long y, long z);
+	DEFINE_EVENT(GamepadStick2ChangedRelativeEvent, long x, long y, long z)
+
+
+
 	DEFINE_EVENT(ReloadConstsEvent)
 	DEFINE_EVENT(GameStateChangeEvent, State* state)
 	
