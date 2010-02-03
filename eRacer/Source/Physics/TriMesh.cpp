@@ -1,3 +1,11 @@
+/**
+ * @file TriMesh.cpp
+ * @brief Implementation of the Physics::TriMesh class
+ *
+ * @date 31.01.2010
+ * @author: Ole Rehmsen
+ */
+
 #include "TriMesh.h"
 #include <NXU_Streaming.h>
 #include <NxCooking.h>
@@ -12,7 +20,7 @@ namespace Physics {
 	}
 
 
-	void TriMesh::Initialize(ID3DXMesh& mesh){
+	void TriMesh::Init(ID3DXMesh& mesh){
 		NxTriangleMeshDesc meshDesc;
 		//generate our mesh using the cooking API
 		meshDesc.numTriangles = mesh.GetNumFaces();

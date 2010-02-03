@@ -13,12 +13,28 @@
 
 namespace Physics{
 
+/**
+ * @brief wrapper for a physsics actor that is a triangle mesh
+ */
 class TriMesh : public PhysicsObject {
 public:
+	/**
+	 * @brief Constructor stub.
+	 */
 	TriMesh();
+	
+	/**
+	 * @brief Destructor stub.
+	 */ 
 	~TriMesh();
 
-	void Initialize(ID3DXMesh& mesh);
+	/**
+	 * @brief Transfer mesh data from Direct3D mesh to PhysX mesh
+	 *
+	 * @param mesh
+	 * 			the Direct3D mesh to stream the mesh data from
+	 */
+	void Init(ID3DXMesh& mesh);
 
 };
 
