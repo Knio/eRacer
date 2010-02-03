@@ -84,6 +84,9 @@ class Vehicle(Entity):
 	
     Entity.Tick(self, time)
     
+    if not time.game_delta:
+      return
+    
     phys  = self.physics
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION

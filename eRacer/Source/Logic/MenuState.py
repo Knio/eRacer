@@ -4,38 +4,76 @@ from Game.State   import State
 from Camera     import CirclingCamera
 
 class MenuState(State):
+  MENU = []
   def __init__(self):
     State.__init__(self)
     self.scene  = eRacer.Scene()
     self.camera = CirclingCamera()
+    self.selected = 0
     
   def Tick(self, time):
     State.Tick(self, time)
     game().graphics.scene  = self.scene
     game().graphics.camera = self.camera
-  
+    
+    y = 200
+    for i,m in enumerate(self.MENU):
+      name = m[0]
+      game().graphics.graphics.WriteString(
+        name, "Verdana", 32, Point3(100,y,0), i==self.selected and RED or WHITE
+      ) 
+      y += 50
+    
   def KeyPressedEvent(self, key):
-    pass
-
+    if key == KEY.UP:
+      self.selected = (self.selected-1) % len(self.MENU)
+    if key == KEY.DOWN:
+      self.selected = (self.selected+1) % len(self.MENU)
+    if key == KEY.RETURN:
+      name = self.MENU[self.selected][0]
+      getattr(self, 'Menu_%s' % name.replace(' ','_'))()
+    
+  def Menu_Exit(self):
+    game().event.QuitEvent()
+  
+    
 class MainMenuState(MenuState):
+  MENU = [
+  
+    ('New Game',),
+    ('Exit',)
+  
+  ]
+  
   def __init__(self):
     MenuState.__init__(self)
     
+  def Menu_New_Game(self):
+    game().PushState(GameState())
+    
   def KeyPressedEvent(self, key):
-    if key == KEY.RETURN:
-      game().PushState(GameState())
-    else:
-      MenuState.KeyPressedEvent(self, key)      
+    if key == KEY.ESCAPE:
+      game().event.QuitEvent()
+    
+    MenuState.KeyPressedEvent(self, key)
     
   def Tick(self, time):
     game().graphics.graphics.WriteString(
-      "Press ENTER to begin a new game", 
-      "Verdana", 40, Point3(100,100,0)
+      "eRacerX", 
+      "Verdana", 128, Point3(180,60,0)
     )
     MenuState.Tick(self, time)    
     
 
 class PauseMenuState(MenuState):
+  MENU = [
+  
+    ('Continue',),
+    ('Exit',)
+    
+  ]
+  
+  
   def __init__(self):
     MenuState.__init__(self)
     
@@ -50,6 +88,9 @@ class PauseMenuState(MenuState):
       game().PopState()
     else:
       MenuState.KeyPressedEvent(self, key)
+    
+  def Menu_Continue(self):
+    game().PopState()
     
   def Tick(self, time):
     game().graphics.graphics.WriteString(
