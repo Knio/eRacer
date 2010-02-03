@@ -10,16 +10,16 @@
 
 #include "Device.h"
 
-//TODO should be constant
-#define N_KEYS				256
-
 namespace Input{
 
 /**
  * @brief Keyboard wrapper class
  */
-	class Keyboard : public Device
+class Keyboard : public Device
 {
+public:
+	static const unsigned int N_KEYS = 256;
+
 private:
 	unsigned char		m_States[2*N_KEYS];
 
@@ -34,17 +34,14 @@ public:
 	 *			a handle to the window
 	 * @param directInput 
 	 *			a pointer to the DirectInput Interface
+	 * @throws runtime_error 
+	 *			if the mouse is not registered, not attached or we are out of memory
 	 */
 	virtual void Init(HWND hWnd, IDirectInput8* directInput);
 
 	/**
 	 * @brief poll the state of the input devices and emit events
-	 *
-	 * @returns 
-	 *		 0 on success or
-	 *		-1 if one of the devices was not ready or lost the connection - just poll again!
 	 */
-	//TODO update doc
 	virtual void Update();
 
 	/**
