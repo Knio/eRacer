@@ -29,15 +29,15 @@ void Input::Init(HWND hWnd,HINSTANCE hInstance){
 	if(DIERR_OUTOFMEMORY == hr)
 		throw runtime_error("Could not create DirectInput object - out of memory!");
 
-	mouse_.Init(hWnd, directInput_);
-	keyboard_.Init(hWnd, directInput_);
-	gamepad_.Init(hWnd, directInput_);
+	mouse.Init(hWnd, directInput_);
+	keyboard.Init(hWnd, directInput_);
+	gamepad.Init(hWnd, directInput_);
 }
 
 void Input::Update(){
-	mouse_.Update();
-	keyboard_.Update();
-	gamepad_.Update();
+	mouse.Update();
+	keyboard.Update();
+	gamepad.Update();
 }
 
 void Input::Shutdown(){

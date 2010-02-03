@@ -26,6 +26,10 @@ namespace Input {
  */
 class Input{
 public:
+	Mouse mouse;
+	Keyboard keyboard;
+	Gamepad gamepad;
+
 	/**
 	 * @brief Constructor stub.
 	 */
@@ -53,9 +57,6 @@ public:
 
 private:
 	IDirectInput8* directInput_;
-	Mouse mouse_;
-	Keyboard keyboard_;
-	Gamepad gamepad_;
 
 };
 
