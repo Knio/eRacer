@@ -8,10 +8,13 @@ from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera
+from Mapping    import GameMapping
 
 class GameState(State):
   def __init__(self):
     State.__init__(self)
+    
+    self.mapping = GameMapping()
         
     # testing stuff
     game().sound.PlaySound2D("jaguar.wav")

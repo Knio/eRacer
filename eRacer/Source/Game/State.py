@@ -2,7 +2,8 @@ from Core.Globals import *
 
 class State(eRacer.State):
   def __init__(self):
-    self.parent = None
+    self.parent   = None
+    self.mapping  = None
     
   def Tick(self, time):
     pass
