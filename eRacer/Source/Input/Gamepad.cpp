@@ -17,8 +17,8 @@ BOOL CALLBACK enumCallback(const DIDEVICEINSTANCE* instance, VOID* context)
 	HRESULT hr;
 	Gamepad *mypad = (Gamepad* ) context; 
 
-	// Obtain an interface to the enumerated joystick.
-	hr = mypad->m_lpdi->CreateDevice(instance->guidInstance, &mypad->m_lpGamepad, NULL);
+	// Obtain an interface to the enumerated gamepad
+	hr = mypad->m_lpdi->CreateDevice(instance->guidInstance, &mypad->m_pDevice, NULL);
 
 	if (FAILED(hr)) { 
 		return DIENUM_CONTINUE;
@@ -42,83 +42,78 @@ BOOL CALLBACK enumAxisCallback(const DIDEVICEOBJECTINSTANCE* instance, VOID* con
 	Gamepad *mypad = (Gamepad* ) context; 
 
 	// Set the range for the axis
-	if (FAILED(mypad->m_lpGamepad->SetProperty(DIPROP_RANGE, &propRange.diph))) {
+	if (FAILED(mypad->m_pDevice->SetProperty(DIPROP_RANGE, &propRange.diph))) {
 		return DIENUM_STOP;
 	}
 
 	return DIENUM_CONTINUE;
 }
 
-int Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
+void Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 {
-	m_lpdi = directInput;
-	m_lpGamepad = NULL;
+	Device::Init(hWnd,directInput);
 
-	HRESULT hr;
+	m_lpdi = directInput;
+
 
 	// Look for the first simple joystick we can find.
-	if (FAILED(hr = m_lpdi->EnumDevices(DI8DEVCLASS_GAMECTRL, enumCallback, this, DIEDFL_ATTACHEDONLY))) {
-		return hr;
-	}
+	assert(SUCCEEDED(m_lpdi->EnumDevices(DI8DEVCLASS_GAMECTRL, enumCallback, this, DIEDFL_ATTACHEDONLY)));
 
-	// Make sure we got a joystick
-	if (m_lpGamepad == NULL) {
-		return E_FAIL;
-	}
+
+	// Make sure we got a device
+	if (m_pDevice == NULL)
+		throw runtime_error("Could find any gamepads!");
+
+
+	assert(SUCCEEDED(m_pDevice->SetDataFormat(&c_dfDIJoystick2)));
+
+	assert(SUCCEEDED(m_pDevice->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_BACKGROUND)));
 
 	DIDEVCAPS capabilities;
-
-	if (FAILED(hr = m_lpGamepad->SetDataFormat(&c_dfDIJoystick2))) {
-		return hr;
-	}
-
-	if (FAILED(hr = m_lpGamepad->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_BACKGROUND))) {
-		return hr;
-	}
-
 	capabilities.dwSize = sizeof(DIDEVCAPS);
-	if (FAILED(hr = m_lpGamepad->GetCapabilities(&capabilities))) {
-		return hr;
-	}
+	assert(SUCCEEDED(m_pDevice->GetCapabilities(&capabilities)));
 
-	if (FAILED(hr = m_lpGamepad->EnumObjects(enumAxisCallback, this, DIDFT_AXIS))) {
-		return hr;
-	}
+	assert(SUCCEEDED(m_pDevice->EnumObjects(enumAxisCallback, this, DIDFT_AXIS)));
 
-	return 0;
+	flipBuffers();
+	initialized_=true;
+
 }
 
-int Gamepad::Update(void)
+void Gamepad::Update(void)
 {
+	Device::Update();
 
-	if (NULL == m_lpGamepad) {
-		return S_OK;
+	//if we do not have a device, just do nothing
+	if (NULL == m_pDevice) {
+		return;
 	}
 
 	HRESULT hr;
-	// Poll the device to read the current state
-	hr = m_lpGamepad->Poll(); 
-	if (FAILED(hr)) {
-
-		hr = m_lpGamepad->Acquire();
-		while (hr == DIERR_INPUTLOST) {
-			hr = m_lpGamepad->Acquire();
-		}
-
-		if ((hr == DIERR_INVALIDPARAM) || (hr == DIERR_NOTINITIALIZED)) {
-			return E_FAIL;
-		}
-
-		if (hr == DIERR_OTHERAPPHASPRIO) {
-			return S_OK;
-		}
-	}
+	// Poll the device to read the current state - we do not have to error check, 
+	// because any errors will also occur in the GetDeviceState
+	m_pDevice->Poll(); 
 
 	m_oldPadState = m_padState;
+
 	// Get the input's device state
-	if (FAILED(hr = m_lpGamepad->GetDeviceState(sizeof(DIJOYSTATE2), &m_padState))) {
-		return hr;
+	hr = m_pDevice->GetDeviceState(sizeof(DIJOYSTATE2), &m_padState);
+
+	switch(hr){
+		case DI_OK:
+			break; //everything is fine
+		case DIERR_INPUTLOST:  
+		case DIERR_NOTACQUIRED:
+			m_pDevice->Acquire(); //get the device back 
+			return; //and try next time again
+		case E_PENDING: //not ready yet, maybe next frame
+			return;
+		default:
+			assert(hr != DIERR_NOTINITIALIZED);
+			assert(hr != DIERR_INVALIDPARAM);
 	}
+
+
 
 	for(unsigned int i=0; i<N_GAMEPAD_BUTTONS; i++)
 	{
@@ -137,10 +132,6 @@ int Gamepad::Update(void)
 		EVENT(GamepadStick1ChangedAbsoluteEvent(m_padState.lRx,m_padState.lRy,m_padState.lRz));
 		EVENT(GamepadStick1ChangedRelativeEvent(m_oldPadState.lRx-m_padState.lRx,m_oldPadState.lRy-m_padState.lRy,m_oldPadState.lRz-m_padState.lRz));
 	}
-
-	
-
-	return S_OK;
 }
 
 bool Gamepad::isButtonPressed(const GamepadButton &button)
@@ -170,18 +161,6 @@ Vector3 Gamepad::getStick2State(){
 	
 }
 
-
-void Gamepad::Shutdown(void)
-{
-	if (NULL != m_lpGamepad) {
-		m_lpGamepad->Unacquire();
-		m_lpGamepad = NULL;
-	}
-	if (NULL != m_lpdi) {
-		m_lpdi->Release();
-		m_lpdi = NULL;
-	}
-}
 
 bool Gamepad::hasStick1Changed() const{
 	return m_padState.lX != m_oldPadState.lX || m_padState.lY != m_oldPadState.lY || m_padState.lZ != m_oldPadState.lZ;
