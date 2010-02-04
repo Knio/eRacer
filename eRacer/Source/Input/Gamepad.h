@@ -36,12 +36,6 @@ typedef enum GamepadButton {
 };
 
 
-typedef enum GamepadAnalog {
-	STICK_LEFT,
-	STICK_RIGHT,
-	N_GAMEPAD_STICKS
-};
-
 /**
  * @brief DirectX Gamepad Wrapper Class
  */
@@ -52,6 +46,7 @@ private:
 
 	bool hasStick1Changed() const;
 	bool hasStick2Changed() const;
+	bool hasTriggerChanged() const; 
 
 	DIJOYSTATE2& currentState() { return m_States[m_BufferFlip]; }
 	DIJOYSTATE2& oldState() { return m_States[!m_BufferFlip]; }

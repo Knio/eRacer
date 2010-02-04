@@ -120,17 +120,20 @@ void Gamepad::Update(void)
 	}
 
 	if(hasStick1Changed()){
-		EVENT(GamepadStick1AbsoluteEvent(currentState().lX,currentState().lY,currentState().lZ));
+		EVENT(GamepadStick1AbsoluteEvent(currentState().lX,currentState().lY));
 		EVENT(GamepadStick1RelativeEvent(oldState().lX-currentState().lX,
-												oldState().lY-currentState().lY,
-												oldState().lZ-currentState().lZ));
+											oldState().lY-currentState().lY));
 	}
 
 	if(hasStick2Changed()){
-		EVENT(GamepadStick1AbsoluteEvent(currentState().lRx, currentState().lRy, currentState().lRz));
-		EVENT(GamepadStick1RelativeEvent(oldState().lRx-currentState().lRx,
-												oldState().lRy-currentState().lRy,
-												oldState().lRz-currentState().lRz));
+		EVENT(GamepadStick2AbsoluteEvent(currentState().lRx, currentState().lRy));
+		EVENT(GamepadStick2RelativeEvent(oldState().lRx-currentState().lRx,
+										 oldState().lRy-currentState().lRy));
+	}
+
+	if(hasTriggerChanged()){
+		EVENT(GamepadTriggerAbsoluteEvent(currentState().lZ));
+		EVENT(GamepadTriggerRelativeEvent(oldState().lZ-currentState().lZ));	
 	}
 
 	flipBuffers();
@@ -167,15 +170,18 @@ Vector3 Gamepad::getStick2State() const{
 
 bool Gamepad::hasStick1Changed() const{
 	return currentState().lX != oldState().lX 
-		|| currentState().lY != oldState().lY 
-		|| currentState().lZ != oldState().lZ;
+		|| currentState().lY != oldState().lY;
 }
 
 bool Gamepad::hasStick2Changed() const{
 	return currentState().lRx != oldState().lRx 
-		|| currentState().lRy != oldState().lRy 
-		|| currentState().lRz != oldState().lRz;
+		|| currentState().lRy != oldState().lRy;
 }
+
+bool Gamepad::hasTriggerChanged() const{
+	return currentState().lZ != oldState().lZ;
+}
+
 
 
 };
