@@ -84,6 +84,7 @@ void Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 
 	assert(SUCCEEDED(m_pDevice->EnumObjects(enumAxisCallback, this, DIDFT_AXIS)));
 
+	memset(&m_States,0,2*sizeof(DIJOYSTATE2));
 	flipBuffers();
 	initialized_=true;
 

@@ -18,7 +18,6 @@
 #define GamepadUp(state, index)		(state[index] == 0)
 
 
-
 namespace Input{
 
 typedef enum GamepadButton {
