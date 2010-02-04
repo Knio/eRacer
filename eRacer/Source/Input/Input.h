@@ -11,6 +11,10 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
+#include <vector>
+
+using namespace std;
+
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Gamepad.h"
@@ -26,10 +30,6 @@ namespace Input {
  */
 class Input{
 public:
-	Mouse mouse;
-	Keyboard keyboard;
-	Gamepad gamepad;
-
 	/**
 	 * @brief Constructor stub.
 	 */
@@ -57,6 +57,7 @@ public:
 
 private:
 	IDirectInput8* directInput_;
+	vector<Device*> devices_;
 
 };
 

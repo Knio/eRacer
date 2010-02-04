@@ -28,18 +28,45 @@ void Input::Init(HWND hWnd,HINSTANCE hInstance){
 
 	if(DIERR_OUTOFMEMORY == hr)
 		throw runtime_error("Could not create DirectInput object - out of memory!");
-	try {   mouse.Init(hWnd, directInput_);	}	catch (runtime_error) {} // hacks for #145
-	try {keyboard.Init(hWnd, directInput_);	}	catch (runtime_error) {}
-	try { gamepad.Init(hWnd, directInput_); }	catch (runtime_error) {}
+	
+	
+	try { 
+		Device* keyboard = new Keyboard();
+		keyboard->Init(hWnd, directInput_);
+		devices_.push_back(keyboard);
+		
+	}	catch (runtime_error) {}
+	try { 
+		Device* gamepad = new Gamepad();
+		gamepad->Init(hWnd, directInput_);
+		devices_.push_back(gamepad);
+	}	catch (runtime_error) {
+		if(devices_.size()<1)
+			throw runtime_error("Fatal error: Neither keyboard, nor gamepad found!");
+	}
+
+	try {
+		Device* mouse = new Mouse();
+		mouse->Init(hWnd, directInput_);
+		devices_.push_back(mouse);
+	}	
+	catch (runtime_error) {} //mouse is not necessary
+
 }
 
 void Input::Update(){
-	mouse.Update();
-	keyboard.Update();
-	//gamepad.Update(); FIXME #145
+	for(vector<Device*>::iterator i = devices_.begin();
+		i!= devices_.end(); i++)
+		(*i)->Update();
 }
 
 void Input::Shutdown(){
+	for(vector<Device*>::iterator i = devices_.begin();
+		i!= devices_.end(); i++)
+		delete (*i);
+	devices_.clear();
+
+
 }
 
 
