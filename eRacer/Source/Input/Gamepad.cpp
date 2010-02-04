@@ -94,10 +94,8 @@ void Gamepad::Update(void)
 	// because any errors will also occur in the GetDeviceState
 	m_pDevice->Poll(); 
 
-	m_oldPadState = m_padState;
-
 	// Get the input's device state
-	hr = m_pDevice->GetDeviceState(sizeof(DIJOYSTATE2), &m_padState);
+	hr = m_pDevice->GetDeviceState(sizeof(DIJOYSTATE2), &oldState());
 
 	switch(hr){
 		case DI_OK:
@@ -113,49 +111,54 @@ void Gamepad::Update(void)
 			assert(hr != DIERR_INVALIDPARAM);
 	}
 
-
-
 	for(unsigned int i=0; i<N_GAMEPAD_BUTTONS; i++)
 	{
-		if (GamepadUp(m_padState.rgbButtons, i) && GamepadDown(m_oldPadState.rgbButtons, i))
+		if (GamepadUp(currentState().rgbButtons, i) && GamepadDown(oldState().rgbButtons, i))
 			EVENT(GamepadButtonReleasedEvent(i));
-		else if (GamepadDown(m_padState.rgbButtons, i) && GamepadUp(m_oldPadState.rgbButtons, i))
+		else if (GamepadDown(currentState().rgbButtons, i) && GamepadUp(oldState().rgbButtons, i))
 			EVENT(GamepadButtonPressedEvent(i));
 	}
 
 	if(hasStick1Changed()){
-		EVENT(GamepadStick1ChangedAbsoluteEvent(m_padState.lX,m_padState.lY,m_padState.lZ));
-		EVENT(GamepadStick1ChangedRelativeEvent(m_oldPadState.lX-m_padState.lX,m_oldPadState.lY-m_padState.lY,m_oldPadState.lZ-m_padState.lZ));
+		EVENT(GamepadStick1ChangedAbsoluteEvent(currentState().lX,currentState().lY,currentState().lZ));
+		EVENT(GamepadStick1ChangedRelativeEvent(oldState().lX-currentState().lX,
+												oldState().lY-currentState().lY,
+												oldState().lZ-currentState().lZ));
 	}
 
 	if(hasStick2Changed()){
-		EVENT(GamepadStick1ChangedAbsoluteEvent(m_padState.lRx,m_padState.lRy,m_padState.lRz));
-		EVENT(GamepadStick1ChangedRelativeEvent(m_oldPadState.lRx-m_padState.lRx,m_oldPadState.lRy-m_padState.lRy,m_oldPadState.lRz-m_padState.lRz));
+		EVENT(GamepadStick1ChangedAbsoluteEvent(currentState().lRx, currentState().lRy, currentState().lRz));
+		EVENT(GamepadStick1ChangedRelativeEvent(oldState().lRx-currentState().lRx,
+												oldState().lRy-currentState().lRy,
+												oldState().lRz-currentState().lRz));
 	}
+
+	flipBuffers();
+
 }
 
-bool Gamepad::isButtonPressed(const GamepadButton &button)
+bool Gamepad::isButtonPressed(const GamepadButton &button) const
 {
-	return GamepadDown(m_padState.rgbButtons,button);
+	return GamepadDown(oldState().rgbButtons,button);
 }
 
-Vector3 Gamepad::getStick1State()
+Vector3 Gamepad::getStick1State() const
 {
 	Vector3 joyState;
 	
-	joyState.x = (float) m_padState.lX;
-	joyState.y = (float) m_padState.lY;
-	joyState.z = (float) m_padState.lZ;
+	joyState.x = (float) oldState().lX;
+	joyState.y = (float) oldState().lY;
+	joyState.z = (float) oldState().lZ;
 
 	return joyState;
 }
 
-Vector3 Gamepad::getStick2State(){
+Vector3 Gamepad::getStick2State() const{
 	Vector3 joyState;
 	
-	joyState.x = (float) m_padState.lRx;
-	joyState.y = (float) m_padState.lRy;
-	joyState.z = (float) m_padState.lRz;
+	joyState.x = (float) oldState().lRx;
+	joyState.y = (float) oldState().lRy;
+	joyState.z = (float) oldState().lRz;
 
 	return joyState;
 	
@@ -163,11 +166,15 @@ Vector3 Gamepad::getStick2State(){
 
 
 bool Gamepad::hasStick1Changed() const{
-	return m_padState.lX != m_oldPadState.lX || m_padState.lY != m_oldPadState.lY || m_padState.lZ != m_oldPadState.lZ;
+	return currentState().lX != oldState().lX 
+		|| currentState().lY != oldState().lY 
+		|| currentState().lZ != oldState().lZ;
 }
 
 bool Gamepad::hasStick2Changed() const{
-	return m_padState.lRx != m_oldPadState.lRx || m_padState.lRy != m_oldPadState.lRy || m_padState.lRz != m_oldPadState.lRz;
+	return currentState().lRx != oldState().lRx 
+		|| currentState().lRy != oldState().lRy 
+		|| currentState().lRz != oldState().lRz;
 }
 
 

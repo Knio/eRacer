@@ -48,11 +48,16 @@ typedef enum GamepadAnalog {
 class Gamepad : public Device
 {
 private:
-	DIJOYSTATE2 m_padState;
-	DIJOYSTATE2 m_oldPadState;
+	DIJOYSTATE2 m_States[2];
 
 	bool hasStick1Changed() const;
 	bool hasStick2Changed() const;
+
+	DIJOYSTATE2& currentState() { return m_States[m_BufferFlip]; }
+	DIJOYSTATE2& oldState() { return m_States[!m_BufferFlip]; }
+
+	const DIJOYSTATE2& currentState() const { return m_States[m_BufferFlip]; }
+	const DIJOYSTATE2& oldState() const { return m_States[!m_BufferFlip]; }
 
 public:
 	IDirectInput8* m_lpdi;
@@ -80,13 +85,13 @@ public:
 	 * @brief Get the state of the left analog stick
 	 * @return A Vector3 holding axis readings, between -1000 and 1000 each.
 	 */
-	Vector3 getStick1State();
+	Vector3 getStick1State() const;
 
 	/**
 	 * @brief Get the state of the left analog stick
 	 * @return A Vector3 holding axis readings, between -1000 and 1000 each.
 	 */
-	Vector3 getStick2State();
+	Vector3 getStick2State() const;
 
 	/**
 	 * @brief Get the Button state using GamepadButtons sticks
@@ -94,7 +99,7 @@ public:
 	 *			Choose a button
 	 * @return True if the button is currently pressed
 	 */
-	bool isButtonPressed(const GamepadButton &button);
+	bool isButtonPressed(const GamepadButton &button) const;
 };
 
 
