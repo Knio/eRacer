@@ -395,11 +395,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Logic\GameMapping.py"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Logic\GameState.py"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Logic\Logic.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Logic\Mapping.py"
 					>
 				</File>
 				<File

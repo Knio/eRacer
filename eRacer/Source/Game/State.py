@@ -1,17 +1,14 @@
 from Core.Globals import *
 
 class State(eRacer.State):
+  MAPPING = None
   def __init__(self):
     self.parent   = None
-    self.mapping  = None
+    self.mapping  = self.MAPPING and self.MAPPING()
     
   def Tick(self, time):
     pass
     
-  def KeyPressedEvent(self, key): 
-    if key == KEY.ESCAPE:
-      game().event.QuitEvent()
-
   def Activate(self):
     pass
     

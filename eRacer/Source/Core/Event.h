@@ -11,7 +11,7 @@ Implements the Observer pattern.
 Objects can register for certain event types and implement
 callback methods that will be called when those events happen.
 
-To define an event type, in the Event class below, add:
+To define an event type*, in the Event class below, add:
 
 DEFINE_EVENT(name, parameter list)
 
@@ -19,6 +19,8 @@ for example:
 DEFINE_EVENT(KeyPressedEvent, int key)
 
 event names must end in "Event"
+(*Events that are used purely in python do
+ not need to be defined)
 
 
 To send an event: anywhere, call

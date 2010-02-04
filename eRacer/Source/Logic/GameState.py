@@ -8,22 +8,21 @@ from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera
-from Mapping    import GameMapping
+from GameMapping    import GameMapping
 
 class GameState(State):
+  MAPPING = GameMapping
   def __init__(self):
     State.__init__(self)
+    self.load()
     
-    self.mapping = GameMapping()
-        
+  def load(self):
     # testing stuff
     game().sound.PlaySound2D("jaguar.wav")
     
     scene = eRacer.Scene()
     self.scene = scene
     game().graphics.graphics.m_scene = scene
-    
-    
     
     # TODO this should be in some 
     # map-loading code with a progress bar
@@ -55,11 +54,10 @@ class GameState(State):
       self.boxcount += max(self.boxcount+1, 20)
       game().logic.Add(Box(self.scene))
       
-    
-  def KeyPressedEvent(self, key):   
-    if key == KEY.ESCAPE:
-      game().PushState(PauseMenuState())
+  def PauseEvent(self):
+    game().PushState(PauseMenuState())
 
+  def KeyPressedEvent(self, key):   
     if key == KEY.SPACE:
       game().sound.PlaySound2D("jaguar.wav")          
     

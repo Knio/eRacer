@@ -1,7 +1,8 @@
 from Core.Globals import *
 from Game.State   import State
 
-from Camera     import CirclingCamera
+from Camera       import CirclingCamera
+from MenuMapping  import MainMenuMapping, PauseMenuMapping
 
 class MenuState(State):
   MENU = []
@@ -23,26 +24,26 @@ class MenuState(State):
         name, "Verdana", 32, Point3(100,y,0), i==self.selected and RED or WHITE
       ) 
       y += 50
-    
-  def KeyPressedEvent(self, key):
-    if key == KEY.UP:
-      self.selected = (self.selected-1) % len(self.MENU)
-    if key == KEY.DOWN:
-      self.selected = (self.selected+1) % len(self.MENU)
-    if key == KEY.RETURN:
-      name = self.MENU[self.selected][0]
-      getattr(self, 'Menu_%s' % name.replace(' ','_'))()
+      
+  def MenuUpEvent(self):
+    self.selected = (self.selected-1) % len(self.MENU)
+  
+  def MenuDownEvent(self):
+    self.selected = (self.selected+1) % len(self.MENU)
+
+  def MenuSelectEvent(self):
+    name = self.MENU[self.selected][0]
+    getattr(self, 'Menu_%s' % name.replace(' ','_'))()
     
   def Menu_Exit(self):
     game().event.QuitEvent()
   
     
 class MainMenuState(MenuState):
+  MAPPING = MainMenuMapping
   MENU = [
-  
     ('New Game',),
     ('Exit',)
-  
   ]
   
   def __init__(self):
@@ -50,13 +51,7 @@ class MainMenuState(MenuState):
     
   def Menu_New_Game(self):
     game().PushState(GameState())
-    
-  def KeyPressedEvent(self, key):
-    if key == KEY.ESCAPE:
-      game().event.QuitEvent()
-    
-    MenuState.KeyPressedEvent(self, key)
-    
+        
   def Tick(self, time):
     game().graphics.graphics.WriteString(
       "eRacerX", 
@@ -66,13 +61,11 @@ class MainMenuState(MenuState):
     
 
 class PauseMenuState(MenuState):
+  MAPPING = PauseMenuMapping
   MENU = [
-  
     ('Continue',),
-    ('Exit',)
-    
+    ('Exit',) 
   ]
-  
   
   def __init__(self):
     MenuState.__init__(self)
@@ -83,11 +76,8 @@ class PauseMenuState(MenuState):
   def Deactivate(self):
     game().simspeed = 1.
     
-  def KeyPressedEvent(self, key):
-    if key == KEY.ESCAPE:
-      game().PopState()
-    else:
-      MenuState.KeyPressedEvent(self, key)
+  def UnPauseEvent(self):
+    game().PopState()
     
   def Menu_Continue(self):
     game().PopState()
