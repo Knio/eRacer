@@ -45,6 +45,7 @@ class Vehicle(Entity):
     
     self.graphics = scene.CreateMovingGeometry("vehicle")
     self.graphics.visible = False
+    self.physics.SetCentreOfMass(Point3(0, -1, 0))
 
     def load(r):
       if not r:

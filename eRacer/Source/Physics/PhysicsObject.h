@@ -48,6 +48,8 @@ public:
 	*/
 	float GetMass();
 
+	void SetCentreOfMass(const Point3& centre); 
+
 	/**
 	* @brief Returns the position of the physics object
 	* @return The position of the physics object
