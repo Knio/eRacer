@@ -61,11 +61,12 @@ public:
 	 */
 	virtual void Shutdown();
 
+	IDirectInputDevice8* m_pDevice;
+
 protected:
 	bool initialized_;
 	bool m_BufferFlip;
 
-	IDirectInputDevice8* m_pDevice;
 
 
 	void flipBuffers(){ m_BufferFlip = !m_BufferFlip; }

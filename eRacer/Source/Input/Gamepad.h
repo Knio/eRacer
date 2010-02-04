@@ -12,6 +12,7 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include "..\Core\Math.h"
+#include "Device.h"
 
 #define GamepadDown(state, index)	(state[index] > 0)
 #define GamepadUp(state, index)		(state[index] == 0)
@@ -35,73 +36,65 @@ typedef enum GamepadButton {
 };
 
 
-typedef enum GamepadAnalog {
-	STICK_LEFT,
-	STICK_RIGHT,
-	N_GAMEPAD_STICKS
-};
-
 /**
  * @brief DirectX Gamepad Wrapper Class
  */
-class Gamepad
+class Gamepad : public Device
 {
 private:
-	DIJOYSTATE2 m_padState;
-	DIJOYSTATE2 m_oldPadState;
+	DIJOYSTATE2 m_States[2];
 
 	bool hasStick1Changed() const;
 	bool hasStick2Changed() const;
+	bool hasTriggerChanged() const; 
+
+	DIJOYSTATE2& currentState() { return m_States[m_BufferFlip]; }
+	DIJOYSTATE2& oldState() { return m_States[!m_BufferFlip]; }
+
+	const DIJOYSTATE2& currentState() const { return m_States[m_BufferFlip]; }
+	const DIJOYSTATE2& oldState() const { return m_States[!m_BufferFlip]; }
 
 public:
-	LPDIRECTINPUTDEVICE8 m_lpGamepad;
 	IDirectInput8* m_lpdi;
 
-	Gamepad() { }
-	~Gamepad() { Shutdown(); }
+	Gamepad();
+	virtual ~Gamepad();
 
-/**
- * @brief Initialization
- * @param hwnd
- *			Handle to the window to listen to
- * @param directInput
- * 			a pointer to the DirectInput object
- * @return An error code. When debugging you can check it to see what went wrong.
- */
-	int Init(	HWND hWnd, IDirectInput8* directInput);
+	/**
+	 * @brief Initialization
+	 * @param hwnd
+	 *			Handle to the window to listen to
+	 * @param directInput
+	 * 			a pointer to the DirectInput object
+	 */
+	void Init(	HWND hWnd, IDirectInput8* directInput);
 
-/**
- * @brief Call Update every frame to poll the device
- * @return Ignore the return value
- */
-	int Update();
-
-/**
- * @brief Call Shutdown when done to destroy the device
- */
-	void Shutdown();
+	/**
+	 * @brief Call Update every frame to poll the device
+	 */
+	void Update();
 
 
-/**
- * @brief Get the state of the left analog stick
- * @return A Vector3 holding axis readings, between -1000 and 1000 each.
- */
-	Vector3 getStick1State();
 
-/**
- * @brief Get the state of the left analog stick
- * @return A Vector3 holding axis readings, between -1000 and 1000 each.
- */
-	Vector3 getStick2State();
+	/**
+	 * @brief Get the state of the left analog stick
+	 * @return A Vector3 holding axis readings, between -1000 and 1000 each.
+	 */
+	Vector3 getStick1State() const;
 
+	/**
+	 * @brief Get the state of the left analog stick
+	 * @return A Vector3 holding axis readings, between -1000 and 1000 each.
+	 */
+	Vector3 getStick2State() const;
 
-/**
- * @brief Get the Button state using GamepadButtons sticks
- * @param button
- *			Choose a button
- * @return True if the button is currently pressed
- */
-	bool isButtonPressed(const GamepadButton &button);
+	/**
+	 * @brief Get the Button state using GamepadButtons sticks
+	 * @param button
+	 *			Choose a button
+	 * @return True if the button is currently pressed
+	 */
+	bool isButtonPressed(const GamepadButton &button) const;
 };
 
 

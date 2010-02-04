@@ -33,7 +33,7 @@ public:
 class FontManager
 {
 public:
-	static const float FONT_SIZE;
+	static const unsigned int FONT_SIZE;
 	std::map<const char *, ID3DXFont*> m_fontCacheSimple;
 	std::vector<StringRenderable> m_strList;	//List of strings to render
 

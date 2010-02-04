@@ -3,7 +3,7 @@
 
 
 namespace Graphics {
-	const float FontManager::FONT_SIZE = 128.0;
+	const unsigned int FontManager::FONT_SIZE = 128;
 
 	StringRenderable::StringRenderable()
 	{
