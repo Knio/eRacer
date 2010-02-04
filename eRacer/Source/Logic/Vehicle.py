@@ -63,22 +63,16 @@ class Vehicle(Entity):
     self.sliding = [False] * len(self.WHEELS)
     self.crashtime = 0
     
-    game().event.Register(self.KeyPressedEvent)
-    game().event.Register(self.KeyReleasedEvent)
+    game().event.Register(self.PlayerAccelerateEvent)
+    game().event.Register(self.PlayerTurnEvent)
 
-  def KeyPressedEvent(self,key):
-    if key == KEY.W:  self.newAcceleration += 1.0
-    if key == KEY.S:  self.newAcceleration -= 1.0
-    if key == KEY.A:  self.newTurn -= 1.0
-    if key == KEY.D:  self.newTurn += 1.0            
-    
-  def KeyReleasedEvent(self,key):
-    if key == KEY.W:  self.newAcceleration -= 1.0
-    if key == KEY.S:  self.newAcceleration += 1.0
-    if key == KEY.A:  self.newTurn += 1.0
-    if key == KEY.D:  self.newTurn -= 1.0            
+  def PlayerAccelerateEvent(self, accel):
+    self.newAcceleration += accel
+    print self.newAcceleration
 
-    
+  def PlayerTurnEvent(self, turn):
+    self.newTurn += turn  
+    print self.newTurn
   
   def Tick(self, time):
 	
@@ -122,8 +116,8 @@ class Vehicle(Entity):
       #normal = Vector3(0,1,0)
       
       # cast a ray to the road, get distance
-     # dist = pos.y / -dot(axis, normal)
-      print dist  
+      # dist = pos.y / -dot(axis, normal)
+      # print dist
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
         # whee is in the air - no it will not have any forces

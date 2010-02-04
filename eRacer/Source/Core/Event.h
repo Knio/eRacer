@@ -103,10 +103,10 @@ public:
 
 	DEFINE_EVENT(GamepadButtonPressedEvent,  int gamepadButton)
 	DEFINE_EVENT(GamepadButtonReleasedEvent, int gamepadButton)
-	DEFINE_EVENT(GamepadStick1ChangedAbsoluteEvent, long x, long y, long z);
-	DEFINE_EVENT(GamepadStick2ChangedAbsoluteEvent, long x, long y, long z)
-	DEFINE_EVENT(GamepadStick1ChangedRelativeEvent, long x, long y, long z);
-	DEFINE_EVENT(GamepadStick2ChangedRelativeEvent, long x, long y, long z)
+	DEFINE_EVENT(GamepadStick1AbsoluteEvent, long x, long y, long z);
+	DEFINE_EVENT(GamepadStick2AbsoluteEvent, long x, long y, long z)
+	DEFINE_EVENT(GamepadStick1RelativeEvent, long x, long y, long z);
+	DEFINE_EVENT(GamepadStick2RelativeEvent, long x, long y, long z)
 
 
 

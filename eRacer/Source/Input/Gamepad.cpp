@@ -120,15 +120,15 @@ void Gamepad::Update(void)
 	}
 
 	if(hasStick1Changed()){
-		EVENT(GamepadStick1ChangedAbsoluteEvent(currentState().lX,currentState().lY,currentState().lZ));
-		EVENT(GamepadStick1ChangedRelativeEvent(oldState().lX-currentState().lX,
+		EVENT(GamepadStick1AbsoluteEvent(currentState().lX,currentState().lY,currentState().lZ));
+		EVENT(GamepadStick1RelativeEvent(oldState().lX-currentState().lX,
 												oldState().lY-currentState().lY,
 												oldState().lZ-currentState().lZ));
 	}
 
 	if(hasStick2Changed()){
-		EVENT(GamepadStick1ChangedAbsoluteEvent(currentState().lRx, currentState().lRy, currentState().lRz));
-		EVENT(GamepadStick1ChangedRelativeEvent(oldState().lRx-currentState().lRx,
+		EVENT(GamepadStick1AbsoluteEvent(currentState().lRx, currentState().lRy, currentState().lRz));
+		EVENT(GamepadStick1RelativeEvent(oldState().lRx-currentState().lRx,
 												oldState().lRy-currentState().lRy,
 												oldState().lRz-currentState().lRz));
 	}

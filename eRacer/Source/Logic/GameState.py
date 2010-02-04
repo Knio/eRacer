@@ -8,10 +8,13 @@ from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera
+from Mapping    import GameMapping
 
 class GameState(State):
   def __init__(self):
     State.__init__(self)
+    
+    self.mapping = GameMapping()
         
     # testing stuff
     game().sound.PlaySound2D("jaguar.wav")
@@ -53,12 +56,7 @@ class GameState(State):
       game().logic.Add(Box(self.scene))
       
     
-  def KeyPressedEvent(self, key):
-    if key == KEY.W:  game().event.PlayerAccelerateEvent(+1);
-    if key == KEY.S:  game().event.PlayerAccelerateEvent(-1);
-    if key == KEY.A:  game().event.PlayerTurnEvent(-1);
-    if key == KEY.D:  game().event.PlayerTurnEvent(+1);
-    
+  def KeyPressedEvent(self, key):   
     if key == KEY.ESCAPE:
       game().PushState(PauseMenuState())
 
@@ -70,18 +68,5 @@ class GameState(State):
       game().event.ReloadConstsEvent()        
       
   def GamepadButtonPressedEvent(self, button):
-    
-    #if key == KEY.W:  game().event.PlayerAccelerateEvent(+1);
-    #if key == KEY.S:  game().event.PlayerAccelerateEvent(-1);
-    #if key == KEY.A:  game().event.PlayerTurnEvent(-1);
-    #if key == KEY.D:  game().event.PlayerTurnEvent(+1);
     if button == eRacer.BUTTON_START:
       game().PushState(PauseMenuState())
-
-    # if key == KEY.SPACE:
-    #  game().sound.PlaySound2D("jaguar.wav")          
-    
-    # if key == KEY.R:
-    #  game().config.read()
-    #  game().event.ReloadConstsEvent()        
-
