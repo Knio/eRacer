@@ -129,13 +129,13 @@ int Gamepad::Update(void)
 	}
 
 	if(hasStick1Changed()){
-		EVENT(GamepadStick1ChangedAbsoluteEvent(m_padState.lX,m_padState.lY,m_padState.lZ));
-		EVENT(GamepadStick1ChangedRelativeEvent(m_oldPadState.lX-m_padState.lX,m_oldPadState.lY-m_padState.lY,m_oldPadState.lZ-m_padState.lZ));
+		EVENT(GamepadStick1AbsoluteEvent(m_padState.lX,m_padState.lY,m_padState.lZ));
+		EVENT(GamepadStick1RelativeEvent(m_oldPadState.lX-m_padState.lX,m_oldPadState.lY-m_padState.lY,m_oldPadState.lZ-m_padState.lZ));
 	}
 
 	if(hasStick2Changed()){
-		EVENT(GamepadStick1ChangedAbsoluteEvent(m_padState.lRx,m_padState.lRy,m_padState.lRz));
-		EVENT(GamepadStick1ChangedRelativeEvent(m_oldPadState.lRx-m_padState.lRx,m_oldPadState.lRy-m_padState.lRy,m_oldPadState.lRz-m_padState.lRz));
+		EVENT(GamepadStick1AbsoluteEvent(m_padState.lRx,m_padState.lRy,m_padState.lRz));
+		EVENT(GamepadStick1RelativeEvent(m_oldPadState.lRx-m_padState.lRx,m_oldPadState.lRy-m_padState.lRy,m_oldPadState.lRz-m_padState.lRz));
 	}
 
 	

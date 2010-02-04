@@ -7,7 +7,7 @@ class event(object):
     def f(*args):
       return getattr(game().event, attr), args
     return f
-
+E = event()
 
 class Mapping(object):
   def __init__(self):
@@ -29,7 +29,7 @@ class Mapping(object):
         eventlist = mapping(*args)
 
       for event,args in eventlist:
-       getattr(game().event, event)(*args, **kwargs)
+        event(*args)
     
     return f
       
