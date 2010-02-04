@@ -11,6 +11,16 @@
 
 namespace Input{
 
+Gamepad::Gamepad() 
+: Device()
+{
+
+}
+
+Gamepad::~Gamepad() { 
+	Shutdown(); 
+}
+
 
 BOOL CALLBACK enumCallback(const DIDEVICEINSTANCE* instance, VOID* context)
 {
@@ -55,12 +65,11 @@ void Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 
 	m_lpdi = directInput;
 
-
 	// Look for the first simple joystick we can find.
 	assert(SUCCEEDED(m_lpdi->EnumDevices(DI8DEVCLASS_GAMECTRL, enumCallback, this, DIEDFL_ATTACHEDONLY)));
 
-
 	// Make sure we got a device
+	//TODO for some reason, this always finds a gamepad - even if there is none.
 	if (m_pDevice == NULL)
 		throw runtime_error("Could find any gamepads!");
 

@@ -57,8 +57,8 @@ private:
 public:
 	IDirectInput8* m_lpdi;
 
-	Gamepad() { }
-	~Gamepad() { Shutdown(); }
+	Gamepad();
+	virtual ~Gamepad();
 
 	/**
 	 * @brief Initialization
