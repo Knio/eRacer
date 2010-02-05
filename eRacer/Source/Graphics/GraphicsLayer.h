@@ -62,7 +62,9 @@ public:
 		return m_pGlobalGLayer;
 	}
 
-	Starfield *stars;
+	Starfield *stars1;
+	Starfield *stars2;
+	
 };
 
 inline GraphicsLayer *GraphicsModule()

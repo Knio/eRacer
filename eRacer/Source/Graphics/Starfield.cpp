@@ -1,9 +1,6 @@
 #include "Starfield.h"
 
-const float Starfield::SIZE = 1000.0;
-
-
-Starfield::Starfield(LPDIRECT3DDEVICE9 d, int N) : N(N), vb(NULL), stars(NULL), dev(d)
+Starfield::Starfield(LPDIRECT3DDEVICE9 d, int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL), dev(d)
 {   
   assert(SUCCEEDED(dev->CreateVertexBuffer(
     2 * N * sizeof(Star),   
@@ -83,7 +80,7 @@ void Starfield::Update(const Matrix &c1, const Matrix &c2, const Point3& pos)
   }
   
   vb->Unlock();
-};
+}
 void Starfield::Draw(const Matrix &newcamera, const Point3 &pos)
 {
   Update(camera, newcamera, pos);
@@ -92,5 +89,4 @@ void Starfield::Draw(const Matrix &newcamera, const Point3 &pos)
   dev->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
   dev->DrawPrimitive(D3DPT_LINELIST, 0, N);
 }
-
 

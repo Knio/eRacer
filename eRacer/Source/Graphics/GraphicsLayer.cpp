@@ -73,7 +73,9 @@ int GraphicsLayer::Init( HWND hWnd )
 	// AA
 	assert(SUCCEEDED(m_pd3dDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE)));
 	
-	stars = new Starfield(m_pd3dDevice);
+  stars1 = new Starfield(m_pd3dDevice,  512, 1000.0);
+  stars2 = new Starfield(m_pd3dDevice, 1024,   20.0);
+  
 
 	return S_OK;
 }
@@ -98,11 +100,13 @@ void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
 		geometry!=visibleGeometry.end(); geometry++){
 			RenderGeometry(*geometry);
 	}
-	//RenderSkyBox(camera, scene.GetSkyBox());
+	RenderSkyBox(camera, scene.GetSkyBox());
     
   
 	m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
-	stars->Draw(camera.GetViewMatrix(), camera.GetPosition());
+  
+	stars1->Draw(camera.GetViewMatrix(), camera.GetPosition());
+  stars2->Draw(camera.GetViewMatrix(), camera.GetPosition());
   
   m_fontManager.Draw();
   // End the scene

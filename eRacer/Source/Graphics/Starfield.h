@@ -12,16 +12,17 @@ struct Star {
 class Starfield
 {
 public:
-	static const float SIZE;
+	float SIZE;
 	int N;
 	Matrix camera;
 	Star* stars;
 	LPDIRECT3DVERTEXBUFFER9 vb;
 	LPDIRECT3DDEVICE9 dev;
-	Starfield(LPDIRECT3DDEVICE9 d, int N=4096);
+	Starfield(LPDIRECT3DDEVICE9 d, int n, float s);
 	void Update(const Matrix &c1, const Matrix &c2, const Point3 &pos);
 	void Draw(const Matrix &newcamera, const Point3 &pos);
 
 
 };
+
 #endif
