@@ -1,6 +1,6 @@
 #include "Starfield.h"
 
-const float Starfield::SIZE = 100.0;
+const float Starfield::SIZE = 1000.0;
 
 
 Starfield::Starfield(LPDIRECT3DDEVICE9 d, int N) : N(N), vb(NULL), stars(NULL), dev(d)
@@ -16,15 +16,15 @@ Starfield::Starfield(LPDIRECT3DDEVICE9 d, int N) : N(N), vb(NULL), stars(NULL), 
   stars = new Star[N];
   for (int i=0;i<N;i++)
   {
-    stars[i].pos.x = (float)(rand()/RAND_MAX-0.5)*SIZE;
-    stars[i].pos.y = (float)(rand()/RAND_MAX-0.5)*SIZE;
-    stars[i].pos.z = (float)(rand()/RAND_MAX-0.5)*SIZE;
+    stars[i].pos.x = ((float)(rand())/RAND_MAX-0.5)*2*SIZE;
+    stars[i].pos.y = ((float)(rand())/RAND_MAX-0.5)*2*SIZE;
+    stars[i].pos.z = ((float)(rand())/RAND_MAX-0.5)*2*SIZE;
     stars[i].color = 0x00FFFFFF;
   }
   camera = IDENTITY;
   
 }
-void Starfield::Update(const Matrix &c1, const Matrix &c2, const Point3 pos)
+void Starfield::Update(const Matrix &c1, const Matrix &c2, const Point3& pos)
 {
   Matrix i1;
   Matrix i2;
@@ -50,12 +50,9 @@ void Starfield::Update(const Matrix &c1, const Matrix &c2, const Point3 pos)
   W1 = C1 * p0
   W2 = C2 * p0
   
-  W1 = 1 * (C2 * p0)
-  W1 = C1 * C1^-1 * (C2 * p0)
-  
-  
-  
-  
+  W1 = 1 * (C1 * p0)
+  W1 = C2 * C2^-1 * (C1 * p0)
+
   */
   
   
@@ -63,22 +60,24 @@ void Starfield::Update(const Matrix &c1, const Matrix &c2, const Point3 pos)
   Star t;
   for (int i=0; i<N; i++)
   {
-    t.pos = stars[i].pos;
-    while (t.pos.x > SIZE) t.pos.x -= SIZE;        
-    while (t.pos.x <-SIZE) t.pos.x += SIZE;       
-    while (t.pos.y > SIZE) t.pos.y -= SIZE;
-    while (t.pos.y <-SIZE) t.pos.y += SIZE;
-    while (t.pos.z > SIZE) t.pos.z -= SIZE;
-    while (t.pos.z <-SIZE) t.pos.z += SIZE;
-    starbuff[2*i+0] = stars[i];
+    t = stars[i];
+    //printf("%5.1f %5.1f %5.1f \n", t.pos.x, t.pos.y, t.pos.z);
+    while (t.pos.x-pos.x > SIZE) t.pos.x -= 2*SIZE;
+    while (t.pos.x-pos.x <-SIZE) t.pos.x += 2*SIZE;
+    while (t.pos.y-pos.y > SIZE) t.pos.y -= 2*SIZE;
+    while (t.pos.y-pos.y <-SIZE) t.pos.y += 2*SIZE;
+    while (t.pos.z-pos.z > SIZE) t.pos.z -= 2*SIZE;
+    while (t.pos.z-pos.z <-SIZE) t.pos.z += 2*SIZE;
 
-    t.pos = mul1(i2, stars[i].pos); 
-    while (t.pos.x > SIZE) t.pos.x -= SIZE;
-    while (t.pos.x <-SIZE) t.pos.x += SIZE;
-    while (t.pos.y > SIZE) t.pos.y -= SIZE;
-    while (t.pos.y <-SIZE) t.pos.y += SIZE;
-    while (t.pos.z > SIZE) t.pos.z -= SIZE;
-    while (t.pos.z <-SIZE) t.pos.z += SIZE;
+    starbuff[2*i+0] = t;
+    
+    t.pos = mul1(c1, t.pos);
+    t.pos = mul1(i2, t.pos);
+    
+    // t.pos.x += ((float)rand())/RAND_MAX;
+    // t.pos.y += ((float)rand())/RAND_MAX;
+    // t.pos.z += ((float)rand())/RAND_MAX;
+
     starbuff[2*i+1] = t;
 
   }

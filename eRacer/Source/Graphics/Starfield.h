@@ -18,8 +18,8 @@ public:
 	Star* stars;
 	LPDIRECT3DVERTEXBUFFER9 vb;
 	LPDIRECT3DDEVICE9 dev;
-	Starfield(LPDIRECT3DDEVICE9 d, int N=2048);
-	void Update(const Matrix &c1, const Matrix &c2);
+	Starfield(LPDIRECT3DDEVICE9 d, int N=4096);
+	void Update(const Matrix &c1, const Matrix &c2, const Point3 &pos);
 	void Draw(const Matrix &newcamera, const Point3 &pos);
 
 

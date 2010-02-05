@@ -102,7 +102,7 @@ void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
     
   
 	m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
-	stars->Draw(camera.GetPosition, camera.GetViewMatrix());
+	stars->Draw(camera.GetViewMatrix(), camera.GetPosition());
   
   m_fontManager.Draw();
   // End the scene
