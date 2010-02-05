@@ -71,9 +71,9 @@ void Starfield::Update(const Matrix &c1, const Matrix &c2, const Point3& pos)
     t.pos = mul1(c1, t.pos);
     t.pos = mul1(i2, t.pos);
     
-    // t.pos.x += ((float)rand())/RAND_MAX;
-    // t.pos.y += ((float)rand())/RAND_MAX;
-    // t.pos.z += ((float)rand())/RAND_MAX;
+    t.pos.x += ((float)rand())/RAND_MAX * SIZE / 5000.0;
+    t.pos.y += ((float)rand())/RAND_MAX * SIZE / 5000.0;
+    t.pos.z += ((float)rand())/RAND_MAX * SIZE / 5000.0;
 
     starbuff[2*i+1] = t;
 
