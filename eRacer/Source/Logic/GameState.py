@@ -7,7 +7,7 @@ from Plane      import Plane
 from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
-from Camera     import ChasingCamera
+from Camera     import ChasingCamera, FirstPersonCamera
 from GameMapping    import GameMapping
 
 class GameState(State):
@@ -30,7 +30,8 @@ class GameState(State):
     
     
     self.player = Vehicle(self.scene)
-    self.camera = ChasingCamera(self.player)
+    # self.camera = ChasingCamera(self.player)
+    self.camera = FirstPersonCamera()
     
     game().logic.Add(self.player)
     game().logic.Add(self.camera)

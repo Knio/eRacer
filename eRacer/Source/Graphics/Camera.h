@@ -167,6 +167,13 @@ public:
 	 * @return the specified plane
 	 */
 	const Plane& GetPlane(int planeIndex) const;
+
+	//hack
+	Point3 position_;
+	Point3 lookAt_;
+	Vector3 approxUp_;
+	Vector3 up_;
+
 private:
 	void UpdateView();
 	void UpdateProjection();
@@ -176,10 +183,6 @@ private:
 	Matrix viewMatrix_;
 	Matrix projectionMatrix_;
 
-	Point3 position_;
-	Point3 lookAt_;
-	Vector3 approxUp_;
-	Vector3 up_;
 
 	float near_;
 	float far_;
