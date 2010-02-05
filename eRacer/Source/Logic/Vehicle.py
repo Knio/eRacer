@@ -118,10 +118,11 @@ class Vehicle(Entity):
       
       # cast a ray to the road, get distance
       # dist = pos.y / -dot(axis, normal)
-      # print dist
+      print dist
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
         # whee is in the air - no it will not have any forces
+        game().event.PauseEvent()
         ddd.append(-1)
         continue
       if disp > 3*self.DISPLACEMENT:
@@ -186,8 +187,8 @@ class Vehicle(Entity):
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
-    #print ''.join('%6.2f' % i for i in ddd),
-    #print self.acceleration, self.turning
+    print ''.join('%6.2f' % i for i in ddd),
+    print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx
