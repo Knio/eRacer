@@ -121,8 +121,7 @@ class Vehicle(Entity):
       print dist
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
-        # whee is in the air - no it will not have any forces
-        game().event.PauseEvent()
+        # whee is in the air - no it will not have any forcesww
         ddd.append(-1)
         continue
       if disp > 3*self.DISPLACEMENT:
