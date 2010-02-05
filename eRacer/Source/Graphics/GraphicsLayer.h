@@ -17,6 +17,7 @@
 #include "StaticGeometry.h"
 #include "Scene.h"
 #include "FontManager.h"
+#include "Starfield.h"
 
 namespace Graphics {
 
@@ -60,6 +61,8 @@ public:
 
 		return m_pGlobalGLayer;
 	}
+
+	Starfield *stars;
 };
 
 inline GraphicsLayer *GraphicsModule()

@@ -45,6 +45,7 @@ int GraphicsLayer::Init( HWND hWnd )
     d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
     d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 	
+	
     // Create the D3DDevice
     if( FAILED( m_pD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
                                       D3DCREATE_HARDWARE_VERTEXPROCESSING,
@@ -68,8 +69,12 @@ int GraphicsLayer::Init( HWND hWnd )
 
 	assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_LINEAR)));
 	assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR)));
-
 	
+	// AA
+	assert(SUCCEEDED(m_pd3dDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE)));
+	
+	stars = new Starfield(m_pd3dDevice);
+
 	return S_OK;
 }
 
@@ -93,13 +98,18 @@ void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
 		geometry!=visibleGeometry.end(); geometry++){
 			RenderGeometry(*geometry);
 	}
-	RenderSkyBox(camera, scene.GetSkyBox());
+	//RenderSkyBox(camera, scene.GetSkyBox());
+    
+  
+	m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
+	stars->Draw(camera.GetPosition, camera.GetViewMatrix());
+  
+  m_fontManager.Draw();
+  // End the scene
+  m_pd3dDevice->EndScene();
+  
 
-	m_fontManager.Draw();
-    // End the scene
-    m_pd3dDevice->EndScene();
-
-    // Present the backbuffer contents to the display
+	// Present the backbuffer contents to the display
     m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
 }
 
