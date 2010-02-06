@@ -6,6 +6,7 @@
 
 // Core
 #include <d3dx9math.h>
+#include "..\Core\Math.h"
 #include "..\Core\Event.h"
 #include "..\Core\Time.h"
 #include "..\Core\Consts.h"

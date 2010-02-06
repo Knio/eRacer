@@ -94,19 +94,25 @@ class FirstPersonCamera(Camera):
     Camera.Tick(self, time)
     delta = float(time.wall_delta) / time.RESOLUTION
     
-    acc = self.acceleration
+    acc = Vector3(self.acceleration)
     acc.x*=delta
     acc.z*=delta
     
-    worldAcceleration = eRacer.transformedAffine(self.transform,acc)
+    # eRacer.transformAffine(self.transform,acc)
+    
+    print acc.x,",",acc.y,",",acc.z
+    print acc.x,",",acc.y,",",acc.z
+    self.translate(acc)
     
     # self.transform._41 += worldAcceleration.x;
     # self.transform._43 += worldAcceleration.z;
     
     
-    # print worldAcceleration.x,",",worldAcceleration.y,",",worldAcceleration.z
-    
-    self.camera.SetFrame(self.camera.position_+worldAcceleration, self.camera.lookAt_+worldAcceleration, self.camera.approxUp_);
+    #self.camera.SetFrame(self.camera.position_+worldAcceleration, self.camera.lookAt_+worldAcceleration, self.camera.approxUp_);
     #self.camera.SetPosition(self.position+worldAcceleration)
     
-    # self.camera.SetLookAt(targetPosition)    
+    # self.camera.SetLookAt(targetPosition)
+    
+  def transform_changed(self):
+    # eRacer.debug(self.transform)
+    self.camera.SetViewMatrix(self.transform)  

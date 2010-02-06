@@ -70,4 +70,24 @@ const Plane& Camera::GetPlane(int planeIndex) const {
 	assert(planeIndex < 6);
 	return planes_[planeIndex];
 }
-};
+
+void Camera::SetViewMatrix(const Matrix& viewMatrix){
+	//float ignore;
+	//Matrix rotation;
+
+	//Decompose(viewMatrix, position_, rotation, ignore, ignore, ignore);
+
+	viewMatrix_ = viewMatrix;
+	
+	position_ = ORIGIN;
+	lookAt_ = Z;
+	up_ = Y;
+
+	transformAffine(viewMatrix,position_);
+	transformAffine(viewMatrix,lookAt_);
+	transformAffine(viewMatrix,up_);
+	approxUp_ = up_;
+
+}
+
+}

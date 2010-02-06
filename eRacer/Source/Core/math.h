@@ -21,7 +21,9 @@ typedef D3DXVECTOR3 Vector3;
 typedef D3DXVECTOR4 Vector4;
 typedef D3DXVECTOR3 Point3;
 typedef D3DXVECTOR4 Point4;
-typedef D3DXMATRIX  Matrix;
+
+typedef D3DXMATRIX Matrix;
+
 #undef RGB
 typedef D3DXVECTOR3 RGB;
 typedef D3DXVECTOR4 RGBA;
@@ -211,5 +213,10 @@ void ExtractAngleAxis(const Matrix& matrix, float& angle, Vector3& axis);
  */
 void Decompose(const Matrix& matrix, Point3& position, Matrix& rotation, float& scaleX, float& scaleY, float& scaleZ);
 
+
+Matrix& SetTranslation(Matrix& matrix, const Vector3& translation);
+Matrix& Translate(Matrix& matrix, const Vector3& translation);
+Matrix Translated(const Matrix& matrix, const Vector3& translation);
+Vector3 GetTranslation(const Matrix& matrix);
 
 #endif

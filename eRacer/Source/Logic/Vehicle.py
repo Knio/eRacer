@@ -69,11 +69,9 @@ class Vehicle(Entity):
 
   def PlayerAccelerateEvent(self, accel):
     self.newAcceleration += accel
-    print self.newAcceleration
 
   def PlayerTurnEvent(self, turn):
     self.newTurn += turn  
-    print self.newTurn
   
   def Tick(self, time):
 	
@@ -118,7 +116,6 @@ class Vehicle(Entity):
       
       # cast a ray to the road, get distance
       # dist = pos.y / -dot(axis, normal)
-      print dist
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
         # whee is in the air - no it will not have any forcesww
@@ -186,8 +183,6 @@ class Vehicle(Entity):
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
-    print ''.join('%6.2f' % i for i in ddd),
-    print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx

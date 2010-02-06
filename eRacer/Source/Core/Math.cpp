@@ -18,6 +18,7 @@ _41 = %6.2f, _42 = %6.2f _43 = %6.2f _44 = %6.2f\n\
 		
 }
 
+
 float abs(const Vector3 &A)
 {
 	return sqrt(A.x*A.x + A.y*A.y + A.z*A.z);
@@ -194,4 +195,28 @@ void Decompose(const Matrix& matrix, Point3& position, Matrix& rotation, float& 
 	D3DXQuaternionToAxisAngle(&quat,&scaleOrAxis, &angle);
 	D3DXMatrixRotationAxis(&rotation, &scaleOrAxis,angle);
 }
+
+Matrix& SetTranslation(Matrix& matrix, const Vector3& translation){
+	matrix._41 = translation.x;
+	matrix._42 = translation.y;
+	matrix._43 = translation.z;
+	return matrix;
+}
+
+Matrix& Translate(Matrix& matrix, const Vector3& translation){
+	matrix._41 += translation.x;
+	matrix._42 += translation.y;
+	matrix._43 += translation.z;
+	return matrix;
+}
+
+Matrix Translated(const Matrix& matrix, const Vector3& translation){
+	Matrix result(matrix);
+	return Translate(result,translation);
+}
+
+Vector3 GetTranslation(const Matrix& matrix){
+	return Vector3(matrix._41, matrix._42, matrix._43);
+}
+
 

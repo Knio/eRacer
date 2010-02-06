@@ -21,8 +21,5 @@ class Box(Entity):
     Entity.Tick(self, time)
     self.transform = self.physics.GetTransform()
     
-  def set_transform(self, transform):
-    Entity.set_transform(self, transform)
+  def transform_changed(self):
     self.graphics.SetTransform(self.transform)  
-
-  transform = property(Entity.get_transform, set_transform)    

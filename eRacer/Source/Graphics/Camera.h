@@ -174,6 +174,8 @@ public:
 	Vector3 approxUp_;
 	Vector3 up_;
 
+	void SetViewMatrix(const Matrix& viewMatrix);
+
 private:
 	void UpdateView();
 	void UpdateProjection();
