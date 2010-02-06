@@ -89,7 +89,7 @@ class FirstPersonCamera(Camera):
     if key == KEY.RIGHT: self.acceleration.x -= self.keyboardSpeed
   
   def MouseMovedEvent(self, relX, relY):
-    pass
+    self.rotate(relX/-300.,relY/-300.,0)
     
   def Tick(self, time):
     Camera.Tick(self, time)
@@ -98,11 +98,10 @@ class FirstPersonCamera(Camera):
     acc = Vector3(self.acceleration)
     acc.x*=delta
     acc.z*=delta
-    
     self.translate(acc)
     
   def transform_changed(self):
-    t = self.get_translation()
-    print t.x,",",t.y,",",t.z
+    # t = self.get_translation()
+    # print t.x,",",t.y,",",t.z
     # eRacer.debug(self.transform)
     self.camera.SetViewMatrix(self.transform)  

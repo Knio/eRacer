@@ -217,3 +217,26 @@ Vector3 GetTranslation(const Matrix& matrix){
 }
 
 
+Matrix& SetRotation(Matrix& matrix, float yaw, float pitch, float roll){
+	Point3 position;
+	float scaleX;
+	float scaleY;
+	float scaleZ;
+	Matrix rotation;
+	Decompose(matrix, position, rotation, scaleX, scaleY, scaleZ);
+
+	matrix = CreateMatrix(position, yaw, pitch, roll,scaleX,scaleY,scaleZ);
+	return matrix;
+}
+
+Matrix& Rotate(Matrix& matrix, float yaw, float pitch, float roll){
+	Matrix m2;
+	D3DXMatrixRotationYawPitchRoll(&m2, yaw, pitch, roll);
+	return matrix*=m2;
+}
+
+Matrix Rotated(const Matrix& matrix, float yaw, float pitch, float roll){
+	Matrix result(matrix);
+	Rotate(result,yaw,pitch,roll);
+	return result;
+}

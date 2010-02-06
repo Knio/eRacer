@@ -220,4 +220,9 @@ Matrix& Translate(Matrix& matrix, const Vector3& translation);
 Matrix Translated(const Matrix& matrix, const Vector3& translation);
 Vector3 GetTranslation(const Matrix& matrix);
 
+Matrix& SetRotation(Matrix& matrix, float yaw, float pitch, float roll);
+Matrix& Rotate(Matrix& matrix, float yaw, float pitch, float roll);
+Matrix Rotated(const Matrix& matrix, float yaw, float pitch, float roll);
+
+
 #endif

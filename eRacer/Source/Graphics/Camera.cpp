@@ -73,6 +73,8 @@ const Plane& Camera::GetPlane(int planeIndex) const {
 
 void Camera::SetViewMatrix(const Matrix& viewMatrix){
 	viewMatrix_ = viewMatrix;
+
+	//TODO hack - find out why this has to be inverted
 	viewMatrix_._41 = -viewMatrix_._41;
 	viewMatrix_._42 = -viewMatrix_._42;
 	viewMatrix_._43 = -viewMatrix_._43;
