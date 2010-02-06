@@ -29,6 +29,7 @@
 #include "..\Graphics\MovingGeometry.h"
 #include "..\Graphics\GraphicsLayer.h"
 #include "..\Graphics\Window.h"
+#include "..\Graphics\Starfield.h"
 
 
 // Sound
@@ -67,6 +68,9 @@ These are the classes that get exposed to Python
 
 
 // Core
+
+%rename(m11) D3DXMATRIX::_11;
+
 %include "..\Core\d3dx.h"
 %include "..\Core\Math.h"
 %feature("director") Event;
@@ -99,6 +103,7 @@ These are the classes that get exposed to Python
 %include "..\Graphics\Scene.h"
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
+%include "..\Graphics\Starfield.h"
 
 
 // Sound

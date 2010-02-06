@@ -15,7 +15,7 @@ class Track(Entity):
       self.graphics.visible = True
       self.physics.Init(self.graphics.mesh());
       
-    game().io.LoadMeshAsync(load, self.graphics, "simple_track.x")   
+    game().io.LoadMeshAsync(load, self.graphics, "track_fix.x")   
     
     
   def Tick(self, time):

@@ -239,6 +239,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\Starfield.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\StaticGeometry.cpp"
 					>
 				</File>
@@ -505,11 +509,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\Renderable.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Scene.h"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\Spatial.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Starfield.h"
 					>
 				</File>
 				<File
@@ -556,7 +568,7 @@
 						>
 						<Tool
 							Name="VCCustomBuildTool"
-							CommandLine="$(SWIG_DIR)\swig.exe -c++ -python $(InputPath)&#x0D;&#x0A;"
+							CommandLine=""
 							AdditionalDependencies="Sorce\Core\*.h"
 							Outputs="Source\SWIG\$(InputName)_wrap.cxx"
 						/>

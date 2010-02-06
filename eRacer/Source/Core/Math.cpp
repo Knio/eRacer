@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-void debug(Matrix &m)
+void debug(const Matrix &m)
 {
 	printf(
 "\
@@ -16,6 +16,16 @@ _41 = %6.2f, _42 = %6.2f _43 = %6.2f _44 = %6.2f\n\
 		m._31, m._32, m._33, m._34, 
 		m._41, m._42, m._43, m._44);
 		
+}
+
+
+bool affine(const Matrix& m)
+{
+	if (fabs(m._14) > ZERO) return false;
+	if (fabs(m._24) > ZERO) return false;
+	if (fabs(m._34) > ZERO) return false;
+	if (fabs(m._44-1)>ZERO) return false;
+	return true;
 }
 
 float abs(const Vector3 &A)
@@ -51,10 +61,7 @@ Vector3 normalized(const Vector3& A){
 Vector3 mul0(const Matrix &m, const Vector3 &v)
 {
 	//Make sure the matrix is affine
-	assert(0 == m._14);
-	assert(0 == m._24);
-	assert(0 == m._34);
-	assert(1 == m._44);
+	assert(affine(m));
 	Vector3 r;
 	D3DXVec3TransformNormal(&r, &v, &m);
 	return r;
@@ -63,10 +70,7 @@ Vector3 mul0(const Matrix &m, const Vector3 &v)
 Point3	mul1(const Matrix &m, const Point3  &v)
 {
 	//Make sure the matrix is affine
-	assert(0 == m._14);
-	assert(0 == m._24);
-	assert(0 == m._34);
-	assert(1 == m._44);
+	assert(affine(m));
 
 	Vector4 t;
 	D3DXVec3Transform(&t, &v, &m);
@@ -78,10 +82,7 @@ Point3	mul1(const Matrix &m, const Point3  &v)
 
 Vector3 transformedAffine(const Matrix& T, const Vector3& u){
 	//Make sure the matrix is affine
-	assert(0 == T._14);
-	assert(0 == T._24);
-	assert(0 == T._34);
-	assert(1 == T._44);
+	assert(affine(T));
 
 
 	Vector4 temp;
@@ -95,10 +96,7 @@ Vector3 transformedAffine(const Matrix& T, const Vector3& u){
 
 const Vector3& transformAffine(const Matrix& T, Vector3& u){
 	//Make sure the matrix is affine
-	assert(0 == T._14);
-	assert(0 == T._24);
-	assert(0 == T._34);
-	assert(1 == T._44);
+	assert(affine(T));
 
 	Vector4 temp;
 	D3DXVec3Transform(&temp, &u, &T);
