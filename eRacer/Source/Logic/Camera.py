@@ -64,32 +64,24 @@ class ChasingCamera(Camera):
 class FirstPersonCamera(Camera):
   def __init__(self): 
     Camera.__init__(self)
+
     self.set_translation(Vector3(0, 20, 20))
     self.acceleration = Vector3(0,0,0)
-    self.keyboardSpeed = 200
+    self.speed = 200
     
-    # self.position = Point3(0, 20, -20)
-    # self.fov      = math.pi/2.1
-    game().event.Register(self.KeyPressedEvent)
-    game().event.Register(self.KeyReleasedEvent)
-    game().event.Register(self.MouseMovedEvent)
+    game().event.Register(self.CameraAccelerateEvent)
+    game().event.Register(self.CameraStrafeEvent)
+    game().event.Register(self.CameraLookAroundEvent)
     
-  def KeyPressedEvent(self, key):
-    from Input import KEY
-    if key == KEY.UP:    self.acceleration.z += self.keyboardSpeed
-    if key == KEY.DOWN:  self.acceleration.z -= self.keyboardSpeed
-    if key == KEY.LEFT:  self.acceleration.x -= self.keyboardSpeed
-    if key == KEY.RIGHT: self.acceleration.x += self.keyboardSpeed
-
-  def KeyReleasedEvent(self, key):
-    from Input import KEY
-    if key == KEY.UP:    self.acceleration.z -= self.keyboardSpeed
-    if key == KEY.DOWN:  self.acceleration.z += self.keyboardSpeed
-    if key == KEY.LEFT:  self.acceleration.x += self.keyboardSpeed
-    if key == KEY.RIGHT: self.acceleration.x -= self.keyboardSpeed
-  
-  def MouseMovedEvent(self, relX, relY):
-    self.rotate(relX/-300.,relY/-300.,0)
+  def CameraAccelerateEvent(self, acceleration):  
+    self.acceleration.z += acceleration*self.speed
+    
+  def CameraStrafeEvent(self,acceleration):
+    self.acceleration.x += acceleration*self.speed
+    
+    
+  def CameraLookAroundEvent(self, relX, relY):
+    self.rotate(-relX,-relY,0)
     
   def Tick(self, time):
     Camera.Tick(self, time)
