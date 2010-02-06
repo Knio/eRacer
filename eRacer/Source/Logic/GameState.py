@@ -19,7 +19,7 @@ class GameState(State):
     
   def load(self):
     # testing stuff
-    game().sound.PlaySound2D("jaguar.wav")
+   # game().sound.PlaySound2D("jaguar.wav")
     
     scene = eRacer.Scene()
     self.scene = scene
