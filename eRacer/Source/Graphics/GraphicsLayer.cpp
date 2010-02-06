@@ -166,7 +166,7 @@ void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
 
     Matrix transform = skyBox.GetTransform();
 
-	cout << camera.GetPosition().x << endl;
+	//cout << camera.GetPosition().x << endl;
     transform*=CreateMatrix(camera.GetPosition());
     m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
     
