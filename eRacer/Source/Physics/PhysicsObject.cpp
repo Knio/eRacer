@@ -97,6 +97,13 @@ NxActor* PhysicsObject::CreateActor(const NxActorDesc& actorDesc)
 	Actor = PhysicsLayer::g_PhysicsLayer->AddActor(actorDesc);
 	return Actor;
 }
-
+//centre of mass should be given in the local frame
+void PhysicsObject::SetCentreOfMass(const Point3& centre){
+	//Matrix toGlobal = GetTransform();
+	//Point3 gCentre = mul1(toGlobal, centre);
+	
+	//Actor->setCMassOffsetGlobalPosition(Vector3_NxVec3(gCentre));
+	Actor->setCMassOffsetLocalPosition(Vector3_NxVec3(centre));
+}
 
 }

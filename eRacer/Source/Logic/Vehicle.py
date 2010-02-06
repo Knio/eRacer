@@ -45,6 +45,7 @@ class Vehicle(Entity):
     
     self.graphics = scene.CreateMovingGeometry("vehicle")
     self.graphics.visible = False
+    self.physics.SetCentreOfMass(Point3(0, -1, 0))
 
     def load(r):
       if not r:
@@ -117,10 +118,10 @@ class Vehicle(Entity):
       
       # cast a ray to the road, get distance
       # dist = pos.y / -dot(axis, normal)
-      # print dist
+      print dist
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
-        # whee is in the air - no it will not have any forces
+        # whee is in the air - no it will not have any forcesww
         ddd.append(-1)
         continue
       if disp > 3*self.DISPLACEMENT:
@@ -185,8 +186,8 @@ class Vehicle(Entity):
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
-    #print ''.join('%6.2f' % i for i in ddd),
-    #print self.acceleration, self.turning
+    print ''.join('%6.2f' % i for i in ddd),
+    print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx
