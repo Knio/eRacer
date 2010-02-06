@@ -71,7 +71,7 @@ class GameState(State):
     
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
-    #game().logic.Add(Plane(scene))    
+    game().logic.Add(Plane(scene))    
     
     self.starfield1 = Starfield(scene, self.camera, 1024, 1000.0)
     self.starfield2 = Starfield(scene, self.camera, 1024, 100.0)
