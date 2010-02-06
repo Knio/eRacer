@@ -1,8 +1,7 @@
 from Core.Globals import *
 
 class Vehicle(Entity):
-  MODEL   = "Ship_06.x"
-  MODEL   = "box2.x"
+  MODEL   = "Ship1.x"
   SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left

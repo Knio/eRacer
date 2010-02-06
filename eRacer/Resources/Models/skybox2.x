@@ -46,7 +46,7 @@ Material {
 0.0;
 0.0; 0.0; 0.0;;
 0.0; 0.0; 0.0;;
-TextureFilename { "sky2_small2.jpg"; }
+TextureFilename { "sky2_small.jpg"; }
 } //end of Material
 } //end of MaterialList
 
