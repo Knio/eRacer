@@ -72,20 +72,18 @@ const Plane& Camera::GetPlane(int planeIndex) const {
 }
 
 void Camera::SetViewMatrix(const Matrix& viewMatrix){
-	//float ignore;
-	//Matrix rotation;
-
-	//Decompose(viewMatrix, position_, rotation, ignore, ignore, ignore);
-
 	viewMatrix_ = viewMatrix;
+	viewMatrix_._41 = -viewMatrix_._41;
+	viewMatrix_._42 = -viewMatrix_._42;
+	viewMatrix_._43 = -viewMatrix_._43;
 	
 	position_ = ORIGIN;
 	lookAt_ = Z;
 	up_ = Y;
 
-	transformAffine(viewMatrix,position_);
-	transformAffine(viewMatrix,lookAt_);
-	transformAffine(viewMatrix,up_);
+	transformAffine(viewMatrix_,position_);
+	transformAffine(viewMatrix_,lookAt_);
+	transformAffine(viewMatrix_,up_);
 	approxUp_ = up_;
 
 }

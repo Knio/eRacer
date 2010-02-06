@@ -29,6 +29,10 @@ class Entity(object):
   def set_translation(self, translation):
     eRacer.SetTranslation(self.__transform, translation)
     self.transform_changed()
+
+  #def set_translation(self, x, y, z):
+  #  self.set_translation(Vector3(x,y,z))
+
     
   def translate(self, translation):
     eRacer.Translate(self.__transform, translation)

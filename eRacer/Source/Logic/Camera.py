@@ -64,8 +64,9 @@ class ChasingCamera(Camera):
 class FirstPersonCamera(Camera):
   def __init__(self): 
     Camera.__init__(self)
+    self.set_translation(Vector3(0, 20, 20))
     self.acceleration = Vector3(0,0,0)
-    self.keyboardSpeed = 2000
+    self.keyboardSpeed = 200
     
     # self.position = Point3(0, 20, -20)
     # self.fov      = math.pi/2.1
@@ -98,21 +99,10 @@ class FirstPersonCamera(Camera):
     acc.x*=delta
     acc.z*=delta
     
-    # eRacer.transformAffine(self.transform,acc)
-    
-    print acc.x,",",acc.y,",",acc.z
-    print acc.x,",",acc.y,",",acc.z
     self.translate(acc)
     
-    # self.transform._41 += worldAcceleration.x;
-    # self.transform._43 += worldAcceleration.z;
-    
-    
-    #self.camera.SetFrame(self.camera.position_+worldAcceleration, self.camera.lookAt_+worldAcceleration, self.camera.approxUp_);
-    #self.camera.SetPosition(self.position+worldAcceleration)
-    
-    # self.camera.SetLookAt(targetPosition)
-    
   def transform_changed(self):
+    t = self.get_translation()
+    print t.x,",",t.y,",",t.z
     # eRacer.debug(self.transform)
     self.camera.SetViewMatrix(self.transform)  
