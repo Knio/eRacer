@@ -200,20 +200,22 @@ class Vehicle(Entity):
     velx = phys.GetVelocity().x
     vely = phys.GetVelocity().y
     velz = phys.GetVelocity().z
-    velStr = "Vel: %2.3f" %velx + " %2.3f " %vely + " %2.3f " %velz
+    velStr = "Vel: %2.3f %2.3f  %2.3f " % (velx,vely,velz)
     game().graphics.graphics.WriteString(
-      velStr, "Verdana", 24, Point3(0,0,5))
+      velStr, "Verdana", 16, Point3(5,0,0))
       
-    speed = phys.GetSpeed()
-    speedStr = "Speed: %2.3f"%speed
+
     game().graphics.graphics.WriteString(
-      speedStr, "Verdana", 24, Point3(0,50,500))
+      "Speed: %2.3f" % phys.GetSpeed(),
+      "Verdana", 16, Point3(5,50,0)
+    )
     
-    throttleStr = "Throttle:  %1.3f"%self.throttle
     game().graphics.graphics.WriteString(
-      throttleStr, "Verdana", 24, Point3(0,100,0))
+      "Throttle:  %1.3f" % self.throttle, 
+      "Verdana", 16, Point3(5,100,0)
+    )
       
-    steerStr = "Control L/R:  %1.3f"%self.steerPos
+    steerStr = "Control L/R:  %1.3f" % self.steerPos
     game().graphics.graphics.WriteString(
-      steerStr, "Verdana", 24, Point3(0,150,0))
+      steerStr, "Verdana", 16, Point3(5,150,0))
     

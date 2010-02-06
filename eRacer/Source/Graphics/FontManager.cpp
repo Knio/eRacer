@@ -12,7 +12,6 @@ namespace Graphics {
 
 	StringRenderable::~StringRenderable()
 	{
-		m_strTextBuffer = NULL;
 		m_pFont = NULL;
 		//m_scaling = NULL;
 	}
@@ -96,7 +95,7 @@ namespace Graphics {
 			//WCHAR wszmsg[128]; //convert to wide char
 			//MultiByteToWideChar(CP_ACP, 0, m_strList[i].m_strTextBuffer, -1, wszmsg, 128);
 			m_pTextSprite->SetTransform(&m_strList[i].m_scaling);
-			m_strList[i].m_pFont->DrawText( m_pTextSprite, m_strList[i].m_strTextBuffer, -1, &m_strList[i].m_renderArea, DT_NOCLIP, m_strList[i].m_color );
+			m_strList[i].m_pFont->DrawText( m_pTextSprite, m_strList[i].m_strTextBuffer.c_str(), -1, &m_strList[i].m_renderArea, DT_NOCLIP, m_strList[i].m_color );
 		}
 		m_pTextSprite->End();
 

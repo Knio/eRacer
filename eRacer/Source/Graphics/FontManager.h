@@ -5,8 +5,11 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <map>
+#include <string>
 #include <vector>
 #include "../Core/Math.h"
+
+using namespace std;
 
 namespace Graphics {
 
@@ -14,7 +17,7 @@ class StringRenderable
 {
 public:
 	ID3DXFont* m_pFont;
-	const char* m_strTextBuffer;
+	string m_strTextBuffer;
 	RECT m_renderArea; //Position and area to render in
 	D3DXCOLOR m_color;
 	D3DXMATRIX m_scaling;
