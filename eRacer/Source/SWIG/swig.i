@@ -25,6 +25,7 @@
 // Graphics
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
+#include "..\Graphics\View.h"
 #include "..\Graphics\Geometry.h"
 #include "..\Graphics\StaticGeometry.h"
 #include "..\Graphics\MovingGeometry.h"
@@ -102,6 +103,7 @@ These are the classes that get exposed to Python
 %include "..\Graphics\StaticGeometry.h"
 %include "..\Graphics\MovingGeometry.h"
 %include "..\Graphics\Scene.h"
+%include "..\Graphics\View.h"
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
 %include "..\Graphics\Starfield.h"

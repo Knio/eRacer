@@ -13,10 +13,9 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <mmsystem.h>
-#include "Camera.h"
 #include "StaticGeometry.h"
-#include "Scene.h"
 #include "FontManager.h"
+#include "View.h"
 
 namespace Graphics {
 
@@ -50,7 +49,8 @@ public:
 
 	void WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const RGB &color=WHITE);
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
-	void RenderFrame(const Camera& camera, const Scene& scene);
+	//void RenderFrame(const Camera& camera, const Scene& scene);
+	void RenderView(const View& view);
 	void Shutdown();
 
 	static GraphicsLayer *GetInstance()

@@ -295,6 +295,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\View.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\View.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Window.cpp"
 					>
 				</File>
