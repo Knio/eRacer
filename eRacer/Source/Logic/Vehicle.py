@@ -57,23 +57,24 @@ class Vehicle(Entity):
     self.acceleration = 0.
     self.turning      = 0.
 
-    self.newAcceleration = 0.05
-    self.newTurn = 0.
+    self.throttle = 0.00 # position of the throttle on game controller from -1 to +1
+    #if < 0, might want different logic for braking
+    self.steerPos = 0.00 # position of the control stick from left to right ranges from -1 to +1
 
     self.sliding = [False] * len(self.WHEELS)
     self.crashtime = 0
     
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
-
-  def PlayerAccelerateEvent(self, accel):
-    self.newAcceleration += accel
+  #change in throttle ranges between -1 and +1
+  def PlayerAccelerateEvent(self, changeThrottle):
+    self.throttle += changeThrottle
 
   def PlayerTurnEvent(self, turn):
-    self.newTurn += turn  
+    self.steerPos += turn  
+
   
   def Tick(self, time):
-	
     Entity.Tick(self, time)
     
     if not time.game_delta:
@@ -82,32 +83,15 @@ class Vehicle(Entity):
     phys  = self.physics
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
-    
-    # print debug info
-    velx = phys.GetVelocity().x
-    vely = phys.GetVelocity().y
-    velz = phys.GetVelocity().z
-    velStr = "Vel: %2.3f" %velx + " %2.3f " %vely + " %2.3f " %velz
-    game().graphics.graphics.WriteString(
-      velStr, "Verdana", 24, Point3(0,0,0))
-      
-    speed = phys.GetSpeed()
-    speedStr = "Speed: %1.3f"%speed
-    print speedStr
-    game().graphics.graphics.WriteString(
-      speedStr, "Verdana", 24, Point3(100,100,0))
-    
-    
 
+    self.PrintDebug()
     # do engine/brake/steering/user input forces    
-    
-
     
     alphaa = math.pow(self.REV_ALPHA,  delta)
     alphat = math.pow(self.TURN_ALPHA, delta)
     
-    self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.newAcceleration
-    self.turning      = (alphat)*self.turning      + (1-alphat)*self.newTurn
+    self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.throttle
+    self.turning      = (alphat)*self.turning      + (1-alphat)*self.steerPos
     
     crashed = True
     ddd = []
@@ -209,3 +193,27 @@ class Vehicle(Entity):
     self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * transform)
 
   transform = property(Entity.get_transform, set_transform)   
+  
+  def PrintDebug(self):
+    # print debug info
+    phys = self.physics
+    velx = phys.GetVelocity().x
+    vely = phys.GetVelocity().y
+    velz = phys.GetVelocity().z
+    velStr = "Vel: %2.3f" %velx + " %2.3f " %vely + " %2.3f " %velz
+    game().graphics.graphics.WriteString(
+      velStr, "Verdana", 24, Point3(0,0,5))
+      
+    speed = phys.GetSpeed()
+    speedStr = "Speed: %2.3f"%speed
+    game().graphics.graphics.WriteString(
+      speedStr, "Verdana", 24, Point3(0,50,500))
+    
+    throttleStr = "Throttle:  %1.3f"%self.throttle
+    game().graphics.graphics.WriteString(
+      throttleStr, "Verdana", 24, Point3(0,100,0))
+      
+    steerStr = "Control L/R:  %1.3f"%self.steerPos
+    game().graphics.graphics.WriteString(
+      steerStr, "Verdana", 24, Point3(0,150,0))
+    
