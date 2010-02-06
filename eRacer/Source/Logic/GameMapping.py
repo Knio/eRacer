@@ -34,7 +34,7 @@ class GameMapping(Mapping):
   def GamepadStick1RelativeEvent(self, x, y):
     return E.PlayerTurnEvent(x/1000.0)
 
-  def GamepadStick2RelativeEvent(self, x, y):
+  def GamepadStick2RelativeEvent(self, relX, relY):
     #needs calibration
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
 

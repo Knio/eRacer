@@ -37,7 +37,7 @@ class Vehicle(Entity):
     self.physics = eRacer.Box(
       True,       # dynamic
       self.MASS,  # mass
-      Vector3(0, 3, 0), # position
+      Vector3(80, 0, 0), # position
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
