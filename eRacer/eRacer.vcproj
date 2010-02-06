@@ -183,7 +183,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
+			Name="Source"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
@@ -203,7 +203,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\AxisAlignedBoundingBox.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Camera.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Camera.h"
 					>
 				</File>
 				<File
@@ -211,7 +219,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\FontManager.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Geometry.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Geometry.h"
 					>
 				</File>
 				<File
@@ -223,7 +239,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\GraphicsLayer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\InnerNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\InnerNode.h"
 					>
 				</File>
 				<File
@@ -231,7 +255,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\MovingGeometry.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Renderable.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Scene.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Scene.h"
 					>
 				</File>
 				<File
@@ -239,7 +275,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\Spatial.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Starfield.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Starfield.h"
 					>
 				</File>
 				<File
@@ -247,7 +291,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\StaticGeometry.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Window.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Window.h"
 					>
 				</File>
 				<File
@@ -267,11 +319,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Input\Device.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Input\Gamepad.cpp"
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Input\Gamepad.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Input\Input.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Input\Input.h"
 					>
 				</File>
 				<File
@@ -287,7 +351,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Input\Keyboard.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Input\Mouse.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Input\Mouse.h"
 					>
 				</File>
 			</Filter>
@@ -307,7 +379,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\Consts.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\d3dx.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\Event.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\Event.h"
 					>
 				</File>
 				<File
@@ -323,7 +407,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Core\Math.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\Time.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Core\Time.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Core\Types.h"
 					>
 				</File>
 				<File
@@ -346,6 +442,10 @@
 					RelativePath=".\Source\Sound\SoundLayer.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\Sound\SoundLayer.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Physics"
@@ -359,7 +459,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Physics\Box.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Physics\Convert.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\Convert.h"
 					>
 				</File>
 				<File
@@ -371,7 +479,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Physics\PhysicsLayer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Physics\PhysicsObject.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\PhysicsObject.h"
 					>
 				</File>
 				<File
@@ -379,7 +495,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Physics\Plane.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Physics\TriMesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\TriMesh.h"
 					>
 				</File>
 			</Filter>
@@ -446,6 +570,10 @@
 					RelativePath=".\Source\IO\IO.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Source\IO\IO.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Game"
@@ -463,97 +591,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Game\Game.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Game\Game.py"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Game\Module.h"
 					>
 				</File>
 				<File
 					RelativePath=".\Source\Game\Module.py"
 					>
 				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-			<Filter
-				Name="Graphics"
-				>
 				<File
-					RelativePath=".\Source\Graphics\AxisAlignedBoundingBox.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Camera.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\FontManager.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Geometry.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\GraphicsLayer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\InnerNode.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\MovingGeometry.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Renderable.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Scene.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Spatial.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Starfield.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\StaticGeometry.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Window.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Input"
-				>
-				<File
-					RelativePath=".\Source\Input\Device.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Input\Gamepad.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Input\Input.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Input\Keyboard.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Input\Mouse.h"
+					RelativePath=".\Source\Game\State.h"
 					>
 				</File>
 			</Filter>
@@ -593,94 +647,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Core"
-				>
-				<File
-					RelativePath=".\Source\Core\Consts.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\d3dx.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\Event.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\Math.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\Time.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Core\Types.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Sound"
-				>
-				<File
-					RelativePath=".\Source\Sound\SoundLayer.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Physics"
-				>
-				<File
-					RelativePath=".\Source\Physics\Box.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Physics\Convert.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Physics\PhysicsLayer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Physics\PhysicsObject.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Physics\Plane.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Physics\TriMesh.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="IO"
-				>
-				<File
-					RelativePath=".\Source\IO\IO.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Game"
-				>
-				<File
-					RelativePath=".\Source\Game\Game.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Game\Module.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Game\State.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="Test"
 				>
 				<File
@@ -690,7 +656,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Resource Files"
+			Name="Resources"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
