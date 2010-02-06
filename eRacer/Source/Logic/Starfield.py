@@ -11,6 +11,5 @@ class Starfield(Entity, eRacer.Starfield):
     Entity.Tick(self, time)
     v = self.camera.camera.GetViewMatrix()
     p = self.camera.camera.GetPosition()
-    print p.x, p.y, p.z
     self.Update(v, p)
     
