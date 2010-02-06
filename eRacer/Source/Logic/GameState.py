@@ -31,11 +31,16 @@ class GameState(State):
     
     
     self.player = Vehicle(self.scene)
-    # self.camera = ChasingCamera(self.player)
-    self.camera = FirstPersonCamera()
+
+    self.cameras = []
+    self.cameras.append(ChasingCamera(self.player))
+    self.cameras.append(FirstPersonCamera())
+    self.cameraIndex = 0
     
     game().logic.Add(self.player)
-    game().logic.Add(self.camera)
+    
+    for camera in self.cameras:
+      game().logic.Add(camera)
     
     
     
@@ -43,13 +48,31 @@ class GameState(State):
     game().logic.Add(Track(scene))
     game().logic.Add(Plane(scene))    
     
-    game().logic.Add(Starfield(scene, self.camera, 1024, 1000.0))
-    game().logic.Add(Starfield(scene, self.camera, 1024,  100.0))
-    game().logic.Add(Starfield(scene, self.camera, 1024,   20.0))
+    self.starfield1 = Starfield(scene, self.camera, 1024, 1000.0)
+    self.starfield2 = Starfield(scene, self.camera, 1024, 100.0)
+    self.starfield3 = Starfield(scene, self.camera, 1024, 20.0)
     
+    
+    game().logic.Add(self.starfield1)
+    game().logic.Add(self.starfield2)
+    game().logic.Add(self.starfield3)
 
     self.boxcount = 1
     game().time.Zero()
+    
+  def get_camera(self):
+    return self.cameras[self.cameraIndex]
+    
+  camera = property(get_camera)   
+    
+  def CameraChangedEvent(self):
+    # print "Camera ",self.cameraIndex+1," out of ",len(self.cameras)
+    self.cameraIndex+=1
+    if(self.cameraIndex>=len(self.cameras)): self.cameraIndex=0
+    self.starfield1.camera = self.camera
+    self.starfield2.camera = self.camera
+    self.starfield3.camera = self.camera
+      
     
     
   def Tick(self, time):

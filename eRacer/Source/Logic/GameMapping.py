@@ -12,6 +12,7 @@ class GameMapping(Mapping):
     KEY.DOWN:   [E.CameraAccelerateEvent  (-1.0)],
     KEY.LEFT:   [E.CameraStrafeEvent      (-1.0)],
     KEY.RIGHT:  [E.CameraStrafeEvent      (+1.0)],
+    KEY.C:      [E.CameraChangedEvent     (    )],
     KEY.ESCAPE: [E.PauseEvent             (    )],
     }.get(key, None)
 
