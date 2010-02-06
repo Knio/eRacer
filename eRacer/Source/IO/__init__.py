@@ -74,7 +74,11 @@ class IO(Module, eRacer.IO):
       self.textures[name] = r
     
     return self.textures[name]
-    
+
+  def Loaded(self):
+    pass
+  LoadAsyncEvent = asynchronous(Loaded)
+  
   def Quit(self):
     Module.Quit(self)
     for k,t in self.textures.items():

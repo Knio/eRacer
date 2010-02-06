@@ -23,6 +23,7 @@ class Game(eRacer.Game):
     eRacer.Game.__init__(self)
     
   def PushState(self, state):
+    print 'Game::PushState(%r)' % state
     s = self.states[-1]
     if s: s.Deactivate()
     state.parent = s
@@ -30,6 +31,7 @@ class Game(eRacer.Game):
     state.Activate()
     
   def PopState(self):
+    print 'Game::PopState()'
     s = self.states.pop()
     s.Deactivate()
     return s
@@ -61,6 +63,7 @@ class Game(eRacer.Game):
     self.state = 1
 
   def Tick(self, time, speed=1.0):
+    #print 'Game::Tick'
     for i in self.modules:
       i.Tick(time)
       
