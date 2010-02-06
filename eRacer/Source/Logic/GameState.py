@@ -7,6 +7,7 @@ from Plane      import Plane
 from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
+from Starfield  import Starfield
 from Camera     import ChasingCamera
 from GameMapping    import GameMapping
 
@@ -35,9 +36,16 @@ class GameState(State):
     game().logic.Add(self.player)
     game().logic.Add(self.camera)
     
+    
+    
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
     game().logic.Add(Plane(scene))    
+    
+    game().logic.Add(Starfield(scene, self.camera, 1024, 1000.0))
+    game().logic.Add(Starfield(scene, self.camera, 1024,  100.0))
+    game().logic.Add(Starfield(scene, self.camera, 1024,   20.0))
+    
 
     self.boxcount = 1
     game().time.Zero()

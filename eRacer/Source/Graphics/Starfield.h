@@ -3,26 +3,28 @@
 
 #include "assert.h"
 #include "Core/Types.h"
+#include "Renderable.h"
+
+namespace Graphics {
 
 struct Star {
 	Point3 pos;
 	DWORD color;
 };
 
-class Starfield
+class Starfield : public Renderable
 {
 public:
 	float SIZE;
 	int N;
-	Matrix camera;
+	Matrix oldcamera;
 	Star* stars;
 	LPDIRECT3DVERTEXBUFFER9 vb;
-	LPDIRECT3DDEVICE9 dev;
-	Starfield(LPDIRECT3DDEVICE9 d, int n, float s);
-	void Update(const Matrix &c1, const Matrix &c2, const Point3 &pos);
-	void Draw(const Matrix &newcamera, const Point3 &pos);
-
-
+	Starfield(int n, float s);
+	void Update(const Matrix &newcamera, const Point3 &pos);
+	void Draw(LPDIRECT3DDEVICE9);
 };
+
+}
 
 #endif

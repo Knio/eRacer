@@ -17,7 +17,6 @@
 #include "StaticGeometry.h"
 #include "Scene.h"
 #include "FontManager.h"
-#include "Starfield.h"
 
 namespace Graphics {
 
@@ -54,22 +53,20 @@ public:
 	void RenderFrame(const Camera& camera, const Scene& scene);
 	void Shutdown();
 
-	static GraphicsLayer *GetGraphicsInstance()
+	static GraphicsLayer *GetInstance()
 	{
 		if (m_pGlobalGLayer == NULL)
 			m_pGlobalGLayer = new GraphicsLayer;
 
 		return m_pGlobalGLayer;
 	}
+	LPDIRECT3DDEVICE9 GetDevice() const { return m_pd3dDevice; }
 
-	Starfield *stars1;
-	Starfield *stars2;
-	
 };
 
 inline GraphicsLayer *GraphicsModule()
 {
-	return GraphicsLayer::GetGraphicsInstance();
+	return GraphicsLayer::GetInstance();
 }
 
 };

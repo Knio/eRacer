@@ -7,7 +7,7 @@ class Graphics(Module):
     Module.__init__(self, game)
     
     self.window   = Window("Test")
-    self.graphics = eRacer.GraphicsLayer.GetGraphicsInstance()
+    self.graphics = eRacer.GraphicsLayer.GetInstance()
     
     # get pointers
     
@@ -22,7 +22,7 @@ class Graphics(Module):
     self.d3d.disown()
     
     #self.views = []
-    self.scene = None
+    self.scene  = None
     self.camera = None
 
 
