@@ -106,4 +106,9 @@ void PhysicsObject::SetCentreOfMass(const Point3& centre){
 	Actor->setCMassOffsetLocalPosition(Vector3_NxVec3(centre));
 }
 
+float PhysicsObject::GetSpeed(){
+	Vector3 vel = GetVelocity();
+	return sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z);
+}
+
 }

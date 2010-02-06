@@ -37,7 +37,7 @@ class Vehicle(Entity):
     self.physics = eRacer.Box(
       True,       # dynamic
       self.MASS,  # mass
-      Vector3(80, 0, 0), # position
+      Vector3(80, 3, 0), # position
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
@@ -82,6 +82,20 @@ class Vehicle(Entity):
     phys  = self.physics
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
+    
+    # print debug info
+    velx = phys.GetVelocity().x
+    vely = phys.GetVelocity().y
+    velz = phys.GetVelocity().z
+    velStr = "Vel: %2.3f" %velx + " %2.3f " %vely + " %2.3f " %velz
+    game().graphics.graphics.WriteString(
+      velStr, "Verdana", 24, Point3(0,0,0))
+      
+    speed = phys.GetSpeed()
+    speedStr = "Speed: %1.3f"%speed
+    print speedStr
+    game().graphics.graphics.WriteString(
+      speedStr, "Verdana", 24, Point3(100,100,0))
     
     
 
