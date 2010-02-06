@@ -1,8 +1,7 @@
 from Core.Globals import *
 
 class Vehicle(Entity):
-  MODEL   = "Ship_06.x"
-  MODEL   = "box2.x"
+  MODEL   = "Ship1.x"
   SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left
@@ -116,6 +115,8 @@ class Vehicle(Entity):
       
       # cast a ray to the road, get distance
       # dist = pos.y / -dot(axis, normal)
+
+      #print dist
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
         # whee is in the air - no it will not have any forcesww
@@ -183,6 +184,8 @@ class Vehicle(Entity):
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
+    #print ''.join('%6.2f' % i for i in ddd),
+    #print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx

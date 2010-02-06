@@ -53,18 +53,20 @@ public:
 	void RenderFrame(const Camera& camera, const Scene& scene);
 	void Shutdown();
 
-	static GraphicsLayer *GetGraphicsInstance()
+	static GraphicsLayer *GetInstance()
 	{
 		if (m_pGlobalGLayer == NULL)
 			m_pGlobalGLayer = new GraphicsLayer;
 
 		return m_pGlobalGLayer;
 	}
+	LPDIRECT3DDEVICE9 GetDevice() const { return m_pd3dDevice; }
+
 };
 
 inline GraphicsLayer *GraphicsModule()
 {
-	return GraphicsLayer::GetGraphicsInstance();
+	return GraphicsLayer::GetInstance();
 }
 
 };

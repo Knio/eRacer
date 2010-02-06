@@ -10,9 +10,9 @@
 
 #include <vector>
 #include "Camera.h"
+#include "Renderable.h"
 #include "StaticGeometry.h"
 #include "MovingGeometry.h"
-
 
 
 using namespace std;
@@ -79,10 +79,14 @@ public:
 	void LoadSkyBox(const std::string& filename);
 
 	const Geometry& GetSkyBox() const;
+	
+	void AddRenderable(Renderable* r) { renderable_.push_back(r); }
+	const vector<Renderable*> GetRenderables() const { return renderable_; }
 
 private:
-	vector<Geometry*> geometry_;
-	MovingGeometry skyBox_;
+	vector<Geometry*> 	geometry_;
+	vector<Renderable*> renderable_;
+	MovingGeometry 			skyBox_;
 };
 
 

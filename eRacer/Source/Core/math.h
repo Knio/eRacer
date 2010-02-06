@@ -9,6 +9,7 @@
 #define PI D3DX_PI
 #define DEG2RAD(x) (PI*(x)/180.0)
 #define RAD2DEG(x) (180.0*(x)/PI)
+#define ZERO (1e-5)
 
 const float INF   = std::numeric_limits<float>::infinity();
 const float NaN   = std::numeric_limits<float>::quiet_NaN();
@@ -54,7 +55,7 @@ const Matrix IDENTITY = Matrix(1,0,0,0,
 #pragma warning( disable : 4996 4995 ) // disable deprecated warning 
 #include <strsafe.h>
 
-void debug(Matrix &m);
+void debug(const Matrix &m);
 
 float abs(const Vector3 &A);
 Vector3 cross(const Vector3 &A, const Vector3 &B);
