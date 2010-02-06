@@ -31,6 +31,7 @@
 #include "..\Graphics\GraphicsLayer.h"
 #include "..\Graphics\Window.h"
 #include "..\Graphics\Starfield.h"
+#include "..\Graphics\CoordinateCross.h"
 
 
 // Sound
@@ -105,6 +106,7 @@ These are the classes that get exposed to Python
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
 %include "..\Graphics\Starfield.h"
+%include "..\Graphics\CoordinateCross.h"
 
 
 // Sound

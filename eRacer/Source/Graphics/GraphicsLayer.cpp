@@ -3,6 +3,9 @@
 #include "Core/Time.h"
 #include "Math.h"
 
+#include <iostream>
+using namespace std;
+
 namespace Graphics {
 
 GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
@@ -162,6 +165,8 @@ void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
     // set the transform
 
     Matrix transform = skyBox.GetTransform();
+
+	cout << camera.GetPosition().x << endl;
     transform*=CreateMatrix(camera.GetPosition());
     m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
     

@@ -9,6 +9,7 @@ from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera, FirstPersonCamera
 from Starfield  import Starfield
+from CoordinateCross import CoordinateCross
 from GameMapping    import GameMapping
 
 class GameState(State):
@@ -43,16 +44,18 @@ class GameState(State):
       game().logic.Add(camera)
     
     
-    
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
+    
     #game().logic.Add(Plane(scene))    
     
     self.starfield1 = Starfield(scene, self.camera, 1024, 1000.0)
     self.starfield2 = Starfield(scene, self.camera, 1024, 100.0)
     self.starfield3 = Starfield(scene, self.camera, 1024, 20.0)
     
-    
+    self.coordinatecross = CoordinateCross(scene)
+    game().logic.Add(self.coordinatecross)
+
     game().logic.Add(self.starfield1)
     game().logic.Add(self.starfield2)
     game().logic.Add(self.starfield3)
