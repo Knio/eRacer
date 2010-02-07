@@ -37,7 +37,7 @@ class Vehicle(Entity):
     self.physics = eRacer.Box(
       True,       # dynamic
       self.MASS,  # mass
-      Vector3(80, 3, 0), # position
+      Vector3(0, 5, 0), # position
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
@@ -107,17 +107,11 @@ class Vehicle(Entity):
       suspensionpoint = Vector3(wheel.x, wheel.y + 0.5, wheel.z)
       dist = phys.RaycastDown(suspensionpoint, normal) - 0.5
       
-      # we don't have a road yet, so it is implicitly a plane at y=0
-      # road normal - assume +Y      
-      #normal = Vector3(0,1,0)
-      
-      # cast a ray to the road, get distance
-      # dist = pos.y / -dot(axis, normal)
-
       #print dist
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
-        # whee is in the air - no it will not have any forcesww
+        # raycast returned big number
+        # wheel is in the air - ignore it
         ddd.append(-1)
         continue
       if disp > 3*self.DISPLACEMENT:
@@ -184,6 +178,8 @@ class Vehicle(Entity):
       
     #print ''.join('%6.2f' % i for i in ddd),
     #print self.acceleration, self.turning
+    #eRacer.debug(tx)
+    
     
     #tx = Matrix()
     self.transform = tx

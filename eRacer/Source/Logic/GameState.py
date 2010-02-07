@@ -28,6 +28,12 @@ class LoadingState(State):
     self.thread = threading.Thread(target=load)
     self.thread.start()
     
+  def Activate(self):
+    game().simspeed = 0.
+  
+  def Deactivate(self):
+    game().simspeed = 1.    
+    
   def Loaded(self, none):
     game().PopState()
     

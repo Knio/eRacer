@@ -84,8 +84,15 @@ int GraphicsLayer::Init( HWND hWnd )
 void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
 {
     // Clear the backbuffer and the zbuffer
-    m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
-
+    m_pd3dDevice->Clear(
+        0, 
+        NULL, 
+        D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 
+        D3DCOLOR_COLORVALUE(0.0f,0.0f,0.0f,1.0f), 
+        1.0f, 
+        0
+    );
+    
     SetCamera(camera);
 
     vector<Geometry*> visibleGeometry;
@@ -143,7 +150,6 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
     // is this even the right matrix?
     m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &(geometry->GetTransform()) );
     
-
     for(unsigned int i = 0; i<geometry->Materials().size(); i++){
         m_pd3dDevice->SetMaterial( geometry->Materials()[i]);
         m_pd3dDevice->SetTexture(0, geometry->Textures()[i]);
