@@ -34,24 +34,10 @@ void Geometry::cullRecursive(const Camera&, vector<const Geometry*>& visibleNode
 void Geometry::Draw(IDirect3DDevice9* device) const{
 	assert(NULL != device);
 
-    //there need to be the same number of textures and materials
-	assert(textures_.size()==materials_.size());
-    // Meshes are divided into subsets, one for each material. Render them in a loop
-    
     // set the transform
-    // TODO unset it after!
-    // is this even the right matrix?
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &transform_);
-    
-    for(unsigned int i = 0; i<materials_.size(); i++){
-        device->SetMaterial( materials_[i]);
-        device->SetTexture(0, textures_[i]);
-        
-        //make sure the mesh has been initialized at this point
-        assert(NULL != mesh_);
+	Model::Draw(device);
 
-        mesh_->DrawSubset(i);
-    }
 }
 
 

@@ -11,6 +11,8 @@
 #include "Spatial.h"
 #include <vector>
 #include "Renderable.h"
+#include "d3d9types.h"
+#include "d3dx9mesh.h"
 #include "Model.h"
 
 
@@ -24,7 +26,7 @@ namespace Graphics {
  * @see MovingGeometry
  * @see StaticGeometry
  */
-class Geometry : public Spatial, public Renderable, public Model
+class Geometry : public Spatial, public Model
 {
 public:
 	/**

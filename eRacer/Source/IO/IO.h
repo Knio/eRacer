@@ -4,6 +4,7 @@
 #pragma message("IOH1")
 
 #include <windows.h>
+#include <cassert>
 #include <d3d9types.h>
 #include <d3dx9mesh.h>
 

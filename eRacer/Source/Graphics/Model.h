@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <d3d9types.h>
 #include <d3dx9mesh.h>
+#include "Renderable.h"
 
 #include <vector>
 
@@ -11,9 +12,11 @@ using namespace std;
 
 namespace Graphics{
 
-class Model {
+class Model : public Renderable {
 public:
 	Model();
+
+	virtual void Draw(IDirect3DDevice9* device) const;
 
 	/**
 	 * @brief getter for the mesh
@@ -23,7 +26,7 @@ public:
 	const ID3DXMesh* GetMesh() const;
 
 	//TODO comment or remove
-	//ID3DXMesh& mesh() { return *mesh_; };
+	ID3DXMesh& mesh() { return *mesh_; };
 	
 	/**
 	 * @brief setter for the mesh. Has to be implemented by subclasses
@@ -94,6 +97,9 @@ inline const vector<IDirect3DTexture9*>& Model::Textures() const{
 inline vector<IDirect3DTexture9*>& Model::Textures(){
 	return textures_;
 }
+
+
+
 
 }
 

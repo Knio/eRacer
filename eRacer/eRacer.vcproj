@@ -255,6 +255,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\Model.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Model.h"
 					>
 				</File>

@@ -8,9 +8,9 @@
 
 namespace Graphics {
 
-class SkyBox : public Model, public Renderable {
+class SkyBox : public Model {
 public:	
-	virtual void Draw(LPDIRECT3DDEVICE9 device) const;
+	virtual void Draw(IDirect3DDevice9* device) const;
 	void SetMesh(ID3DXMesh* mesh);
 };
 
