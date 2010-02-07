@@ -13,6 +13,7 @@ def _set_game(g):
 def game():
   return __game
 
+
 Vector3   = eRacer.D3DXVECTOR3
 Vector4   = eRacer.D3DXVECTOR4
 Point3    = eRacer.D3DXVECTOR3
@@ -36,6 +37,15 @@ cross     = eRacer.cross
 normalize = eRacer.normalize
 mul1      = eRacer.mul1
 mul0      = eRacer.mul0
+
+
+PI    = math.pi
+ZERO  = 1e-5
+def printvec(v):
+  print "(%6.2f %6.2f %6.2f)" % (v.x, v.y, v.z)
+
+def clamp(x, _min, _max):
+  return min(max(x, _min), _max)
 
 CONSTS    = eRacer.Constants().g_Constants
 
