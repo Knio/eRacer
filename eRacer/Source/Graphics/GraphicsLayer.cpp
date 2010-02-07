@@ -97,7 +97,7 @@ void GraphicsLayer::RenderView(const View& view){
     // render all geometry
     for (vector<Geometry*>::const_iterator geometry = visibleGeometry.begin(); 
         geometry!=visibleGeometry.end(); geometry++){
-            RenderGeometry(*geometry);
+			(*geometry)->Draw(m_pd3dDevice);
     }
     
     vector<Renderable*> renderables = view.scene->GetRenderables();
@@ -182,6 +182,7 @@ void GraphicsLayer::WriteString(const char* msg, const char* fontName, const flo
     m_fontManager.WriteString(msg, fontName, size, pos, color);
 }
 
+/*
 void GraphicsLayer::RenderGeometry(const Geometry* geometry){
     assert(NULL != geometry);
 
@@ -205,6 +206,7 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
         geometry->GetMesh()->DrawSubset(i);
     }
 }
+*/
 
 void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
 

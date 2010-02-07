@@ -12,6 +12,7 @@
 #include <vector>
 #include "d3d9types.h"
 #include "d3dx9mesh.h"
+#include "Renderable.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ namespace Graphics {
  * @see MovingGeometry
  * @see StaticGeometry
  */
-class Geometry : public Spatial
+class Geometry : public Spatial, public Renderable
 {
 public:
 	/**
@@ -31,6 +32,9 @@ public:
 	 *
 	 */
 	virtual ~Geometry();
+
+
+	virtual void Draw(IDirect3DDevice9* device) const;
 
 	/**
 	 * @brief Add myself to the list
@@ -106,9 +110,9 @@ protected:
 
 
 	Matrix transform_;
-	LPD3DXMESH mesh_;
+	ID3DXMesh* mesh_;
 	vector<D3DMATERIAL9*> materials_;
-	vector<LPDIRECT3DTEXTURE9> textures_;
+	vector<IDirect3DTexture9*> textures_;
 };
 
 inline const LPD3DXMESH Geometry::GetMesh() const{

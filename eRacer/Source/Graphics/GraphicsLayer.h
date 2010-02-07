@@ -38,7 +38,7 @@ protected:
 	GraphicsLayer(const GraphicsLayer&);
 	GraphicsLayer& operator= (const GraphicsLayer); 
 
-	void RenderGeometry(const Geometry* geometry);
+	//void RenderGeometry(const Geometry* geometry);
 	void RenderSkyBox(const Camera& camera, const Geometry& skyBox);
 	void SetCamera(const Camera& camera);
 
