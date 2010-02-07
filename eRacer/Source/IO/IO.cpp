@@ -70,17 +70,17 @@ void IO::_FreeMesh(Mesh &m)
 }
 
 // This could probably be done by Geometry
-void IO::_SetMesh(Graphics::Geometry *geom, Mesh &mesh)
+void IO::_SetMesh(Graphics::Model *model, Mesh &mesh)
 {
 	// TODO clear these std::vectors?
-	assert(!geom->Materials().size());
-	assert(!geom->Textures().size());
+	assert(!model->Materials().size());
+	assert(!model->Textures().size());
 
-	geom->SetMesh(mesh.mesh);
+	model->SetMesh(mesh.mesh);
 	for(DWORD i=0; i<mesh.n; i++)
 	{
-		geom->Materials().push_back(&mesh.materials[i]);
-		geom->Textures().push_back(mesh.textures[i]);
+		model->Materials().push_back(&mesh.materials[i]);
+		model->Textures().push_back(mesh.textures[i]);
 	}
 }
 
