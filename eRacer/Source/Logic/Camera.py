@@ -65,9 +65,9 @@ class FirstPersonCamera(Camera):
   def __init__(self): 
     Camera.__init__(self)
 
-    self.set_translation(Vector3(0, 20, 20))
+    self.set_translation(Vector3(0, 0, -20))
     self.acceleration = Vector3(0,0,0)
-    self.speed = 200
+    self.speed = 100
     
     game().event.Register(self.CameraAccelerateEvent)
     game().event.Register(self.CameraStrafeEvent)
@@ -82,6 +82,7 @@ class FirstPersonCamera(Camera):
     
   def CameraLookAroundEvent(self, relX, relY):
     self.rotate(-relX,-relY,0)
+    pass
     
   def Tick(self, time):
     Camera.Tick(self, time)

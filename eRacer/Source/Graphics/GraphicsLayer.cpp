@@ -3,6 +3,9 @@
 #include "Core/Time.h"
 #include "Math.h"
 
+#include <iostream>
+using namespace std;
+
 namespace Graphics {
 
 GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
@@ -125,8 +128,15 @@ void GraphicsLayer::RenderView(const View& view){
 void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
 {
     // Clear the backbuffer and the zbuffer
-    m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
-
+    m_pd3dDevice->Clear(
+        0, 
+        NULL, 
+        D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 
+        D3DCOLOR_COLORVALUE(0.0f,0.0f,0.0f,1.0f), 
+        1.0f, 
+        0
+    );
+    
     SetCamera(camera);
 
     vector<Geometry*> visibleGeometry;
@@ -184,7 +194,6 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
     // is this even the right matrix?
     m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &(geometry->GetTransform()) );
     
-
     for(unsigned int i = 0; i<geometry->Materials().size(); i++){
         m_pd3dDevice->SetMaterial( geometry->Materials()[i]);
         m_pd3dDevice->SetTexture(0, geometry->Textures()[i]);
@@ -206,6 +215,8 @@ void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
     // set the transform
 
     Matrix transform = skyBox.GetTransform();
+
+	//cout << camera.GetPosition().x << endl;
     transform*=CreateMatrix(camera.GetPosition());
     m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
     

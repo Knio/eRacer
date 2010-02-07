@@ -10,6 +10,7 @@
 #define PHYSICS_OBJECT_H
 
 #include <iostream>
+#include <cmath>
 #include "NxPhysics.h"
 #include "Core\Math.h"
 #include "Convert.h"
@@ -130,6 +131,7 @@ public:
 	{
 		return Actor->addLocalForceAtLocalPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));
 	}
+	float GetSpeed();
 
 protected:
 	/**

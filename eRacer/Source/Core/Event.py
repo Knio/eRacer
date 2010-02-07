@@ -8,7 +8,7 @@ class Event(eRacer.Event):
     print 'Initialized Event manager'
 
   def Register(self, obj, event=None):
-    print 'Register', event, obj
+    #print 'Register', event, obj
     try:
       if callable(obj):
         event = obj.__name__
