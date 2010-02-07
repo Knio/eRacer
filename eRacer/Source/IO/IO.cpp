@@ -1,9 +1,8 @@
+#pragma message("IOCPP0")
 #include "IO.h"
-#include <cstdio>
-
+#pragma message("IOCPP1")
 
 IO* IO::g_IO = NULL;
-
 
 LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
 {

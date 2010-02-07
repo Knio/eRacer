@@ -1,10 +1,16 @@
 #ifndef IO_H_
 #define IO_H_
 
-#include <string>
-#include "Graphics\Model.h"
+#pragma message("IOH1")
 
-using namespace std;
+#include <windows.h>
+#include <d3d9types.h>
+#include <d3dx9mesh.h>
+
+#pragma message("IOH2")
+#include "Graphics\Model.h"
+#pragma message("IOH3")
+
 
 struct Mesh
 {
@@ -31,7 +37,7 @@ public:
 	// TODO this should return a tuple (mesh, materials, textures)
 
 	/** Load a .x mesh into a Geometry node. This will also load any textures defined in the mesh */
-	virtual int LoadMesh(Graphics::Model* model, const char* file)	{ assert(false); return 0; }
+	virtual int LoadMesh(Graphics::Model* model, const char* file)		{ assert(false); return 0; }
 
 	/** Load a texture. returns (LPDIRECT3DTEXTURE9)-1 on failure. NULL is a valid, empty texture */
 	virtual LPDIRECT3DTEXTURE9 LoadTexture(const char* file)			{ assert(false); return NULL; }
@@ -55,4 +61,4 @@ inline IO* IO::GetInstance(){
 }
 
 #endif
-
+#pragma message("IOH4")

@@ -79,7 +79,6 @@ class FirstPersonCamera(Camera):
   def CameraStrafeEvent(self,acceleration):
     self.acceleration.x += acceleration*self.speed
     
-    
   def CameraLookAroundEvent(self, relX, relY):
     self.rotate(-relX,-relY,0)
     pass

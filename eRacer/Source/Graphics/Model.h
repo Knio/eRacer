@@ -1,10 +1,13 @@
+#ifndef MODEL_H_
+#define MODEL_H_
 
+#include <windows.h>
+#include <d3d9types.h>
+#include <d3dx9mesh.h>
 
-#pragma once
+#include <vector>
 
-#include "d3d9types.h"
-#include "d3dx9mesh.h"
-
+using namespace std;
 
 namespace Graphics{
 
@@ -93,3 +96,5 @@ inline vector<IDirect3DTexture9*>& Model::Textures(){
 }
 
 }
+
+#endif
