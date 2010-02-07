@@ -2,13 +2,12 @@
 
 #pragma once
 
-#include "Renderable.h"
-#include "Model.h"
+#include "Mesh.h"
 
 
 namespace Graphics {
 
-class SkyBox : public Model {
+class SkyBox : public Mesh {
 public:	
 	virtual void Draw(IDirect3DDevice9* device) const;
 	void SetMesh(ID3DXMesh* mesh);

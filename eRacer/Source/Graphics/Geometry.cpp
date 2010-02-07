@@ -36,7 +36,7 @@ void Geometry::Draw(IDirect3DDevice9* device) const{
 
     // set the transform
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &transform_);
-	Model::Draw(device);
+	Mesh::Draw(device);
 
 }
 

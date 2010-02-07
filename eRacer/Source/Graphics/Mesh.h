@@ -1,5 +1,4 @@
-#ifndef MODEL_H_
-#define MODEL_H_
+#pragma once
 
 #include <windows.h>
 #include <d3d9types.h>
@@ -12,9 +11,9 @@ using namespace std;
 
 namespace Graphics{
 
-class Model : public Renderable {
+class Mesh : public Renderable {
 public:
-	Model();
+	Mesh();
 
 	virtual void Draw(IDirect3DDevice9* device) const;
 
@@ -72,29 +71,29 @@ protected:
 	vector<IDirect3DTexture9*> textures_;
 };
 
-inline Model::Model()
+inline Mesh::Mesh()
 : mesh_(NULL)
 {
 }
 
-inline const ID3DXMesh* Model::GetMesh() const{
+inline const ID3DXMesh* Mesh::GetMesh() const{
 	return mesh_;
 }
 
 
-inline const vector<D3DMATERIAL9*>& Model::Materials() const{
+inline const vector<D3DMATERIAL9*>& Mesh::Materials() const{
 	return materials_;
 }
 
-inline vector<D3DMATERIAL9*>& Model::Materials(){
+inline vector<D3DMATERIAL9*>& Mesh::Materials(){
 	return materials_;
 }
 
-inline const vector<IDirect3DTexture9*>& Model::Textures() const{
+inline const vector<IDirect3DTexture9*>& Mesh::Textures() const{
 	return textures_;
 }
 
-inline vector<IDirect3DTexture9*>& Model::Textures(){
+inline vector<IDirect3DTexture9*>& Mesh::Textures(){
 	return textures_;
 }
 
@@ -102,5 +101,3 @@ inline vector<IDirect3DTexture9*>& Model::Textures(){
 
 
 }
-
-#endif

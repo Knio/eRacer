@@ -13,7 +13,7 @@
 #include "Renderable.h"
 #include "d3d9types.h"
 #include "d3dx9mesh.h"
-#include "Model.h"
+#include "Mesh.h"
 
 
 using namespace std;
@@ -26,7 +26,7 @@ namespace Graphics {
  * @see MovingGeometry
  * @see StaticGeometry
  */
-class Geometry : public Spatial, public Model
+class Geometry : public Spatial, public Mesh
 {
 public:
 	/**

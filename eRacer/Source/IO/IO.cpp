@@ -1,6 +1,4 @@
-#pragma message("IOCPP0")
 #include "IO.h"
-#pragma message("IOCPP1")
 
 IO* IO::g_IO = NULL;
 
@@ -19,10 +17,10 @@ LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
 
 
 
-Mesh IO::_LoadMesh(const char* file)
+MeshStruct IO::_LoadMesh(const char* file)
 {
 	LPD3DXBUFFER materialsbuffer;
-	Mesh mesh;
+	MeshStruct mesh;
 	HRESULT r = D3DXLoadMeshFromX(
 		file, 
 		D3DXMESH_SYSTEMMEM,
@@ -61,7 +59,8 @@ void IO::_FreeTexture(LPDIRECT3DTEXTURE9 t)
 {
 	if (t)	t->Release();
 }
-void IO::_FreeMesh(Mesh &m)
+
+void IO::_FreeMesh(MeshStruct &m)
 {
 	delete [] m.materials;
 	delete [] m.textures;
@@ -69,7 +68,7 @@ void IO::_FreeMesh(Mesh &m)
 }
 
 // This could probably be done by Geometry
-void IO::_SetMesh(Graphics::Model *model, Mesh &mesh)
+void IO::_SetMesh(Graphics::Mesh *model, MeshStruct &mesh)
 {
 	// TODO clear these std::vectors?
 	assert(!model->Materials().size());

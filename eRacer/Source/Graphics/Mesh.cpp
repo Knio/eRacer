@@ -1,9 +1,9 @@
-#include "Model.h"
+#include "Mesh.h"
 #include <cassert>
 
 namespace Graphics {
 
-void Model::Draw(IDirect3DDevice9* device) const{
+void Mesh::Draw(IDirect3DDevice9* device) const{
 	assert(NULL != device);
 
     //there need to be the same number of textures and materials
