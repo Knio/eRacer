@@ -25,10 +25,11 @@ class Vehicle(Entity):
   STATIC_FRICTION   = 1.0
   SLIDING_FRICTION  = 0.5
   
-  MAX_SPEED = 40.0
+  MAX_SPEED = 200.0
+  MAX_WHEEL_ANGLE = 0.78 #90 degrees max turn
   
-  REV_ALPHA   = 3.0/5.0
-  TURN_ALPHA  = 1.0/5.0
+  #REV_ALPHA   = 3.0/5.0
+  #TURN_ALPHA  = 1.0/5.0
   
   
   def __init__(self, scene):
@@ -54,8 +55,8 @@ class Vehicle(Entity):
       
     game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
   
-    self.acceleration = 0.
-    self.turning      = 0.
+ #   self.acceleration = 0.
+    #self.turning      = 0.
 
     self.throttle = 0.00 # position of the throttle on game controller from -1 to +1
     #if < 0, might want different logic for braking
@@ -63,6 +64,9 @@ class Vehicle(Entity):
 
     self.sliding = [False] * len(self.WHEELS)
     self.crashtime = 0
+    
+    self.accelRate = 5.0 # this should vary based on current speed
+    self.safeWheelAngle = 1.0 # maximum angle of the wheel turn, might vary depending on speed to eliminate flips
     
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
@@ -73,7 +77,6 @@ class Vehicle(Entity):
   def PlayerTurnEvent(self, turn):
     self.steerPos += turn  
 
-  
   def Tick(self, time):
     Entity.Tick(self, time)
     
@@ -83,41 +86,38 @@ class Vehicle(Entity):
     phys  = self.physics
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
-
+    bodyPos = phys.GetPosition()
+    orient = phys.GetOrientation()
+    #create vectors for the car in terms of world space
+    chassisForward = mul0(orient, Z)
+    normalize(chassisForward)
+    chassisUp = mul0(orient, Y)
+    normalize(chassisUp)
+    chassisRight = mul0(orient, X)
+    normalize(chassisRight) 
     self.PrintDebug()
+    self.UpdateSafeWheelAngle()
     # do engine/brake/steering/user input forces    
     
-    alphaa = math.pow(self.REV_ALPHA,  delta)
-    alphat = math.pow(self.TURN_ALPHA, delta)
+    #alphaa = math.pow(self.REV_ALPHA,  delta)
+   # alphat = math.pow(self.TURN_ALPHA, delta)
     
-    self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.throttle
-    self.turning      = (alphat)*self.turning      + (1-alphat)*self.steerPos
+    #self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.throttle
+    #self.turning      = (alphat)*self.turning      + (1-alphat)*self.steerPos
     
     crashed = True
     ddd = []
     for i,wheel in enumerate(self.WHEELS):
-      # position of wheel in world space
-      pos   = mul1(tx, wheel)
-      
-      # suspension axis (pointing down from car)
-      axis  = mul0(tx, -Y)
-      
       #raycast down
       normal = Vector3()
-      suspensionpoint = Vector3(wheel.x, wheel.y + 0.5, wheel.z)
-      dist = phys.RaycastDown(suspensionpoint, normal) - 0.5
+      localSusPoint = Point3(wheel.x, wheel.y + 0.5, wheel.z)
+      susPoint = mul1(tx, localSusPoint)
       
-      # we don't have a road yet, so it is implicitly a plane at y=0
-      # road normal - assume +Y      
-      #normal = Vector3(0,1,0)
-      
-      # cast a ray to the road, get distance
-      # dist = pos.y / -dot(axis, normal)
+      dist = phys.RaycastDown(susPoint, normal) - 0.5
 
-      #print dist
       disp = (self.DISPLACEMENT - dist)
       if disp < 0:
-        # whee is in the air - no it will not have any forcesww
+        # wheel is in the air - no it will not have any forcesww
         ddd.append(-1)
         continue
       if disp > 3*self.DISPLACEMENT:
@@ -128,10 +128,10 @@ class Vehicle(Entity):
       crashed = False
       
       # spring force
-      downforce = normal * disp * self.SPRING_K * self.SPRING_MAGIC
+      susForce = normal * disp * self.SPRING_K * self.SPRING_MAGIC
       #print delta, disp, self.SPRING_K, self.SPRING_MAGIC
       #print force.x, force.y, force.z
-      phys.AddWorldForceAtLocalPos(downforce, wheel)
+      phys.AddWorldForceAtLocalPos(susForce, wheel)
       
       # do shock absorber forces
       vel = phys.GetPointVelocity(wheel)
@@ -140,29 +140,40 @@ class Vehicle(Entity):
       phys.AddWorldForceAtLocalPos(slowforce, wheel)
       
       # do accelleration
+      engAccForce = chassisForward
+      engAccForce = engAccForce * (self.throttle * self.MASS * self.accelRate)
+      engAccStr = "Acc: %2.3f" %engAccForce.x + " %2.3f " %engAccForce.y + " %2.3f " %engAccForce.z
+      #print engAccStr
       
       # TODO modify Z for steering
       # direction of the wheel on the surface of the road
       if i < 2: # front wheel
-        turning = Matrix(ORIGIN, self.turning, Y)
+        turning = Matrix(ORIGIN, self.steerPos*self.safeWheelAngle, Y) 
+        # turning is a local space matrix
       else:
         turning = Matrix()
+        
+      #locoTraction = susForce * -1 * self.STATIC_FRICTION
+      #slideRatio = length(engAccForce) / length(locoTraction) # over 1 means sliding
+      #if slideRatio >= 1:
+      #  engAccForce *= (1/slideRatio)
       
-      forward = mul0(tx, mul0(turning, Z * self.acceleration * self.MAX_SPEED))
-      forward = forward - normal * dot(forward, normal)
+      #forward = mul0(tx, mul0(turning, Z * self.throttle * self.MAX_SPEED)) #this is direction we want to turn 
+      #forward = forward - normal * dot(forward, normal)
+      #projection of dir we want to turn onto the normal?
       
       # wheel's motion on the surface of the road
-      motion = vel - normal * dot(vel, normal)
+      #motion = vel - normal * dot(vel, normal) #projection of velocity onto the normal?
       
-      powerforce = forward - motion
+      #powerforce = forward - motion
       
-      if self.sliding[i]:
-        powerforce = powerforce * self.SLIDING_FRICTION * length(downforce)
-      else:
-        powerforce = powerforce * self.STATIC_FRICTION  * length(downforce)
+      #if self.sliding[i]:
+       # powerforce = powerforce * self.SLIDING_FRICTION * length(downforce)
+      #else:
+        #powerforce = powerforce * self.STATIC_FRICTION  * length(downforce)
         
       
-      phys.AddWorldForceAtLocalPos(powerforce, wheel)
+      phys.AddWorldForceAtLocalPos(engAccForce, wheel)
       
     # no wheels are touching the ground.
     # reset the car
@@ -181,11 +192,7 @@ class Vehicle(Entity):
       pos.y = 1.5
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
-      
-    #print ''.join('%6.2f' % i for i in ddd),
-    #print self.acceleration, self.turning
-    
-    #tx = Matrix()
+   
     self.transform = tx
 
   def set_transform(self, transform):
@@ -197,15 +204,15 @@ class Vehicle(Entity):
   def PrintDebug(self):
     # print debug info
     phys = self.physics
-    velx = phys.GetVelocity().x
-    vely = phys.GetVelocity().y
-    velz = phys.GetVelocity().z
-    velStr = "Vel: %2.3f" %velx + " %2.3f " %vely + " %2.3f " %velz
+    vel = phys.GetVelocity()
+
+    velStr = "Vel: %2.3f" %vel.x + " %2.3f " %vel.y + " %2.3f " %vel.z
     game().graphics.graphics.WriteString(
       velStr, "Verdana", 24, Point3(0,0,5))
       
     speed = phys.GetSpeed()
     speedStr = "Speed: %2.3f"%speed
+    #print speedStr
     game().graphics.graphics.WriteString(
       speedStr, "Verdana", 24, Point3(0,50,500))
     
@@ -216,4 +223,14 @@ class Vehicle(Entity):
     steerStr = "Control L/R:  %1.3f"%self.steerPos
     game().graphics.graphics.WriteString(
       steerStr, "Verdana", 24, Point3(0,150,0))
+  #make the max angle the largest it can be to not cause flipping
+  def UpdateSafeWheelAngle(self):
+    speed = self.physics.GetSpeed()
+    if -0.0001 < speed < 0.0001:
+      self.safeWheelAngle = 0.78 #90 degrees
+    else:
+      self.safeWheelAngle = 0.05 / (speed/self.MAX_SPEED)
+    if self.safeWheelAngle > self.MAX_WHEEL_ANGLE:
+      self.safeWheelAngle = self.MAX_WHEEL_ANGLE
+    #print self.safeWheelAngle
     
