@@ -25,7 +25,7 @@ StaticGeometry::StaticGeometry(const string& name, const Matrix& transform)
 StaticGeometry::~StaticGeometry(){
 }
 
-void StaticGeometry::SetMesh(const LPD3DXMESH mesh){
+void StaticGeometry::SetMesh(ID3DXMesh* mesh){
 	//this method can only be called once
 	assert(NULL == mesh_);
 	assert(NULL != mesh);

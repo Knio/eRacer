@@ -18,8 +18,7 @@ namespace Graphics {
 
 Geometry::Geometry(const string& name)
 	: Spatial(name),
-	  transform_(IDENTITY),
-	  mesh_(NULL)
+	  transform_(IDENTITY)
 {
 	
 }

@@ -24,7 +24,7 @@ void MovingGeometry::SetTransform(const  Matrix& transform){
 }
 
 
-void MovingGeometry::SetMesh(const LPD3DXMESH mesh){
+void MovingGeometry::SetMesh(ID3DXMesh* mesh){
 	//this method can only be called once
 	assert(NULL == mesh_);
 	assert(NULL != mesh);

@@ -10,8 +10,6 @@
 
 #include "Geometry.h"
 #include <vector>
-#include "d3d9types.h"
-#include "d3dx9mesh.h"
 
 using namespace std;
 
@@ -52,10 +50,10 @@ public:
 	 * @param mesh
 	 *			a pointer to the mesh for this geometry
 	 */
-	virtual void SetMesh(const LPD3DXMESH mesh);
+	virtual void SetMesh(ID3DXMesh* mesh);
 
 
 protected:
 };
 
-};
+}

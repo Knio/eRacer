@@ -86,27 +86,26 @@ void GraphicsLayer::RenderView(const View& view){
 
     SetCamera(*view.camera);
 
-    vector<Geometry*> visibleGeometry;
-    view.scene->GetVisibleGeometry(*view.camera, visibleGeometry);
+    vector<Renderable*> visibleRenderables;
+    view.scene->GetVisibleRenderables(*view.camera, visibleRenderables);
 
     // Begin the scene
     //In the future this will be done inside a loop to handle each shader/effect
     assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
 
     
-    // render all geometry
-    for (vector<Geometry*>::const_iterator geometry = visibleGeometry.begin(); 
-        geometry!=visibleGeometry.end(); geometry++){
-			(*geometry)->Draw(m_pd3dDevice);
+    for (vector<Renderable*>::const_iterator renderable = visibleRenderables.begin(); 
+        renderable!=visibleRenderables.end(); renderable++){
+			(*renderable)->Draw(m_pd3dDevice);
     }
-    
+    /*
     vector<Renderable*> renderables = view.scene->GetRenderables();
     for (vector<Renderable*>::const_iterator i=renderables.begin(); i!=renderables.end();i++)
     {
         (*i)->Draw(m_pd3dDevice);  
     }
-    
-    RenderSkyBox(*view.camera, view.scene->GetSkyBox());
+    */
+    //RenderSkyBox(*view.camera, view.scene->GetSkyBox());
     
   
     m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
@@ -207,7 +206,7 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
     }
 }
 */
-
+/*
 void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
 
     //there need to be the same number of textures and materials
@@ -234,7 +233,7 @@ void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
         skyBox.GetMesh()->DrawSubset(i);
     }
 }
-
+*/
 
 void GraphicsLayer::Shutdown()
 {

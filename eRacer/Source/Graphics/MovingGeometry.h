@@ -52,7 +52,7 @@ public:
 	 * @param mesh
 	 *			a pointer to the mesh for this geometry
 	 */
-	virtual void SetMesh(const LPD3DXMESH mesh);
+	virtual void SetMesh(ID3DXMesh* mesh);
 private:
 };
 

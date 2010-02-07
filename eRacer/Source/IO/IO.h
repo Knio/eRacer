@@ -2,7 +2,7 @@
 #define IO_H_
 
 #include <string>
-#include "Graphics\Geometry.h"
+#include "Graphics\Model.h"
 
 using namespace std;
 
@@ -31,7 +31,7 @@ public:
 	// TODO this should return a tuple (mesh, materials, textures)
 
 	/** Load a .x mesh into a Geometry node. This will also load any textures defined in the mesh */
-	virtual int LoadMesh(Graphics::Geometry* geom, const char* file)	{ assert(false); return 0; }
+	virtual int LoadMesh(Graphics::Model* model, const char* file)	{ assert(false); return 0; }
 
 	/** Load a texture. returns (LPDIRECT3DTEXTURE9)-1 on failure. NULL is a valid, empty texture */
 	virtual LPDIRECT3DTEXTURE9 LoadTexture(const char* file)			{ assert(false); return NULL; }
@@ -43,7 +43,7 @@ public:
 
 	// private
 	Mesh _LoadMesh(const char* file);
-	void _SetMesh(Graphics::Geometry* geom, Mesh &Mesh);
+	void _SetMesh(Graphics::Model* model, Mesh &Mesh);
 	LPDIRECT3DTEXTURE9 _LoadTexture(const char* file);	
 	void _FreeTexture(LPDIRECT3DTEXTURE9 t);
 	void _FreeMesh(Mesh &m);

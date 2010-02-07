@@ -43,11 +43,11 @@ public:
 	 *
 	 * @param camera 
 	 *			a camera defining the view frustum against which the scene is culled
-	 * @param visibleNodes
-	 *			the list the visible geometry nodes are appended to 
+	 * @param renderables
+	 *			the vector the visible renderables are appended to 
 	 *
 	 */
-	void GetVisibleGeometry(const Camera& camera, vector<Geometry*>& visibleNodes) const;
+	void GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const;
 
 	/**
 	 * @brief Factory method to create new non-moving geometry in the scene
@@ -78,15 +78,15 @@ public:
 
 	void LoadSkyBox(const std::string& filename);
 
-	const Geometry& GetSkyBox() const;
+	//const Geometry& GetSkyBox() const;
 	
-	void AddRenderable(Renderable* r) { renderable_.push_back(r); }
-	const vector<Renderable*> GetRenderables() const { return renderable_; }
+	void AddRenderable(Renderable* r) { renderables_.push_back(r); }
+	//const vector<Renderable*> GetRenderables() const { return renderable_; }
 
 private:
-	vector<Geometry*> 	geometry_;
-	vector<Renderable*> renderable_;
-	MovingGeometry 			skyBox_;
+	vector<Geometry*> 	geometries_;
+	vector<Renderable*> renderables_;
+	//MovingGeometry 			skyBox_;
 };
 
 
