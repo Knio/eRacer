@@ -1,6 +1,6 @@
 /**
- * @file StaticGeometry.h
- * @brief Definition of the StaticGeometry class
+ * @file StaticMeshNode.h
+ * @brief Definition of the StaticMeshNode class
  *
  * @date 12.01.2010
  * @author: Ole Rehmsen
@@ -22,9 +22,9 @@ namespace Graphics {
  * be associated with different geometry. This ensures that the bounding
  * volumes do not change over time.
  * 
- * @see MovingGeometryNode
+ * @see MovingMeshNode
  */
-class StaticGeometry : public MeshNode
+class StaticMeshNode : public MeshNode
 {
 public:
 	/**
@@ -35,12 +35,12 @@ public:
 	 * @param transform
 	 *			the transformation to apply to the geometry (for instancing)
 	 */
-	StaticGeometry(const string& name, const Matrix& transform);
+	StaticMeshNode(const string& name, const Matrix& transform);
 
 	/**
 	 * @brief Destructor stub.
 	 */
-	virtual ~StaticGeometry();
+	virtual ~StaticMeshNode();
 
 	/**
 	 * @brief setter for the mesh

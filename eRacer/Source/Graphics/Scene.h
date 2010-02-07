@@ -11,8 +11,8 @@
 #include <vector>
 #include "Camera.h"
 #include "Renderable.h"
-#include "StaticGeometry.h"
-#include "MovingGeometry.h"
+#include "StaticMeshNode.h"
+#include "MovingMeshNode.h"
 
 
 using namespace std;
@@ -63,7 +63,7 @@ public:
 	 *
 	 * @see CreateGeometry
 	 */ 
-	StaticGeometry* CreateStaticGeometry(const string& name, const Matrix& transform=IDENTITY);
+	StaticMeshNode* CreateStaticGeometry(const string& name, const Matrix& transform=IDENTITY);
 
 	/**
 	 * @brief Factory method to create new geometry in the scene
@@ -74,7 +74,7 @@ public:
 	 *			a transformation matrix for the geometry
 	 * @return a pointer to the newly created geometry
 	 */ 
-	MovingGeometry* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
+	MovingMeshNode* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
 
 	void LoadSkyBox(const std::string& filename);
 

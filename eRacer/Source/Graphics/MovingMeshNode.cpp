@@ -1,30 +1,30 @@
 /**
- * @file MovingGeometry.cpp
- * @brief Implementation of the MovingGeometry class
+ * @file MovingMeshNode.cpp
+ * @brief Implementation of the MovingMeshNode class
  *
  * @date 13.01.2010
  * @author: Ole Rehmsen
  */
 
-#include "MovingGeometry.h"
+#include "MovingMeshNode.h"
 namespace Graphics {
 
-MovingGeometry::MovingGeometry(const string& name)
+MovingMeshNode::MovingMeshNode(const string& name)
 	: MeshNode(name)
 {
 }
-MovingGeometry::~MovingGeometry(){
+MovingMeshNode::~MovingMeshNode(){
 	
 }
 
-void MovingGeometry::SetTransform(const  Matrix& transform){
+void MovingMeshNode::SetTransform(const  Matrix& transform){
 	transform_ = transform;
 	if(NULL != mesh_)
 		UpdateBounds();
 }
 
 
-void MovingGeometry::SetMesh(ID3DXMesh* mesh){
+void MovingMeshNode::SetMesh(ID3DXMesh* mesh){
 	//this method can only be called once
 	assert(NULL == mesh_);
 	assert(NULL != mesh);
