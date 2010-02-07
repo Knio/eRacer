@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Geometry.h"
+#include "MeshNode.h"
 #include <vector>
 
 using namespace std;
@@ -24,7 +24,7 @@ namespace Graphics {
  * 
  * @see MovingGeometryNode
  */
-class StaticGeometry : public Geometry
+class StaticGeometry : public MeshNode
 {
 public:
 	/**

@@ -21,7 +21,7 @@ Spatial::Spatial(const string& name)
 Spatial::~Spatial(){
 }
 
-void Spatial::cull(const Camera& camera, vector<const Geometry*>& visibleNodes) const{
+void Spatial::cull(const Camera& camera, vector<const MeshNode*>& visibleNodes) const{
 	if(!visible)
 		return;
 

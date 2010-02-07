@@ -10,7 +10,7 @@
 namespace Graphics {
 
 MovingGeometry::MovingGeometry(const string& name)
-	: Geometry(name)
+	: MeshNode(name)
 {
 }
 MovingGeometry::~MovingGeometry(){

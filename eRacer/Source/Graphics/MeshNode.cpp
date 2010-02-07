@@ -1,12 +1,12 @@
 /**
- * @file StaticGeometry.cpp
- * @brief Implementation of the StaticGeometry class
+ * @file MeshNode.cpp
+ * @brief Implementation of the MeshNode class
  *
  * @date 12.01.2010
  * @author: Ole Rehmsen
  */
 
-#include "Geometry.h"
+#include "MeshNode.h"
 #include "GraphicsLayer.h"
 #include "d3d9types.h"
 #include <iostream>
@@ -16,7 +16,7 @@ using namespace std;
 
 namespace Graphics {
 
-Geometry::Geometry(const string& name)
+MeshNode::MeshNode(const string& name)
 	: Spatial(name),
 	  transform_(IDENTITY)
 {
@@ -24,14 +24,14 @@ Geometry::Geometry(const string& name)
 }
 
 
-Geometry::~Geometry(){
+MeshNode::~MeshNode(){
 }
 
-void Geometry::cullRecursive(const Camera&, vector<const Geometry*>& visibleNodes) const{
+void MeshNode::cullRecursive(const Camera&, vector<const MeshNode*>& visibleNodes) const{
 	visibleNodes.push_back(this);
 }
 
-void Geometry::Draw(IDirect3DDevice9* device) const{
+void MeshNode::Draw(IDirect3DDevice9* device) const{
 	assert(NULL != device);
 
     // set the transform
@@ -41,7 +41,7 @@ void Geometry::Draw(IDirect3DDevice9* device) const{
 }
 
 
-void Geometry::UpdateBounds(){
+void MeshNode::UpdateBounds(){
 	unsigned int bytesPerVertex = mesh_->GetNumBytesPerVertex();
 	unsigned int positionOffset = -1;
 

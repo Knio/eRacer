@@ -16,7 +16,7 @@
 namespace Graphics {
 
 
-class Geometry;
+class MeshNode;
 
 /**
  * @brief Abstract base class for all nodes in a scene graph.
@@ -48,7 +48,7 @@ public:
 	 * @param visibleNodes
 	 * 			A vector to push all visible nodes to
 	 */
-	void cull(const Camera& camera, vector<const Geometry*>& visibleNodes) const;
+	void cull(const Camera& camera, vector<const MeshNode*>& visibleNodes) const;
 	const AxisAlignedBoundingBox& getWorldBoundingVolume() const;
 
 protected:
@@ -60,7 +60,7 @@ protected:
 	 * @param visibleNodes
 	 * 			A vector to push all visible nodes to
 	 */
-	virtual void cullRecursive(const Camera& camera, vector<const Geometry*>& visibleNodes) const = 0;
+	virtual void cullRecursive(const Camera& camera, vector<const MeshNode*>& visibleNodes) const = 0;
 	string name_;	
 	AxisAlignedBoundingBox worldBoundingVolume_;
 };

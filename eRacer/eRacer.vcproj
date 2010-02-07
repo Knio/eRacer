@@ -227,14 +227,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\Geometry.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Geometry.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Graphics\Graphics.py"
 					>
 				</File>
@@ -260,6 +252,14 @@
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\Mesh.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\MeshNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\MeshNode.h"
 					>
 				</File>
 				<File

@@ -17,7 +17,7 @@ using namespace std;
 namespace Graphics {
 
 StaticGeometry::StaticGeometry(const string& name, const Matrix& transform)
-	: Geometry(name)
+	: MeshNode(name)
 {
 	transform_ = transform;
 }

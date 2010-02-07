@@ -1,6 +1,6 @@
 /**
- * @file Geometry.h
- * @brief Definition of the Geometry class
+ * @file MeshNode.h
+ * @brief Definition of the MeshNode class
  *
  * @date 22.01.2010
  * @author: Ole Rehmsen
@@ -21,19 +21,19 @@ using namespace std;
 namespace Graphics {
 
 /**
- * @brief base class for different kinds of geometry
+ * @brief A mesh that is part of the scene graph
  * 
  * @see MovingGeometry
  * @see StaticGeometry
  */
-class Geometry : public Spatial, public Mesh
+class MeshNode : public Spatial, public Mesh
 {
 public:
 	/**
 	 * @brief Destructor stub. Virtual so that subclasse's constructors will be called
 	 *
 	 */
-	virtual ~Geometry();
+	virtual ~MeshNode();
 
 
 	virtual void Draw(IDirect3DDevice9* device) const;
@@ -48,7 +48,7 @@ public:
 	 *
 	 * @see Spatial::cullRecursive
 	 */
-	virtual void cullRecursive(const Camera& camera, vector<const Geometry*>& visibleNodes) const;
+	virtual void cullRecursive(const Camera& camera, vector<const MeshNode*>& visibleNodes) const;
 
 	const Matrix& GetTransform() const { return transform_; }
 
@@ -61,7 +61,7 @@ protected:
 	 * @param name
 	 *			a name for this node to fascilitate debugging
 	 */
-	Geometry(const string& name);
+	MeshNode(const string& name);
 
 	void UpdateBounds();
 

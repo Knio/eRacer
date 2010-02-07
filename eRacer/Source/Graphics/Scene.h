@@ -84,7 +84,7 @@ public:
 	//const vector<Renderable*> GetRenderables() const { return renderable_; }
 
 private:
-	vector<Geometry*> 	geometries_;
+	vector<MeshNode*> 	geometries_;
 	vector<Renderable*> renderables_;
 	//MovingGeometry 			skyBox_;
 };

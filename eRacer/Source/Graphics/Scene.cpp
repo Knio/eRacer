@@ -20,7 +20,7 @@ Scene::Scene()
 
 
 Scene::~Scene(){
-	for(vector<Geometry*>::iterator i = geometries_.begin();
+	for(vector<MeshNode*>::iterator i = geometries_.begin();
 		i != geometries_.end(); i++)
 		delete *i;
 	for(vector<Renderable*>::iterator i = renderables_.begin();
@@ -29,7 +29,7 @@ Scene::~Scene(){
 }
 
 void Scene::GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const {
-	for (vector<Geometry*>::const_iterator i = geometries_.begin(); i != geometries_.end(); i++)
+	for (vector<MeshNode*>::const_iterator i = geometries_.begin(); i != geometries_.end(); i++)
 	{
 		if ((*i)->visible)
 			visibleRenderables.push_back(*i);

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Geometry.h"
+#include "MeshNode.h"
 
 namespace Graphics {
 
@@ -21,7 +21,7 @@ namespace Graphics {
  * Moving geometry may not change its mesh over time! Another subclass should be dedicated 
  * to this if necessary.
  */
-class MovingGeometry : public Geometry
+class MovingGeometry : public MeshNode
 {
 public:
 	/**
