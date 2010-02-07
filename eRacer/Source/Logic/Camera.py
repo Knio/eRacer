@@ -79,7 +79,7 @@ class FirstPersonCamera(Camera):
   def CameraAccelerateEvent(self, acceleration):  
     self.velocity += Z * acceleration
     
-  def CameraStrafeEvent(self,acceleration):
+  def CameraStrafeEvent(self, acceleration):
     self.velocity += X * acceleration
     
   def CameraLookAroundEvent(self, relX, relY):
@@ -96,13 +96,13 @@ class FirstPersonCamera(Camera):
     delta = float(time.wall_delta) / time.RESOLUTION
         
     velocity  = mul0(self.transform, self.velocity)
-    self.position += velocity * (delta * 10.0)
+    self.position += velocity * (delta * 50.0)
 
     lookat    = self.position + mul0(self.transform, Z)
     
-    print self.look
-    printvec(self.position)
-    printvec(lookat)
+    # print self.look
+    # printvec(self.position)
+    # printvec(lookat)
     
     self.camera.SetFrame(self.position, lookat)
     
