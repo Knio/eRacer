@@ -35,7 +35,7 @@ public:
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 * 			- default: (0,1,0)
 	 */
-	Camera(const Point3& position = Point3(0, 0, -1), const Point3& lookAt = Point3(0,0,0), const Vector3& approxUp=Vector3(0,1,0));
+	Camera(const Point3& position = -Z, const Point3& lookAt = ORIGIN, const Vector3& approxUp=Y);
 
 	/**
 	 * @brief Destructor stub.
@@ -56,7 +56,7 @@ public:
 	 * 			a vector that approximates the up direction. The actual up vector
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 */
-	void SetFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp);
+	void SetFrame(const Point3& position=ORIGIN, const Point3& lookAt=Z, const Vector3& approxUp=Y);
 
 	/**
 	 * @brief set position

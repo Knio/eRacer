@@ -61,39 +61,48 @@ class ChasingCamera(Camera):
     
     self.camera.SetLookAt(targetPosition)
     
+
 class FirstPersonCamera(Camera):
   def __init__(self): 
     Camera.__init__(self)
 
-    self.set_translation(Vector3(0, 0, -20))
-    self.acceleration = Vector3(0,0,0)
-    self.speed = 100
+    self.position = Point3(0,0,0)
+    self.velocity = Vector3(0,0,0)
+    self.look   = 0.
+    
+    self.transform = Matrix()
     
     game().event.Register(self.CameraAccelerateEvent)
     game().event.Register(self.CameraStrafeEvent)
     game().event.Register(self.CameraLookAroundEvent)
     
   def CameraAccelerateEvent(self, acceleration):  
-    self.acceleration.z += acceleration*self.speed
+    self.velocity += Z * acceleration
     
   def CameraStrafeEvent(self,acceleration):
-    self.acceleration.x += acceleration*self.speed
+    self.velocity += X * acceleration
     
   def CameraLookAroundEvent(self, relX, relY):
-    self.rotate(-relX,-relY,0)
-    pass
+    x = self.look.real + relX
+    y = self.look.imag + relY
+    y = clamp(y, -PI/2+ZERO, PI/2-ZERO)
+    self.look = complex(x,y)
+    
+    self.transform  = Matrix(ORIGIN, self.look.imag, X) \
+                    * Matrix(ORIGIN, self.look.real, Y)
     
   def Tick(self, time):
     Camera.Tick(self, time)
     delta = float(time.wall_delta) / time.RESOLUTION
+        
+    velocity  = mul0(self.transform, self.velocity)
+    self.position += velocity * (delta * 10.0)
+
+    lookat    = self.position + mul0(self.transform, Z)
     
-    acc = Vector3(self.acceleration)
-    acc.x*=delta
-    acc.z*=delta
-    self.translate(acc)
+    print self.look
+    printvec(self.position)
+    printvec(lookat)
     
-  def transform_changed(self):
-    # t = self.get_translation()
-    # print t.x,",",t.y,",",t.z
-    # eRacer.debug(self.transform)
-    self.camera.SetViewMatrix(self.transform)  
+    self.camera.SetFrame(self.position, lookat)
+    
