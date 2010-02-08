@@ -11,6 +11,8 @@ from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera, FirstPersonCamera
 from Starfield  import Starfield
+from SkyBox     import SkyBox
+
 from CoordinateCross import CoordinateCross
 from GameMapping    import GameMapping
 
@@ -62,9 +64,9 @@ class GameState(State):
     
     scene = eRacer.Scene()
     self.scene = scene
-    game().graphics.graphics.m_scene = scene
+    self.view = eRacer.View(self.scene)
         
-    self.player = Vehicle(self.scene)
+    self.player = Vehicle(self.view.scene)
 
     self.cameras = []
     self.cameras.append(ChasingCamera(self.player))
@@ -76,23 +78,25 @@ class GameState(State):
     for camera in self.cameras:
       game().logic.Add(camera)
     
+    self.view.camera = self.camera.camera
     
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
-    game().logic.Add(Plane(scene))    
+    game().logic.Add(Plane(scene))
     
-    self.starfield1 = Starfield(scene, self.camera, 1024, 1000.0)
-    self.starfield2 = Starfield(scene, self.camera, 1024, 100.0)
-    self.starfield3 = Starfield(scene, self.camera, 1024, 20.0)
+    self.starfield1 = Starfield(self.view, self.camera, 1024, 1000.0)
+    self.starfield2 = Starfield(self.view, self.camera, 1024, 100.0)
+    self.starfield3 = Starfield(self.view, self.camera, 1024, 20.0)
     
-    self.coordinatecross = CoordinateCross(scene)
+    self.coordinatecross = CoordinateCross(self.view)
     game().logic.Add(self.coordinatecross)
 
     game().logic.Add(self.starfield1)
     game().logic.Add(self.starfield2)
     game().logic.Add(self.starfield3)
     
-    self.scene.LoadSkyBox('skybox2.x')
+    skybox = SkyBox(camera)
+    self.view.AddRenderable(skybox.graphics)
     
     self.boxcount = 1
     game().time.Zero()
@@ -110,6 +114,7 @@ class GameState(State):
     self.starfield1.camera = self.camera
     self.starfield2.camera = self.camera
     self.starfield3.camera = self.camera
+    self.view.camera = self.camera.camera
       
     
     
@@ -118,7 +123,7 @@ class GameState(State):
 
     #game().graphics.scene  = self.scene
     #game().graphics.camera = self.camera
-    game().graphics.views.append(eRacer.View(self.scene, self.camera.camera))
+    game().graphics.views.append(self.view)
     
     # if time.seconds > self.boxcount:
     #   self.boxcount += min(self.boxcount+1, 20)

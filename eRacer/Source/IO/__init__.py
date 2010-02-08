@@ -48,11 +48,13 @@ class IO(Module, eRacer.IO):
 
   def LoadMesh(self, node, name):
     name = j(MODELPATH,name)
+    print "Loading mesh %s" % name
     if not name in self.meshes:
       r = self._LoadMesh(name)
       if not self.valid(r):
         print 'Failed to load mesh "%s"' % name
         return -1
+      print "Loaded mesh %s" % name
       self.meshes[name] = r
 
     mesh = self.meshes[name]    

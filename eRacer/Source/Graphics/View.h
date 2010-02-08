@@ -11,14 +11,17 @@ namespace Graphics{
 typedef D3DVIEWPORT9 Viewport;
 
 struct View {
-	static const Camera DEFAULT_CAMERA;
+	static Camera DEFAULT_CAMERA;
 	static const Viewport DEFAULT_VIEWPORT;
 
-	View(const Scene* s, const Camera* c = &DEFAULT_CAMERA, const Viewport* v=&DEFAULT_VIEWPORT) : camera(c), scene(s), viewport(v) {};
+	View(const Scene* s, Camera* c = &DEFAULT_CAMERA, const Viewport* v=&DEFAULT_VIEWPORT) : camera(c), scene(s), viewport(v) {};
 
-	const Camera* camera;
+	Camera* camera;
 	const Scene* scene;
 	const Viewport* viewport;
+	vector<const Renderable*> viewDependantRenderables;
+	void AddRenderable(const Renderable* renderable);
+
 };
 
 }

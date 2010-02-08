@@ -42,6 +42,8 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 
 
 void MeshNode::UpdateBounds(){
+	assert(NULL != mesh_);
+	
 	unsigned int bytesPerVertex = mesh_->GetNumBytesPerVertex();
 	unsigned int positionOffset = -1;
 

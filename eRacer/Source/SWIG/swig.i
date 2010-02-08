@@ -33,6 +33,7 @@
 #include "..\Graphics\GraphicsLayer.h"
 #include "..\Graphics\Window.h"
 #include "..\Graphics\Starfield.h"
+#include "..\Graphics\SkyBox.h"
 #include "..\Graphics\CoordinateCross.h"
 
 
@@ -69,6 +70,7 @@ These are the classes that get exposed to Python
 
 // SWIG
 %include "std_string.i"
+%include "std_vector.i"
 
 
 // Core
@@ -111,7 +113,7 @@ These are the classes that get exposed to Python
 %include "..\Graphics\Window.h"
 %include "..\Graphics\Starfield.h"
 %include "..\Graphics\CoordinateCross.h"
-
+%include "..\Graphics\SkyBox.h"
 
 // Sound
 %include "..\Sound\SoundLayer.h"

@@ -19,4 +19,8 @@ class Plane(Entity):
   def Tick(self, time):
      Entity.Tick(self, time)
      pos = self.physics.GetPosition()
+     print "Plane tick"
      self.graphics.SetTransform(self.physics.GetTransform())
+
+  def __del__(self):
+    print "Plane being deleted"

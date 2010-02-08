@@ -74,6 +74,7 @@ protected:
 inline Mesh::Mesh()
 : mesh_(NULL)
 {
+	printf("MESH = %p", mesh_);
 }
 
 inline const ID3DXMesh* Mesh::GetMesh() const{

@@ -76,11 +76,8 @@ public:
 	 */ 
 	MovingMeshNode* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
 
-	void LoadSkyBox(const std::string& filename);
-
-	//const Geometry& GetSkyBox() const;
 	
-	void AddRenderable(Renderable* r) { renderables_.push_back(r); }
+	//void AddRenderable(Renderable* r) { renderables_.push_back(r); }
 	//const vector<Renderable*> GetRenderables() const { return renderable_; }
 
 private:

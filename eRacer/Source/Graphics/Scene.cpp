@@ -8,7 +8,6 @@
 
 #include "Scene.h"
 #include "IO/IO.h"
-#include "SkyBox.h"
 
 namespace Graphics {
 
@@ -50,16 +49,6 @@ StaticMeshNode* Scene::CreateStaticGeometry(const string& name, const Matrix& tr
 }
 
 
-void Scene::LoadSkyBox(const std::string& filename){
-	const float SKYBOX_SIZE = 1000;
-
-	SkyBox* skyBox = new SkyBox();
-
-	//we might want to make IO use strings in future...
-	IO::GetInstance()->LoadMesh(skyBox, filename.c_str());
-	//skyBox_.SetTransform(CreateMatrix(SKYBOX_SIZE,SKYBOX_SIZE,SKYBOX_SIZE));
-	renderables_.push_back(skyBox);
-}
 
 /*
 const Geometry& Scene::GetSkyBox() const{
