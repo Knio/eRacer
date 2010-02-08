@@ -20,8 +20,8 @@ Scene::Scene()
 
 
 Scene::~Scene(){
-	for(vector<MeshNode*>::iterator i = geometries_.begin();
-		i != geometries_.end(); i++)
+	for(vector<MeshNode*>::iterator i = meshNodes_.begin();
+		i != meshNodes_.end(); i++)
 		delete *i;
 	for(vector<Renderable*>::iterator i = renderables_.begin();
 		i != renderables_.end(); i++)
@@ -29,7 +29,7 @@ Scene::~Scene(){
 }
 
 void Scene::GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const {
-	for (vector<MeshNode*>::const_iterator i = geometries_.begin(); i != geometries_.end(); i++)
+	for (vector<MeshNode*>::const_iterator i = meshNodes_.begin(); i != meshNodes_.end(); i++)
 	{
 		if ((*i)->visible)
 			visibleRenderables.push_back(*i);
@@ -40,12 +40,12 @@ void Scene::GetVisibleRenderables(const Camera& camera, vector<Renderable*>& vis
 MovingMeshNode* Scene::CreateMovingGeometry(const string& name, const Matrix& transform) {
 	MovingMeshNode* result = new MovingMeshNode(name);
 	result->SetTransform(transform);
-	geometries_.push_back(result);
+	meshNodes_.push_back(result);
 	return result;
 }
 StaticMeshNode* Scene::CreateStaticGeometry(const string& name, const Matrix& transform) {
 	StaticMeshNode* result = new StaticMeshNode(name, transform);
-	geometries_.push_back(result);
+	meshNodes_.push_back(result);
 	return result;
 }
 
