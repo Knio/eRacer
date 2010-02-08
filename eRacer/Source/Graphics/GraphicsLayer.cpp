@@ -24,8 +24,8 @@ GraphicsLayer::~GraphicsLayer()
 
 void GraphicsLayer::SetCamera(const Camera& camera)
 {
-    m_pd3dDevice->SetTransform( D3DTS_VIEW, &camera.GetViewMatrix() );
     m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &camera.GetProjectionMatrix() );
+    m_pd3dDevice->SetTransform( D3DTS_VIEW, &camera.GetViewMatrix() );
 }
 
 int GraphicsLayer::Init( HWND hWnd ) 
@@ -149,6 +149,7 @@ void GraphicsLayer::RenderGeometry(const Geometry* geometry){
     // TODO unset it after!
     // is this even the right matrix?
     m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &(geometry->GetTransform()) );
+    
     
     for(unsigned int i = 0; i<geometry->Materials().size(); i++){
         m_pd3dDevice->SetMaterial( geometry->Materials()[i]);

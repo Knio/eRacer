@@ -106,7 +106,7 @@ public:
 	NxActor* CreateActor(const NxActorDesc& actorDesc);
 
 	/** returns the WORLD velocity of a point in LOCAL space */
-	Vector3 GetPointVelocity(const Point3 &pos)
+	Vector3 GetLocalPointWorldVelocity(const Point3 &pos)
 	{
 		return NxVec3_Vector3(Actor->getLocalPointVelocity(Vector3_NxVec3(pos)));
 	}

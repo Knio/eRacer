@@ -87,7 +87,7 @@ class GameState(State):
     
     self.coordinatecross = CoordinateCross(scene)
     game().logic.Add(self.coordinatecross)
-
+    
     game().logic.Add(self.starfield1)
     game().logic.Add(self.starfield2)
     game().logic.Add(self.starfield3)

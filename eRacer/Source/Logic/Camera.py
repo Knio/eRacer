@@ -43,7 +43,7 @@ class ChasingCamera(Camera):
   def Tick(self, time):
     Camera.Tick(self, time)
     
-    vel = length(self.target.physics.GetPointVelocity(ORIGIN))
+    vel = length(self.target.physics.GetLocalPointWorldVelocity(ORIGIN))
     
     behind = Point3(0,4,-10-vel)
     behind = eRacer.mul1(self.target.transform, behind)
