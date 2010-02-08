@@ -54,8 +54,8 @@ class Vehicle(Entity):
       
     game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
   
-    #self.acceleration = 0.
-    #self.turning      = 0.
+    self.acceleration = 0.
+    self.turning      = 0.
 
     self.throttle = 0.00 # position of the throttle on game controller from -1 to +1
     #if < 0, might want different logic for braking

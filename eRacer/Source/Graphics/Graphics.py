@@ -36,10 +36,10 @@ class Graphics(Module):
     #print self.camera, self.scene
     # self.graphics.RenderFrame(self.camera.camera, self.scene)
     
-    
+    self.graphics.PreRender();
     while self.views:
       self.graphics.RenderView(self.views.pop())
-    
+    self.graphics.PostRender();
     
     self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())
   

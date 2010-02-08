@@ -80,38 +80,33 @@ int GraphicsLayer::Init( HWND hWnd )
     return S_OK;
 }
 
-void GraphicsLayer::RenderView(const View& view){
-	    // Clear the backbuffer and the zbuffer
+void GraphicsLayer::PreRender(){
+        // Clear the backbuffer and the zbuffer
     m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
+
+    // Begin the scene
+    //In the future this will be done inside a loop to handle each shader/effect
+    assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
+}
+
+
+void GraphicsLayer::RenderView(const View& view){
 
     SetCamera(*view.camera);
 
     vector<Renderable*> visibleRenderables;
     view.scene->GetVisibleRenderables(*view.camera, visibleRenderables);
-
-    // Begin the scene
-    //In the future this will be done inside a loop to handle each shader/effect
-    assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
-
     
     for (vector<Renderable*>::const_iterator renderable = visibleRenderables.begin(); 
         renderable!=visibleRenderables.end(); renderable++){
 			(*renderable)->Draw(m_pd3dDevice);
     }
-    /*
-    vector<Renderable*> renderables = view.scene->GetRenderables();
-    for (vector<Renderable*>::const_iterator i=renderables.begin(); i!=renderables.end();i++)
-    {
-        (*i)->Draw(m_pd3dDevice);  
-    }
-    */
-    //RenderSkyBox(*view.camera, view.scene->GetSkyBox());
-    
-  
+}
+
+void GraphicsLayer::PostRender(){
     m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
-  
-    
-    // draw overlay
+
+     // draw overlay
     m_fontManager.Draw();
     
     
@@ -119,7 +114,7 @@ void GraphicsLayer::RenderView(const View& view){
     m_pd3dDevice->EndScene();
     
     // Present the backbuffer contents to the display
-    m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+    m_pd3dDevice->Present( NULL, NULL, NULL, NULL );   
 }
 
 
