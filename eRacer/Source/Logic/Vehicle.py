@@ -59,6 +59,7 @@ class Vehicle(Entity):
 
     self.throttle = 0.00 # position of the throttle on game controller from -1 to +1
     #if < 0, might want different logic for braking
+    self.brake    = False
     self.steerPos = 0.00 # position of the control stick from left to right ranges from -1 to +1
 
     self.sliding = [False] * len(self.WHEELS)
@@ -66,12 +67,17 @@ class Vehicle(Entity):
     
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
-  #change in throttle ranges between -1 and +1
+    #change in throttle ranges between -1 and +1
+
+
+  def PlayerBrakeEvent(self, brake):
+    self.brake = brake
+
   def PlayerAccelerateEvent(self, changeThrottle):
-    self.throttle += changeThrottle
+    self.throttle = changeThrottle
 
   def PlayerTurnEvent(self, turn):
-    self.steerPos += turn  
+    self.steerPos = turn
 
   
   def Tick(self, time):

@@ -2,6 +2,13 @@
 #include "GraphicsLayer.h"
 namespace Graphics {
 
+float random(float _min=0, float _max=1)
+{
+  float f = (float)rand()/RAND_MAX;
+  return (_max-_min)*f + _min;
+}
+
+
 Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
 {   
 	GraphicsLayer*g = GraphicsLayer::GetInstance();
@@ -16,10 +23,11 @@ Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
   stars = new Star[N];
   for (int i=0;i<N;i++)
   {
-    stars[i].pos.x = ((float)(rand())/RAND_MAX-0.5f)*2*SIZE;
-    stars[i].pos.y = ((float)(rand())/RAND_MAX-0.5f)*2*SIZE;
-    stars[i].pos.z = ((float)(rand())/RAND_MAX-0.5f)*2*SIZE;
-    stars[i].color = 0x00FFFFFF;
+    stars[i].pos.x = random(-1, 1)*SIZE;
+    stars[i].pos.y = random(-1, 1)*SIZE;
+    stars[i].pos.z = random(-1, 1)*SIZE;
+    stars[i].color = D3DCOLOR_COLORVALUE(random(0.5, 1.0), random(0.5, 1.0), random(0.5, 1.0), 1.0f);
+    
   }
   oldcamera = IDENTITY;
 }
