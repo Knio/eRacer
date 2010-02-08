@@ -60,7 +60,7 @@ void Starfield::Update(const Matrix &newcamera, const Point3& pos)
   
   vb->Unlock();
 }
-void Starfield::Draw(LPDIRECT3DDEVICE9 dev)
+void Starfield::Draw(LPDIRECT3DDEVICE9 dev) const
 {
   dev->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
   dev->SetStreamSource(0, vb, 0, sizeof(Star));

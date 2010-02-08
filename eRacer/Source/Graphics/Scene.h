@@ -11,8 +11,8 @@
 #include <vector>
 #include "Camera.h"
 #include "Renderable.h"
-#include "StaticGeometry.h"
-#include "MovingGeometry.h"
+#include "StaticMeshNode.h"
+#include "MovingMeshNode.h"
 
 
 using namespace std;
@@ -43,11 +43,11 @@ public:
 	 *
 	 * @param camera 
 	 *			a camera defining the view frustum against which the scene is culled
-	 * @param visibleNodes
-	 *			the list the visible geometry nodes are appended to 
+	 * @param renderables
+	 *			the vector the visible renderables are appended to 
 	 *
 	 */
-	void GetVisibleGeometry(const Camera& camera, vector<Geometry*>& visibleNodes) const;
+	void GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const;
 
 	/**
 	 * @brief Factory method to create new non-moving geometry in the scene
@@ -63,7 +63,7 @@ public:
 	 *
 	 * @see CreateGeometry
 	 */ 
-	StaticGeometry* CreateStaticGeometry(const string& name, const Matrix& transform=IDENTITY);
+	StaticMeshNode* CreateStaticGeometry(const string& name, const Matrix& transform=IDENTITY);
 
 	/**
 	 * @brief Factory method to create new geometry in the scene
@@ -74,19 +74,19 @@ public:
 	 *			a transformation matrix for the geometry
 	 * @return a pointer to the newly created geometry
 	 */ 
-	MovingGeometry* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
+	MovingMeshNode* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
 
 	void LoadSkyBox(const std::string& filename);
 
-	const Geometry& GetSkyBox() const;
+	//const Geometry& GetSkyBox() const;
 	
-	void AddRenderable(Renderable* r) { renderable_.push_back(r); }
-	const vector<Renderable*> GetRenderables() const { return renderable_; }
+	void AddRenderable(Renderable* r) { renderables_.push_back(r); }
+	//const vector<Renderable*> GetRenderables() const { return renderable_; }
 
 private:
-	vector<Geometry*> 	geometry_;
-	vector<Renderable*> renderable_;
-	MovingGeometry 			skyBox_;
+	vector<MeshNode*> 	meshNodes_;
+	vector<Renderable*> renderables_;
+	//MovingGeometry 			skyBox_;
 };
 
 

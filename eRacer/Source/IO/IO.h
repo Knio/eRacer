@@ -1,12 +1,16 @@
 #ifndef IO_H_
 #define IO_H_
 
-#include <string>
-#include "Graphics\Geometry.h"
 
-using namespace std;
+#include <windows.h>
+#include <cassert>
+#include <d3d9types.h>
+#include <d3dx9mesh.h>
 
-struct Mesh
+#include "Graphics\Mesh.h"
+
+
+struct MeshStruct
 {
 	DWORD				n;
 	LPD3DXMESH			mesh;
@@ -31,7 +35,7 @@ public:
 	// TODO this should return a tuple (mesh, materials, textures)
 
 	/** Load a .x mesh into a Geometry node. This will also load any textures defined in the mesh */
-	virtual int LoadMesh(Graphics::Geometry* geom, const char* file)	{ assert(false); return 0; }
+	virtual int LoadMesh(Graphics::Mesh* model, const char* file)		{ assert(false); return 0; }
 
 	/** Load a texture. returns (LPDIRECT3DTEXTURE9)-1 on failure. NULL is a valid, empty texture */
 	virtual LPDIRECT3DTEXTURE9 LoadTexture(const char* file)			{ assert(false); return NULL; }
@@ -39,14 +43,14 @@ public:
 	/** Check if a texture is valid */
 	static bool valid(LPDIRECT3DTEXTURE9 t) { return t != (LPDIRECT3DTEXTURE9)-1; }
 	/** Check if a mesh is valid */
-	static bool valid(Mesh &m) { return m.n != -1; }
+	static bool valid(MeshStruct &m) { return m.n != -1; }
 
 	// private
-	Mesh _LoadMesh(const char* file);
-	void _SetMesh(Graphics::Geometry* geom, Mesh &Mesh);
+	MeshStruct _LoadMesh(const char* file);
+	void _SetMesh(Graphics::Mesh* model, MeshStruct &Mesh);
 	LPDIRECT3DTEXTURE9 _LoadTexture(const char* file);	
 	void _FreeTexture(LPDIRECT3DTEXTURE9 t);
-	void _FreeMesh(Mesh &m);
+	void _FreeMesh(MeshStruct &m);
 };
 
 inline IO* IO::GetInstance(){
@@ -55,4 +59,3 @@ inline IO* IO::GetInstance(){
 }
 
 #endif
-

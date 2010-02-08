@@ -22,7 +22,7 @@ public:
 	LPDIRECT3DVERTEXBUFFER9 vb;
 	Starfield(int n, float s);
 	void Update(const Matrix &newcamera, const Point3 &pos);
-	void Draw(LPDIRECT3DDEVICE9);
+	virtual void Draw(LPDIRECT3DDEVICE9) const;
 };
 
 }

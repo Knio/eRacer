@@ -1,6 +1,6 @@
 /**
- * @file MovingGeometry.h
- * @brief Definition of the MovingGeometry class
+ * @file MovingMeshNode.h
+ * @brief Definition of the MovingMeshNode class
  *
  * @date 12.01.2010
  * @author: Ole Rehmsen
@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Geometry.h"
+#include "MeshNode.h"
 
 namespace Graphics {
 
@@ -21,18 +21,18 @@ namespace Graphics {
  * Moving geometry may not change its mesh over time! Another subclass should be dedicated 
  * to this if necessary.
  */
-class MovingGeometry : public Geometry
+class MovingMeshNode : public MeshNode
 {
 public:
 	/**
 	 * @brief Constructor.
 	 */
-	MovingGeometry(const string& name);
+	MovingMeshNode(const string& name);
 	
 	/**
 	 * @brief Destructor stub.
 	 */
-	virtual ~MovingGeometry();
+	virtual ~MovingMeshNode();
 
 	/**
 	 * @brief setter for the world transform of this geometry
@@ -52,7 +52,7 @@ public:
 	 * @param mesh
 	 *			a pointer to the mesh for this geometry
 	 */
-	virtual void SetMesh(const LPD3DXMESH mesh);
+	virtual void SetMesh(ID3DXMesh* mesh);
 private:
 };
 

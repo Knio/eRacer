@@ -14,8 +14,10 @@ class MenuState(State):
     
   def Tick(self, time):
     State.Tick(self, time)
-    game().graphics.scene  = self.scene
-    game().graphics.camera = self.camera
+
+    game().graphics.views.append(eRacer.View(self.scene, self.camera.camera))
+    #game().graphics.scene  = self.scene
+    #game().graphics.camera = self.camera
     
     y = 200
     for i,m in enumerate(self.MENU):
