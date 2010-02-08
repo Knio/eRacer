@@ -31,17 +31,19 @@ class GameMapping(Mapping):
   def MouseMovedEvent(self, relX, relY):
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
     
-  def GamepadStick1RelativeEvent(self, x, y):
+  def GamepadStick1AbsoluteEvent(self, x, y):
     return E.PlayerTurnEvent(x/1000.0)
 
-  def GamepadStick2RelativeEvent(self, relX, relY):
+  def GamepadStick2AbsoluteEvent(self, relX, relY):
     #needs calibration
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
-
-    
-  def GamepadTriggerRelativeEvent(self, z):
+        
+  def GamepadTriggerAbsoluteEvent(self, z):
     return E.PlayerAccelerateEvent(z/-1000.0)
     
   def GamepadButtonPressedEvent(self, button):
-    return E.PauseEvent()
+    if button == eRacer.BUTTON_START:   return E.PauseEvent()
+    if button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(True)
     
+  def GamepadButtonReleasedEvent(self, button):
+    if button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(False)
