@@ -49,10 +49,12 @@ class GameState(State):
   def __init__(self):
     State.__init__(self)
     self.loaded = False
+    self.load()
     
   def Activate(self):
-    if not self.loaded:
-      game().PushState(LoadingState(self.load))
+    #if not self.loaded:
+    #  game().PushState(LoadingState(self.load))
+    pass
     
   def load(self):
     # testing stuff

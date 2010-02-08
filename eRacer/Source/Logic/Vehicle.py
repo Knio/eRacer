@@ -54,22 +54,23 @@ class Vehicle(Entity):
       
     game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
   
-    self.acceleration = 0.
-    self.turning      = 0.
 
-    self.throttle = 0.00 # position of the throttle on game controller from -1 to +1
-    #if < 0, might want different logic for braking
-    self.brake    = False
-    self.steerPos = 0.00 # position of the control stick from left to right ranges from -1 to +1
+    self.throttle = 0.      # position of the throttle on game controller from 0 to 1
+    self.brake    = False   # brake button
+    self.steerPos = 0.      # position of the control stick from left to right ranges from -1 to +1
 
-    self.sliding = [False] * len(self.WHEELS)
-    self.crashtime = 0
+    self.acceleration = 0.  # physics engine setting.   from 0 to 1
+    self.turning      = 0.  # physics steering setting. from 0 to 1
+    
+    self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
+    self.crashtime = 0      # time since wheels were last in contact with the ground
     
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
-    #change in throttle ranges between -1 and +1
-
-
+    game().event.Register(self.PlayerBrakeEvent)
+    
+    
+  # control events
   def PlayerBrakeEvent(self, brake):
     self.brake = brake
 
@@ -78,7 +79,6 @@ class Vehicle(Entity):
 
   def PlayerTurnEvent(self, turn):
     self.steerPos = turn
-
   
   def Tick(self, time):
     Entity.Tick(self, time)
