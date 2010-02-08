@@ -1,7 +1,9 @@
 from Core.Globals import *
 
 class Vehicle(Entity):
+  
   MODEL   = "Ship1.x"
+  #MODEL   = "box.x"
   SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left
@@ -27,7 +29,7 @@ class Vehicle(Entity):
   
   MAX_SPEED = 40.0
   
-  REV_ALPHA   = 3.0/5.0
+  REV_ALPHA   = 1.0/8.0
   TURN_ALPHA  = 1.0/5.0
   
   
@@ -64,6 +66,10 @@ class Vehicle(Entity):
     
     self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
     self.crashtime = 0      # time since wheels were last in contact with the ground
+    
+    self.maxEngForce    = 5e4   #the max amount the engine can put on a wheel at the moment
+                                #constant for now, will be variable later
+    self.maxBrakeForce  = 5e4   #always constant
     
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
@@ -110,10 +116,11 @@ class Vehicle(Entity):
       worldvel   = phys.GetLocalPointWorldVelocity(localpos)
       
       #raycast down from suspension point
+      upamount = 1.0
       worldroadnormal = Vector3()
-      localsuspoint   = Point3(localpos.x, localpos.y + 0.5, localpos.z)
+      localsuspoint   = Point3(localpos.x, localpos.y + upamount, localpos.z)
       worldsuspoint   = mul1(tx, localsuspoint)
-      dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - 0.5
+      dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
       disp = (self.DISPLACEMENT - dist)
       
       # check for invalid distances
@@ -141,6 +148,9 @@ class Vehicle(Entity):
       
       # do accelleration
       
+      forwardSpeed = self.GetWheelSpeed(delta, downforce)
+      print forwardSpeed
+      
       # TODO modify Z for steering
       # direction of the wheel on the surface of the road
       # front wheel turns
@@ -152,14 +162,16 @@ class Vehicle(Entity):
       worldrollingvel = worldrollingdir * dot(worldrollingdir, worldvel)
         
             
-      worldforwardvel = mul0(tx, mul0(turning, Z * self.acceleration * self.MAX_SPEED))
+      worldforwardvel = mul0(tx, mul0(turning, Z * forwardSpeed))
       
       # wheel's current motion on the surface of the road
       worldwheelvel = worldvel - worldroadnormal * dot(worldvel, worldroadnormal)
       
       
+
       powerforce = worldrollingvel + worldforwardvel - worldvel
       
+
       
       
       if self.sliding[i]:
@@ -189,8 +201,8 @@ class Vehicle(Entity):
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
-    #print ''.join('%6.2f' % i for i in ddd),
-    #print self.acceleration, self.turning
+    print ''.join('%6.2f' % i for i in ddd),
+    print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx
@@ -223,4 +235,17 @@ class Vehicle(Entity):
     steerStr = "Control L/R:  %1.3f"%self.steerPos
     game().graphics.graphics.WriteString(
       steerStr, "Verdana", 24, Point3(0,150,0))
+    
+  #get the speed the car wants to add to this wheel in the forward direction
+  #this will be due to the braking or acceleration the user wants
+  #needs the weight on this tire
+  #returns a floating number, if negative, then a braking force was applied
+  def GetWheelSpeed(self, timeStep, normalForce):
+    gravityMag = 9.81 #should change based on track segment
+    forceMag = self.maxEngForce * self.acceleration
+    brakeMag = self.maxBrakeForce * self.brake * -1.0
+    massOnTire = length(normalForce) / gravityMag
+    speedDelta = (forceMag+brakeMag) / massOnTire * timeStep
+    return speedDelta
+    
     
