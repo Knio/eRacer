@@ -49,7 +49,7 @@ public:
 
 	void WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const RGB &color=WHITE);
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
-	//void RenderFrame(const Camera& camera, const Scene& scene);
+
 	void PreRender();
 	void RenderView(const View& view);
 	void PostRender();
