@@ -54,7 +54,7 @@ class IO(Module, eRacer.IO):
       if not self.valid(r):
         print 'Failed to load mesh "%s"' % name
         return -1
-      print "Loaded mesh %s" % name
+      # print "Loaded mesh %s" % name
       self.meshes[name] = r
 
     mesh = self.meshes[name]    

@@ -11,7 +11,7 @@ from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera, FirstPersonCamera
 from Starfield  import Starfield
-from SkyBox     import SkyBox
+from Graphics.SkyBox     import SkyBox
 
 from CoordinateCross import CoordinateCross
 from GameMapping    import GameMapping
@@ -96,7 +96,7 @@ class GameState(State):
     game().logic.Add(self.starfield3)
     
     skybox = SkyBox(camera)
-    self.view.AddRenderable(skybox.graphics)
+    self.view.AddRenderable(skybox)
     
     self.boxcount = 1
     game().time.Zero()
