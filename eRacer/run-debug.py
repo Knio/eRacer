@@ -9,6 +9,8 @@ sys.path.append(os.path.join(sys.path[0], 'Source\\Swig'))
 # set path to load fmod.dll
 os.environ['PATH'] += ';Lib'
 
+# print sys.path
+# print os.environ['PATH']
 
 import run
 if __name__ == '__main__':
