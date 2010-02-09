@@ -148,7 +148,7 @@ class Vehicle(Entity):
       # do accelleration
       
       forwardSpeed = self.GetWheelSpeed(delta, downforce)
-      print forwardSpeed
+      # print forwardSpeed
       
       # TODO modify Z for steering
       # direction of the wheel on the surface of the road
@@ -200,8 +200,8 @@ class Vehicle(Entity):
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
-    print ''.join('%6.2f' % i for i in ddd),
-    print self.acceleration, self.turning
+    # print ''.join('%6.2f' % i for i in ddd),
+    # print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx
