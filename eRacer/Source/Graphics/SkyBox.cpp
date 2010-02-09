@@ -14,12 +14,8 @@ SkyBox::SkyBox(const Camera& camera)
 void SkyBox::Draw(IDirect3DDevice9* device) const {
 	if (!initialized) return;
 
-
-	Vector3 cameraPosition = camera_.GetPosition();
-	
-	cout << cameraPosition << endl;
-
-	Matrix transform = CreateMatrix(camera_.GetPosition());
+	//should be far/sqrt(2), but not enough for some reason
+	Matrix transform = CreateMatrix(camera_.GetPosition(), camera_.GetFar()*0.5);
 
     device->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
 

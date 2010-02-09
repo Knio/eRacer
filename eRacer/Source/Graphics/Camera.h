@@ -104,6 +104,8 @@ public:
 	 */
 	void SetNear(float near);
 
+	float GetFar() const;
+
 	/**
 	 * @brief set the distance to the far plane
 	 *
@@ -252,6 +254,11 @@ inline void Camera::SetNear(float nea){
 	assert(nea>0);
 	near_ = nea;
 }
+
+inline float Camera::GetFar() const{
+	return far_;
+}
+
 
 inline void Camera::SetFar(float fa){
 	assert(fa>0);

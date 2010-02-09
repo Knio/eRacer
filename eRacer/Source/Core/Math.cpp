@@ -120,6 +120,14 @@ Matrix CreateMatrix(const Point3& position, const Matrix& orientation)
 	return r;
 }
 
+Matrix CreateMatrix(const Point3& position, float s){
+	Matrix result(	s, 0, 0, 0,
+					0, s, 0, 0,
+					0, 0, s, 0,
+					position.x, position.y, position.z, 1);
+	return result;
+}
+
 Matrix CreateMatrix(const Point3& position, float angle, const Vector3& axis, float scaleX, float scaleY, float scaleZ){
 	static Matrix m1;
 	static Matrix m2;

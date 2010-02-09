@@ -153,6 +153,8 @@ Matrix CreateMatrix(const Point3& position, float angle, const Vector3& axis, fl
 Matrix CreateMatrix(const Point3& position, float yaw, float pitch, float roll, float scaleX=1, float scaleY=1, float scaleZ=1);
 
 
+Matrix CreateMatrix(const Point3& position, float uniformScale);
+
 Matrix CreateMatrix(float scaleX, float scaleY, float scaleZ);
 
 /**
