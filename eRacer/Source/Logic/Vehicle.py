@@ -131,10 +131,15 @@ class Vehicle(Entity):
       disp = (self.DISPLACEMENT - dist)
       
       print -1, ddd
-      
+      print -1.1, self.DEBUG
+      print -1.2, self.DEBUG[i]
       _debug = [self.DEBUG[i]]
+      print -1.3, _debug
+      print -2, ddd
       def debug(s):
-        game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
+        print 100, ddd
+        # game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
+        print 101, ddd
         _debug[0] += Point3(0, 20, 0)
       
       print 0, ddd

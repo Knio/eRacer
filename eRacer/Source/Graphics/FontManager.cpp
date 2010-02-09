@@ -53,7 +53,7 @@ namespace Graphics {
 	void FontManager::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color)
 	{
 		//Check if font exists
-		printf("WriteString(\"%s\")\n", msg);
+		printf("[%p]WriteString(\"%s\")\n", this, msg);
 		if (m_fontCacheSimple.count(fontName) == 0) { //Cache Miss
 
 			ID3DXFont* newFont = NULL;
