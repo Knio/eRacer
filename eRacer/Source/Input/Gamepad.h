@@ -54,6 +54,8 @@ private:
 	const DIJOYSTATE2& oldState() const { return m_States[!m_BufferFlip]; }
 
 public:
+	static const unsigned int DEAD_RADIUS;
+
 	IDirectInput8* m_lpdi;
 
 	Gamepad();
