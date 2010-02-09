@@ -53,7 +53,7 @@ float Box::RaycastDown(const Point3& susAttachPos, Vector3& norm){
 	
 	NxScene *scene = PhysicsLayer::g_PhysicsLayer->ReturnScene();
 	NxRaycastHit hit;
-	NxShape* hitShape = scene->raycastClosestShape(ray, NX_ALL_SHAPES, hit);
+	NxShape* hitShape = scene->raycastClosestShape(ray, NX_STATIC_SHAPES, hit);
 	norm = NxVec3_Vector3(hit.worldNormal);
 	normalize(norm);
 	

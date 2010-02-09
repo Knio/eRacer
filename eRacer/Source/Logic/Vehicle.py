@@ -1,7 +1,9 @@
 from Core.Globals import *
 
 class Vehicle(Entity):
+  
   MODEL   = "Ship1.x"
+  #MODEL   = "box.x"
   SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left
@@ -27,7 +29,7 @@ class Vehicle(Entity):
   
   MAX_SPEED = 40.0
   
-  REV_ALPHA   = 3.0/5.0
+  REV_ALPHA   = 1.0/8.0
   TURN_ALPHA  = 1.0/5.0
   
   
@@ -64,6 +66,10 @@ class Vehicle(Entity):
     self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
     self.crashtime = 0      # time since wheels were last in contact with the ground
     
+    self.maxEngForce    = 5e4   #the max amount the engine can put on a wheel at the moment
+                                #constant for now, will be variable later
+    self.maxBrakeForce  = 5e4   #always constant
+    
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
     game().event.Register(self.PlayerBrakeEvent)
@@ -97,32 +103,26 @@ class Vehicle(Entity):
     
     self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.throttle
     self.turning      = (alphat)*self.turning      + (1-alphat)*self.steerPos
+
+    # suspension axis (pointing down from car)
+    axis  = mul0(tx, -Y)
     
     crashed = True
     ddd = []
-    for i,wheel in enumerate(self.WHEELS):
-      # position of wheel in world space
-      pos   = mul1(tx, wheel)
+    for i,localpos in enumerate(self.WHEELS):
+      # wheel vectors in world space
+      worldpos   = mul1(tx, localpos)
+      worldvel   = phys.GetLocalPointWorldVelocity(localpos)
       
-      # suspension axis (pointing down from car)
-      axis  = mul0(tx, -Y)
-      
-      #raycast down
-      normal = Vector3()
-      localSusPoint = Point3(wheel.x, wheel.y + 0.5, wheel.z)
-      susPoint = mul1(tx, localSusPoint)       
-      dist = phys.RaycastDown(susPoint, normal) - 0.5
+      #raycast down from suspension point
+      upamount = 1.0
+      worldroadnormal = Vector3()
+      localsuspoint   = Point3(localpos.x, localpos.y + upamount, localpos.z)
+      worldsuspoint   = mul1(tx, localsuspoint)
+      dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
       disp = (self.DISPLACEMENT - dist)
- 
-      # we don't have a road yet, so it is implicitly a plane at y=0
-      # road normal - assume +Y      
-      #normal = Vector3(0,1,0)
       
-      # cast a ray to the road, get distance
-      # dist = pos.y / -dot(axis, normal)
-
-      #print dist
-      disp = (self.DISPLACEMENT - dist)
+      # check for invalid distances
       if disp < 0:
         # whee is in the air - no it will not have any forcesww
         ddd.append(-1)
@@ -135,33 +135,43 @@ class Vehicle(Entity):
       crashed = False
       
       # spring force
-      downforce = normal * disp * self.SPRING_K * self.SPRING_MAGIC
+      downforce = worldroadnormal * disp * self.SPRING_K * self.SPRING_MAGIC
       #print delta, disp, self.SPRING_K, self.SPRING_MAGIC
       #print force.x, force.y, force.z
-      phys.AddWorldForceAtLocalPos(downforce, wheel)
+      phys.AddWorldForceAtLocalPos(downforce, localpos)
       
-      # do shock absorber forces
-      vel = phys.GetPointVelocity(wheel)
-      linearvel = -dot(vel, normal)
-      slowforce = normal * linearvel * self.DAMPING * self.DAMPING_MAGIC
-      phys.AddWorldForceAtLocalPos(slowforce, wheel)
+      # shock absorber forces
+      linearvel = -dot(worldvel, worldroadnormal)
+      slowforce = worldroadnormal * linearvel * self.DAMPING * self.DAMPING_MAGIC
+      phys.AddWorldForceAtLocalPos(slowforce, localpos)
       
       # do accelleration
       
+      forwardSpeed = self.GetWheelSpeed(delta, downforce)
+      print forwardSpeed
+      
       # TODO modify Z for steering
       # direction of the wheel on the surface of the road
-      if i < 2: # front wheel
-        turning = Matrix(ORIGIN, self.turning, Y)
-      else:
-        turning = Matrix()
+      # front wheel turns
+      if i < 2: turning = Matrix(ORIGIN, self.turning, Y)
+      else:     turning = Matrix()
       
-      forward = mul0(tx, mul0(turning, Z * self.acceleration * self.MAX_SPEED))
-      forward = forward - normal * dot(forward, normal)
+      # +Z is forward in the local space
+      worldrollingdir = mul0(tx, mul0(turning, Z))
+      worldrollingvel = worldrollingdir * dot(worldrollingdir, worldvel)
+        
+            
+      worldforwardvel = mul0(tx, mul0(turning, Z * forwardSpeed))
       
-      # wheel's motion on the surface of the road
-      motion = vel - normal * dot(vel, normal)
+      # wheel's current motion on the surface of the road
+      worldwheelvel = worldvel - worldroadnormal * dot(worldvel, worldroadnormal)
       
-      powerforce = forward - motion
+      
+
+      powerforce = worldrollingvel + worldforwardvel - worldvel
+      
+
+      
       
       if self.sliding[i]:
         powerforce = powerforce * self.SLIDING_FRICTION * length(downforce)
@@ -169,7 +179,7 @@ class Vehicle(Entity):
         powerforce = powerforce * self.STATIC_FRICTION  * length(downforce)
         
       
-      phys.AddWorldForceAtLocalPos(powerforce, wheel)
+      phys.AddWorldForceAtLocalPos(powerforce, localpos)
       
     # no wheels are touching the ground.
     # reset the car
@@ -181,6 +191,7 @@ class Vehicle(Entity):
     if self.crashtime > 2: # or car stopped?
       self.crashtime = 0
       print "Crash! resetting car"
+      normal = Y
       forward = mul0(tx, Z)
       forward = forward - normal * dot(normal, forward)
       pos = Point3()
@@ -189,8 +200,8 @@ class Vehicle(Entity):
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
-    #print ''.join('%6.2f' % i for i in ddd),
-    #print self.acceleration, self.turning
+    print ''.join('%6.2f' % i for i in ddd),
+    print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx
@@ -223,4 +234,17 @@ class Vehicle(Entity):
     steerStr = "Control L/R:  %1.3f"%self.steerPos
     game().graphics.graphics.WriteString(
       steerStr, "Verdana", 24, Point3(0,150,0))
+    
+  #get the speed the car wants to add to this wheel in the forward direction
+  #this will be due to the braking or acceleration the user wants
+  #needs the weight on this tire
+  #returns a floating number, if negative, then a braking force was applied
+  def GetWheelSpeed(self, timeStep, normalForce):
+    gravityMag = 9.81 #should change based on track segment
+    forceMag = self.maxEngForce * self.acceleration
+    brakeMag = self.maxBrakeForce * self.brake * -1.0
+    massOnTire = length(normalForce) / gravityMag
+    speedDelta = (forceMag+brakeMag) / massOnTire * timeStep
+    return speedDelta
+    
     

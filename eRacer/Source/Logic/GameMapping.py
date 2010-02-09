@@ -5,7 +5,7 @@ class GameMapping(Mapping):
   def KeyPressedEvent(self, key):
     return {
     KEY.W:      [E.PlayerAccelerateEvent  (+1.0)],
-    KEY.S:      [E.PlayerAccelerateEvent  (-1.0)],
+    KEY.S:      [E.PlayerBrakeEvent(True)],
     KEY.A:      [E.PlayerTurnEvent        (-1.0)],
     KEY.D:      [E.PlayerTurnEvent        (+1.0)],
     KEY.UP:     [E.CameraAccelerateEvent  (+1.0)],
@@ -18,10 +18,10 @@ class GameMapping(Mapping):
 
   def KeyReleasedEvent(self, key):
     return {
-    KEY.W:     [E.PlayerAccelerateEvent  (-1.0)],
-    KEY.S:     [E.PlayerAccelerateEvent  (+1.0)],
-    KEY.A:     [E.PlayerTurnEvent        (+1.0)],
-    KEY.D:     [E.PlayerTurnEvent        (-1.0)],
+    KEY.W:     [E.PlayerAccelerateEvent  (0)],
+    KEY.S:     [E.PlayerBrakeEvent(False)],
+    KEY.A:     [E.PlayerTurnEvent        (0)],
+    KEY.D:     [E.PlayerTurnEvent        (0)],
     KEY.UP:    [E.CameraAccelerateEvent  (-1.0)],
     KEY.DOWN:  [E.CameraAccelerateEvent  (+1.0)],
     KEY.LEFT:  [E.CameraStrafeEvent      (+1.0)],
