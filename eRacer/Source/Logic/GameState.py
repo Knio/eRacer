@@ -95,7 +95,7 @@ class GameState(State):
     game().logic.Add(self.starfield2)
     game().logic.Add(self.starfield3)
     
-    skybox = SkyBox(camera)
+    skybox = SkyBox(self.camera.camera)
     self.view.AddRenderable(skybox)
     
     self.boxcount = 1

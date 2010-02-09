@@ -6,13 +6,12 @@ class Plane(Entity):
 
     self.physics  = eRacer.Plane(0, Vector3(0,1,0))
     self.graphics = scene.CreateMovingGeometry("plane")
-    self.graphics.visible = False
     
     def load(r):
       if r:
         print 'Failed to load mesh!!'
         return
-      self.graphics.visible = True
+      self.graphics.initialized = True
       
     game().io.LoadMeshAsync(load, self.graphics, "plane.x")   
     

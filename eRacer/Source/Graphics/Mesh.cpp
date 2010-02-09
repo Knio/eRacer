@@ -4,6 +4,9 @@
 namespace Graphics {
 
 void Mesh::Draw(IDirect3DDevice9* device) const{
+	if(!initialized)
+		return;
+
 	assert(NULL != device);
 
     //there need to be the same number of textures and materials

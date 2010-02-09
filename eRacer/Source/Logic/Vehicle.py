@@ -43,12 +43,11 @@ class Vehicle(Entity):
     )
     
     self.graphics = scene.CreateMovingGeometry("vehicle")
-    self.graphics.visible = False
     self.physics.SetCentreOfMass(Point3(0, -1, 0))
 
     def load(r):
       if not r:
-        self.graphics.visible = True
+        self.graphics.initialized = True
       else:
         print 'Failed to load mesh!'      
       

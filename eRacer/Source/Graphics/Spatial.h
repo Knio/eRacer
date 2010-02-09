@@ -30,9 +30,6 @@ public:
 	 * @param name
 	 *			a name for this node to facilitate debugging
 	 */
-
-	bool visible;
-
 	Spatial(const string& name);
 
 	/**
@@ -51,6 +48,7 @@ public:
 	void cull(const Camera& camera, vector<const MeshNode*>& visibleNodes) const;
 	const AxisAlignedBoundingBox& getWorldBoundingVolume() const;
 
+	bool visible;
 protected:
 	/**
 	 * @brief Pure virtual. Called if the node should not be culled.

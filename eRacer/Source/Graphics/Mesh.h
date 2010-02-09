@@ -65,6 +65,7 @@ public:
 	 */
 	vector<IDirect3DTexture9*>& Textures();
 
+	bool initialized;
 protected:
 	ID3DXMesh* mesh_;
 	vector<D3DMATERIAL9*> materials_;
@@ -72,7 +73,7 @@ protected:
 };
 
 inline Mesh::Mesh()
-: mesh_(NULL)
+: mesh_(NULL), initialized(false)
 {
 	printf("MESH = %p", mesh_);
 }
