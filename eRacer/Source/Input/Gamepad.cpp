@@ -97,10 +97,6 @@ void Gamepad::Update(void)
 {
 	Device::Update();
 
-	//if we do not have a device, just do nothing
-	if (NULL == m_pDevice) {
-		return;
-	}
 
 	HRESULT hr;
 	// Poll the device to read the current state - we do not have to error check, 
@@ -108,7 +104,7 @@ void Gamepad::Update(void)
 	m_pDevice->Poll(); 
 
 	// Get the input's device state
-	hr = m_pDevice->GetDeviceState(sizeof(DIJOYSTATE2), &oldState());
+	hr = m_pDevice->GetDeviceState(sizeof(DIJOYSTATE2), &currentState());
 
 	switch(hr){
 		case DI_OK:
@@ -142,8 +138,7 @@ void Gamepad::Update(void)
 		currentState().lRx = 0;
 	if(abs(currentState().lRy) <= DEAD_RADIUS)
 		currentState().lRy = 0;
-
-
+	
 	if(hasStick1Changed()){
 		EVENT(GamepadStick1AbsoluteEvent(currentState().lX,currentState().lY));
 		EVENT(GamepadStick1RelativeEvent(oldState().lX-currentState().lX,

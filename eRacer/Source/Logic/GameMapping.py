@@ -42,7 +42,7 @@ class GameMapping(Mapping):
     return E.PlayerAccelerateEvent(z/-1000.0)
     
   def GamepadButtonPressedEvent(self, button):
-    if button == eRacer.BUTTON_START:   return E.PauseEvent()
+    if button == eRacer.BUTTON_X:   return E.PauseEvent()
     if button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(True)
     
   def GamepadButtonReleasedEvent(self, button):

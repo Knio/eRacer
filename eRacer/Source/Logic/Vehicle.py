@@ -166,7 +166,6 @@ class Vehicle(Entity):
       # wheel's current motion on the surface of the road
       worldwheelvel = worldvel - worldroadnormal * dot(worldvel, worldroadnormal)
       
-      
 
       powerforce = worldrollingvel + worldforwardvel - worldvel
       
@@ -178,6 +177,7 @@ class Vehicle(Entity):
       else:
         powerforce = powerforce * self.STATIC_FRICTION  * length(downforce)
         
+       # print powerforce.x, powerforce.y, powerforce.z
       
       phys.AddWorldForceAtLocalPos(powerforce, localpos)
       
