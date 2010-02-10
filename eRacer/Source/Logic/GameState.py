@@ -82,7 +82,8 @@ class GameState(State):
     
     game().logic.Add(self.player)
     
-    # is garbage collected if i dont store - why???
+    # without this, the skyboxes are garbage collected because the 
+    # reference in view does not count because view is a c++ object (not python)
     self.skyboxes = []
 
 
@@ -118,8 +119,6 @@ class GameState(State):
   def Tick(self, time):
     State.Tick(self, time)
 
-    #game().graphics.scene  = self.scene
-    #game().graphics.camera = self.camera
     game().graphics.views.append(self.view)
     
     # if time.seconds > self.boxcount:
@@ -127,14 +126,8 @@ class GameState(State):
     #   game().logic.Add(Box(self.scene))
       
   def CameraChangedEvent(self):
-    # print "Camera ",self.cameraIndex+1," out of ",len(self.cameras)
     self.viewIndex+=1
     if(self.viewIndex>=len(self.views)): self.viewIndex=0
-    # self.starfield1.camera = self.camera
-    # self.starfield2.camera = self.camera
-    # self.starfield3.camera = self.camera
-    # self.skybox.camera     = self.camera.camera
-    # self.view.camera       = self.camera.camera
       
     
   def ReloadConstsEvent(self):

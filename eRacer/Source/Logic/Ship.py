@@ -12,7 +12,6 @@ class Ship(Entity):
       if r:
         print 'Failed to load mesh!!'
         return
-      print "ship loaded"
       self.graphics.initialized = True
       
     game().io.LoadMeshAsync(load, self.graphics, "Ship_06.x")

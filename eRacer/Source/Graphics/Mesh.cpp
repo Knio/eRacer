@@ -3,6 +3,12 @@
 
 namespace Graphics {
 
+Mesh::Mesh()
+:   mesh_(NULL), 
+    initialized(false)
+{
+}
+
 void Mesh::Draw(IDirect3DDevice9* device) const{
 	if(!initialized)
 		return;
