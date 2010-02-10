@@ -20,6 +20,8 @@ Scene::Scene()
 
 
 Scene::~Scene(){
+	printf("Scene::~Scene()\n");
+	
 	for(vector<Geometry*>::iterator i = geometry_.begin();
 		i != geometry_.end(); i++)
 		delete *i;

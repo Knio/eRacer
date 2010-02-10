@@ -60,41 +60,45 @@ class GameState(State):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     
+        
+    
+    
     scene = eRacer.Scene()
     self.scene = scene
     game().graphics.graphics.m_scene = scene
         
     self.player = Vehicle(self.scene)
-
-    self.cameras = []
-    self.cameras.append(ChasingCamera(self.player))
-    self.cameras.append(FirstPersonCamera())
-    self.cameraIndex = 0
-    
+    # OK
     game().logic.Add(self.player)
     
-    for camera in self.cameras:
-      game().logic.Add(camera)
+    # self.cameras = []
+    # self.cameras.append(ChasingCamera(self.player))
+    # self.cameras.append(FirstPersonCamera())
+    # self.cameraIndex = 0
     
     
-    game().logic.Add(Ship(scene))
-    game().logic.Add(Track(scene))
-    game().logic.Add(Plane(scene))    
+    # for camera in self.cameras:
+    #   game().logic.Add(camera)
     
-    self.starfield1 = Starfield(scene, self.camera, 1024, 1000.0)
-    self.starfield2 = Starfield(scene, self.camera, 1024, 100.0)
-    self.starfield3 = Starfield(scene, self.camera, 1024, 20.0)
     
-    self.coordinatecross = CoordinateCross(scene)
-    game().logic.Add(self.coordinatecross)
+    # game().logic.Add(Ship(scene))
+    # game().logic.Add(Track(scene))
+    # game().logic.Add(Plane(scene))    
     
-    game().logic.Add(self.starfield1)
-    game().logic.Add(self.starfield2)
-    game().logic.Add(self.starfield3)
+    # self.starfield1 = Starfield(scene, self.camera, 1024, 1000.0)
+    # self.starfield2 = Starfield(scene, self.camera, 1024, 100.0)
+    # self.starfield3 = Starfield(scene, self.camera, 1024, 20.0)
     
-    self.scene.LoadSkyBox('skybox2.x')
+    # self.coordinatecross = CoordinateCross(scene)
+    # game().logic.Add(self.coordinatecross)
     
-    self.boxcount = 1
+    # game().logic.Add(self.starfield1)
+    # game().logic.Add(self.starfield2)
+    # game().logic.Add(self.starfield3)
+    
+    # self.scene.LoadSkyBox('skybox2.x')
+    
+    # self.boxcount = 1
     game().time.Zero()
     self.loaded = True
     
@@ -117,7 +121,7 @@ class GameState(State):
     State.Tick(self, time)
 
     game().graphics.scene  = self.scene
-    game().graphics.camera = self.camera
+    # game().graphics.camera = self.camera
     #game().graphics.views.append(self.view)
     
     # if time.seconds > self.boxcount:

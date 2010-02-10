@@ -34,7 +34,7 @@ namespace Graphics {
 
 	void FontManager::Shutdown()
 	{
-		for( std::map<const char *, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); it !=  m_fontCacheSimple.end(); ++it) {
+		for( std::map<string, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); it !=  m_fontCacheSimple.end(); ++it) {
 			it->second->Release();
 		}
 
@@ -50,11 +50,14 @@ namespace Graphics {
 	{
 	}
 	
+
 	void FontManager::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color)
 	{
 		//Check if font exists
-		printf("[%p]WriteString(\"%s\")\n", this, msg);
-		if (m_fontCacheSimple.count(fontName) == 0) { //Cache Miss
+		printf("[%p]WriteString(\"%s\", (%6.2f %6.2f %6.2f))\n", this, msg, pos.x, pos.y, pos.z);
+		//return;
+		string sFont = fontName;
+		if (m_fontCacheSimple.count(sFont) == 0) { //Cache Miss
 
 			ID3DXFont* newFont = NULL;
 			//WCHAR wszFontName[128]; //convert to wide char
@@ -63,7 +66,7 @@ namespace Graphics {
 									 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
                                      fontName, &newFont );
 
-			m_fontCacheSimple[fontName] = newFont;
+			m_fontCacheSimple[sFont] = newFont;
 		}
 		
 		//Store the String for later

@@ -43,6 +43,11 @@ class Vehicle(Entity):
   def __init__(self, scene):
     Entity.__init__(self)
     
+    print 'Vehicle init'
+    print self.DEBUG
+    d = self.DEBUG[0]
+    print d.x, d.y, d.z
+    
     self.physics = eRacer.Box(
       True,       # dynamic
       self.MASS,  # mass
@@ -52,6 +57,7 @@ class Vehicle(Entity):
     )
     
     self.graphics = scene.CreateMovingGeometry("vehicle")
+    self.graphics.thisown = 0
     self.graphics.visible = False
     self.physics.SetCentreOfMass(Point3(0, -1, 0))
 
@@ -99,6 +105,28 @@ class Vehicle(Entity):
     if not time.game_delta:
       return
     
+    
+    print 8
+    print self.DEBUG
+    d = self.DEBUG[0]
+    print self.DEBUG[0].x, d.y, d.z
+    print 9
+    
+    _debug = [self.DEBUG[0]]
+    
+    def debug(s):
+      print 100
+      # game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
+      _debug[0] += Point3(0, 20, 0)
+      print 101
+    
+    print 10
+    debug("1")
+    print 11
+    
+    return
+    
+    
     phys  = self.physics
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
@@ -140,7 +168,7 @@ class Vehicle(Entity):
         print 100, ddd
         # game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
         print 101, ddd
-        _debug[0] += Point3(0, 20, 0)
+        # _debug[0] += Point3(0, 20, 0)
       
       print 0, ddd
       debug("Disp: %6.3f" % disp)
