@@ -54,6 +54,7 @@ class Game(eRacer.Game):
     while self.state:
       t = self.time.Tick(self.simspeed)
       self.Tick(self.time)
+    print "self.state == false"
     self.Quit()
 
   def Start(self):

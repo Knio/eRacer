@@ -56,22 +56,29 @@ class GameState(State):
   def Activate(self):
     #if not self.loaded:
     #  game().PushState(LoadingState(self.load))
+    print "Activate game state"
     pass
     
   def load(self):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
-    
+    print "GameState::load begin"
     scene = eRacer.Scene()
     self.scene = scene
-    self.view = eRacer.View(self.scene)
         
     self.player = Vehicle(self.scene)
 
 
     self.views = []
-    self.views.append(eRacer.View(self.scene, ChasingCamera(self.player).camera))
-    self.views.append(eRacer.View(self.scene, FirstPersonCamera().camera))
+    
+    cam = ChasingCamera(self.player)
+    game().logic.Add(cam)
+    self.views.append(eRacer.View(self.scene, cam.camera))
+    
+    cam = FirstPersonCamera()
+    game().logic.Add(cam)
+    self.views.append(eRacer.View(self.scene, cam.camera))
+    
     self.viewIndex = 0
     
     game().logic.Add(self.player)
@@ -80,14 +87,9 @@ class GameState(State):
 
 
     for view in self.views:
-      game().logic.Add(view.camera)
-      starfield1 = Starfield(view, 1024, 1000.0)
-      starfield2 = Starfield(view, 1024, 100.0)
-      starfield3 = Starfield(view, 1024, 20.0)
-      game().logic.Add(starfield1)
-      game().logic.Add(starfield2)
-      game().logic.Add(starfield3)
-      
+      game().logic.Add(Starfield(view, 1024, 1000.0))
+      game().logic.Add(Starfield(view, 1024, 100.0))
+      game().logic.Add(Starfield(view, 1024, 20.0))
       skybox = SkyBox(view)
     
     
@@ -104,6 +106,7 @@ class GameState(State):
     self.boxcount = 1
     game().time.Zero()
     self.loaded = True
+    print "GameState::load end"
     
   def get_view(self):
     return self.views[self.viewIndex]
@@ -123,6 +126,7 @@ class GameState(State):
     
     
   def Tick(self, time):
+    print "GameState::Tick"
     State.Tick(self, time)
 
     #game().graphics.scene  = self.scene
