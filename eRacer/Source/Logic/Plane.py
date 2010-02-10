@@ -8,13 +8,11 @@ class Plane(Entity):
     self.graphics = scene.CreateMovingGeometry("plane")
     self.graphics.thisown = 0
     
-    self.graphics.visible = False
-    
     def load(r):
       if r:
         print 'Failed to load mesh!!'
         return
-      self.graphics.visible = True
+      self.graphics.initialized = True
       
     game().io.LoadMeshAsync(load, self.graphics, "plane.x")   
     
@@ -22,3 +20,4 @@ class Plane(Entity):
      Entity.Tick(self, time)
      pos = self.physics.GetPosition()
      self.graphics.SetTransform(self.physics.GetTransform())
+

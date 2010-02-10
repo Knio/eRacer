@@ -189,7 +189,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python -threads Source/SWIG/swig.i"
-				ExcludedFromBuild="true"
+				ExcludedFromBuild="false"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -309,14 +309,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\Geometry.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Geometry.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Source\Graphics\Graphics.py"
 					>
 				</File>
@@ -337,11 +329,27 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\MovingGeometry.cpp"
+					RelativePath=".\Source\Graphics\Mesh.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\MovingGeometry.h"
+					RelativePath=".\Source\Graphics\Mesh.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\MeshNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\MeshNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\MovingMeshNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\MovingMeshNode.h"
 					>
 				</File>
 				<File
@@ -354,6 +362,14 @@
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\Scene.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\SkyBox.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\SkyBox.h"
 					>
 				</File>
 				<File
@@ -373,11 +389,19 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\StaticGeometry.cpp"
+					RelativePath=".\Source\Graphics\StaticMeshNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Source\Graphics\StaticGeometry.h"
+					RelativePath=".\Source\Graphics\StaticMeshNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\View.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\View.h"
 					>
 				</File>
 				<File

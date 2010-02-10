@@ -15,14 +15,14 @@ struct Vertex {
 class CoordinateCross : public Renderable {
 public:
 	CoordinateCross();
-	virtual void Draw(LPDIRECT3DDEVICE9 device);
+	virtual void Draw(LPDIRECT3DDEVICE9 device) const;
 
 private:
 	LPDIRECT3DVERTEXBUFFER9 vertexBuffer_;
 
 };
 
-inline void CoordinateCross::Draw(LPDIRECT3DDEVICE9 device){
+inline void CoordinateCross::Draw(LPDIRECT3DDEVICE9 device) const {
 	Matrix m = CreateMatrix(Y);
 	
 	

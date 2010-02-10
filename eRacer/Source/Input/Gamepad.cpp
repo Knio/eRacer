@@ -11,6 +11,9 @@
 
 namespace Input{
 
+	const unsigned int Gamepad::DEAD_RADIUS = 150;
+
+
 Gamepad::Gamepad() 
 : Device()
 {
@@ -128,6 +131,18 @@ void Gamepad::Update(void)
 		else if (GamepadDown(currentState().rgbButtons, i) && GamepadUp(oldState().rgbButtons, i))
 			EVENT(GamepadButtonPressedEvent(i));
 	}
+	
+
+	//deadzone
+	if(abs(currentState().lX) <= DEAD_RADIUS)
+		currentState().lX = 0;
+	if(abs(currentState().lY) <= DEAD_RADIUS)
+		currentState().lY = 0;
+	if(abs(currentState().lRx) <= DEAD_RADIUS)
+		currentState().lRx = 0;
+	if(abs(currentState().lRy) <= DEAD_RADIUS)
+		currentState().lRy = 0;
+
 
 	if(hasStick1Changed()){
 		EVENT(GamepadStick1AbsoluteEvent(currentState().lX,currentState().lY));
@@ -182,6 +197,7 @@ bool Gamepad::hasStick1Changed() const{
 	return currentState().lX != oldState().lX 
 		|| currentState().lY != oldState().lY;
 }
+
 
 bool Gamepad::hasStick2Changed() const{
 	return currentState().lRx != oldState().lRx 

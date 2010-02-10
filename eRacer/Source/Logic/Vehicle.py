@@ -58,15 +58,15 @@ class Vehicle(Entity):
     
     self.graphics = scene.CreateMovingGeometry("vehicle")
     self.graphics.thisown = 0
-    self.graphics.visible = False
+
     self.physics.SetCentreOfMass(Point3(0, -1, 0))
 
     def load(r):
       if not r:
-        self.graphics.visible = True
+        self.graphics.initialized = True
       else:
         print 'Failed to load mesh!'      
-      
+    
     game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
   
 
@@ -262,12 +262,11 @@ class Vehicle(Entity):
       pos.y = 1.5
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
-    print 3.7
-    print ddd
-    print ''.join('%6.2f' % i for i in ddd)
-    print 3.8
+
+      
+    print ''.join('%6.2f' % i for i in ddd),
     print self.acceleration, self.turning
-    print 3.9
+    
     #tx = Matrix()
     self.transform = tx
     print 4

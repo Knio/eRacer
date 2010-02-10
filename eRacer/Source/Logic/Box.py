@@ -7,14 +7,13 @@ class Box(Entity):
     self.physics = eRacer.Box(True, 1000, Vector3(0, 20, 0))
     self.graphics = scene.CreateMovingGeometry("Box")
     self.graphics.thisown = 0
-    self.graphics.visible = False
     self.graphics.SetTransform(self.transform)
         
     def load(r):
       if r:
         print 'Failed to load mesh!!'
         return
-      self.graphics.visible = True
+      self.graphics.initialized = True
       
     game().io.LoadMeshAsync(load, self.graphics, "leather-box.x")   
     

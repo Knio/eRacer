@@ -21,7 +21,7 @@ class Graphics(Module):
     self.d3d = self.graphics.GetDevice()
     self.d3d.disown()
     
-    #self.views = []
+    self.views = []
     self.scene  = None
     self.camera = None
 
@@ -34,13 +34,12 @@ class Graphics(Module):
     self.window.Poll()
     
     #print self.camera, self.scene
-    self.graphics.RenderFrame(self.camera.camera, self.scene)
-    self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())
+    # self.graphics.RenderFrame(self.camera.camera, self.scene)
     
-    
-    #while self.views:
-    #  self.graphics.RenderView(self.views.pop())
-    
+    self.graphics.PreRender();
+    while self.views:
+      self.graphics.RenderView(self.views.pop())
+    self.graphics.PostRender();
     
     self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())
   

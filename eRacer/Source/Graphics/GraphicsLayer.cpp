@@ -80,48 +80,38 @@ int GraphicsLayer::Init( HWND hWnd )
     return S_OK;
 }
 
-
-void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
-{
-    // Clear the backbuffer and the zbuffer
-    m_pd3dDevice->Clear(
-        0, 
-        NULL, 
-        D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 
-        D3DCOLOR_COLORVALUE(0.0f,0.0f,0.0f,1.0f), 
-        1.0f, 
-        0
-    );
-    
-    SetCamera(camera);
-
-    vector<Geometry*> visibleGeometry;
-    scene.GetVisibleGeometry(camera, visibleGeometry);
+void GraphicsLayer::PreRender(){
+        // Clear the backbuffer and the zbuffer
+    m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
 
     // Begin the scene
     //In the future this will be done inside a loop to handle each shader/effect
     assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
+}
 
+
+void GraphicsLayer::RenderView(const View& view){
+
+    SetCamera(*view.camera);
+
+    vector<Renderable*> visibleRenderables;
+    view.scene->GetVisibleRenderables(*view.camera, visibleRenderables);
     
-    // render all geometry
-    for (vector<Geometry*>::const_iterator geometry = visibleGeometry.begin(); 
-        geometry!=visibleGeometry.end(); geometry++){
-            RenderGeometry(*geometry);
+    for (vector<Renderable*>::const_iterator renderable = visibleRenderables.begin(); 
+        renderable!=visibleRenderables.end(); renderable++){
+			(*renderable)->Draw(m_pd3dDevice);
     }
     
-    vector<Renderable*> renderables = scene.GetRenderables();
-    for (vector<Renderable*>::const_iterator i=renderables.begin(); i!=renderables.end();i++)
-    {
-        (*i)->Draw(m_pd3dDevice);  
+    for (vector<const Renderable*>::const_iterator renderable = view.viewDependantRenderables.begin(); 
+        renderable!=view.viewDependantRenderables.end(); renderable++){
+            (*renderable)->Draw(m_pd3dDevice);
     }
-    
-    RenderSkyBox(camera, scene.GetSkyBox());
-    
-  
+}
+
+void GraphicsLayer::PostRender(){
     m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
-  
-    
-    // draw overlay
+
+     // draw overlay
     m_fontManager.Draw();
     
     
@@ -129,67 +119,15 @@ void GraphicsLayer::RenderFrame(const Camera& camera, const Scene& scene)
     m_pd3dDevice->EndScene();
     
     // Present the backbuffer contents to the display
-    m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+    m_pd3dDevice->Present( NULL, NULL, NULL, NULL );   
 }
+
 
 
 void GraphicsLayer::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const RGB &color)
 {
     m_fontManager.WriteString(msg, fontName, size, pos, color);
 }
-
-void GraphicsLayer::RenderGeometry(const Geometry* geometry){
-    assert(NULL != geometry);
-
-    //there need to be the same number of textures and materials
-    assert(geometry->Textures().size()==geometry->Materials().size());
-    // Meshes are divided into subsets, one for each material. Render them in a loop
-    
-    // set the transform
-    // TODO unset it after!
-    // is this even the right matrix?
-    m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &(geometry->GetTransform()) );
-    
-    
-    for(unsigned int i = 0; i<geometry->Materials().size(); i++){
-        m_pd3dDevice->SetMaterial( geometry->Materials()[i]);
-        m_pd3dDevice->SetTexture(0, geometry->Textures()[i]);
-        
-        //make sure the mesh has been initialized at this point
-        assert(NULL != geometry);
-        assert(NULL != geometry->GetMesh());
-
-        geometry->GetMesh()->DrawSubset(i);
-    }
-}
-
-void GraphicsLayer::RenderSkyBox(const Camera& camera, const Geometry& skyBox){
-
-    //there need to be the same number of textures and materials
-    assert(skyBox.Textures().size()==skyBox.Materials().size());
-    // Meshes are divided into subsets, one for each material. Render them in a loop
-    
-    // set the transform
-
-    Matrix transform = skyBox.GetTransform();
-
-	//cout << camera.GetPosition().x << endl;
-    transform*=CreateMatrix(camera.GetPosition());
-    m_pd3dDevice->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
-    
-    //m_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
-
-    for(unsigned int i = 0; i<skyBox.Materials().size(); i++){
-        m_pd3dDevice->SetMaterial( skyBox.Materials()[i]);
-        m_pd3dDevice->SetTexture(0, skyBox.Textures()[i]);
-        
-        //make sure the mesh has been initialized at this point
-        assert(NULL != skyBox.GetMesh());
-
-        skyBox.GetMesh()->DrawSubset(i);
-    }
-}
-
 
 void GraphicsLayer::Shutdown()
 {
@@ -205,4 +143,4 @@ void GraphicsLayer::Shutdown()
     m_fontManager.Shutdown();
 }
 
-};
+}

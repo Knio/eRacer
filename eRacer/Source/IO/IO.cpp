@@ -1,9 +1,9 @@
 #include "IO.h"
-#include <cstdio>
 
+#include <iostream>
+using namespace std;
 
 IO* IO::g_IO = NULL;
-
 
 LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
 {
@@ -20,10 +20,11 @@ LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
 
 
 
-Mesh IO::_LoadMesh(const char* file)
+MeshStruct IO::_LoadMesh(const char* file)
 {
+
 	LPD3DXBUFFER materialsbuffer;
-	Mesh mesh;
+	MeshStruct mesh;
 	HRESULT r = D3DXLoadMeshFromX(
 		file, 
 		D3DXMESH_SYSTEMMEM,
@@ -62,7 +63,8 @@ void IO::_FreeTexture(LPDIRECT3DTEXTURE9 t)
 {
 	if (t)	t->Release();
 }
-void IO::_FreeMesh(Mesh &m)
+
+void IO::_FreeMesh(MeshStruct &m)
 {
 	delete [] m.materials;
 	delete [] m.textures;
@@ -70,17 +72,17 @@ void IO::_FreeMesh(Mesh &m)
 }
 
 // This could probably be done by Geometry
-void IO::_SetMesh(Graphics::Geometry *geom, Mesh &mesh)
+void IO::_SetMesh(Graphics::Mesh *model, MeshStruct &mesh)
 {
 	// TODO clear these std::vectors?
-	assert(!geom->Materials().size());
-	assert(!geom->Textures().size());
+	assert(!model->Materials().size());
+	assert(!model->Textures().size());
 
-	geom->SetMesh(mesh.mesh);
+	model->SetMesh(mesh.mesh);
 	for(DWORD i=0; i<mesh.n; i++)
 	{
-		geom->Materials().push_back(&mesh.materials[i]);
-		geom->Textures().push_back(mesh.textures[i]);
+		model->Materials().push_back(&mesh.materials[i]);
+		model->Textures().push_back(mesh.textures[i]);
 	}
 }
 

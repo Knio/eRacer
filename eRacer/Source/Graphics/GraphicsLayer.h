@@ -13,10 +13,9 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <mmsystem.h>
-#include "Camera.h"
-#include "StaticGeometry.h"
-#include "Scene.h"
+#include "Renderable.h"
 #include "FontManager.h"
+#include "View.h"
 
 namespace Graphics {
 
@@ -39,8 +38,8 @@ protected:
 	GraphicsLayer(const GraphicsLayer&);
 	GraphicsLayer& operator= (const GraphicsLayer); 
 
-	void RenderGeometry(const Geometry* geometry);
-	void RenderSkyBox(const Camera& camera, const Geometry& skyBox);
+	//void RenderGeometry(const Geometry* geometry);
+	//void RenderSkyBox(const Camera& camera, const Geometry& skyBox);
 	void SetCamera(const Camera& camera);
 
 public:
@@ -50,7 +49,12 @@ public:
 
 	void WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const RGB &color=WHITE);
 	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
-	void RenderFrame(const Camera& camera, const Scene& scene);
+
+	void PreRender();
+	void RenderView(const View& view);
+	void PostRender();
+	
+	
 	void Shutdown();
 
 	static GraphicsLayer *GetInstance()

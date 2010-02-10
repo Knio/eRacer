@@ -6,7 +6,8 @@ class Camera(Entity):
     self.camera = eRacer.Camera()
     
     self.camera.SetNear(2)
-    self.camera.SetFar(2000) 
+    #very high for now, can be reduced once we have some fogging
+    self.camera.SetFar(4000) 
     self.camera.SetFovY(math.pi/4.0)
     self.camera.SetAspectRatio(8./6.)
 

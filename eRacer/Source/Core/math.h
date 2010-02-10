@@ -5,6 +5,8 @@
 #include <d3dx9math.h>
 #include <limits>
 #include <cfloat>
+#include <iostream>
+using namespace std;
 
 #define PI D3DX_PI
 #define DEG2RAD(x) (PI*(x)/180.0)
@@ -56,6 +58,9 @@ const Matrix IDENTITY = Matrix(1,0,0,0,
 #include <strsafe.h>
 
 void debug(const Matrix &m);
+
+
+ostream& operator<<(ostream& s, const Vector3& v);
 
 float abs(const Vector3 &A);
 Vector3 cross(const Vector3 &A, const Vector3 &B);
@@ -147,6 +152,8 @@ Matrix CreateMatrix(const Point3& position, float angle, const Vector3& axis, fl
  */
 Matrix CreateMatrix(const Point3& position, float yaw, float pitch, float roll, float scaleX=1, float scaleY=1, float scaleZ=1);
 
+
+Matrix CreateMatrix(const Point3& position, float uniformScale);
 
 Matrix CreateMatrix(float scaleX, float scaleY, float scaleZ);
 

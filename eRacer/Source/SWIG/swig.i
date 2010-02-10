@@ -25,12 +25,15 @@
 // Graphics
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
-#include "..\Graphics\Geometry.h"
-#include "..\Graphics\StaticGeometry.h"
-#include "..\Graphics\MovingGeometry.h"
+#include "..\Graphics\View.h"
+#include "..\Graphics\Mesh.h"
+#include "..\Graphics\MeshNode.h"
+#include "..\Graphics\StaticMeshNode.h"
+#include "..\Graphics\MovingMeshNode.h"
 #include "..\Graphics\GraphicsLayer.h"
 #include "..\Graphics\Window.h"
 #include "..\Graphics\Starfield.h"
+#include "..\Graphics\SkyBox.h"
 #include "..\Graphics\CoordinateCross.h"
 
 
@@ -67,6 +70,7 @@ These are the classes that get exposed to Python
 
 // SWIG
 %include "std_string.i"
+%include "std_vector.i"
 
 
 // Core
@@ -99,15 +103,17 @@ These are the classes that get exposed to Python
 %include "..\Graphics\Camera.h"
 %include "..\Graphics\AxisAlignedBoundingBox.h"
 %include "..\Graphics\Spatial.h"
-%include "..\Graphics\Geometry.h"
-%include "..\Graphics\StaticGeometry.h"
-%include "..\Graphics\MovingGeometry.h"
+%include "..\Graphics\Mesh.h"
+%include "..\Graphics\MeshNode.h"
+%include "..\Graphics\StaticMeshNode.h"
+%include "..\Graphics\MovingMeshNode.h"
 %include "..\Graphics\Scene.h"
+%include "..\Graphics\View.h"
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
 %include "..\Graphics\Starfield.h"
 %include "..\Graphics\CoordinateCross.h"
-
+%include "..\Graphics\SkyBox.h"
 
 // Sound
 %include "..\Sound\SoundLayer.h"

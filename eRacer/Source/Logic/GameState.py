@@ -11,6 +11,8 @@ from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera, FirstPersonCamera
 from Starfield  import Starfield
+from Graphics.SkyBox     import SkyBox
+
 from CoordinateCross import CoordinateCross
 from GameMapping    import GameMapping
 
@@ -54,75 +56,80 @@ class GameState(State):
   def Activate(self):
     #if not self.loaded:
     #  game().PushState(LoadingState(self.load))
+    print "Activate game state"
     pass
     
   def load(self):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
-    
-        
-    
-    
+    print "GameState::load begin"
+
     scene = eRacer.Scene()
     self.scene = scene
-    game().graphics.graphics.m_scene = scene
         
     self.player = Vehicle(self.scene)
+    
     # OK
     game().logic.Add(self.player)
     
-    # self.cameras = []
-    # self.cameras.append(ChasingCamera(self.player))
-    # self.cameras.append(FirstPersonCamera())
-    # self.cameraIndex = 0
+    self.views = []
+    
+    cam = ChasingCamera(self.player)
+    game().logic.Add(cam)
+    self.views.append(eRacer.View(self.scene, cam.camera))
+    
+    cam = FirstPersonCamera()
+    game().logic.Add(cam)
+    self.views.append(eRacer.View(self.scene, cam.camera))
+    
+    self.viewIndex = 0
+    
+    game().logic.Add(self.player)
+    
+    # is garbage collected if i dont store - why???
+    self.skyboxes = []
+
+
+    for view in self.views:
+      game().logic.Add(Starfield(view, 1024, 1000.0))
+      game().logic.Add(Starfield(view, 1024, 100.0))
+      game().logic.Add(Starfield(view, 1024, 20.0))
+      self.skyboxes.append(SkyBox(view))
     
     
-    # for camera in self.cameras:
-    #   game().logic.Add(camera)
+    ship = Ship(scene)
+    print "ship created"
+    
+    game().logic.Add(ship)
+    print "ship added"
+    game().logic.Add(Track(scene))
+    game().logic.Add(Plane(scene))
     
     
-    # game().logic.Add(Ship(scene))
-    # game().logic.Add(Track(scene))
-    # game().logic.Add(Plane(scene))    
-    
-    # self.starfield1 = Starfield(scene, self.camera, 1024, 1000.0)
-    # self.starfield2 = Starfield(scene, self.camera, 1024, 100.0)
-    # self.starfield3 = Starfield(scene, self.camera, 1024, 20.0)
-    
-    # self.coordinatecross = CoordinateCross(scene)
+    # self.coordinatecross = CoordinateCross(self.view)
     # game().logic.Add(self.coordinatecross)
     
-    # game().logic.Add(self.starfield1)
-    # game().logic.Add(self.starfield2)
-    # game().logic.Add(self.starfield3)
-    
-    # self.scene.LoadSkyBox('skybox2.x')
-    
-    # self.boxcount = 1
     game().time.Zero()
     self.loaded = True
+    print "GameState::load end"
     
-  def get_camera(self):
-    return self.cameras[self.cameraIndex]
+  def get_view(self):
+    return self.views[self.viewIndex]
     
-  camera = property(get_camera)   
+  view = property(get_view)   
     
   def CameraChangedEvent(self):
     # print "Camera ",self.cameraIndex+1," out of ",len(self.cameras)
-    self.cameraIndex+=1
-    if(self.cameraIndex>=len(self.cameras)): self.cameraIndex=0
-    self.starfield1.camera = self.camera
-    self.starfield2.camera = self.camera
-    self.starfield3.camera = self.camera
-      
-    
+    self.viewIndex+=1
+    if(self.viewIndex>=len(self.views)): self.viewIndex=0 
     
   def Tick(self, time):
+    print "GameState::Tick"
     State.Tick(self, time)
 
-    game().graphics.scene  = self.scene
-    # game().graphics.camera = self.camera
-    #game().graphics.views.append(self.view)
+    #game().graphics.scene  = self.scene
+    #game().graphics.camera = self.camera
+    game().graphics.views.append(self.view)
     
     # if time.seconds > self.boxcount:
     #   self.boxcount += min(self.boxcount+1, 20)

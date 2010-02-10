@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+
 void debug(const Matrix &m)
 {
 	printf(
@@ -17,6 +18,11 @@ _41 = %6.2f, _42 = %6.2f _43 = %6.2f _44 = %6.2f\n\
 		m._41, m._42, m._43, m._44);
 		
 }
+
+ostream& operator<<(ostream& s, const Vector3& v){
+	return s << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+}
+
 
 
 bool affine(const Matrix& m)
@@ -112,6 +118,14 @@ Matrix CreateMatrix(const Point3& position, const Matrix& orientation)
 	r._42 = position.y;
 	r._43 = position.z;
 	return r;
+}
+
+Matrix CreateMatrix(const Point3& position, float s){
+	Matrix result(	s, 0, 0, 0,
+					0, s, 0, 0,
+					0, 0, s, 0,
+					position.x, position.y, position.z, 1);
+	return result;
 }
 
 Matrix CreateMatrix(const Point3& position, float angle, const Vector3& axis, float scaleX, float scaleY, float scaleZ){

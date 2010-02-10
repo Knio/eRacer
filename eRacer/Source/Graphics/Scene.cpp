@@ -13,7 +13,6 @@ namespace Graphics {
 
 
 Scene::Scene()
-	: skyBox_("SkyBox")
 {
 
 }
@@ -21,45 +20,41 @@ Scene::Scene()
 
 Scene::~Scene(){
 	printf("Scene::~Scene()\n");
-	
-	for(vector<Geometry*>::iterator i = geometry_.begin();
-		i != geometry_.end(); i++)
+	for(vector<MeshNode*>::iterator i = meshNodes_.begin();
+		i != meshNodes_.end(); i++)
+		delete *i;
+	for(vector<Renderable*>::iterator i = renderables_.begin();
+		i != renderables_.end(); i++)
 		delete *i;
 }
 
-void Scene::GetVisibleGeometry(const Camera& camera, vector<Geometry*>& visibleNodes) const {
-	for (vector<Geometry*>::const_iterator i = geometry_.begin(); i != geometry_.end(); i++)
+void Scene::GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const {
+	for (vector<MeshNode*>::const_iterator i = meshNodes_.begin(); i != meshNodes_.end(); i++)
 	{
 		if ((*i)->visible)
-			visibleNodes.push_back(*i);
+			visibleRenderables.push_back(*i);
 	}
+	visibleRenderables.insert(visibleRenderables.end(), renderables_.begin(), renderables_.end());
 }
 
-MovingGeometry* Scene::CreateMovingGeometry(const string& name, const Matrix& transform) {
-	MovingGeometry* result = new MovingGeometry(name);
+MovingMeshNode* Scene::CreateMovingGeometry(const string& name, const Matrix& transform) {
+	MovingMeshNode* result = new MovingMeshNode(name);
 	result->SetTransform(transform);
-	geometry_.push_back(result);
+	meshNodes_.push_back(result);
 	return result;
 }
-StaticGeometry* Scene::CreateStaticGeometry(const string& name, const Matrix& transform) {
-	StaticGeometry* result = new StaticGeometry(name, transform);
-	geometry_.push_back(result);
+StaticMeshNode* Scene::CreateStaticGeometry(const string& name, const Matrix& transform) {
+	StaticMeshNode* result = new StaticMeshNode(name, transform);
+	meshNodes_.push_back(result);
 	return result;
 }
 
 
-void Scene::LoadSkyBox(const std::string& filename){
-	const float SKYBOX_SIZE = 1000;
 
-	//we might want to make IO use strings in future...
-	IO::GetInstance()->LoadMesh(&skyBox_, filename.c_str());
-	skyBox_.SetTransform(CreateMatrix(SKYBOX_SIZE,SKYBOX_SIZE,SKYBOX_SIZE));
-}
-
-
+/*
 const Geometry& Scene::GetSkyBox() const{
 	return skyBox_;
 }
-
+*/
 
 };
