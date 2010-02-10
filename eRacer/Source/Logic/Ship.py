@@ -5,15 +5,15 @@ class Ship(Entity):
     Entity.__init__(self)
     
     # no physics yet..
-    self.graphics = scene.CreateMovingGeometry("test")
+    self.graphics = scene.CreateMovingGeometry("Old Ship Model")
     self.transform = eRacer.CreateMatrix(Vector3(10,3,4))
-    self.graphics.visible = False
         
     def load(r):
       if r:
         print 'Failed to load mesh!!'
         return
-      self.graphics.visible = True
+      print "ship loaded"
+      self.graphics.initialized = True
       
     game().io.LoadMeshAsync(load, self.graphics, "Ship_06.x")
     

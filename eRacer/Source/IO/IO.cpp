@@ -1,5 +1,8 @@
 #include "IO.h"
 
+#include <iostream>
+using namespace std;
+
 IO* IO::g_IO = NULL;
 
 LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
@@ -19,6 +22,7 @@ LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
 
 MeshStruct IO::_LoadMesh(const char* file)
 {
+
 	LPD3DXBUFFER materialsbuffer;
 	MeshStruct mesh;
 	HRESULT r = D3DXLoadMeshFromX(

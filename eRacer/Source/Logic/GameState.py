@@ -83,17 +83,22 @@ class GameState(State):
     
     game().logic.Add(self.player)
     
-
+    # is garbage collected if i dont store - why???
+    self.skyboxes = []
 
 
     for view in self.views:
       game().logic.Add(Starfield(view, 1024, 1000.0))
       game().logic.Add(Starfield(view, 1024, 100.0))
       game().logic.Add(Starfield(view, 1024, 20.0))
-      skybox = SkyBox(view)
+      self.skyboxes.append(SkyBox(view))
     
     
-    game().logic.Add(Ship(scene))
+    ship = Ship(scene)
+    print "ship created"
+    
+    game().logic.Add(ship)
+    print "ship added"
     game().logic.Add(Track(scene))
     game().logic.Add(Plane(scene))
     
