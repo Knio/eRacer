@@ -66,55 +66,59 @@ class GameState(State):
     self.scene = scene
     self.view = eRacer.View(self.scene)
         
-    self.player = Vehicle(self.view.scene)
+    self.player = Vehicle(self.scene)
 
-    self.cameras = []
-    self.cameras.append(ChasingCamera(self.player))
-    self.cameras.append(FirstPersonCamera())
-    self.cameraIndex = 0
+
+    self.views = []
+    self.views.append(eRacer.View(self.scene, ChasingCamera(self.player).camera))
+    self.views.append(eRacer.View(self.scene, FirstPersonCamera().camera))
+    self.viewIndex = 0
     
     game().logic.Add(self.player)
     
-    for camera in self.cameras:
-      game().logic.Add(camera)
+
+
+
+    for view in self.views:
+      game().logic.Add(view.camera)
+      starfield1 = Starfield(view, 1024, 1000.0)
+      starfield2 = Starfield(view, 1024, 100.0)
+      starfield3 = Starfield(view, 1024, 20.0)
+      game().logic.Add(starfield1)
+      game().logic.Add(starfield2)
+      game().logic.Add(starfield3)
+      
+      skybox = SkyBox(view)
     
-    self.view.camera = self.camera.camera
     
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
     game().logic.Add(Plane(scene))
     
-    self.starfield1 = Starfield(self.view, self.camera, 1024, 1000.0)
-    self.starfield2 = Starfield(self.view, self.camera, 1024, 100.0)
-    self.starfield3 = Starfield(self.view, self.camera, 1024, 20.0)
     
-    self.coordinatecross = CoordinateCross(self.view)
-    game().logic.Add(self.coordinatecross)
+    # self.coordinatecross = CoordinateCross(self.view)
+    # game().logic.Add(self.coordinatecross)
     
-    game().logic.Add(self.starfield1)
-    game().logic.Add(self.starfield2)
-    game().logic.Add(self.starfield3)
     
-    skybox = SkyBox(self.camera.camera)
-    self.view.AddRenderable(skybox)
     
     self.boxcount = 1
     game().time.Zero()
     self.loaded = True
     
-  def get_camera(self):
-    return self.cameras[self.cameraIndex]
+  def get_view(self):
+    return self.views[self.viewIndex]
     
-  camera = property(get_camera)   
+  view = property(get_view)   
     
   def CameraChangedEvent(self):
     # print "Camera ",self.cameraIndex+1," out of ",len(self.cameras)
-    self.cameraIndex+=1
-    if(self.cameraIndex>=len(self.cameras)): self.cameraIndex=0
-    self.starfield1.camera = self.camera
-    self.starfield2.camera = self.camera
-    self.starfield3.camera = self.camera
-    self.view.camera = self.camera.camera
+    self.viewIndex+=1
+    if(self.viewIndex>=len(self.views)): self.viewIndex=0
+    # self.starfield1.camera = self.camera
+    # self.starfield2.camera = self.camera
+    # self.starfield3.camera = self.camera
+    # self.skybox.camera     = self.camera.camera
+    # self.view.camera       = self.camera.camera
       
     
     

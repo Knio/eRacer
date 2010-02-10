@@ -14,7 +14,7 @@ public:
 	virtual void Draw(IDirect3DDevice9* device) const;
 	void SetMesh(ID3DXMesh* mesh);
     
-private:
+protected:
     const Camera& camera_;
 };
 

@@ -1,8 +1,11 @@
 from Core.Globals import *
 
 class SkyBox(eRacer.SkyBox):
-  def __init__(self, camera):
-    eRacer.SkyBox.__init__(self, camera)
+  def __init__(self, view):
+    self.view = view
+    eRacer.SkyBox.__init__(self, view.camera)
+    self.camera = view.camera
+    view.AddRenderable(self)
         
     def load(r):
       if r:
