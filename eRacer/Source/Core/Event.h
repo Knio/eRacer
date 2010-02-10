@@ -115,7 +115,7 @@ public:
 
 
 
-	DEFINE_EVENT(ReloadConstsEvent)
+	DEFINE_EVENT(ReloadedConstsEvent)
 	DEFINE_EVENT(GameStateChangeEvent, State* state)
 	
 };

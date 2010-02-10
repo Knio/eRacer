@@ -82,7 +82,7 @@ int GraphicsLayer::Init( HWND hWnd )
 
 void GraphicsLayer::PreRender(){
         // Clear the backbuffer and the zbuffer
-    m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
+    assert(SUCCEEDED(m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 )));
 
     // Begin the scene
     //In the future this will be done inside a loop to handle each shader/effect
@@ -109,17 +109,33 @@ void GraphicsLayer::RenderView(const View& view){
 }
 
 void GraphicsLayer::PostRender(){
-    m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
+    assert(SUCCEEDED(m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY)));
 
      // draw overlay
     m_fontManager.Draw();
     
     
     // End the scene
-    m_pd3dDevice->EndScene();
+    assert(SUCCEEDED(m_pd3dDevice->EndScene()));
     
     // Present the backbuffer contents to the display
-    m_pd3dDevice->Present( NULL, NULL, NULL, NULL );   
+
+	HRESULT r = m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+	try{
+
+	if(r == D3DERR_DEVICEREMOVED)
+		throw runtime_error("device removed\n");
+    else if(r == D3DERR_INVALIDCALL)
+		throw runtime_error("invalid call\n");
+    else if(FAILED(r))
+	{
+		printf("error message %x (invalid call would have been %x) \n",(int)r, (int) D3DERR_INVALIDCALL);
+		throw runtime_error("something else\n");
+	}
+	}catch(runtime_error e){
+		printf(e.what());
+	}
+
 }
 
 

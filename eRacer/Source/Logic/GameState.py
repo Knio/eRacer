@@ -113,20 +113,6 @@ class GameState(State):
     
   view = property(get_view)   
     
-  def CameraChangedEvent(self):
-    # print "Camera ",self.cameraIndex+1," out of ",len(self.cameras)
-    self.viewIndex+=1
-    if(self.viewIndex>=len(self.views)): self.viewIndex=0
-    # self.starfield1.camera = self.camera
-    # self.starfield2.camera = self.camera
-    # self.starfield3.camera = self.camera
-    # self.skybox.camera     = self.camera.camera
-    # self.view.camera       = self.camera.camera
-      
-    
-  def ReloadConstsEvent():
-      game().config.read()
-      game().event.ReloadedConstsEvent()        
     
     
   def Tick(self, time):
@@ -140,11 +126,27 @@ class GameState(State):
     #   self.boxcount += min(self.boxcount+1, 20)
     #   game().logic.Add(Box(self.scene))
       
+  def CameraChangedEvent(self):
+    # print "Camera ",self.cameraIndex+1," out of ",len(self.cameras)
+    self.viewIndex+=1
+    if(self.viewIndex>=len(self.views)): self.viewIndex=0
+    # self.starfield1.camera = self.camera
+    # self.starfield2.camera = self.camera
+    # self.starfield3.camera = self.camera
+    # self.skybox.camera     = self.camera.camera
+    # self.view.camera       = self.camera.camera
+      
+    
+  def ReloadConstsEvent(self):
+      game().config.read()
+      game().event.ReloadedConstsEvent()        
+
+
   def PauseEvent(self):
     game().PushState(PauseMenuState())
 
 
-  def PlayJaguarSoundEvent():
+  def PlayJaguarSoundEvent(self):
       game().sound.PlaySound2D("jaguar.wav")          
    
     

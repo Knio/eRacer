@@ -3,18 +3,18 @@ from Mapping      import Mapping, E
 
 class GameMapping(Mapping):
   def KeyPressedEvent(self, key):
-    if   button == KEY.W:      return E.PlayerAccelerateEvent  (+1.0)
-    elif button == KEY.S:      return E.PlayerBrakeEvent       (True)
-    elif button == KEY.A:      return E.PlayerTurnEvent        (-1.0)
-    elif button == KEY.D:      return E.PlayerTurnEvent        (+1.0)
-    elif button == KEY.UP:     return E.CameraAccelerateEvent  (+1.0)
-    elif button == KEY.DOWN:   return E.CameraAccelerateEvent  (-1.0)
-    elif button == KEY.LEFT:   return E.CameraStrafeEvent      (-1.0)
-    elif button == KEY.RIGHT:  return E.CameraStrafeEvent      (+1.0)
-    elif button == KEY.C:      return E.CameraChangedEvent     (    )
-    elif button == KEY.ESCAPE: return E.PauseEvent             (    )
-    elif button == KEY.R:      return E.ReloadConstsEvent      (    )
-    elif button == KEY.SPACE:  return E.PlayJaguarSoundEvent   (    )
+    if   key == KEY.W:      return E.PlayerAccelerateEvent  (+1.0)
+    elif key == KEY.S:      return E.PlayerBrakeEvent       (True)
+    elif key == KEY.A:      return E.PlayerTurnEvent        (-1.0)
+    elif key == KEY.D:      return E.PlayerTurnEvent        (+1.0)
+    elif key == KEY.UP:     return E.CameraAccelerateEvent  (+1.0)
+    elif key == KEY.DOWN:   return E.CameraAccelerateEvent  (-1.0)
+    elif key == KEY.LEFT:   return E.CameraStrafeEvent      (-1.0)
+    elif key == KEY.RIGHT:  return E.CameraStrafeEvent      (+1.0)
+    elif key == KEY.C:      return E.CameraChangedEvent     (    )
+    elif key == KEY.ESCAPE: return E.PauseEvent             (    )
+    elif key == KEY.R:      return E.ReloadConstsEvent      (    )
+    elif key == KEY.SPACE:  return E.PlayJaguarSoundEvent   (    )
 
 
   def KeyReleasedEvent(self, key):
@@ -43,8 +43,6 @@ class GameMapping(Mapping):
     return E.PlayerAccelerateEvent(z/-1000.0)
     
   def GamepadButtonPressedEvent(self, button):
-    print button,"==",eRacer.BUTTON_START
-    if button == eRacer.BUTTON_X:       return E.PauseEvent()
     if button == eRacer.BUTTON_START:   return E.PauseEvent()
     if button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(True)
     
