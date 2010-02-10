@@ -5,7 +5,7 @@ namespace Physics{
 PhysicsLayer* PhysicsLayer::g_PhysicsLayer = NULL;
 PhysicsLayer::PhysicsLayer() : gScene(NULL) {
 	g_PhysicsLayer = this;
-	REGISTER(this, ReloadConstsEvent);
+	REGISTER(this, ReloadedConstsEvent);
 }
 
 PhysicsLayer::~PhysicsLayer(){
@@ -52,7 +52,7 @@ void PhysicsLayer::GetPhysicsResults()
 		assert(false);
 }
 
-int PhysicsLayer::ReloadConstsEvent()
+int PhysicsLayer::ReloadedConstsEvent()
 {
 	if (gScene) SetupParameters();
 	return 0;

@@ -62,7 +62,6 @@ class GameState(State):
   def load(self):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
-    print "GameState::load begin"
     scene = eRacer.Scene()
     self.scene = scene
         
@@ -95,10 +94,7 @@ class GameState(State):
     
     
     ship = Ship(scene)
-    print "ship created"
-    
     game().logic.Add(ship)
-    print "ship added"
     game().logic.Add(Track(scene))
     game().logic.Add(Plane(scene))
     
@@ -111,7 +107,6 @@ class GameState(State):
     self.boxcount = 1
     game().time.Zero()
     self.loaded = True
-    print "GameState::load end"
     
   def get_view(self):
     return self.views[self.viewIndex]
@@ -129,9 +124,12 @@ class GameState(State):
     # self.view.camera       = self.camera.camera
       
     
+  def ReloadConstsEvent():
+      game().config.read()
+      game().event.ReloadedConstsEvent()        
+    
     
   def Tick(self, time):
-    print "GameState::Tick"
     State.Tick(self, time)
 
     #game().graphics.scene  = self.scene
@@ -145,14 +143,9 @@ class GameState(State):
   def PauseEvent(self):
     game().PushState(PauseMenuState())
 
-  def KeyPressedEvent(self, key):   
-    if key == KEY.SPACE:
+
+  def PlayJaguarSoundEvent():
       game().sound.PlaySound2D("jaguar.wav")          
+   
     
-    if key == KEY.R:
-      game().config.read()
-      game().event.ReloadConstsEvent()        
       
-  def GamepadButtonPressedEvent(self, button):
-    if button == eRacer.BUTTON_START:
-      game().PushState(PauseMenuState())
