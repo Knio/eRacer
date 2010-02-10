@@ -46,7 +46,7 @@ class Vehicle(Entity):
     print 'Vehicle init'
     print self.DEBUG
     d = self.DEBUG[0]
-    print d.x, d.y, d.z
+    print id(d), d.x, d.y, d.z
     
     self.physics = eRacer.Box(
       True,       # dynamic
@@ -109,17 +109,34 @@ class Vehicle(Entity):
     print 8
     print self.DEBUG
     d = self.DEBUG[0]
-    print self.DEBUG[0].x, d.y, d.z
+    print id(d), self.DEBUG[0].x, d.y, d.z
     print 9
     
     _debug = [self.DEBUG[0]]
     
     def debug(s):
       print 100
+      
+      p1 = Point3(1,0,0)
+      pc = p1
+      print 'p1 = %d' % id(p1)
+      p2 = Point3(0,1,0)
+      print 'p2 = %d' % id(p2)
+      p1 += p2
+      p1 += p2
+      print 'p1 = %d (%6.2f %6.2f %6.2f)' % (id(p1), p1.x, p1.y, p1.z)
+      print 'pc = %d (%6.2f %6.2f %6.2f)' % (id(pc), pc.x, pc.y, pc.z)
+            
+      
+      
+      
       # game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
-      _debug[0] += Point3(0, 20, 0)
+      # _debug[0] += Point3(0, 20, 0)
+      
+      
+      
       print 101
-    
+        
     print 10
     debug("1")
     print 11

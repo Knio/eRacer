@@ -189,7 +189,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python -threads Source/SWIG/swig.i"
-				ExcludedFromBuild="false"
+				ExcludedFromBuild="true"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"

@@ -55,7 +55,7 @@ namespace Graphics {
 	{
 		//Check if font exists
 		printf("[%p]WriteString(\"%s\", (%6.2f %6.2f %6.2f))\n", this, msg, pos.x, pos.y, pos.z);
-		//return;
+
 		string sFont = fontName;
 		if (m_fontCacheSimple.count(sFont) == 0) { //Cache Miss
 
@@ -93,7 +93,6 @@ namespace Graphics {
 	void FontManager::Draw()
 	{
 		//Sort Strings Here
-
 		printf("FontManager::Draw()\n");
 		m_pTextSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
 		for (int i = 0; i < (int) m_strList.size(); i++) {
