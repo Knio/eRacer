@@ -4,7 +4,7 @@ class Vehicle(Entity):
   
   MODEL   = "Ship1.x"
   #MODEL   = "box.x"
-  SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
+  SIZE    = Vector3(3, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left
     Point3( 2, -1.5,  4), # front right
@@ -36,6 +36,7 @@ class Vehicle(Entity):
   def __init__(self, scene):
     Entity.__init__(self)
     
+    # self.physics = eRacer.TriMesh()    
     self.physics = eRacer.Box(
       True,       # dynamic
       self.MASS,  # mass
@@ -49,6 +50,7 @@ class Vehicle(Entity):
 
     def load(r):
       if not r:
+        # self.physics.Init(self.graphics.mesh());
         self.graphics.initialized = True
       else:
         print 'Failed to load mesh!'      

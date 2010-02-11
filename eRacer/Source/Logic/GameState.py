@@ -95,7 +95,7 @@ class GameState(State):
 
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
-    game().logic.Add(Plane(scene))
+    # game().logic.Add(Plane(scene))
     
     
     # self.coordinatecross = CoordinateCross(self.view)
