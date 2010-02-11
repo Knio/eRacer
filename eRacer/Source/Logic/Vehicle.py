@@ -4,7 +4,7 @@ class Vehicle(Entity):
   
   MODEL   = "Ship1.x"
   #MODEL   = "box.x"
-  SIZE    = Vector3(2, 1, 4) # "radius" (double for length)
+  SIZE    = Vector3(3, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left
     Point3( 2, -1.5,  4), # front right
@@ -39,19 +39,17 @@ class Vehicle(Entity):
   REV_ALPHA   = 1.0/8.0
   TURN_ALPHA  = 1.0/5.0
   
+  INITIAL_POS = Vector3(80, 3, 0)
+  
   
   def __init__(self, scene):
     Entity.__init__(self)
     
-    print 'Vehicle init'
-    print self.DEBUG
-    d = self.DEBUG[0]
-    print id(d), d.x, d.y, d.z
-    
+    # self.physics = eRacer.TriMesh()    
     self.physics = eRacer.Box(
       True,       # dynamic
       self.MASS,  # mass
-      Vector3(80, 3, 0), # position
+      self.INITIAL_POS, # position
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
@@ -63,6 +61,7 @@ class Vehicle(Entity):
 
     def load(r):
       if not r:
+        # self.physics.Init(self.graphics.mesh());
         self.graphics.initialized = True
       else:
         print 'Failed to load mesh!'      
@@ -224,9 +223,9 @@ class Vehicle(Entity):
       normal = Y
       forward = mul0(tx, Z)
       forward = forward - normal * dot(normal, forward)
-      pos = Point3()
-      eRacer.ExtractPosition(tx, pos)
-      pos.y = 1.5
+      pos = self.INITIAL_POS
+      # eRacer.ExtractPosition(tx, pos)
+      # pos.y = 1.5
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
 
