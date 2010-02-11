@@ -137,6 +137,7 @@ void GraphicsLayer::PostRender(){
 	default:
 		if(FAILED(r))
 			printf("Encountered logic error 0x%x\n",(int)r);
+
 		assert(SUCCEEDED(r));
 	}
 }

@@ -66,9 +66,10 @@ class GameState(State):
     self.scene = scene
         
     self.player = Vehicle(self.scene)
-
+    game().logic.Add(self.player)
 
     self.views = []
+    self.viewIndex = 0
     
     cam = ChasingCamera(self.player)
     game().logic.Add(cam)
@@ -78,13 +79,10 @@ class GameState(State):
     game().logic.Add(cam)
     self.views.append(eRacer.View(self.scene, cam.camera))
     
-    self.viewIndex = 0
-    
-    game().logic.Add(self.player)
-    
     # without this, the skyboxes are garbage collected because the 
     # reference in view does not count because view is a c++ object (not python)
     self.skyboxes = []
+
 
 
     for view in self.views:
@@ -93,9 +91,9 @@ class GameState(State):
       game().logic.Add(Starfield(view, 1024, 20.0))
       self.skyboxes.append(SkyBox(view))
     
-    
-    ship = Ship(scene)
-    game().logic.Add(ship)
+    #until here, it never crashed, i tried 5 times
+
+    game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
     game().logic.Add(Plane(scene))
     

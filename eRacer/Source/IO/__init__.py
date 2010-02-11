@@ -11,7 +11,8 @@ TEXPATH   = 'Resources/Textures'
 
 def asynchronous(func):
   def f(self, callback, *args, **kwargs):
-    self.queue.put_nowait((func, callback, args, kwargs))
+    callback(func(self, *args, **kwargs))
+    # self.queue.put_nowait((func, callback, args, kwargs))
   return f
   
 def debug(func):
