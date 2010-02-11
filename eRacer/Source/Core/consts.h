@@ -9,6 +9,9 @@ struct Constants
 	float	PHYS_GRAVITY_Z;
 	int		PHYS_DEBUG_MODE;
 	float	PHYS_SKIN_WIDTH;
+	float	CAR_MASS;
+	float	SPRING_MAGIC;
+	float	DAMPING_MAGIC;
 };
 
 #endif
