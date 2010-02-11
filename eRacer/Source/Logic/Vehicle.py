@@ -32,6 +32,8 @@ class Vehicle(Entity):
   REV_ALPHA   = 1.0/8.0
   TURN_ALPHA  = 1.0/5.0
   
+  INITIAL_POS = Vector3(80, 3, 0)
+  
   
   def __init__(self, scene):
     Entity.__init__(self)
@@ -40,7 +42,7 @@ class Vehicle(Entity):
     self.physics = eRacer.Box(
       True,       # dynamic
       self.MASS,  # mass
-      Vector3(80, 3, 0), # position
+      self.INITIAL_POS, # position
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
@@ -196,9 +198,9 @@ class Vehicle(Entity):
       normal = Y
       forward = mul0(tx, Z)
       forward = forward - normal * dot(normal, forward)
-      pos = Point3()
-      eRacer.ExtractPosition(tx, pos)
-      pos.y = 1.5
+      pos = self.INITIAL_POS
+      # eRacer.ExtractPosition(tx, pos)
+      # pos.y = 1.5
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
       
