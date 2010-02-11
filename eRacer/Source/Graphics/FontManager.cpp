@@ -3,7 +3,7 @@
 
 
 namespace Graphics {
-	const unsigned int FontManager::FONT_SIZE = 128;
+	const unsigned int FontManager::FONT_SIZE = 32;
 
 	StringRenderable::StringRenderable()
 	{
@@ -54,7 +54,7 @@ namespace Graphics {
 	void FontManager::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color)
 	{
 		//Check if font exists
-		printf("[%p]WriteString(\"%s\", (%6.2f %6.2f %6.2f))\n", this, msg, pos.x, pos.y, pos.z);
+		// printf("[%p]WriteString(\"%s\", (%6.2f %6.2f %6.2f))\n", this, msg, pos.x, pos.y, pos.z);
 
 		string sFont = fontName;
 		if (m_fontCacheSimple.count(sFont) == 0) { //Cache Miss
@@ -93,20 +93,20 @@ namespace Graphics {
 	void FontManager::Draw()
 	{
 		//Sort Strings Here
-		printf("FontManager::Draw()\n");
+		// printf("FontManager::Draw()\n");
 		m_pTextSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
 		for (int i = 0; i < (int) m_strList.size(); i++) {
 			//WCHAR wszmsg[128]; //convert to wide char
 			//MultiByteToWideChar(CP_ACP, 0, m_strList[i].m_strTextBuffer, -1, wszmsg, 128);
-			printf("i = %d\n", i);
+			// printf("i = %d\n", i);
 			m_pTextSprite->SetTransform(&m_strList[i].m_scaling);
 			m_strList[i].m_pFont->DrawText( m_pTextSprite, m_strList[i].m_strTextBuffer.c_str(), -1, &m_strList[i].m_renderArea, DT_NOCLIP, m_strList[i].m_color );
-			printf("i = %d end\n", i);
+			// printf("i = %d end\n", i);
 		}
 		m_pTextSprite->End();
 		
 		m_strList.clear();
-		printf("FontManager::Draw() end\n");
+		// printf("FontManager::Draw() end\n");
 	}
 
 	void FontManager::GetFont(const char* fontName)

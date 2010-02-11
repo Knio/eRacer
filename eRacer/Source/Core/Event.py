@@ -17,7 +17,7 @@ class Event(eRacer.Event):
         func = getattr(obj, event)
       self.listeners.setdefault(event, []).append(func)
     except:
-      print 'Error registering event!'
+      print 'Error registering event!', obj, event
       import traceback
       traceback.print_exc()
       

@@ -89,8 +89,8 @@ class GameState(State):
     self.skyboxes = []
 
 
-
     for view in self.views:
+      # Don't do this! its computing *all* starfields, not just the rendered ones
       game().logic.Add(Starfield(view, 1024, 1000.0))
       game().logic.Add(Starfield(view, 1024, 100.0))
       game().logic.Add(Starfield(view, 1024, 20.0))

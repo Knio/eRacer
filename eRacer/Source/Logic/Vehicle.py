@@ -12,10 +12,10 @@ class Vehicle(Entity):
     Point3( 2, -1.5, -4), # back right
   ]
   DEBUG   = [ # location of debug strings in screen space
-    Point3(300, 200, 0),
-    Point3(500, 200, 0),
-    Point3(300, 400, 0),
-    Point3(500, 400, 0),
+    Point3(280, 180, 0),
+    Point3(480, 180, 0),
+    Point3(280, 380, 0),
+    Point3(480, 380, 0),
   ]
   MASS    = 5000.0
   THRUST  = 1.0e1 * MASS
@@ -105,50 +105,11 @@ class Vehicle(Entity):
     if not time.game_delta:
       return
     
-    
-    print 8
-    print self.DEBUG
-    d = self.DEBUG[0]
-    print id(d), self.DEBUG[0].x, d.y, d.z
-    print 9
-    
-    _debug = [self.DEBUG[0]]
-    
-    def debug(s):
-      print 100
-      
-      p1 = Point3(1,0,0)
-      pc = p1
-      print 'p1 = %d' % id(p1)
-      p2 = Point3(0,1,0)
-      print 'p2 = %d' % id(p2)
-      p1 += p2
-      p1 += p2
-      print 'p1 = %d (%6.2f %6.2f %6.2f)' % (id(p1), p1.x, p1.y, p1.z)
-      print 'pc = %d (%6.2f %6.2f %6.2f)' % (id(pc), pc.x, pc.y, pc.z)
-            
-      
-      
-      
-      # game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
-      # _debug[0] += Point3(0, 20, 0)
-      
-      
-      
-      print 101
-        
-    print 10
-    debug("1")
-    print 11
-    
-    return
-    
-    
     phys  = self.physics
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
 
-    # self.PrintDebug()
+    self.PrintDebug()
     # do engine/brake/steering/user input forces    
     
     alphaa = math.pow(self.REV_ALPHA,  delta)
@@ -175,40 +136,26 @@ class Vehicle(Entity):
       dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
       disp = (self.DISPLACEMENT - dist)
       
-      print -1, ddd
-      print -1.1, self.DEBUG
-      print -1.2, self.DEBUG[i]
+
       _debug = [self.DEBUG[i]]
-      print -1.3, _debug
-      print -2, ddd
       def debug(s):
-        print 100, ddd
-        # game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
-        print 101, ddd
-        _debug[0] += Point3(0, 20, 0)
+        game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
+        _debug[0] = _debug[0] + Point3(0, 20, 0)
       
-      print 0, ddd
       debug("Disp: %6.3f" % disp)
-      print 1, ddd
       
       # check for invalid distances
       if disp < 0:
-        # whee is in the air - no it will not have any forcesww
-        print 10, ddd
+        # wheel is in the air - no forces applied, ignore it
         ddd.append(-1)
-        print 11, ddd
-        # debug("AIR")
+        debug("AIR")
         continue
       if disp > 3*self.DISPLACEMENT:
-        print 12, ddd
         ddd.append(-2)
-        print 13, ddd
         # sanity check
         # debug("BAD")
         continue
-      print 20, ddd
       ddd.append(disp)
-      print 21, ddd
       crashed = False
       
       # spring force
@@ -225,12 +172,15 @@ class Vehicle(Entity):
       # do accelleration
       
       forwardSpeed = self.GetWheelSpeed(delta, downforce)
-      # debug("%6.2f" % forwardSpeed)
+      debug("FW: %6.2f" % forwardSpeed)
       
       # TODO modify Z for steering
       # direction of the wheel on the surface of the road
       # front wheel turns
-      if i < 2: turning = Matrix(ORIGIN, self.turning, Y)
+      
+      angle = self.turning * min(1.,(40. / max(1.,length(worldvel))**1.6))
+      debug("angle: %6.2f" % angle)
+      if i < 2: turning = Matrix(ORIGIN, angle, Y)
       else:     turning = Matrix()
       
       # +Z is forward in the local space
@@ -251,16 +201,16 @@ class Vehicle(Entity):
       
       if self.sliding[i]:
         powerforce = powerforce * self.FRICTION_SLIDING * length(downforce)
-        # debug("SLIDING")
+        debug("SLIDING")
       else:
-        # debug("STATIC")
+        debug("STATIC")
         powerforce = powerforce * self.FRICTION_STATIC * length(downforce)
-      # print powerforce.x, powerforce.y, powerforce.z
+      debug("(%6.2f %6.2f %6.2f)" % (powerforce.x, powerforce.y, powerforce.z))
+      debug("Power:  %6.2f" % length(powerforce))
+      debug("Static: %6.2f" % staticfrictionmax)
       
       phys.AddWorldForceAtLocalPos(powerforce, localpos)
-      print 2
       
-    print 3
     # no wheels are touching the ground.
     # reset the car
     if not crashed:
@@ -268,9 +218,7 @@ class Vehicle(Entity):
     else:
       self.crashtime += delta
     
-    print 3.1
     if self.crashtime > 2: # or car stopped?
-      print 3.2
       self.crashtime = 0
       print "Crash! resetting car"
       normal = Y
@@ -288,7 +236,6 @@ class Vehicle(Entity):
     
     #tx = Matrix()
     self.transform = tx
-    print 4
 
   def set_transform(self, transform):
     Entity.set_transform(self, transform)
@@ -301,26 +248,28 @@ class Vehicle(Entity):
     phys = self.physics
     vel = phys.GetVelocity()
     game().graphics.graphics.WriteString(
-      "Vel: %2.3f %2.3f  %2.3f " % (vel.x, vel.y, vel.z),
-      "Verdana", 16, Point3(5,0,0)
+      "Vel: (%6.2f %6.2f %6.2f)" % (vel.x, vel.y, vel.z),
+      "Verdana", 12, Point3(380,280,0)
     )
 
     game().graphics.graphics.WriteString(
-      "Speed: %2.3f" % phys.GetSpeed(),
-      "Verdana", 16, Point3(5,50,0)
+      "Speed: %6.2f" % phys.GetSpeed(),
+      "Verdana", 12, Point3(380,300,0)
     )
     
     game().graphics.graphics.WriteString(
-      "Throttle:  %1.3f" % self.throttle, 
-      "Verdana", 16, Point3(5,100,0)
+      "Throttle:  %4.2f (%4.2f)" % (self.throttle, self.acceleration),
+      "Verdana", 12, Point3(380,320,0)
     )
-      
-    steerStr = "Control L/R:  %1.3f" % self.steerPos
+    
     game().graphics.graphics.WriteString(
-      steerStr, "Verdana", 16, Point3(5,150,0))
+      "Steer:  %4.2f (%4.2f)" % (self.steerPos, self.turning),
+      "Verdana", 12, Point3(380,340,0)
+    )
     
-
-    
+  
+  # why does this depend on the down force?
+  
   #get the speed the car wants to add to this wheel in the forward direction
   #this will be due to the braking or acceleration the user wants
   #needs the weight on this tire
