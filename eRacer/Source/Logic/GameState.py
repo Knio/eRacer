@@ -62,10 +62,15 @@ class GameState(State):
   def load(self):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
+    print "GameState::load begin"
+
+
     scene = eRacer.Scene()
     self.scene = scene
         
     self.player = Vehicle(self.scene)
+    
+    # OK
     game().logic.Add(self.player)
 
     self.views = []
@@ -84,8 +89,8 @@ class GameState(State):
     self.skyboxes = []
 
 
-
     for view in self.views:
+      # Don't do this! its computing *all* starfields, not just the rendered ones
       game().logic.Add(Starfield(view, 1024, 1000.0))
       game().logic.Add(Starfield(view, 1024, 100.0))
       game().logic.Add(Starfield(view, 1024, 20.0))
@@ -97,26 +102,19 @@ class GameState(State):
     game().logic.Add(Track(scene))
     # game().logic.Add(Plane(scene))
     
-    
     # self.coordinatecross = CoordinateCross(self.view)
     # game().logic.Add(self.coordinatecross)
     
-    
-    
-    self.boxcount = 1
     game().time.Zero()
     self.loaded = True
     
   def get_view(self):
     return self.views[self.viewIndex]
     
-  view = property(get_view)   
-    
-    
+  view = property(get_view)
     
   def Tick(self, time):
     State.Tick(self, time)
-
     game().graphics.views.append(self.view)
     
     # if time.seconds > self.boxcount:
@@ -124,21 +122,15 @@ class GameState(State):
     #   game().logic.Add(Box(self.scene))
       
   def CameraChangedEvent(self):
-    self.viewIndex+=1
-    if(self.viewIndex>=len(self.views)): self.viewIndex=0
-      
+    self.viewIndex = (self.viewIndex+1) % len(self.views)
     
   def ReloadConstsEvent(self):
-      game().config.read()
-      game().event.ReloadedConstsEvent()        
-
+    game().config.read()
+    game().event.ReloadedConstsEvent()
 
   def PauseEvent(self):
     game().PushState(PauseMenuState())
 
-
   def PlayJaguarSoundEvent(self):
       game().sound.PlaySound2D("jaguar.wav")          
    
-    
-      

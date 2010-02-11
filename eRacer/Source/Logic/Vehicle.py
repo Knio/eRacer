@@ -11,6 +11,12 @@ class Vehicle(Entity):
     Point3(-2, -1.5, -4), # back left
     Point3( 2, -1.5, -4), # back right
   ]
+  DEBUG   = [ # location of debug strings in screen space
+    Point3(280, 180, 0),
+    Point3(480, 180, 0),
+    Point3(280, 380, 0),
+    Point3(480, 380, 0),
+  ]
   MASS    = 5000.0
   THRUST  = 1.0e1 * MASS
   TURN    = 3.0e+0          
@@ -24,8 +30,9 @@ class Vehicle(Entity):
   DAMPING       = 2.0 * math.sqrt(SPRING_K * MASS)
   DAMPING_MAGIC = 1.0 # tuning parameter
   
-  STATIC_FRICTION   = 1.0
-  SLIDING_FRICTION  = 0.5
+  FRICTION_STATIC   = 1.0
+  FRICTION_MAX      = 1.0
+  FRICTION_SLIDING  = 0.5
   
   MAX_SPEED = 40.0
   
@@ -48,6 +55,8 @@ class Vehicle(Entity):
     )
     
     self.graphics = scene.CreateMovingGeometry("vehicle")
+    self.graphics.thisown = 0
+
     self.physics.SetCentreOfMass(Point3(0, -1, 0))
 
     def load(r):
@@ -56,7 +65,7 @@ class Vehicle(Entity):
         self.graphics.initialized = True
       else:
         print 'Failed to load mesh!'      
-      
+    
     game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
   
 
@@ -126,14 +135,24 @@ class Vehicle(Entity):
       dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
       disp = (self.DISPLACEMENT - dist)
       
+
+      _debug = [self.DEBUG[i]]
+      def debug(s):
+        game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
+        _debug[0] = _debug[0] + Point3(0, 20, 0)
+      
+      debug("Disp: %6.3f" % disp)
+      
       # check for invalid distances
       if disp < 0:
-        # whee is in the air - no it will not have any forcesww
+        # wheel is in the air - no forces applied, ignore it
         ddd.append(-1)
+        debug("AIR")
         continue
       if disp > 3*self.DISPLACEMENT:
         ddd.append(-2)
         # sanity check
+        # debug("BAD")
         continue
       ddd.append(disp)
       crashed = False
@@ -152,12 +171,15 @@ class Vehicle(Entity):
       # do accelleration
       
       forwardSpeed = self.GetWheelSpeed(delta, downforce)
-      # print forwardSpeed
+      debug("FW: %6.2f" % forwardSpeed)
       
       # TODO modify Z for steering
       # direction of the wheel on the surface of the road
       # front wheel turns
-      if i < 2: turning = Matrix(ORIGIN, self.turning, Y)
+      
+      angle = self.turning * min(1.,(40. / max(1.,length(worldvel))**1.6))
+      debug("angle: %6.2f" % angle)
+      if i < 2: turning = Matrix(ORIGIN, angle, Y)
       else:     turning = Matrix()
       
       # +Z is forward in the local space
@@ -170,18 +192,21 @@ class Vehicle(Entity):
       # wheel's current motion on the surface of the road
       worldwheelvel = worldvel - worldroadnormal * dot(worldvel, worldroadnormal)
       
+      # difference of where the wheel wants to go, and where it is really going.
 
       powerforce = worldrollingvel + worldforwardvel - worldvel
       
-
-      
+      staticfrictionmax = self.FRICTION_SLIDING * length(downforce+slowforce)
       
       if self.sliding[i]:
-        powerforce = powerforce * self.SLIDING_FRICTION * length(downforce)
+        powerforce = powerforce * self.FRICTION_SLIDING * length(downforce)
+        debug("SLIDING")
       else:
-        powerforce = powerforce * self.STATIC_FRICTION  * length(downforce)
-        
-       # print powerforce.x, powerforce.y, powerforce.z
+        debug("STATIC")
+        powerforce = powerforce * self.FRICTION_STATIC * length(downforce)
+      debug("(%6.2f %6.2f %6.2f)" % (powerforce.x, powerforce.y, powerforce.z))
+      debug("Power:  %6.2f" % length(powerforce))
+      debug("Static: %6.2f" % staticfrictionmax)
       
       phys.AddWorldForceAtLocalPos(powerforce, localpos)
       
@@ -191,7 +216,7 @@ class Vehicle(Entity):
       self.crashtime = 0
     else:
       self.crashtime += delta
-      
+    
     if self.crashtime > 2: # or car stopped?
       self.crashtime = 0
       print "Crash! resetting car"
@@ -203,9 +228,10 @@ class Vehicle(Entity):
       # pos.y = 1.5
       tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
       phys.SetTransform(tx)
+
       
-    # print ''.join('%6.2f' % i for i in ddd),
-    # print self.acceleration, self.turning
+    print ''.join('%6.2f' % i for i in ddd),
+    print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx
@@ -219,26 +245,30 @@ class Vehicle(Entity):
   def PrintDebug(self):
     # print debug info
     phys = self.physics
-    velx = phys.GetVelocity().x
-    vely = phys.GetVelocity().y
-    velz = phys.GetVelocity().z
-    velStr = "Vel: %2.3f" %velx + " %2.3f " %vely + " %2.3f " %velz
+    vel = phys.GetVelocity()
     game().graphics.graphics.WriteString(
-      velStr, "Verdana", 24, Point3(0,0,5))
-      
-    speed = phys.GetSpeed()
-    speedStr = "Speed: %2.3f"%speed
+      "Vel: (%6.2f %6.2f %6.2f)" % (vel.x, vel.y, vel.z),
+      "Verdana", 12, Point3(380,280,0)
+    )
+
     game().graphics.graphics.WriteString(
-      speedStr, "Verdana", 24, Point3(0,50,500))
+      "Speed: %6.2f" % phys.GetSpeed(),
+      "Verdana", 12, Point3(380,300,0)
+    )
     
-    throttleStr = "Throttle:  %1.3f"%self.throttle
     game().graphics.graphics.WriteString(
-      throttleStr, "Verdana", 24, Point3(0,100,0))
-      
-    steerStr = "Control L/R:  %1.3f"%self.steerPos
-    game().graphics.graphics.WriteString(
-      steerStr, "Verdana", 24, Point3(0,150,0))
+      "Throttle:  %4.2f (%4.2f)" % (self.throttle, self.acceleration),
+      "Verdana", 12, Point3(380,320,0)
+    )
     
+    game().graphics.graphics.WriteString(
+      "Steer:  %4.2f (%4.2f)" % (self.steerPos, self.turning),
+      "Verdana", 12, Point3(380,340,0)
+    )
+    
+  
+  # why does this depend on the down force?
+  
   #get the speed the car wants to add to this wheel in the forward direction
   #this will be due to the braking or acceleration the user wants
   #needs the weight on this tire
@@ -250,5 +280,4 @@ class Vehicle(Entity):
     massOnTire = length(normalForce) / gravityMag
     speedDelta = (forceMag+brakeMag) / massOnTire * timeStep
     return speedDelta
-    
     

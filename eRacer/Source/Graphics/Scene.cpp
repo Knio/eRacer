@@ -19,6 +19,7 @@ Scene::Scene()
 
 
 Scene::~Scene(){
+	printf("Scene::~Scene()\n");
 	for(vector<MeshNode*>::iterator i = meshNodes_.begin();
 		i != meshNodes_.end(); i++)
 		delete *i;

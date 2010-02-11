@@ -6,6 +6,7 @@ class Plane(Entity):
 
     self.physics  = eRacer.Plane(0, Vector3(0,1,0))
     self.graphics = scene.CreateMovingGeometry("plane")
+    self.graphics.thisown = 0
     
     def load(r):
       if r:

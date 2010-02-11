@@ -6,6 +6,7 @@ class Ship(Entity):
     
     # no physics yet..
     self.graphics = scene.CreateMovingGeometry("Old Ship Model")
+    self.graphics.thisown = 0
     self.transform = eRacer.CreateMatrix(Vector3(10,3,4))
         
     def load(r):

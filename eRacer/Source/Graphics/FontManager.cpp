@@ -3,7 +3,7 @@
 
 
 namespace Graphics {
-	const unsigned int FontManager::FONT_SIZE = 128;
+	const unsigned int FontManager::FONT_SIZE = 32;
 
 	StringRenderable::StringRenderable()
 	{
@@ -34,7 +34,7 @@ namespace Graphics {
 
 	void FontManager::Shutdown()
 	{
-		for( std::map<const char *, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); it !=  m_fontCacheSimple.end(); ++it) {
+		for( std::map<string, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); it !=  m_fontCacheSimple.end(); ++it) {
 			it->second->Release();
 		}
 
@@ -49,11 +49,15 @@ namespace Graphics {
 	void FontManager::SortStringList()
 	{
 	}
+	
 
 	void FontManager::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color)
 	{
 		//Check if font exists
-		if (m_fontCacheSimple.count(fontName) == 0) { //Cache Miss
+		// printf("[%p]WriteString(\"%s\", (%6.2f %6.2f %6.2f))\n", this, msg, pos.x, pos.y, pos.z);
+
+		string sFont = fontName;
+		if (m_fontCacheSimple.count(sFont) == 0) { //Cache Miss
 
 			ID3DXFont* newFont = NULL;
 			//WCHAR wszFontName[128]; //convert to wide char
@@ -62,9 +66,9 @@ namespace Graphics {
 									 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
                                      fontName, &newFont );
 
-			m_fontCacheSimple[fontName] = newFont;
+			m_fontCacheSimple[sFont] = newFont;
 		}
-
+		
 		//Store the String for later
 		RECT rc;
 		rc.top = (LONG) pos.y;
@@ -73,15 +77,15 @@ namespace Graphics {
 		rc.right = 0;
 
  		StringRenderable s;
-		s.m_pFont = m_fontCacheSimple[fontName];
+		s.m_pFont 				= m_fontCacheSimple[fontName];
 		s.m_strTextBuffer = msg;
-		s.m_color = D3DXCOLOR(color.x, color.y, color.z, 1.0f);
-		s.m_renderArea = rc;
+		s.m_color 				= D3DXCOLOR(color.x, color.y, color.z, 1.0f);
+		s.m_renderArea 		= rc;
 		D3DXMatrixScaling(&s.m_scaling, size/FONT_SIZE, size/FONT_SIZE, 1.0f);
 		D3DXMATRIX tmp;
 		D3DXMatrixTranslation(&tmp, -pos.x*size/FONT_SIZE + pos.x, -pos.y*size/FONT_SIZE + pos.y, 0.0f);
 		D3DXMatrixMultiply(&s.m_scaling, &s.m_scaling, &tmp);
-
+		
 		m_strList.push_back(s);
 	
 	}
@@ -89,18 +93,20 @@ namespace Graphics {
 	void FontManager::Draw()
 	{
 		//Sort Strings Here
-
+		// printf("FontManager::Draw()\n");
 		m_pTextSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
 		for (int i = 0; i < (int) m_strList.size(); i++) {
 			//WCHAR wszmsg[128]; //convert to wide char
 			//MultiByteToWideChar(CP_ACP, 0, m_strList[i].m_strTextBuffer, -1, wszmsg, 128);
+			// printf("i = %d\n", i);
 			m_pTextSprite->SetTransform(&m_strList[i].m_scaling);
 			m_strList[i].m_pFont->DrawText( m_pTextSprite, m_strList[i].m_strTextBuffer.c_str(), -1, &m_strList[i].m_renderArea, DT_NOCLIP, m_strList[i].m_color );
+			// printf("i = %d end\n", i);
 		}
 		m_pTextSprite->End();
-
+		
 		m_strList.clear();
-
+		// printf("FontManager::Draw() end\n");
 	}
 
 	void FontManager::GetFont(const char* fontName)

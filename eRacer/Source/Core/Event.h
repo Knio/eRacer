@@ -114,8 +114,9 @@ public:
 	DEFINE_EVENT(GamepadTriggerRelativeEvent, long z)
 
 
-
+	DEFINE_EVENT(ReloadConstsEvent)
 	DEFINE_EVENT(ReloadedConstsEvent)
+
 	DEFINE_EVENT(GameStateChangeEvent, State* state)
 	
 };

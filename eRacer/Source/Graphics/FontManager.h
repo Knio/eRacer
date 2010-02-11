@@ -37,7 +37,7 @@ class FontManager
 {
 public:
 	static const unsigned int FONT_SIZE;
-	std::map<const char *, ID3DXFont*> m_fontCacheSimple;
+	std::map<string, ID3DXFont*> m_fontCacheSimple;
 	std::vector<StringRenderable> m_strList;	//List of strings to render
 
 	LPDIRECT3DDEVICE9   m_pd3dDevice;

@@ -14,6 +14,16 @@ def game():
   return __game
 
 
+def VECTOR3__iadd__(self, arg):
+  raise Exception("The (+=) operator seems to be unstable. Please do not use.")
+
+def VECTOR3__repr__(self):
+  return "(%6.2f %6.2f %6.2f)" % (self.x, self.y, self.z)
+
+eRacer.D3DXVECTOR3.__iadd__ = VECTOR3__iadd__
+eRacer.D3DXVECTOR3.__repr__ = VECTOR3__repr__
+
+
 Vector3   = eRacer.D3DXVECTOR3
 Vector4   = eRacer.D3DXVECTOR4
 Point3    = eRacer.D3DXVECTOR3
