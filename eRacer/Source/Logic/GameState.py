@@ -64,6 +64,7 @@ class GameState(State):
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
 
+
     scene = eRacer.Scene()
     self.scene = scene
         
@@ -71,8 +72,9 @@ class GameState(State):
     
     # OK
     game().logic.Add(self.player)
-    
+
     self.views = []
+    self.viewIndex = 0
     
     cam = ChasingCamera(self.player)
     game().logic.Add(cam)
@@ -82,12 +84,10 @@ class GameState(State):
     game().logic.Add(cam)
     self.views.append(eRacer.View(self.scene, cam.camera))
     
-    self.viewIndex = 0
-    
-    game().logic.Add(self.player)
-    
-    # is garbage collected if i dont store - why???
+    # without this, the skyboxes are garbage collected because the 
+    # reference in view does not count because view is a c++ object (not python)
     self.skyboxes = []
+
 
 
     for view in self.views:
@@ -96,56 +96,41 @@ class GameState(State):
       game().logic.Add(Starfield(view, 1024, 20.0))
       self.skyboxes.append(SkyBox(view))
     
-    
-    ship = Ship(scene)
-    print "ship created"
-    
-    game().logic.Add(ship)
-    print "ship added"
+    #until here, it never crashed, i tried 5 times
+
+    game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
     game().logic.Add(Plane(scene))
-    
     
     # self.coordinatecross = CoordinateCross(self.view)
     # game().logic.Add(self.coordinatecross)
     
     game().time.Zero()
     self.loaded = True
-    print "GameState::load end"
     
   def get_view(self):
     return self.views[self.viewIndex]
     
-  view = property(get_view)   
-    
-  def CameraChangedEvent(self):
-    # print "Camera ",self.cameraIndex+1," out of ",len(self.cameras)
-    self.viewIndex+=1
-    if(self.viewIndex>=len(self.views)): self.viewIndex=0 
+  view = property(get_view)
     
   def Tick(self, time):
-    print "GameState::Tick"
     State.Tick(self, time)
-
-    #game().graphics.scene  = self.scene
-    #game().graphics.camera = self.camera
     game().graphics.views.append(self.view)
     
     # if time.seconds > self.boxcount:
     #   self.boxcount += min(self.boxcount+1, 20)
     #   game().logic.Add(Box(self.scene))
       
+  def CameraChangedEvent(self):
+    self.viewIndex = (self.viewIndex+1) % len(self.views)
+    
+  def ReloadConstsEvent(self):
+    game().config.read()
+    game().event.ReloadedConstsEvent()
+
   def PauseEvent(self):
     game().PushState(PauseMenuState())
 
-  def KeyPressedEvent(self, key):   
-    if key == KEY.SPACE:
+  def PlayJaguarSoundEvent(self):
       game().sound.PlaySound2D("jaguar.wav")          
-    
-    if key == KEY.R:
-      game().config.read()
-      game().event.ReloadConstsEvent()        
-      
-  def GamepadButtonPressedEvent(self, button):
-    if button == eRacer.BUTTON_START:
-      game().PushState(PauseMenuState())
+   

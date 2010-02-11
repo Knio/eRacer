@@ -185,7 +185,7 @@ class Vehicle(Entity):
         print 100, ddd
         # game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
         print 101, ddd
-        # _debug[0] += Point3(0, 20, 0)
+        _debug[0] += Point3(0, 20, 0)
       
       print 0, ddd
       debug("Disp: %6.3f" % disp)
@@ -244,6 +244,7 @@ class Vehicle(Entity):
       worldwheelvel = worldvel - worldroadnormal * dot(worldvel, worldroadnormal)
       
       # difference of where the wheel wants to go, and where it is really going.
+
       powerforce = worldrollingvel + worldforwardvel - worldvel
       
       staticfrictionmax = self.FRICTION_SLIDING * length(downforce+slowforce)
@@ -254,7 +255,8 @@ class Vehicle(Entity):
       else:
         # debug("STATIC")
         powerforce = powerforce * self.FRICTION_STATIC * length(downforce)
-        
+      # print powerforce.x, powerforce.y, powerforce.z
+      
       phys.AddWorldForceAtLocalPos(powerforce, localpos)
       print 2
       
@@ -330,5 +332,4 @@ class Vehicle(Entity):
     massOnTire = length(normalForce) / gravityMag
     speedDelta = (forceMag+brakeMag) / massOnTire * timeStep
     return speedDelta
-    
     

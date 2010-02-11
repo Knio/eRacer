@@ -3,18 +3,19 @@ from Mapping      import Mapping, E
 
 class GameMapping(Mapping):
   def KeyPressedEvent(self, key):
-    return {
-    KEY.W:      [E.PlayerAccelerateEvent  (+1.0)],
-    KEY.S:      [E.PlayerBrakeEvent(True)],
-    KEY.A:      [E.PlayerTurnEvent        (-1.0)],
-    KEY.D:      [E.PlayerTurnEvent        (+1.0)],
-    KEY.UP:     [E.CameraAccelerateEvent  (+1.0)],
-    KEY.DOWN:   [E.CameraAccelerateEvent  (-1.0)],
-    KEY.LEFT:   [E.CameraStrafeEvent      (-1.0)],
-    KEY.RIGHT:  [E.CameraStrafeEvent      (+1.0)],
-    KEY.C:      [E.CameraChangedEvent     (    )],
-    KEY.ESCAPE: [E.PauseEvent             (    )],
-    }.get(key, None)
+    if   key == KEY.W:      return E.PlayerAccelerateEvent  (+1.0)
+    elif key == KEY.S:      return E.PlayerBrakeEvent       (True)
+    elif key == KEY.A:      return E.PlayerTurnEvent        (-1.0)
+    elif key == KEY.D:      return E.PlayerTurnEvent        (+1.0)
+    elif key == KEY.UP:     return E.CameraAccelerateEvent  (+1.0)
+    elif key == KEY.DOWN:   return E.CameraAccelerateEvent  (-1.0)
+    elif key == KEY.LEFT:   return E.CameraStrafeEvent      (-1.0)
+    elif key == KEY.RIGHT:  return E.CameraStrafeEvent      (+1.0)
+    elif key == KEY.C:      return E.CameraChangedEvent     (    )
+    elif key == KEY.ESCAPE: return E.PauseEvent             (    )
+    elif key == KEY.R:      return E.ReloadConstsEvent      (    )
+    elif key == KEY.SPACE:  return E.PlayJaguarSoundEvent   (    )
+
 
   def KeyReleasedEvent(self, key):
     return {

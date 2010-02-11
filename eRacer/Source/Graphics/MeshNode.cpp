@@ -32,6 +32,9 @@ void MeshNode::cullRecursive(const Camera&, vector<const MeshNode*>& visibleNode
 }
 
 void MeshNode::Draw(IDirect3DDevice9* device) const{
+	if(!initialized)
+		return;
+			
 	assert(NULL != device);
 
     // set the transform

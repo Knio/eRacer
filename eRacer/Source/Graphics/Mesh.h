@@ -72,10 +72,7 @@ protected:
 	vector<IDirect3DTexture9*> textures_;
 };
 
-inline Mesh::Mesh()
-: mesh_(NULL), initialized(false)
-{
-}
+
 
 inline const ID3DXMesh* Mesh::GetMesh() const{
 	return mesh_;

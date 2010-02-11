@@ -69,7 +69,7 @@ public:
 	*/
 	void SetupParameters();
 
-	int ReloadConstsEvent();
+	int ReloadedConstsEvent();
 
 	/**
 	* @brief Sets the parameters

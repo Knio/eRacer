@@ -37,22 +37,13 @@ int GraphicsLayer::Init( HWND hWnd )
         return E_FAIL;
     }
 
-    // Set up the structure used to create the D3DDevice. Since we are now
-    // using more complex geometry, we will create a device with a zbuffer.
-    D3DPRESENT_PARAMETERS d3dpp;
-    ZeroMemory( &d3dpp, sizeof( d3dpp ) );
-    d3dpp.Windowed = TRUE;
-    d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-    d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
-    d3dpp.EnableAutoDepthStencil = TRUE;
-    d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-    d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	resetPresentationParameters();
     
     
     // Create the D3DDevice
     if( FAILED( m_pD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
                                       D3DCREATE_HARDWARE_VERTEXPROCESSING,
-                                      &d3dpp, &m_pd3dDevice ) ) )
+                                      &m_presentationParameters, &m_pd3dDevice ) ) )
     {
         assert(false);
         return E_FAIL;
@@ -80,9 +71,22 @@ int GraphicsLayer::Init( HWND hWnd )
     return S_OK;
 }
 
+void GraphicsLayer::resetPresentationParameters(){
+    // Set up the structure used to create the D3DDevice. Since we are now
+    // using more complex geometry, we will create a device with a zbuffer.
+    ZeroMemory( &m_presentationParameters, sizeof( m_presentationParameters ) );
+    m_presentationParameters.Windowed = TRUE;
+    m_presentationParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    m_presentationParameters.BackBufferFormat = D3DFMT_UNKNOWN;
+    m_presentationParameters.EnableAutoDepthStencil = TRUE;
+    m_presentationParameters.AutoDepthStencilFormat = D3DFMT_D16;
+    m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+}
+
+
 void GraphicsLayer::PreRender(){
         // Clear the backbuffer and the zbuffer
-    m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 );
+    assert(SUCCEEDED(m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 )));
 
     // Begin the scene
     //In the future this will be done inside a loop to handle each shader/effect
@@ -109,17 +113,53 @@ void GraphicsLayer::RenderView(const View& view){
 }
 
 void GraphicsLayer::PostRender(){
-    m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
+    assert(SUCCEEDED(m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY)));
 
      // draw overlay
     m_fontManager.Draw();
     
     
     // End the scene
-    m_pd3dDevice->EndScene();
+    assert(SUCCEEDED(m_pd3dDevice->EndScene()));
     
     // Present the backbuffer contents to the display
-    m_pd3dDevice->Present( NULL, NULL, NULL, NULL );   
+
+	HRESULT r = m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+
+	switch(r){
+	case D3DERR_DRIVERINTERNALERROR:
+		printf("driver internal error - trying to reset presentation parameters\n");
+		resetDevice();
+		break;
+	case D3DERR_DEVICEREMOVED:
+		throw runtime_error("Fatal error: The Direct3D Device has been removed");
+		break;
+	default:
+		if(FAILED(r))
+			printf("Encountered logic error 0x%x\n",(int)r);
+
+		assert(SUCCEEDED(r));
+	}
+}
+
+void GraphicsLayer::resetDevice(){
+	resetPresentationParameters();
+	HRESULT r = m_pd3dDevice->Reset(&m_presentationParameters);
+
+	switch(r){
+	case D3DERR_DEVICELOST:
+		printf("Fatal error: The Direct3D Device has been lost");
+		throw runtime_error("Fatal error: The Direct3D Device has been lost");
+	case D3DERR_DEVICEREMOVED:
+		printf("Fatal error: The Direct3D Device has been lost");
+		throw runtime_error("Fatal error: The Direct3D Device has been removed");
+	case D3DERR_DRIVERINTERNALERROR:
+		printf("again driver internal error\n");
+		throw runtime_error("Fatal error: Repeated driver internal error.");
+	case D3DERR_OUTOFVIDEOMEMORY:
+		printf("Fatal error: Out of video memory\n");
+		throw runtime_error("Fatal error: Out of video memory.");
+	}
 }
 
 

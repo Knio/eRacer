@@ -32,7 +32,10 @@ private:
 	LPDIRECT3D9			m_pD3D;			//Used to create the D3DDevice
 	LPDIRECT3DDEVICE9   m_pd3dDevice;	//Our rendering device
 	FontManager			m_fontManager;
+	D3DPRESENT_PARAMETERS m_presentationParameters;
 
+	void resetPresentationParameters();
+	void resetDevice();
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
 	GraphicsLayer(const GraphicsLayer&);
