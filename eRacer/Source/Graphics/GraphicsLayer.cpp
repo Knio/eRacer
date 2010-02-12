@@ -26,6 +26,15 @@ void GraphicsLayer::SetCamera(const Camera& camera)
 {
     m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &camera.GetProjectionMatrix() );
     m_pd3dDevice->SetTransform( D3DTS_VIEW, &camera.GetViewMatrix() );
+
+	    // Begin the scene
+    //In the future this will be done inside a loop to handle each shader/effect
+	D3DXMATRIXA16 viewMat = camera.GetViewMatrix();
+	D3DXMATRIXA16 projMat = camera.GetProjectionMatrix();
+	HRESULT hr;
+	hr = m_pEffect->SetMatrix( "g_ViewMatrix", &viewMat );
+	hr = m_pEffect->SetMatrix( "g_ProjectionMatrix", &projMat );
+	hr = m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
 }
 
 int GraphicsLayer::Init( HWND hWnd ) 
@@ -73,7 +82,7 @@ int GraphicsLayer::Init( HWND hWnd )
 	DWORD dwShaderFlags = D3DXFX_NOT_CLONEABLE | D3DXSHADER_DEBUG;
 	//dwShaderFlags |= D3DXSHADER_FORCE_VS_SOFTWARE_NOOPT;
     dwShaderFlags |= D3DXSHADER_FORCE_PS_SOFTWARE_NOOPT; //Force software shader since not everything is textured
-	HRESULT hr = D3DXCreateEffectFromFile( m_pd3dDevice, "SimpleHLSL.fx", NULL, NULL, dwShaderFlags, NULL, &m_pEffect, NULL );
+	HRESULT hr = D3DXCreateEffectFromFile( m_pd3dDevice, "BasicHLSL.fx", NULL, NULL, dwShaderFlags, NULL, &m_pEffect, NULL );
 
     // Set effect variables as needed
     D3DXCOLOR colorMtrlDiffuse( 1.0f, 1.0f, 1.0f, 1.0f );
@@ -114,34 +123,18 @@ void GraphicsLayer::RenderView(const View& view){
     vector<Renderable*> visibleRenderables;
     view.scene->GetVisibleRenderables(*view.camera, visibleRenderables);
     
-	//D3DXMATRIXA16 worldMat;
-    //m_pEffect->SetMatrix( "g_WorldMatrix", &worldMat );
-	//m_pEffect->SetTexture( "g_MeshTexture", geometry->Textures()[i] );
 
-	HRESULT h1 = m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
-	UINT cPasses = 1;
-	h1 = m_pEffect->Begin( &cPasses, 0 );
-	for( int iPass = 0; iPass < cPasses; iPass++ )
-	{
-		for (vector<Renderable*>::const_iterator renderable = visibleRenderables.begin(); 
-			renderable!=visibleRenderables.end(); renderable++){
-				(*renderable)->Draw(m_pd3dDevice);
-		}
-		h1 = m_pEffect->EndPass();
+	for (vector<Renderable*>::const_iterator renderable = visibleRenderables.begin(); 
+		renderable!=visibleRenderables.end(); renderable++){
+		(*renderable)->Draw(m_pd3dDevice);
 	}
-	h1 = m_pEffect->End();
 
-	HRESULT h2 = m_pEffect->SetTechnique( "RenderSceneWithTextureFixedLight" );
-	h2 = m_pEffect->Begin( &cPasses, 0 );
-	for( int iPass = 0; iPass < cPasses; iPass++ )
-	{
-		for (vector<const Renderable*>::const_iterator renderable = view.viewDependantRenderables.begin(); 
-			renderable!=view.viewDependantRenderables.end(); renderable++){
-				(*renderable)->Draw(m_pd3dDevice);
-		}
-		h2 = m_pEffect->EndPass();
+
+	for (vector<const Renderable*>::const_iterator renderable = view.viewDependantRenderables.begin(); 
+		renderable!=view.viewDependantRenderables.end(); renderable++){
+			(*renderable)->Draw(m_pd3dDevice);
 	}
-	h2 = m_pEffect->End();
+
 }
 
 void GraphicsLayer::PostRender(){
