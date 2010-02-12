@@ -42,22 +42,21 @@ public:
 
 class FontManager
 {
-public:
-	//static const unsigned int FONT_SIZE;
+private:
 	map<FontDescription, ID3DXFont*> m_fontCacheSimple;
 	vector<StringRenderable> m_strList;	//List of strings to render
 
 	LPDIRECT3DDEVICE9   m_pd3dDevice;
 	ID3DXSprite*        m_pTextSprite;
 
+public:
 	FontManager();
 	~FontManager();
 
 	void Init(LPDIRECT3DDEVICE9 device);
 
 	void WriteString(const char* msg, const char* fontName, int size, const Vector3 &pos, const Vector3 &color);
-	void WriteString(const char* msg, ID3DXSprite* font, Vector3 color);
-	void CreateFont(const char* fontName, int size, bool bold, bool italic); 
+
 	void Draw();
 	void Shutdown();
 };
