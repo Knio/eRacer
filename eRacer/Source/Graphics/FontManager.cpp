@@ -1,11 +1,11 @@
 #include "FontManager.h"
-
+#include <cassert>
 
 
 namespace Graphics {
 
 	StringRenderable::StringRenderable(ID3DXSprite* targetSprite)
-		: m_pTextSprite(targetSprite)
+		: m_pTextSprite(targetSprite), m_pFont(NULL)
 	{
 
 	}
@@ -21,9 +21,9 @@ namespace Graphics {
 	}
 
 	void StringRenderable::Draw(IDirect3DDevice9*) const{
-		//why in the world does direct x not take a const rect???
-		RECT r = m_renderArea;
-		m_pFont->DrawText( m_pTextSprite, m_strTextBuffer.c_str(), -1, &r, DT_NOCLIP, m_color);
+		assert(NULL != m_pFont);
+		RECT area = {m_uiScreenX,m_uiScreenY,0,0};
+		m_pFont->DrawText( m_pTextSprite, m_strTextBuffer.c_str(), -1, &area, DT_NOCLIP, m_color);
 
 	}
 
@@ -46,7 +46,8 @@ namespace Graphics {
 
 	void FontManager::Shutdown()
 	{
-		for(map<FontDescription, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); it !=  m_fontCacheSimple.end(); ++it) {
+		for(map<FontDescription, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); 
+			it !=  m_fontCacheSimple.end(); ++it) {
 			it->second->Release();
 		}
 
@@ -80,16 +81,8 @@ namespace Graphics {
 		s.m_pFont 			= font->second;
 		s.m_strTextBuffer	= msg;
 		s.m_color 			= D3DXCOLOR(color.x, color.y, color.z, 1.0f);
-		s.m_renderArea.top = (LONG) pos.y;
-		s.m_renderArea.left = (LONG) pos.x;
-		s.m_renderArea.bottom = 0;
-		s.m_renderArea.right = 0;
-
-
-
-
-
-	
+		s.m_uiScreenX = (unsigned int ) pos.x;
+		s.m_uiScreenY= (unsigned int) pos.y;
 	}
 
 	void FontManager::Draw()

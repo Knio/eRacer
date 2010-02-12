@@ -23,7 +23,8 @@ class StringRenderable : public Renderable
 public:
 	ID3DXFont* m_pFont;
 	string m_strTextBuffer;
-	RECT m_renderArea; //Position and area to render in
+	unsigned int m_uiScreenX;
+	unsigned int m_uiScreenY;
 	D3DXCOLOR m_color;
 	ID3DXSprite* m_pTextSprite;
 
