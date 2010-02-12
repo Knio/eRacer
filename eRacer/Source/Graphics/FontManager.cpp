@@ -72,20 +72,23 @@ namespace Graphics {
 			font = m_fontCacheSimple.insert(make_pair(fontDesc,newFont)).first;
 		}
 		
-		//Store the String for later
-		RECT rc;
-		rc.top = (LONG) pos.y;
-		rc.left = (LONG) pos.x;
-		rc.bottom = 0;
-		rc.right = 0;
 
- 		StringRenderable s(m_pTextSprite);
+		//Buffer sring for rendering
+		m_strList.push_back(StringRenderable(m_pTextSprite));
+		StringRenderable& s = m_strList.back();
+
 		s.m_pFont 			= font->second;
 		s.m_strTextBuffer	= msg;
 		s.m_color 			= D3DXCOLOR(color.x, color.y, color.z, 1.0f);
-		s.m_renderArea 		= rc;
+		s.m_renderArea.top = (LONG) pos.y;
+		s.m_renderArea.left = (LONG) pos.x;
+		s.m_renderArea.bottom = 0;
+		s.m_renderArea.right = 0;
 
-		m_strList.push_back(s);
+
+
+
+
 	
 	}
 
