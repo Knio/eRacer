@@ -7,11 +7,15 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <algorithm>
+
 #include "../Core/Math.h"
 
 using namespace std;
 
 namespace Graphics {
+
+typedef pair<string, int> FontDescription;
 
 class StringRenderable
 {
@@ -20,43 +24,34 @@ public:
 	string m_strTextBuffer;
 	RECT m_renderArea; //Position and area to render in
 	D3DXCOLOR m_color;
-	D3DXMATRIX m_scaling;
 
 	StringRenderable();
 	~StringRenderable();
+	/**
+	 * @brief Comparison operator for sorting - sorts by the address of the font used
+	 */
+	bool operator<(const StringRenderable& s);
 };
 
-class FontRenderable
-{
-public:
-	ID3DXFont* m_pFont;
-};
 
 
 class FontManager
 {
 public:
-	static const unsigned int FONT_SIZE;
-	std::map<string, ID3DXFont*> m_fontCacheSimple;
-	std::vector<StringRenderable> m_strList;	//List of strings to render
+	//static const unsigned int FONT_SIZE;
+	map<FontDescription, ID3DXFont*> m_fontCacheSimple;
+	vector<StringRenderable> m_strList;	//List of strings to render
 
 	LPDIRECT3DDEVICE9   m_pd3dDevice;
 	ID3DXSprite*        m_pTextSprite;
-
-protected:
-	void SortStringList();
-
-public:
 
 	FontManager();
 	~FontManager();
 
 	void Init(LPDIRECT3DDEVICE9 device);
 
-	//void WriteString(const char* msg, const char* fontName, float size, Vector3 pos, Vector3 color);
-	void WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color);
+	void WriteString(const char* msg, const char* fontName, int size, const Vector3 &pos, const Vector3 &color);
 	void WriteString(const char* msg, ID3DXSprite* font, Vector3 color);
-	void GetFont(const char* fontName);
 	void CreateFont(const char* fontName, int size, bool bold, bool italic); 
 	void Draw();
 	void Shutdown();

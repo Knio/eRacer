@@ -3,7 +3,7 @@
 
 
 namespace Graphics {
-	const unsigned int FontManager::FONT_SIZE = 32;
+	//const unsigned int FontManager::FONT_SIZE = 32;
 
 	StringRenderable::StringRenderable()
 	{
@@ -13,8 +13,12 @@ namespace Graphics {
 	StringRenderable::~StringRenderable()
 	{
 		m_pFont = NULL;
-		//m_scaling = NULL;
 	}
+
+	bool StringRenderable::operator<(const StringRenderable& s){
+		return m_pFont < s.m_pFont;
+	}
+
 
 	FontManager::FontManager()
 	{
@@ -34,7 +38,7 @@ namespace Graphics {
 
 	void FontManager::Shutdown()
 	{
-		for( std::map<string, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); it !=  m_fontCacheSimple.end(); ++it) {
+		for(map<FontDescription, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); it !=  m_fontCacheSimple.end(); ++it) {
 			it->second->Release();
 		}
 
@@ -44,29 +48,20 @@ namespace Graphics {
 			m_pTextSprite->Release();
 			m_pTextSprite = NULL;
 		}
-	}
+	}	
 
-	void FontManager::SortStringList()
+	void FontManager::WriteString(const char* msg, const char* fontFamily, int fontSize, const Vector3 &pos, const Vector3 &color)
 	{
-	}
-	
-
-	void FontManager::WriteString(const char* msg, const char* fontName, const float &size, const Vector3 &pos, const Vector3 &color)
-	{
-		//Check if font exists
-		// printf("[%p]WriteString(\"%s\", (%6.2f %6.2f %6.2f))\n", this, msg, pos.x, pos.y, pos.z);
-
-		string sFont = fontName;
-		if (m_fontCacheSimple.count(sFont) == 0) { //Cache Miss
+		FontDescription fontDesc(fontFamily, fontSize);
+		map<FontDescription,ID3DXFont*>::iterator font;
+		if ((font = m_fontCacheSimple.find(fontDesc)) == m_fontCacheSimple.end()) { //Cache Miss
 
 			ID3DXFont* newFont = NULL;
-			//WCHAR wszFontName[128]; //convert to wide char
-			//MultiByteToWideChar(CP_ACP, 0, fontName, -1, wszFontName,128); 
-			D3DXCreateFont( m_pd3dDevice, FONT_SIZE, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
+			D3DXCreateFont( m_pd3dDevice, fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
 									 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
-                                     fontName, &newFont );
+                                     fontFamily, &newFont );
 
-			m_fontCacheSimple[sFont] = newFont;
+			font = m_fontCacheSimple.insert(make_pair(fontDesc,newFont)).first;
 		}
 		
 		//Store the String for later
@@ -77,57 +72,25 @@ namespace Graphics {
 		rc.right = 0;
 
  		StringRenderable s;
-		s.m_pFont 				= m_fontCacheSimple[fontName];
-		s.m_strTextBuffer = msg;
-		s.m_color 				= D3DXCOLOR(color.x, color.y, color.z, 1.0f);
+		s.m_pFont 			= font->second;
+		s.m_strTextBuffer	= msg;
+		s.m_color 			= D3DXCOLOR(color.x, color.y, color.z, 1.0f);
 		s.m_renderArea 		= rc;
-		D3DXMatrixScaling(&s.m_scaling, size/FONT_SIZE, size/FONT_SIZE, 1.0f);
-		D3DXMATRIX tmp;
-		D3DXMatrixTranslation(&tmp, -pos.x*size/FONT_SIZE + pos.x, -pos.y*size/FONT_SIZE + pos.y, 0.0f);
-		D3DXMatrixMultiply(&s.m_scaling, &s.m_scaling, &tmp);
-		
+
 		m_strList.push_back(s);
 	
 	}
 
 	void FontManager::Draw()
 	{
-		//Sort Strings Here
-		// printf("FontManager::Draw()\n");
+		sort(m_strList.begin(), m_strList.end());
+
 		m_pTextSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
 		for (int i = 0; i < (int) m_strList.size(); i++) {
-			//WCHAR wszmsg[128]; //convert to wide char
-			//MultiByteToWideChar(CP_ACP, 0, m_strList[i].m_strTextBuffer, -1, wszmsg, 128);
-			// printf("i = %d\n", i);
-			m_pTextSprite->SetTransform(&m_strList[i].m_scaling);
 			m_strList[i].m_pFont->DrawText( m_pTextSprite, m_strList[i].m_strTextBuffer.c_str(), -1, &m_strList[i].m_renderArea, DT_NOCLIP, m_strList[i].m_color );
-			// printf("i = %d end\n", i);
 		}
 		m_pTextSprite->End();
 		
 		m_strList.clear();
-		// printf("FontManager::Draw() end\n");
 	}
-
-	void FontManager::GetFont(const char* fontName)
-	{
-		//Does nothing
-
-		/*WCHAR wszFontName[128]; //convert to wide char
-		//MultiByteToWideChar(CP_ACP, 0, fontName, -1, wszFontName,128); 
-
-		ID3DXFont* newFont;
-
-		D3DXCreateFont( m_pd3dDevice, 24, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET,
-									 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
-                                     wszFontName, &newFont );
-
-		m_fontCacheSimple[fontName] = newFont;*/
-	}
-
-
-
-
-
-
 };
