@@ -16,24 +16,12 @@ class Vehicle(Entity):
     Point3(280, 380, 0),
     Point3(480, 380, 0),
   ]
- # THRUST  = 1.0e1 * MASS
-  TURN    = 3.0e+0          
   DISPLACEMENT = 0.30  # from wheel rest position
-  
-  # MASS * G = 4 * K * DISPLACEMENT
-  # TODO: get G from CONSTS
-
   
   FRICTION_STATIC   = 1.0
   FRICTION_MAX      = 1.0
   FRICTION_SLIDING  = 0.5
-  DRAG_COEFF = 10.0
-  MASS_CENTRE  = Point3(0, -1, 0)
-  
-  MAX_SPEED = 40.0
-  
-  REV_ALPHA   = 1.0/8.0
-  TURN_ALPHA  = 1.0/8.0
+  DRAG_COEFF = 8.0
   
   INITIAL_POS = Vector3(80, 3, 0)
   
@@ -42,16 +30,14 @@ class Vehicle(Entity):
     Entity.__init__(self)
     
     self.MASS = CONSTS.CAR_MASS
-    print self.MASS
     self.SPRING_MAGIC = CONSTS.SPRING_MAGIC
-    print self.SPRING_MAGIC
     self.DAMPING_MAGIC = CONSTS.DAMPING_MAGIC
-    print self.DAMPING_MAGIC
-    
+    self.MASS_CENTRE = Point3(CONSTS.MASS_CENTRE_X, CONSTS.MASS_CENTRE_Y, CONSTS.MASS_CENTRE_Z)
+    self.REV_ALPHA = CONSTS.REV_ALPHA
+    self.TURN_ALPHA = CONSTS.TURN_ALPHA
     
     self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
-    
     # self.physics = eRacer.TriMesh()    
     self.physics = eRacer.Box(
       True,       # dynamic
@@ -85,7 +71,7 @@ class Vehicle(Entity):
     self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
     self.crashtime = 0      # time since wheels were last in contact with the ground
     
-    self.maxEngForce    = 100000   #the max amount the engine can put on a wheel at the moment
+    self.maxEngForce    = 2e5   #the max amount the engine can put on a wheel at the moment
                                 #constant for now, will be variable later
     self.maxBrakeForce  = 5e4   #always constant
     
@@ -134,7 +120,6 @@ class Vehicle(Entity):
     dragForce = dragDir * dragForceMag
     phys.AddWorldForceAtLocalPos(dragForce, self.MASS_CENTRE)
     #print dragForce.x, dragForce.y, dragForce.z
-    print length(dragForce)
     
     crashed = True
     ddd = []
@@ -311,6 +296,9 @@ class Vehicle(Entity):
     self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
     self.physics.SetMass(self.MASS)
+    self.MASS_CENTRE = Point3(CONSTS.MASS_CENTRE_X, CONSTS.MASS_CENTRE_Y, CONSTS.MASS_CENTRE_Z)
+    self.REV_ALPHA = CONSTS.REV_ALPHA
+    self.TURN_ALPHA = CONSTS.TURN_ALPHA
     
   def resetCar(self):
       phys  = self.physics
