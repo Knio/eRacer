@@ -1,7 +1,7 @@
 from Core.Globals import *
 class Vehicle(Entity):
   
-  MODEL   = "Ship1.x"
+  MODEL   = "RacerModel.x"
   #MODEL   = "box.x"
   SIZE    = Vector3(3, 1, 4) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
