@@ -86,8 +86,9 @@ namespace Graphics {
 		sort(m_strList.begin(), m_strList.end());
 
 		m_pTextSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
-		for (int i = 0; i < (int) m_strList.size(); i++) {
-			m_strList[i].m_pFont->DrawText( m_pTextSprite, m_strList[i].m_strTextBuffer.c_str(), -1, &m_strList[i].m_renderArea, DT_NOCLIP, m_strList[i].m_color );
+		for (vector<StringRenderable>::iterator i = m_strList.begin();
+			i != m_strList.end(); i++) {
+			i->m_pFont->DrawText( m_pTextSprite, i->m_strTextBuffer.c_str(), -1, &i->m_renderArea, DT_NOCLIP, i->m_color);
 		}
 		m_pTextSprite->End();
 		
