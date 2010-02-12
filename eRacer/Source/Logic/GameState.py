@@ -127,7 +127,7 @@ class GameState(State):
   def ReloadConstsEvent(self):
     game().config.read()
     game().event.ReloadedConstsEvent()
-
+    
   def PauseEvent(self):
     game().PushState(PauseMenuState())
 

@@ -1,5 +1,4 @@
 from Core.Globals import *
-
 class Vehicle(Entity):
   
   MODEL   = "Ship1.x"
@@ -17,18 +16,13 @@ class Vehicle(Entity):
     Point3(280, 380, 0),
     Point3(480, 380, 0),
   ]
-  MASS    = 5000.0
-  THRUST  = 1.0e1 * MASS
+ # THRUST  = 1.0e1 * MASS
   TURN    = 3.0e+0          
   DISPLACEMENT = 0.30  # from wheel rest position
   
   # MASS * G = 4 * K * DISPLACEMENT
   # TODO: get G from CONSTS
-  SPRING_K = (MASS * 9.81) / (len(WHEELS) * DISPLACEMENT)
-  SPRING_MAGIC  = 1.0 # tuning parameter
-  
-  DAMPING       = 2.0 * math.sqrt(SPRING_K * MASS)
-  DAMPING_MAGIC = 1.0 # tuning parameter
+
   
   FRICTION_STATIC   = 1.0
   FRICTION_MAX      = 1.0
@@ -44,6 +38,17 @@ class Vehicle(Entity):
   
   def __init__(self, scene):
     Entity.__init__(self)
+    
+    self.MASS = CONSTS.CAR_MASS
+    print self.MASS
+    self.SPRING_MAGIC = CONSTS.SPRING_MAGIC
+    print self.SPRING_MAGIC
+    self.DAMPING_MAGIC = CONSTS.DAMPING_MAGIC
+    print self.DAMPING_MAGIC
+    
+    
+    self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
+    self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
     
     # self.physics = eRacer.TriMesh()    
     self.physics = eRacer.Box(
@@ -68,7 +73,6 @@ class Vehicle(Entity):
     
     game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
   
-
     self.throttle = 0.      # position of the throttle on game controller from 0 to 1
     self.brake    = False   # brake button
     self.steerPos = 0.      # position of the control stick from left to right ranges from -1 to +1
@@ -79,14 +83,16 @@ class Vehicle(Entity):
     self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
     self.crashtime = 0      # time since wheels were last in contact with the ground
     
-    self.maxEngForce    = 5e4   #the max amount the engine can put on a wheel at the moment
+    self.maxEngForce    = 50000   #the max amount the engine can put on a wheel at the moment
                                 #constant for now, will be variable later
     self.maxBrakeForce  = 5e4   #always constant
     
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
     game().event.Register(self.PlayerBrakeEvent)
+    game().event.Register(self.ReloadedConstsEvent)
     
+
     
   # control events
   def PlayerBrakeEvent(self, brake):
@@ -171,6 +177,7 @@ class Vehicle(Entity):
       # do accelleration
       
       forwardSpeed = self.GetWheelSpeed(delta, downforce)
+      #forwardSpeed = self.GetWheelSpeed(delta)
       debug("FW: %6.2f" % forwardSpeed)
       
       # TODO modify Z for steering
@@ -230,8 +237,8 @@ class Vehicle(Entity):
       phys.SetTransform(tx)
 
       
-    print ''.join('%6.2f' % i for i in ddd),
-    print self.acceleration, self.turning
+   #print ''.join('%6.2f' % i for i in ddd),
+    #print self.acceleration, self.turning
     
     #tx = Matrix()
     self.transform = tx
@@ -273,6 +280,7 @@ class Vehicle(Entity):
   #this will be due to the braking or acceleration the user wants
   #needs the weight on this tire
   #returns a floating number, if negative, then a braking force was applied
+  
   def GetWheelSpeed(self, timeStep, normalForce):
     gravityMag = 9.81 #should change based on track segment
     forceMag = self.maxEngForce * self.acceleration
@@ -280,4 +288,23 @@ class Vehicle(Entity):
     massOnTire = length(normalForce) / gravityMag
     speedDelta = (forceMag+brakeMag) / massOnTire * timeStep
     return speedDelta
+  
+  #def GetWheelSpeed(self, timeStep):
+   # forceMag = self.maxEngForce * self.acceleration
+    #brakeMag = self.maxBrakeForce * self.brake * -1.0
+    #speedDelta = (forceMag+brakeMag) * timeStep
+    #return speedDelta
+    
+    
+  def ReloadedConstsEvent(self):
+    print "in vehicle reloadedconsts"
+    self.MASS = CONSTS.CAR_MASS
+    print self.MASS
+    self.SPRING_MAGIC = CONSTS.SPRING_MAGIC
+    print self.SPRING_MAGIC
+    self.DAMPING_MAGIC = CONSTS.DAMPING_MAGIC
+    print self.DAMPING_MAGIC
+    self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
+    self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
+    self.physics.SetMass(self.MASS)
     

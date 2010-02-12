@@ -34,6 +34,9 @@ private:
 	FontManager			m_fontManager;
 	D3DPRESENT_PARAMETERS m_presentationParameters;
 
+	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
+
+
 	void resetPresentationParameters();
 	void resetDevice();
 protected:
