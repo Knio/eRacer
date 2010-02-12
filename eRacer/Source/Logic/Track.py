@@ -15,6 +15,7 @@ class Track(Entity):
       self.graphics.initialized = True
       self.physics.Init(self.graphics.mesh());
       
+    # game().io.LoadMeshAsync(load, self.graphics, "Track.x")   
     game().io.LoadMeshAsync(load, self.graphics, "track_fix.x")   
     
     

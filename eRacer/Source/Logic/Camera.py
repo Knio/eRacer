@@ -79,10 +79,10 @@ class FirstPersonCamera(Camera):
     game().event.Register(self.CameraLookAroundEvent)
     
   def CameraAccelerateEvent(self, acceleration):  
-    self.velocity += Z * acceleration
+    self.velocity = self.velocity + Z * acceleration
     
   def CameraStrafeEvent(self, acceleration):
-    self.velocity += X * acceleration
+    self.velocity = self.velocity + X * acceleration
     
   def CameraLookAroundEvent(self, relX, relY):
     x = self.look.real + relX
@@ -99,7 +99,7 @@ class FirstPersonCamera(Camera):
         
     velocity        = mul0(self.transform, self.velocity)
     self.position   = self.position + velocity * (delta * 50.0)
-    lookat    = self.position + mul0(self.transform, Z)
+    lookat          = self.position + mul0(self.transform, Z)
     
     # print self.look
     # printvec(self.position)
