@@ -98,6 +98,18 @@ public:
 	void SetVelocity(const Vector3 &vel);
 
 	/**
+	* @brief Returns the angular velocity of the physics object. Will return (0, 0, 0) if object is static.
+	* @return The angular velocity of the physics object.
+	*/
+	Vector3 GetAngVelocity();
+
+	/**
+	* @brief Sets the angular velocity of the physics object. Object must be dynamic.
+	* @param vel The angular velocity of the object.
+	*/
+	void SetAngVelocity(const Vector3 &vel);
+
+	/**
 	* @brief Checks if the object is movable or not
 	* @return The state of the object
 	*/

@@ -27,11 +27,13 @@ class Vehicle(Entity):
   FRICTION_STATIC   = 1.0
   FRICTION_MAX      = 1.0
   FRICTION_SLIDING  = 0.5
+  DRAG_COEFF = 10.0
+  MASS_CENTRE  = Point3(0, -1, 0)
   
   MAX_SPEED = 40.0
   
   REV_ALPHA   = 1.0/8.0
-  TURN_ALPHA  = 1.0/5.0
+  TURN_ALPHA  = 1.0/8.0
   
   INITIAL_POS = Vector3(80, 3, 0)
   
@@ -62,7 +64,7 @@ class Vehicle(Entity):
     self.graphics = scene.CreateMovingGeometry("vehicle")
     self.graphics.thisown = 0
 
-    self.physics.SetCentreOfMass(Point3(0, -1, 0))
+    self.physics.SetCentreOfMass(self.MASS_CENTRE)
 
     def load(r):
       if not r:
@@ -83,7 +85,7 @@ class Vehicle(Entity):
     self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
     self.crashtime = 0      # time since wheels were last in contact with the ground
     
-    self.maxEngForce    = 50000   #the max amount the engine can put on a wheel at the moment
+    self.maxEngForce    = 100000   #the max amount the engine can put on a wheel at the moment
                                 #constant for now, will be variable later
     self.maxBrakeForce  = 5e4   #always constant
     
@@ -125,6 +127,14 @@ class Vehicle(Entity):
 
     # suspension axis (pointing down from car)
     axis  = mul0(tx, -Y)
+    
+    bodyVel = phys.GetVelocity();
+    dragForceMag = self.DRAG_COEFF * length(bodyVel) ** 2
+    dragDir = normalize(bodyVel) * -1.0
+    dragForce = dragDir * dragForceMag
+    phys.AddWorldForceAtLocalPos(dragForce, self.MASS_CENTRE)
+    #print dragForce.x, dragForce.y, dragForce.z
+    print length(dragForce)
     
     crashed = True
     ddd = []
@@ -184,7 +194,7 @@ class Vehicle(Entity):
       # direction of the wheel on the surface of the road
       # front wheel turns
       
-      angle = self.turning * min(1.,(40. / max(1.,length(worldvel))**1.6))
+      angle = self.turning * min(1.,(60. / max(1.,length(worldvel))**1.4))
       debug("angle: %6.2f" % angle)
       if i < 2: turning = Matrix(ORIGIN, angle, Y)
       else:     turning = Matrix()
@@ -227,14 +237,8 @@ class Vehicle(Entity):
     if self.crashtime > 2: # or car stopped?
       self.crashtime = 0
       print "Crash! resetting car"
-      normal = Y
-      forward = mul0(tx, Z)
-      forward = forward - normal * dot(normal, forward)
-      pos = self.INITIAL_POS
-      # eRacer.ExtractPosition(tx, pos)
-      # pos.y = 1.5
-      tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
-      phys.SetTransform(tx)
+      self.resetCar()
+
 
       
    #print ''.join('%6.2f' % i for i in ddd),
@@ -307,4 +311,19 @@ class Vehicle(Entity):
     self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
     self.physics.SetMass(self.MASS)
+    
+  def resetCar(self):
+      phys  = self.physics
+      tx    = phys.GetTransform()
+      normal = Y
+      forward = mul0(tx, Z)
+      forward = forward - normal * dot(normal, forward)
+      pos = self.INITIAL_POS
+      phys.SetVelocity(Vector3())
+      phys.SetOrientation(Matrix())
+      phys.SetAngVelocity(Vector3())
+      # eRacer.ExtractPosition(tx, pos)
+      # pos.y = 1.5
+      tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
+      phys.SetTransform(tx)
     

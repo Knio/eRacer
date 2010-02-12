@@ -107,4 +107,18 @@ float PhysicsObject::GetSpeed(){
 	return sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z);
 }
 
+Vector3 PhysicsObject::GetAngVelocity()
+{
+	if(isDynamic())
+		return NxVec3_Vector3(Actor->getAngularVelocity());
+	else
+		return Vector3(0, 0, 0);
+}
+
+void PhysicsObject::SetAngVelocity(const Vector3 &vel)
+{
+	assert(isDynamic());
+	Actor->setAngularVelocity(Vector3_NxVec3(vel));
+}
+
 }
