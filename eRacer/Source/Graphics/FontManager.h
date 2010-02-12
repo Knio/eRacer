@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include "Renderable.h"
 
 #include "../Core/Math.h"
 
@@ -17,20 +18,23 @@ namespace Graphics {
 
 typedef pair<string, int> FontDescription;
 
-class StringRenderable
+class StringRenderable : public Renderable
 {
 public:
 	ID3DXFont* m_pFont;
 	string m_strTextBuffer;
 	RECT m_renderArea; //Position and area to render in
 	D3DXCOLOR m_color;
+	ID3DXSprite* m_pTextSprite;
 
-	StringRenderable();
+	StringRenderable(ID3DXSprite* targetSprite);
 	~StringRenderable();
 	/**
 	 * @brief Comparison operator for sorting - sorts by the address of the font used
 	 */
 	bool operator<(const StringRenderable& s);
+
+	virtual void Draw(IDirect3DDevice9*) const;
 };
 
 

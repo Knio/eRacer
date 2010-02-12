@@ -3,10 +3,11 @@
 
 
 namespace Graphics {
-	//const unsigned int FontManager::FONT_SIZE = 32;
 
-	StringRenderable::StringRenderable()
+	StringRenderable::StringRenderable(ID3DXSprite* targetSprite)
+		: m_pTextSprite(targetSprite)
 	{
+
 	}
 
 
@@ -17,6 +18,13 @@ namespace Graphics {
 
 	bool StringRenderable::operator<(const StringRenderable& s){
 		return m_pFont < s.m_pFont;
+	}
+
+	void StringRenderable::Draw(IDirect3DDevice9*) const{
+		//why in the world does direct x not take a const rect???
+		RECT r = m_renderArea;
+		m_pFont->DrawText( m_pTextSprite, m_strTextBuffer.c_str(), -1, &r, DT_NOCLIP, m_color);
+
 	}
 
 
@@ -71,7 +79,7 @@ namespace Graphics {
 		rc.bottom = 0;
 		rc.right = 0;
 
- 		StringRenderable s;
+ 		StringRenderable s(m_pTextSprite);
 		s.m_pFont 			= font->second;
 		s.m_strTextBuffer	= msg;
 		s.m_color 			= D3DXCOLOR(color.x, color.y, color.z, 1.0f);
@@ -86,9 +94,9 @@ namespace Graphics {
 		sort(m_strList.begin(), m_strList.end());
 
 		m_pTextSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
-		for (vector<StringRenderable>::iterator i = m_strList.begin();
+		for (vector<StringRenderable>::const_iterator i = m_strList.begin();
 			i != m_strList.end(); i++) {
-			i->m_pFont->DrawText( m_pTextSprite, i->m_strTextBuffer.c_str(), -1, &i->m_renderArea, DT_NOCLIP, i->m_color);
+				i->Draw(m_pd3dDevice);
 		}
 		m_pTextSprite->End();
 		

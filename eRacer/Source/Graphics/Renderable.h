@@ -14,8 +14,7 @@
 class Renderable
 {
 public:
-	Renderable() {};
-	virtual void Draw(LPDIRECT3DDEVICE9) const = 0;
+	virtual void Draw(IDirect3DDevice9*) const = 0;
 };
 
 #endif
