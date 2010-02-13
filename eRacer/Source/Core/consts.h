@@ -17,7 +17,11 @@ struct Constants
 	float	MASS_CENTRE_Z;
 	float	REV_ALPHA;
 	float	TURN_ALPHA;
+	float	DRAG_COEFF;
+	float MAX_ENG_FORCE;
+	float MAX_BRAKE_FORCE;
 };
 
 #endif
 
+r
