@@ -55,9 +55,9 @@ int SoundLayer::Shutdown()
 		FMUSIC_FreeSong(m_fmodule);
 	
 	//Clear the Cache
-    for( map<string, FSOUND_SAMPLE* >::const_iterator it = m_SoundCache2D.begin(); it != m_SoundCache2D.end(); ++it)
+    for( FontCache::const_iterator it = m_SoundCache2D.begin(); it != m_SoundCache2D.end(); ++it)
 		FSOUND_Sample_Free(it->second);
-	for( map<string, FSOUND_SAMPLE* >::const_iterator it = m_SoundCache3D.begin(); it != m_SoundCache3D.end(); ++it)
+	for( FontCache::const_iterator it = m_SoundCache3D.begin(); it != m_SoundCache3D.end(); ++it)
 		FSOUND_Sample_Free(it->second);
 
     FSOUND_Close();
@@ -85,21 +85,23 @@ int SoundLayer::StopMusic()
 
 int SoundLayer::PlaySound3D(const string& name, const Point3& pos, const Vector3& vel)
 {
-	float p[3] = { pos.x, pos.y, pos.z };
-	float v[3] = { vel.x, vel.y, vel.z };
+	//float p[3] = { pos.x, pos.y, pos.z };
+	//float v[3] = { vel.x, vel.y, vel.z };
 
-	//The channel is given a 3D position
-	if (m_SoundCache3D.count(name) == 0) { //Cache Miss
+	FontCache::iterator sound;
+	if ((sound = m_SoundCache3D.find(name)) == m_SoundCache3D.end()) { //Cache Miss
 		FSOUND_SAMPLE  *soundClip = NULL;
 		soundClip = FSOUND_Sample_Load(FSOUND_FREE, name.c_str(), FSOUND_HW3D, 0, 0);
 		if (!soundClip)
 			return -1; //Failed to load
-		m_SoundCache3D[name] = soundClip;
 		FSOUND_Sample_SetMinMaxDistance(soundClip, 4.0f, 10000.0f);
+
+		sound = m_SoundCache3D.insert(make_pair(name, soundClip)).first;
 	}
 
-	int chan = FSOUND_PlaySound(FSOUND_FREE, m_SoundCache3D[name]);
-	FSOUND_3D_SetAttributes( chan, p, v);
+	int chan = FSOUND_PlaySound(FSOUND_FREE, sound->second);
+	//The channel is given a 3D position
+	FSOUND_3D_SetAttributes( chan, (float*)&pos, (float*)&vel);
 
 	return chan;
 }
@@ -112,14 +114,16 @@ int SoundLayer::ChangePitch(int channel, int pitch)
 
 int SoundLayer::PlaySound2D(const string& name)
 {
-	if (m_SoundCache2D.count(name) == 0) { //Cache Miss
+	FontCache::iterator sound;
+	if ((sound = m_SoundCache2D.find(name)) == m_SoundCache2D.end()) { //Cache Miss
 		FSOUND_SAMPLE  *soundClip = NULL;
 		soundClip = FSOUND_Sample_Load(FSOUND_FREE, name.c_str(), FSOUND_HW2D, 0, 0);
 		if (!soundClip)
 			return -1; //Failed to load
-		m_SoundCache2D[name] = soundClip;
+		
+		sound = m_SoundCache2D.insert(make_pair(name, soundClip)).first;
 	}
-	int chan = FSOUND_PlaySound(FSOUND_FREE, m_SoundCache2D[name]);
+	int chan = FSOUND_PlaySound(FSOUND_FREE, sound->second);
 	return 0;
 }
 

@@ -27,6 +27,7 @@ using namespace std;
 
 namespace Sound {
 
+typedef map<string, FSOUND_SAMPLE*> FontCache;
 
 class SoundLayer
 {
@@ -35,8 +36,8 @@ private:
 	FMUSIC_MODULE *m_fmodule;
 
 	//map<const char*, FMUSIC_MODULE*> m_MusicCache;
-	map<string, FSOUND_SAMPLE*> m_SoundCache2D;
-	map<string, FSOUND_SAMPLE*> m_SoundCache3D;
+	FontCache m_SoundCache2D;
+	FontCache m_SoundCache3D;
 
 protected:
 	SoundLayer();	//Constructor, Singleton 
