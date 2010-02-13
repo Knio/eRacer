@@ -46,7 +46,7 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 	HRESULT h1 = GraphicsModule()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
 	UINT cPasses = 1;
 	h1 = GraphicsModule()->m_pEffect->Begin( &cPasses, 0 );
-	for( int iPass = 0; iPass < cPasses; iPass++ )
+	for(UINT iPass = 0; iPass < cPasses; iPass++ )
 	{
 			GraphicsModule()->m_pEffect->BeginPass( iPass ) ;
 			Mesh::Draw(device);
