@@ -27,6 +27,7 @@ using namespace std;
 
 namespace Sound {
 
+typedef map<string, FSOUND_SAMPLE*> FontCache;
 
 class SoundLayer
 {
@@ -35,8 +36,8 @@ private:
 	FMUSIC_MODULE *m_fmodule;
 
 	//map<const char*, FMUSIC_MODULE*> m_MusicCache;
-	map<const char*, FSOUND_SAMPLE*> m_SoundCache2D;
-	map<const char*, FSOUND_SAMPLE*> m_SoundCache3D;
+	FontCache m_SoundCache2D;
+	FontCache m_SoundCache3D;
 
 protected:
 	SoundLayer();	//Constructor, Singleton 
@@ -67,7 +68,7 @@ public:
 	 * @param upVector The up direction for the listener
 	 * @return Poorly defined error code
 	 */
-	int SetOrientation3D(Vector3 listenerPos, Vector3 listenerVel, Vector3 atVector, Vector3 upVector); //For 3D sound
+	int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
 
 	/**
 	 * @brief Play sound in 3D Space
@@ -77,15 +78,15 @@ public:
 	 * @param vel Velocity vector for doppler effects. In meters per second
 	 * @return The channel the sound is playing on
 	 */
-	int PlaySound3D(const char* name, Vector3 pos, Vector3 vel);
+	int PlaySound3D(const string& name, const Point3& pos, const Vector3& vel);
 
 	/**
-	 * @brief Play sound in 3D Space
+	 * @brief Play sound in 2D Space
 	 * 
 	 * @param name Resource file name
 	 * @return The channel the sound is playing on
 	 */
-	int PlaySound2D(const char* name);
+	int PlaySound2D(const string& name);
 
 	/**
 	 * @brief Changes the pitch for a sound being played on a given channel
@@ -102,7 +103,7 @@ public:
 	 * @param name Resource file name
 	 * @return The channel the sound is playing on
 	 */
-	int LoopMusic(const char* name);
+	int LoopMusic(const string& name);
 
 	/**
 	 * @brief Stop looped music

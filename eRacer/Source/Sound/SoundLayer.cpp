@@ -30,7 +30,7 @@ int SoundLayer::Init()
 	return 0;
 }
 
-int SoundLayer::SetOrientation3D(Vector3 listenerPos, Vector3 listenerVel, Vector3 atVector, Vector3 upVector)
+int SoundLayer::SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector)
 {
 	//To be replaced when new Vector3 class is implemented
 	float pos[3] = { listenerPos.x, listenerPos.y, listenerPos.z };
@@ -55,21 +55,21 @@ int SoundLayer::Shutdown()
 		FMUSIC_FreeSong(m_fmodule);
 	
 	//Clear the Cache
-    for( map< const char*, FSOUND_SAMPLE* >::const_iterator it = m_SoundCache2D.begin(); it != m_SoundCache2D.end(); ++it)
+    for( FontCache::const_iterator it = m_SoundCache2D.begin(); it != m_SoundCache2D.end(); ++it)
 		FSOUND_Sample_Free(it->second);
-	for( map< const char*, FSOUND_SAMPLE* >::const_iterator it = m_SoundCache3D.begin(); it != m_SoundCache3D.end(); ++it)
+	for( FontCache::const_iterator it = m_SoundCache3D.begin(); it != m_SoundCache3D.end(); ++it)
 		FSOUND_Sample_Free(it->second);
 
     FSOUND_Close();
 	return 0;
 }
 
-int SoundLayer::LoopMusic(const char* name)
+int SoundLayer::LoopMusic(const string& name)
 {
 	//Potentially multiple songs can be playing at once
 	//But this design only allows for one
 	//The game will forseeably need to keep better track of channels being used 
-	m_fmodule = FMUSIC_LoadSong(name);
+	m_fmodule = FMUSIC_LoadSong(name.c_str());
     if (!m_fmodule) //failed to load the song
 		return -1;
 
@@ -83,23 +83,25 @@ int SoundLayer::StopMusic()
 	return 0;
 }
 
-int SoundLayer::PlaySound3D(const char* name, Vector3 pos, Vector3 vel)
+int SoundLayer::PlaySound3D(const string& name, const Point3& pos, const Vector3& vel)
 {
-	float p[3] = { pos.x, pos.y, pos.z };
-	float v[3] = { vel.x, vel.y, vel.z };
+	//float p[3] = { pos.x, pos.y, pos.z };
+	//float v[3] = { vel.x, vel.y, vel.z };
 
-	//The channel is given a 3D position
-	if (m_SoundCache3D.count(name) == 0) { //Cache Miss
+	FontCache::iterator sound;
+	if ((sound = m_SoundCache3D.find(name)) == m_SoundCache3D.end()) { //Cache Miss
 		FSOUND_SAMPLE  *soundClip = NULL;
-		soundClip = FSOUND_Sample_Load(FSOUND_FREE, name, FSOUND_HW3D, 0, 0);
+		soundClip = FSOUND_Sample_Load(FSOUND_FREE, name.c_str(), FSOUND_HW3D, 0, 0);
 		if (!soundClip)
 			return -1; //Failed to load
-		m_SoundCache3D[name] = soundClip;
 		FSOUND_Sample_SetMinMaxDistance(soundClip, 4.0f, 10000.0f);
+
+		sound = m_SoundCache3D.insert(make_pair(name, soundClip)).first;
 	}
 
-	int chan = FSOUND_PlaySound(FSOUND_FREE, m_SoundCache3D[name]);
-	FSOUND_3D_SetAttributes( chan, p, v);
+	int chan = FSOUND_PlaySound(FSOUND_FREE, sound->second);
+	//The channel is given a 3D position
+	FSOUND_3D_SetAttributes( chan, (float*)&pos, (float*)&vel);
 
 	return chan;
 }
@@ -110,16 +112,18 @@ int SoundLayer::ChangePitch(int channel, int pitch)
 	return 0;
 }
 
-int SoundLayer::PlaySound2D(const char* name)
+int SoundLayer::PlaySound2D(const string& name)
 {
-	if (m_SoundCache2D.count(name) == 0) { //Cache Miss
+	FontCache::iterator sound;
+	if ((sound = m_SoundCache2D.find(name)) == m_SoundCache2D.end()) { //Cache Miss
 		FSOUND_SAMPLE  *soundClip = NULL;
-		soundClip = FSOUND_Sample_Load(FSOUND_FREE, name, FSOUND_HW2D, 0, 0);
+		soundClip = FSOUND_Sample_Load(FSOUND_FREE, name.c_str(), FSOUND_HW2D, 0, 0);
 		if (!soundClip)
 			return -1; //Failed to load
-		m_SoundCache2D[name] = soundClip;
+		
+		sound = m_SoundCache2D.insert(make_pair(name, soundClip)).first;
 	}
-	int chan = FSOUND_PlaySound(FSOUND_FREE, m_SoundCache2D[name]);
+	int chan = FSOUND_PlaySound(FSOUND_FREE, sound->second);
 	return 0;
 }
 
