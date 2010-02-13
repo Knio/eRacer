@@ -59,6 +59,15 @@ class MainMenuState(MenuState):
       "eRacerX", 
       "Verdana", 128, Point3(180,60,0)
     )
+    
+    
+    p = Point3(500,350,0)
+    for i in ['Don Ha', 'John Stuart', 'Michael Blackadar', 'Tom Flanagan', 'Ole Rehmsen']:
+      game().graphics.graphics.WriteString(
+        i, "Verdana", 28, p
+      )
+      p = p + Point3(0, 30, 0)
+    
     MenuState.Tick(self, time)    
     
 

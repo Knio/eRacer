@@ -139,6 +139,7 @@ class Vehicle(Entity):
 
       _debug = [self.DEBUG[i]]
       def debug(s):
+        if not CONSTS.CAR_DEBUG: return
         game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
         _debug[0] = _debug[0] + Point3(0, 20, 0)
       
@@ -232,6 +233,7 @@ class Vehicle(Entity):
   transform = property(Entity.get_transform, set_transform)   
   
   def PrintDebug(self):
+    if not CONSTS.CAR_DEBUG: return
     # print debug info
     phys = self.physics
     vel = phys.GetVelocity()
