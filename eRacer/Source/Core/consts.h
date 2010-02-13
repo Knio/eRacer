@@ -18,8 +18,11 @@ struct Constants
 	float	REV_ALPHA;
 	float	TURN_ALPHA;
 	float	DRAG_COEFF;
-	float MAX_ENG_FORCE;
-	float MAX_BRAKE_FORCE;
+	float	MAX_ENG_FORCE;
+	float	MAX_BRAKE_FORCE;
+	float	FRICTION_STATIC;
+	float	FRICTION_MAX;
+	float	FRICTION_SLIDING;
 };
 
 #endif
