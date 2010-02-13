@@ -21,7 +21,6 @@ class Vehicle(Entity):
   FRICTION_STATIC   = 1.0
   FRICTION_MAX      = 1.0
   FRICTION_SLIDING  = 0.5
-  DRAG_COEFF = 8.0
   
   INITIAL_POS = Vector3(80, 3, 0)
   
@@ -35,6 +34,9 @@ class Vehicle(Entity):
     self.MASS_CENTRE = Point3(CONSTS.MASS_CENTRE_X, CONSTS.MASS_CENTRE_Y, CONSTS.MASS_CENTRE_Z)
     self.REV_ALPHA = CONSTS.REV_ALPHA
     self.TURN_ALPHA = CONSTS.TURN_ALPHA
+    self.DRAG_COEFF = CONSTS.DRAG_COEFF
+    self.MAX_ENG_FORCE    = CONSTS.MAX_ENG_FORCE       
+    self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
     
     self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
@@ -71,9 +73,7 @@ class Vehicle(Entity):
     self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
     self.crashtime = 0      # time since wheels were last in contact with the ground
     
-    self.maxEngForce    = 2e5   #the max amount the engine can put on a wheel at the moment
-                                #constant for now, will be variable later
-    self.maxBrakeForce  = 5e4   #always constant
+
     
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
@@ -223,13 +223,6 @@ class Vehicle(Entity):
       self.crashtime = 0
       print "Crash! resetting car"
       self.resetCar()
-
-
-      
-   #print ''.join('%6.2f' % i for i in ddd),
-    #print self.acceleration, self.turning
-    
-    #tx = Matrix()
     self.transform = tx
 
   def set_transform(self, transform):
@@ -272,8 +265,8 @@ class Vehicle(Entity):
   
   def GetWheelSpeed(self, timeStep, normalForce):
     gravityMag = 9.81 #should change based on track segment
-    forceMag = self.maxEngForce * self.acceleration
-    brakeMag = self.maxBrakeForce * self.brake * -1.0
+    forceMag = self.MAX_ENG_FORCE * self.acceleration
+    brakeMag = self.MAX_BRAKE_FORCE * self.brake * -1.0
     massOnTire = length(normalForce) / gravityMag
     speedDelta = (forceMag+brakeMag) / massOnTire * timeStep
     return speedDelta
@@ -286,19 +279,18 @@ class Vehicle(Entity):
     
     
   def ReloadedConstsEvent(self):
-    print "in vehicle reloadedconsts"
     self.MASS = CONSTS.CAR_MASS
-    print self.MASS
     self.SPRING_MAGIC = CONSTS.SPRING_MAGIC
-    print self.SPRING_MAGIC
     self.DAMPING_MAGIC = CONSTS.DAMPING_MAGIC
-    print self.DAMPING_MAGIC
     self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
     self.physics.SetMass(self.MASS)
     self.MASS_CENTRE = Point3(CONSTS.MASS_CENTRE_X, CONSTS.MASS_CENTRE_Y, CONSTS.MASS_CENTRE_Z)
     self.REV_ALPHA = CONSTS.REV_ALPHA
     self.TURN_ALPHA = CONSTS.TURN_ALPHA
+    self.DRAG_COEFF = CONSTS.DRAG_COEFF
+    self.MAX_ENG_FORCE    = CONSTS.MAX_ENG_FORCE       
+    self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
     
   def resetCar(self):
       phys  = self.physics
@@ -310,8 +302,9 @@ class Vehicle(Entity):
       phys.SetVelocity(Vector3())
       phys.SetOrientation(Matrix())
       phys.SetAngVelocity(Vector3())
+      phys.SetPosition(pos)
       # eRacer.ExtractPosition(tx, pos)
       # pos.y = 1.5
-      tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
-      phys.SetTransform(tx)
+      #tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
+      #phys.SetTransform(tx)
     
