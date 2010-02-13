@@ -268,7 +268,7 @@ class Vehicle(Entity):
     forceMag = self.MAX_ENG_FORCE * self.acceleration
     brakeMag = self.MAX_BRAKE_FORCE * self.brake * -1.0
     massOnTire = length(normalForce) / gravityMag
-    speedDelta = (forceMag+brakeMag) / massOnTire * timeStep
+    speedDelta = (forceMag+brakeMag) / massOnTire
     return speedDelta
   
   #def GetWheelSpeed(self, timeStep):
