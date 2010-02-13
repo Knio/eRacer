@@ -56,6 +56,10 @@ Vector3& normalize(Vector3& A){
 	return A;
 }
 
+Vector3 project(const Vector3 &a, const Vector3 &b)
+{
+	return b * (dot(a,b) / dot(b,b));
+}
 
 Vector3 normalized(const Vector3& A){
 	Vector3 result;
@@ -157,10 +161,13 @@ Matrix CreateMatrix(float scaleX, float scaleY, float scaleZ){
 }
 
 
-void ExtractPosition(const Matrix& matrix, Point3& position){
-	position.x = matrix._41;
-	position.y = matrix._42;
-	position.z = matrix._43;
+Point3 ExtractPosition(const Matrix& matrix, Point3* position){
+	Point3 pos;
+	pos.x = matrix._41;
+	pos.y = matrix._42;
+	pos.z = matrix._43;
+	if (position) *position = pos;
+	return pos;
 }
 
 void ExtractScaling(const Matrix& matrix, float& scaleX, float& scaleY, float& scaleZ){

@@ -93,6 +93,8 @@ inline float length(const Vector3& v){
 Vector3 mul0(const Matrix &m, const Vector3 &v);
 Point3	mul1(const Matrix &m, const Point3  &v);
 
+Vector3 project(const Vector3 &a, const Vector3 &b);
+
 Vector3 transformedAffine(const Matrix& T, const Vector3& u);
 const Vector3& transformAffine(const Matrix& T, Vector3& u);
 
@@ -165,7 +167,7 @@ Matrix CreateMatrix(float scaleX, float scaleY, float scaleZ);
  * @param position
  *			out: the translational component
  */
-void ExtractPosition(const Matrix& matrix, Point3& position);
+Point3 ExtractPosition(const Matrix& matrix, Point3* position=NULL);
 
 /**
  * @brief Extract only the scaling component from a transformation matrix.

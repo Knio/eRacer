@@ -14,12 +14,12 @@ struct Star {
 
 class Starfield : public Renderable
 {
-public:
 	float SIZE;
 	int N;
 	Matrix oldcamera;
 	Star* stars;
 	LPDIRECT3DVERTEXBUFFER9 vb;
+public:
 	Starfield(int n, float s);
 	void Update(const Matrix &newcamera, const Point3 &pos);
 	virtual void Draw(LPDIRECT3DDEVICE9) const;

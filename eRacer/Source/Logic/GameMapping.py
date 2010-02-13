@@ -18,16 +18,17 @@ class GameMapping(Mapping):
 
 
   def KeyReleasedEvent(self, key):
-    return {
-    KEY.W:     [E.PlayerAccelerateEvent  (0)],
-    KEY.S:     [E.PlayerBrakeEvent(False)],
-    KEY.A:     [E.PlayerTurnEvent        (0)],
-    KEY.D:     [E.PlayerTurnEvent        (0)],
-    KEY.UP:    [E.CameraAccelerateEvent  (-1.0)],
-    KEY.DOWN:  [E.CameraAccelerateEvent  (+1.0)],
-    KEY.LEFT:  [E.CameraStrafeEvent      (+1.0)],
-    KEY.RIGHT: [E.CameraStrafeEvent      (-1.0)],
-    }.get(key, None)
+    if   key == KEY.W:     return E.PlayerAccelerateEvent ( 0)
+    elif key == KEY.S:     return E.PlayerBrakeEvent      (False)
+    elif key == KEY.A:     return E.PlayerTurnEvent       ( 0)
+    elif key == KEY.D:     return E.PlayerTurnEvent       ( 0)
+    elif key == KEY.UP:    return E.CameraAccelerateEvent (-1.0)
+    elif key == KEY.DOWN:  return E.CameraAccelerateEvent (+1.0)
+    elif key == KEY.LEFT:  return E.CameraStrafeEvent     (+1.0)
+    elif key == KEY.RIGHT: return E.CameraStrafeEvent     (-1.0)
+    
+    elif key == KEY.TAB:  CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
+    
     
   def MouseMovedEvent(self, relX, relY):
     return E.CameraLookAroundEvent(relX/300.,relY/300.)

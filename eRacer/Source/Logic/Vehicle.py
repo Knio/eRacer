@@ -132,6 +132,7 @@ class Vehicle(Entity):
 
       _debug = [self.DEBUG[i]]
       def debug(s):
+        if not CONSTS.CAR_DEBUG: return
         game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
         _debug[0] = _debug[0] + Point3(0, 20, 0)
       
@@ -216,7 +217,7 @@ class Vehicle(Entity):
     else:
       self.crashtime += delta
     
-    if self.crashtime > 2: # or car stopped?
+    if self.crashtime > 3: # or car stopped? ## why stopped?
       self.crashtime = 0
       print "Crash! resetting car"
       self.resetCar()
@@ -229,6 +230,7 @@ class Vehicle(Entity):
   transform = property(Entity.get_transform, set_transform)   
   
   def PrintDebug(self):
+    if not CONSTS.CAR_DEBUG: return
     # print debug info
     phys = self.physics
     vel = phys.GetVelocity()
@@ -265,7 +267,7 @@ class Vehicle(Entity):
     forceMag = self.MAX_ENG_FORCE * self.acceleration
     brakeMag = self.MAX_BRAKE_FORCE * self.brake * -1.0
     massOnTire = length(normalForce) / gravityMag
-    speedDelta = (forceMag+brakeMag) / massOnTire * timeStep
+    speedDelta = (forceMag+brakeMag) / massOnTire
     return speedDelta
   
   #def GetWheelSpeed(self, timeStep):

@@ -45,9 +45,11 @@ length    = eRacer.abs
 dot       = eRacer.dot
 cross     = eRacer.cross
 normalize = eRacer.normalize
+normalized= eRacer.normalized
+normal    = eRacer.normalized
+project   = eRacer.project
 mul1      = eRacer.mul1
 mul0      = eRacer.mul0
-
 
 PI    = math.pi
 ZERO  = 1e-5
