@@ -9,7 +9,6 @@ float random(float _min=0, float _max=1)
 }
 
 
-
 Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
 {   
 	GraphicsLayer*g = GraphicsLayer::GetInstance();

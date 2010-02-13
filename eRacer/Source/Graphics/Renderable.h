@@ -9,11 +9,12 @@
 #ifndef RENDERABLE_H_
 #define RENDERABLE_H_
 
-#include "D3D9.h."
+#include "D3D9.h"
 
 class Renderable
 {
 public:
+	virtual ~Renderable() {}
 	virtual void Draw(IDirect3DDevice9*) const = 0;
 };
 

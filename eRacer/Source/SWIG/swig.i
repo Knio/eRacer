@@ -23,6 +23,7 @@
 
 
 // Graphics
+#include "..\Graphics\Renderable.h"
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
 #include "..\Graphics\View.h"
@@ -99,7 +100,9 @@ These are the classes that get exposed to Python
 %include "..\IO\IO.h"
 
 
+
 // Graphics
+// %include "..\Graphics\Renderable.h"
 %include "..\Graphics\Camera.h"
 %include "..\Graphics\AxisAlignedBoundingBox.h"
 %include "..\Graphics\Spatial.h"
