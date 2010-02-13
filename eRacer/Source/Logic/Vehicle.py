@@ -219,7 +219,7 @@ class Vehicle(Entity):
     else:
       self.crashtime += delta
     
-    if self.crashtime > 2: # or car stopped?
+    if self.crashtime > 3: # or car stopped? ## why stopped?
       self.crashtime = 0
       print "Crash! resetting car"
       self.resetCar()

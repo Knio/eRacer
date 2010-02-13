@@ -46,21 +46,30 @@ class ChasingCamera(Camera):
     
     vel = length(self.target.physics.GetLocalPointWorldVelocity(ORIGIN))
     
-    behind = Point3(0,8,-10-vel)
-    behind = eRacer.mul1(self.target.transform, behind)
+    originlocal = ORIGIN
+    behindlocal = Point3(0,8,-10-vel)
+    originworld = mul1(self.target.transform, originlocal)
+    behindworld = mul1(self.target.transform, behindlocal)
     
     fov = math.pi/2.5/(vel*0.10+1)
     
     alpha = math.pow(0.5, float(time.game_delta) / time.RESOLUTION)
-    self.position = self.position*alpha + behind*(1-alpha)
-    # self.position = behind * dot(behind, self.position)
+    self.position = self.position*alpha + behindworld*(1-alpha)
     self.fov      = self.fov*alpha      + fov*(1-alpha)
     
-    self.camera.SetPosition(self.position)
+    lateral = project(self.position-originworld, mul1(self.target.transform, X))
+
+    pos = self.position - lateral * 2
+    pos = self.position
+    
+    
+    self.camera.SetPosition(pos)
+    
+    
     self.camera.SetFovY(self.fov)
+    
     targetPosition = Point3()
     eRacer.ExtractPosition(self.target.transform, targetPosition)
-    
     self.camera.SetLookAt(targetPosition)
     
 

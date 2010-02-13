@@ -43,16 +43,16 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
     GraphicsModule()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
 	//m_pEffect->SetTexture( "g_MeshTexture", geometry->Textures()[i] );
 
-	HRESULT h1 = GraphicsModule()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
+	assert(SUCCEEDED(GraphicsModule()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" )));
 	UINT cPasses = 1;
-	h1 = GraphicsModule()->m_pEffect->Begin( &cPasses, 0 );
+	assert(SUCCEEDED(GraphicsModule()->m_pEffect->Begin( &cPasses, 0 )));
 	for( int iPass = 0; iPass < cPasses; iPass++ )
 	{
 			GraphicsModule()->m_pEffect->BeginPass( iPass ) ;
 			Mesh::Draw(device);
-			h1 = GraphicsModule()->m_pEffect->EndPass();
+			assert(SUCCEEDED(GraphicsModule()->m_pEffect->EndPass()));
 	}
-	h1 = GraphicsModule()->m_pEffect->End();
+	assert(SUCCEEDED(GraphicsModule()->m_pEffect->End()));
 
 }
 
