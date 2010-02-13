@@ -23,5 +23,3 @@ struct Constants
 };
 
 #endif
-
-r
