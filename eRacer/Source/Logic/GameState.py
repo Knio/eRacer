@@ -64,7 +64,6 @@ class GameState(State):
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
 
-
     scene = eRacer.Scene()
     self.scene = scene
         
