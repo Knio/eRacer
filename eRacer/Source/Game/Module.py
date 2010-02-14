@@ -15,6 +15,7 @@ class Module(eRacer.Module):
     add an object to this module
     '''
     self.objects.append(obj)
+    return obj
     
   def Init(self):
     '''

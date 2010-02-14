@@ -7,10 +7,10 @@ void debug(const Matrix &m)
 {
 	printf(
 "\
-_11 = %6.2f, _12 = %6.2f _13 = %6.2f _14 = %6.2f\n\
-_21 = %6.2f, _22 = %6.2f _23 = %6.2f _24 = %6.2f\n\
-_31 = %6.2f, _32 = %6.2f _33 = %6.2f _34 = %6.2f\n\
-_41 = %6.2f, _42 = %6.2f _43 = %6.2f _44 = %6.2f\n\
+_11 = %10.4f, _12 = %10.4f _13 = %10.4f _14 = %10.4f\n\
+_21 = %10.4f, _22 = %10.4f _23 = %10.4f _24 = %10.4f\n\
+_31 = %10.4f, _32 = %10.4f _33 = %10.4f _34 = %10.4f\n\
+_41 = %10.4f, _42 = %10.4f _43 = %10.4f _44 = %10.4f\n\
 \n",
 		m._11, m._12, m._13, m._14, 
 		m._21, m._22, m._23, m._24, 
@@ -261,3 +261,11 @@ Matrix Rotated(const Matrix& matrix, float yaw, float pitch, float roll){
 	Rotate(result,yaw,pitch,roll);
 	return result;
 }
+
+Matrix Inverse(const Matrix& m)
+{
+	Matrix r;
+  D3DXMatrixInverse(&r, NULL, &m);
+	return r;
+}
+

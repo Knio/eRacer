@@ -99,6 +99,8 @@ Vector3 transformedAffine(const Matrix& T, const Vector3& u);
 const Vector3& transformAffine(const Matrix& T, Vector3& u);
 
 
+bool affine(const Matrix& m);
+
 
 /**
  * @brief Construct a matrix from position and orientation
@@ -226,12 +228,12 @@ void Decompose(const Matrix& matrix, Point3& position, Matrix& rotation, float& 
 
 Matrix& SetTranslation(Matrix& matrix, const Vector3& translation);
 Matrix& Translate(Matrix& matrix, const Vector3& translation);
-Matrix Translated(const Matrix& matrix, const Vector3& translation);
+Matrix  Translated(const Matrix& matrix, const Vector3& translation);
 Vector3 GetTranslation(const Matrix& matrix);
 
 Matrix& SetRotation(Matrix& matrix, float yaw, float pitch, float roll);
 Matrix& Rotate(Matrix& matrix, float yaw, float pitch, float roll);
-Matrix Rotated(const Matrix& matrix, float yaw, float pitch, float roll);
-
+Matrix  Rotated(const Matrix& matrix, float yaw, float pitch, float roll);
+Matrix  Inverse(const Matrix& m);
 
 #endif

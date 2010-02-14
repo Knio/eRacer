@@ -39,7 +39,7 @@ private:
 	void resetDevice();
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
-	void SetCamera(const Camera& camera);
+	void SetCamera(Camera& camera);
 
 public:
 	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
@@ -62,15 +62,12 @@ public:
 
 	static GraphicsLayer *GetInstance()
 	{
-		if (m_pGlobalGLayer == NULL)
-			m_pGlobalGLayer = new GraphicsLayer;
-
+		if (m_pGlobalGLayer == NULL)	m_pGlobalGLayer = new GraphicsLayer;
 		return m_pGlobalGLayer;
 	}
 
 };
 
-};
-
+}
 
 #endif

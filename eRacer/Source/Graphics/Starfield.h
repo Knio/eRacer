@@ -4,6 +4,8 @@
 #include "assert.h"
 #include "Core/Types.h"
 #include "Renderable.h"
+#include "Camera.h"
+
 
 namespace Graphics {
 
@@ -15,13 +17,20 @@ struct Star {
 class Starfield : public Renderable
 {
 	float SIZE;
-	int N;
-	Matrix oldcamera;
+	int 	N;
+	
+	Camera* camera;
+	Matrix* view;
+	Point3 	pos;
+	
 	Star* stars;
 	LPDIRECT3DVERTEXBUFFER9 vb;
+	
+	void _Update();
+	
 public:
 	Starfield(int n, float s);
-	void Update(const Matrix &newcamera, const Point3 &pos);
+	void Update();
 	virtual void Draw(LPDIRECT3DDEVICE9) const;
 };
 

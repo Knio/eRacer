@@ -22,15 +22,17 @@ GraphicsLayer::~GraphicsLayer()
     }
 }
 
-void GraphicsLayer::SetCamera(const Camera& camera)
+void GraphicsLayer::SetCamera(Camera& cam)
 {
-    m_pd3dDevice->SetTransform( D3DTS_PROJECTION, &camera.GetProjectionMatrix() );
-    m_pd3dDevice->SetTransform( D3DTS_VIEW, &camera.GetViewMatrix() );
+    camera = &cam;
+    
+    m_pd3dDevice->SetTransform( D3DTS_PROJECTION,   &cam.GetProjectionMatrix() );
+    m_pd3dDevice->SetTransform( D3DTS_VIEW,         &cam.GetViewMatrix() );
 
-	    // Begin the scene
-    //In the future this will be done inside a loop to handle each shader/effect
-	D3DXMATRIXA16 viewMat = camera.GetViewMatrix();
-	D3DXMATRIXA16 projMat = camera.GetProjectionMatrix();
+    // HACK!
+    // In the future this will be done inside a loop to handle each shader/effect
+	D3DXMATRIXA16 viewMat = cam.GetViewMatrix();
+	D3DXMATRIXA16 projMat = cam.GetProjectionMatrix();
 	HRESULT hr;
 	hr = m_pEffect->SetMatrix( "g_ViewMatrix", &viewMat );
 	hr = m_pEffect->SetMatrix( "g_ProjectionMatrix", &projMat );
