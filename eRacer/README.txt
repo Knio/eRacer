@@ -48,6 +48,8 @@ In Menu:
 
 
 In Game:
+  
+  ESC                           Pause
 
   W, right trigger:             Accelerate
   S, left trigger:              Brake
