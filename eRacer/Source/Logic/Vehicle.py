@@ -115,7 +115,6 @@ class Vehicle(Entity):
     #print dragForce.x, dragForce.y, dragForce.z
     
     crashed = True
-    ddd = []
     for i,localpos in enumerate(self.WHEELS):
       # wheel vectors in world space
       worldpos   = mul1(tx, localpos)
@@ -141,19 +140,18 @@ class Vehicle(Entity):
       # check for invalid distances
       if disp < -100:
         # wheel is in the air - no forces applied, ignore it
-        ddd.append(-1)
-        #we should reset
+        debug("AIR")
+        # we should reset
         continue
       if -20 < disp < 0:
         #print "in the air after jump"
         crashed = False
+        debug("JUMP")
         continue
       if disp > 3*self.DISPLACEMENT:
-        ddd.append(-2)
         # sanity check
-        # debug("BAD")
+        debug("BAD")
         continue
-      ddd.append(disp)
       crashed = False
       
       # spring force
