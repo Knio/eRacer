@@ -55,9 +55,12 @@ In Game:
   S, left trigger:              Brake
   A-D, left control stick:      Steering
 
+  C                             Cycle cameras (3rd person, in car, and free flying)
+  ARROWS                        Move flying camera
+
   R                             Reload Config/eRacer.cnf file
   TAB                           Toggle debug variables
-  Spacebar                      RAWR!
+  SPACEBAR                      RAWR!
 
 
 BINARIES
