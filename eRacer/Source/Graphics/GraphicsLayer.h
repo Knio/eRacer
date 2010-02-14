@@ -15,6 +15,7 @@
 #include <mmsystem.h>
 #include "Renderable.h"
 #include "FontManager.h"
+#include "Camera.h"
 #include "View.h"
 
 namespace Graphics {
@@ -29,31 +30,28 @@ class GraphicsLayer
 private:
 	static GraphicsLayer *m_pGlobalGLayer;
 
-	LPDIRECT3D9			m_pD3D;			//Used to create the D3DDevice
-	LPDIRECT3DDEVICE9   m_pd3dDevice;	//Our rendering device
-	FontManager			m_fontManager;
+	LPDIRECT3D9						m_pD3D;				//Used to create the D3DDevice
+	LPDIRECT3DDEVICE9   	m_pd3dDevice;	//Our rendering device
+	FontManager						m_fontManager;
 	D3DPRESENT_PARAMETERS m_presentationParameters;
 
 	void resetPresentationParameters();
 	void resetDevice();
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
-	GraphicsLayer(const GraphicsLayer&);
-	GraphicsLayer& operator= (const GraphicsLayer); 
-
-	//void RenderGeometry(const Geometry* geometry);
-	//void RenderSkyBox(const Camera& camera, const Geometry& skyBox);
 	void SetCamera(const Camera& camera);
 
 public:
 	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
+	
+	Camera *camera;
 
-	Scene* m_scene;
 	~GraphicsLayer();	//Destructor
 	int Init( HWND hWnd );
 
 	void WriteString(const char* msg, const char* fontName, int size, const Vector3 &pos, const RGB &color=WHITE);
-	const LPDIRECT3DDEVICE9 GetDevice() { return m_pd3dDevice; }
+	
+	LPDIRECT3DDEVICE9 GetDevice() const { return m_pd3dDevice; }
 
 	void PreRender();
 	void RenderView(const View& view);
@@ -69,15 +67,10 @@ public:
 
 		return m_pGlobalGLayer;
 	}
-	LPDIRECT3DDEVICE9 GetDevice() const { return m_pd3dDevice; }
 
 };
 
-inline GraphicsLayer *GraphicsModule()
-{
-	return GraphicsLayer::GetInstance();
-}
-
 };
+
 
 #endif

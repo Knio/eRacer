@@ -40,19 +40,19 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
     // set the transform
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &transform_);
 
-    GraphicsModule()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
+    GraphicsLayer::GetInstance()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
 	//m_pEffect->SetTexture( "g_MeshTexture", geometry->Textures()[i] );
 
-	assert(SUCCEEDED(GraphicsModule()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" )));
+	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" )));
 	UINT cPasses = 1;
-	assert(SUCCEEDED(GraphicsModule()->m_pEffect->Begin( &cPasses, 0 )));
+	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->Begin( &cPasses, 0 )));
 	for(UINT iPass = 0; iPass < cPasses; iPass++ )
 	{
-			GraphicsModule()->m_pEffect->BeginPass( iPass ) ;
+			GraphicsLayer::GetInstance()->m_pEffect->BeginPass( iPass ) ;
 			Mesh::Draw(device);
-			assert(SUCCEEDED(GraphicsModule()->m_pEffect->EndPass()));
+			assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->EndPass()));
 	}
-	assert(SUCCEEDED(GraphicsModule()->m_pEffect->End()));
+	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->End()));
 
 }
 

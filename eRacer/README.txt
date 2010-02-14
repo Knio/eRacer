@@ -40,11 +40,26 @@ To run the program, run eRacer/run-release.py or eRacer/run-debug.py with python
 
 CONTROLS
 
-Spacebar - RAWR!
+In Menu:
+  
+  ESC                           Go back
+  UP-DOWN, left control stick   Move
+  ENTER                         Select Item
+
+
+In Game:
+
+  W, right trigger:             Accelerate
+  S, left trigger:              Brake
+  A-D, left control stick:      Steering
+
+  R                             Reload Config/eRacer.cnf file
+  TAB                           Toggle debug variables
+  Spacebar                      RAWR!
 
 
 BINARIES
 
-Binary distributions are included for Windows XP and Windows 7, in dist-xp.zip and dist-7.zip.
+Binary distributions are included for Windows XP and Windows 7.
 You may or may not still need the MSVCRT10 Runtime and/or DirectX Runtime installed.
 
