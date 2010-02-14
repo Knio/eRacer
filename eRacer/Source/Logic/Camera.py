@@ -75,6 +75,22 @@ class ChasingCamera(Camera):
     
     self.camera.SetLookAt(targetPosition)
     
+class CarCamera(Camera):
+  def __init__(self, target): 
+    Camera.__init__(self)
+    self.target   = target
+    self.position = Point3(0, 0, 0)
+    self.fov      = math.pi/2.1
+    
+  def Tick(self, time):
+    Camera.Tick(self, time)
+    
+    posworld  = mul1(self.target.transform, Point3(0,1,1))
+    lookworld = mul1(self.target.transform, Point3(0,1,2))
+    upworld   = mul0(self.target.transform, Y)
+    
+    self.camera.SetFrame(posworld, lookworld, upworld)
+      
 
 class FirstPersonCamera(Camera):
   def __init__(self): 
@@ -110,7 +126,7 @@ class FirstPersonCamera(Camera):
     delta = float(time.wall_delta) / time.RESOLUTION
         
     velocity        = mul0(self.transform, self.velocity)
-    self.position   = self.position + velocity * (delta * 50.0)
+    self.position   = self.position + velocity * (delta * 100.0)
     lookat          = self.position + mul0(self.transform, Z)
     
     # print self.look

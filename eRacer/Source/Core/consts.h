@@ -1,11 +1,16 @@
 #ifndef CONSTS_H_
 #define CONSTS_H_
 
+// These variables are populated
+// from Config/eRacer.cnf by Core/Config.py
+
 struct Constants
 {
 	static Constants* g_Constants;
 	
 	// PhysX
+	float PHYS_MAX_TIMESTEP;
+
 	float	PHYS_GRAVITY_X;
 	float	PHYS_GRAVITY_Y;
 	float	PHYS_GRAVITY_Z;

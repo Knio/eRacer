@@ -9,7 +9,7 @@ from Plane      import Plane
 from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
-from Camera     import ChasingCamera, FirstPersonCamera
+from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
 from Starfield  import Starfield
 from Graphics.SkyBox     import SkyBox
 
@@ -75,12 +75,13 @@ class GameState(State):
     self.views = []
     self.viewIndex = 0
     
-    cam = ChasingCamera(self.player)
-    game().logic.Add(cam)
+    cam = game().logic.Add(ChasingCamera(self.player))
     self.views.append(eRacer.View(self.scene, cam.camera))
     
-    cam = FirstPersonCamera()
-    game().logic.Add(cam)
+    cam = game().logic.Add(FirstPersonCamera())
+    self.views.append(eRacer.View(self.scene, cam.camera))
+    
+    cam = game().logic.Add(CarCamera(self.player))
     self.views.append(eRacer.View(self.scene, cam.camera))
     
     # without this, the skyboxes are garbage collected because the 

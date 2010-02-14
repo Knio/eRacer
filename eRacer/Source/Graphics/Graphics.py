@@ -1,6 +1,5 @@
-from Game.Module    import Module
+from Core.Globals   import *
 from Window         import Window
-import eRacer
 
 class Graphics(Module):
   def __init__(self, game):
@@ -33,15 +32,22 @@ class Graphics(Module):
     Module.Tick(self, time)
     self.window.Poll()
     
-    #print self.camera, self.scene
-    # self.graphics.RenderFrame(self.camera.camera, self.scene)
+    fps = time.Fps()
+    self.window.SetTitle("eRacerX - %.2f FPS" % fps)
+        
+    if 1.0/fps > CONSTS.PHYS_MAX_TIMESTEP:
+      # we are lagging
+      # alternately skip this frame so that physx gets more sim time
+      if game().ticks % 2: 
+        print 'skipping rendering'
+        self.views = []
+        return
     
     self.graphics.PreRender();
     while self.views:
       self.graphics.RenderView(self.views.pop())
     self.graphics.PostRender();
     
-    self.window.SetTitle("eRacerX - %.2f FPS" % time.Fps())
   
   def Quit(self):
     Module.Quit(self)

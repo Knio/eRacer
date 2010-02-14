@@ -2,6 +2,7 @@
 #ifndef TIME_H_
 #define TIME_H_
 
+#define NOMINMAX
 #include <windows.h>
 
 struct Time

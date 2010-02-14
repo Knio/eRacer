@@ -1,7 +1,7 @@
 #ifndef IO_H_
 #define IO_H_
 
-
+#define NOMINMAX
 #include <windows.h>
 #include <cassert>
 #include <d3d9types.h>

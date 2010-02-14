@@ -16,4 +16,10 @@ def run():
     msvcrt.getch()
   
 if __name__ == '__main__':
-  run()    
+  print 'This application must be started with'
+  print 'run-release.py or run-debug.py'
+  import msvcrt
+  print
+  print 'Press any key to exit'
+  msvcrt.getch()
+

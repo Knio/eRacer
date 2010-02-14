@@ -51,6 +51,7 @@ class Game(eRacer.Game):
     print 'Game::Run'
     self.Start()  
     self.time.Zero()
+    self.ticks = 0
     while self.state:
       t = self.time.Tick(self.simspeed)
       self.Tick(self.time)
@@ -64,6 +65,7 @@ class Game(eRacer.Game):
 
   def Tick(self, time, speed=1.0):
     #print 'Game::Tick'
+    self.ticks += 1
     for i in self.modules:
       i.Tick(time)
       

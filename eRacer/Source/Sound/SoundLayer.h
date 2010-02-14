@@ -15,6 +15,7 @@
 #include "wincompat.h"
 #pragma warning( default : 4995 )
 #include <map>
+#define NOMINMAX
 #include <windows.h>
 #include "fmod.h"
 #include "fmod_errors.h"
