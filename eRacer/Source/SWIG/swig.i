@@ -103,17 +103,22 @@ These are the classes that get exposed to Python
 
 // Graphics
 // %include "..\Graphics\Renderable.h"
+
 %include "..\Graphics\Camera.h"
-%include "..\Graphics\AxisAlignedBoundingBox.h"
-%include "..\Graphics\Spatial.h"
+
+// Python doesn't need these declarations
+// %include "..\Graphics\AxisAlignedBoundingBox.h"
+// %include "..\Graphics\Spatial.h"
 %include "..\Graphics\Mesh.h"
 %include "..\Graphics\MeshNode.h"
+
 %include "..\Graphics\StaticMeshNode.h"
 %include "..\Graphics\MovingMeshNode.h"
 %include "..\Graphics\Scene.h"
 %include "..\Graphics\View.h"
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
+%ignore Star;
 %include "..\Graphics\Starfield.h"
 %include "..\Graphics\CoordinateCross.h"
 %include "..\Graphics\SkyBox.h"

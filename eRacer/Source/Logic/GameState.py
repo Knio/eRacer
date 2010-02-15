@@ -95,6 +95,7 @@ class GameState(State):
     ]
     
     for view in self.views:
+      view.AddRenderable(self.scene)
       for s in self.starfeilds:
         view.AddRenderable(s)      
       view.AddRenderable(self.skybox)

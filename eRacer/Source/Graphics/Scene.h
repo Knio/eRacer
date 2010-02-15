@@ -23,7 +23,7 @@ namespace Graphics {
 /**
  * @brief Provides an abstraction for whatever internal organisation of the scene may be. 
  */
-class Scene
+class Scene : public Renderable
 {
 public:
 	/**
@@ -75,15 +75,12 @@ public:
 	 * @return a pointer to the newly created geometry
 	 */ 
 	MovingMeshNode* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
-
 	
-	//void AddRenderable(Renderable* r) { renderables_.push_back(r); }
-	//const vector<Renderable*> GetRenderables() const { return renderable_; }
+	void Draw(IDirect3DDevice9* m_pd3dDevice) const;
+	
 
 private:
 	vector<MeshNode*> 	meshNodes_;
-	vector<Renderable*> renderables_;
-	//MovingGeometry 			skyBox_;
 };
 
 

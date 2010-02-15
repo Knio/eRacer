@@ -8,6 +8,7 @@
 
 #include "Scene.h"
 #include "IO/IO.h"
+#include "GraphicsLayer.h"
 
 namespace Graphics {
 
@@ -23,9 +24,6 @@ Scene::~Scene(){
 	for(vector<MeshNode*>::iterator i = meshNodes_.begin();
 		i != meshNodes_.end(); i++)
 		delete *i;
-	for(vector<Renderable*>::iterator i = renderables_.begin();
-		i != renderables_.end(); i++)
-		delete *i;
 }
 
 void Scene::GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const {
@@ -34,7 +32,6 @@ void Scene::GetVisibleRenderables(const Camera& camera, vector<Renderable*>& vis
 		if ((*i)->visible)
 			visibleRenderables.push_back(*i);
 	}
-	visibleRenderables.insert(visibleRenderables.end(), renderables_.begin(), renderables_.end());
 }
 
 MovingMeshNode* Scene::CreateMovingGeometry(const string& name, const Matrix& transform) {
@@ -49,12 +46,16 @@ StaticMeshNode* Scene::CreateStaticGeometry(const string& name, const Matrix& tr
 	return result;
 }
 
-
-
-/*
-const Geometry& Scene::GetSkyBox() const{
-	return skyBox_;
+void Scene::Draw(IDirect3DDevice9* m_pd3dDevice) const
+{
+	Camera* cam = GraphicsLayer::GetInstance()->camera;
+	vector<Renderable*> renderables;
+  GetVisibleRenderables(*cam, renderables);
+	
+	for (vector<Renderable*>::const_iterator i = renderables.begin(); 
+		i != renderables.end(); i++){
+		(*i)->Draw(m_pd3dDevice);
+	}
 }
-*/
 
 };
