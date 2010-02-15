@@ -26,7 +26,6 @@
 #include "..\Graphics\Renderable.h"
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
-#include "..\Graphics\View.h"
 #include "..\Graphics\Mesh.h"
 #include "..\Graphics\MeshNode.h"
 #include "..\Graphics\StaticMeshNode.h"
@@ -63,9 +62,12 @@
 
 %}
 
-/* 
+/* *****************************************************************************
+
 Parse the header file to generate wrappers 
+
 These are the classes that get exposed to Python
+If a class doesn't need to be exported to Python, it can be left out.
 */
 
 
@@ -115,7 +117,6 @@ These are the classes that get exposed to Python
 %include "..\Graphics\StaticMeshNode.h"
 %include "..\Graphics\MovingMeshNode.h"
 %include "..\Graphics\Scene.h"
-%include "..\Graphics\View.h"
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
 %ignore Star;

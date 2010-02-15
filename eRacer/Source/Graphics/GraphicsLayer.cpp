@@ -124,28 +124,6 @@ void GraphicsLayer::PreRender(){
     assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
 }
 
-
-void GraphicsLayer::RenderView(const View& view){
-
-    SetCamera(*view.camera);
-
- //    vector<Renderable*> visibleRenderables;
- //    view.scene->GetVisibleRenderables(*view.camera, visibleRenderables);
-    
-
-	// for (vector<Renderable*>::const_iterator renderable = visibleRenderables.begin(); 
-	// 	renderable!=visibleRenderables.end(); renderable++){
-	// 	(*renderable)->Draw(m_pd3dDevice);
-	// }
-
-
-	for (vector<const Renderable*>::const_iterator renderable = view.viewDependantRenderables.begin(); 
-		renderable!=view.viewDependantRenderables.end(); renderable++){
-			(*renderable)->Draw(m_pd3dDevice);
-	}
-
-}
-
 void GraphicsLayer::PostRender(){
     assert(SUCCEEDED(m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY)));
 

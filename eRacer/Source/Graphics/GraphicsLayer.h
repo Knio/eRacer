@@ -16,7 +16,6 @@
 #include "Renderable.h"
 #include "FontManager.h"
 #include "Camera.h"
-#include "View.h"
 
 namespace Graphics {
 
@@ -54,11 +53,8 @@ public:
 
 	void WriteString(const char* msg, const char* fontName, int size, const Vector3 &pos, const RGB &color=WHITE);
 	
-
 	void PreRender();
-	void RenderView(const View& view);
 	void PostRender();
-	
 	
 	void Shutdown();
 
