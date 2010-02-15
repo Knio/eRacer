@@ -4,7 +4,8 @@ from Mapping      import Mapping, E
 class GameMapping(Mapping):
   def KeyPressedEvent(self, key):
     if   key == KEY.W:      return E.PlayerAccelerateEvent  (+1.0)
-    elif key == KEY.S:      return E.PlayerBrakeEvent       (True)
+    elif key == KEY.S:      return E.PlayerAccelerateEvent  (-1.0)
+    elif key == KEY.LSHIFT:  return E.PlayerBrakeEvent       (True)
     elif key == KEY.A:      return E.PlayerTurnEvent        (-1.0)
     elif key == KEY.D:      return E.PlayerTurnEvent        (+1.0)
     elif key == KEY.UP:     return E.CameraAccelerateEvent  (+1.0)
@@ -19,7 +20,8 @@ class GameMapping(Mapping):
 
   def KeyReleasedEvent(self, key):
     if   key == KEY.W:     return E.PlayerAccelerateEvent ( 0)
-    elif key == KEY.S:     return E.PlayerBrakeEvent      (False)
+    elif key == KEY.S:     return E.PlayerAccelerateEvent ( 0)
+    elif key == KEY.LSHIFT: return E.PlayerBrakeEvent     (False)
     elif key == KEY.A:     return E.PlayerTurnEvent       ( 0)
     elif key == KEY.D:     return E.PlayerTurnEvent       ( 0)
     elif key == KEY.UP:    return E.CameraAccelerateEvent (-1.0)

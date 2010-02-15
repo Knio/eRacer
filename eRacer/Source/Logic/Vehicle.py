@@ -261,9 +261,15 @@ class Vehicle(Entity):
   def GetWheelSpeed(self, timeStep, normalForce):
     gravityMag = 9.81 #should change based on track segment
     forceMag = self.MAX_ENG_FORCE * self.acceleration
-    brakeMag = self.MAX_BRAKE_FORCE * self.brake * -1.0
+    if self.physics.GetSpeed() < 1:
+      brakeMag =0
+    else:
+      brakeMag = self.MAX_BRAKE_FORCE * self.brake
     massOnTire = length(normalForce) / gravityMag
-    speedDelta = (forceMag+brakeMag) / massOnTire
+    if forceMag > 0:
+      speedDelta = (forceMag-brakeMag) / massOnTire
+    else:
+      speedDelta = (forceMag+brakeMag) / massOnTire
     return speedDelta
   
   #def GetWheelSpeed(self, timeStep):
