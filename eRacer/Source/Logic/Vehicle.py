@@ -16,7 +16,7 @@ class Vehicle(Entity):
   ]
   DISPLACEMENT = 0.30  # from wheel rest position  
   INITIAL_POS = Vector3(80, 2, 0)
-  
+
   def __init__(self, scene):
     Entity.__init__(self)
     

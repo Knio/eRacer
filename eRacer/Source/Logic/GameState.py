@@ -118,6 +118,23 @@ class GameState(State):
     # self.coordinatecross = CoordinateCross(self.view)
     # game().logic.Add(self.coordinatecross)
     
+    #for j in range (24, 35, 3):
+    #  for i in range(-191, -225, -2):
+    #    game().logic.Add(Box(scene, Vector3(-1850, j, i)))
+        
+    for i in range(-191, -230, -5):
+        game().logic.Add(Box(scene, Vector3(-1850, 24, i)))
+    for i in range(-193, -230, -5):
+        game().logic.Add(Box(scene, Vector3(-1850, 26, i)))
+    for i in range(-195, -235, -5):
+        game().logic.Add(Box(scene, Vector3(-1850, 28, i)))
+    for i in range(-193, -230, -5):
+        game().logic.Add(Box(scene, Vector3(-1850, 30, i)))
+    for i in range(-191, -230, -5):
+        game().logic.Add(Box(scene, Vector3(-1850, 32, i)))
+
+
+    
     game().time.Zero()
     self.loaded = True
     
@@ -133,6 +150,7 @@ class GameState(State):
     # if time.seconds > self.boxcount:
     #   self.boxcount += min(self.boxcount+1, 20)
     #   game().logic.Add(Box(self.scene))
+    
       
   def CameraChangedEvent(self):
     self.viewIndex = (self.viewIndex+1) % len(self.views)
