@@ -86,7 +86,7 @@ class GameState(State):
     
     # without this, the skyboxes are garbage collected because the 
     # reference in view does not count because view is a c++ object (not python)
-    self.skyboxes = []
+    self.skybox = SkyBox()
 
     self.starfeilds = [
       game().logic.Add(Starfield(1024, 1000.0)),
@@ -95,18 +95,14 @@ class GameState(State):
     ]
     
     for view in self.views:
-      # Don't do this! its computing *all* starfields, not just the rendered ones
       for s in self.starfeilds:
-        view.AddRenderable(s)
-      
-      self.skyboxes.append(SkyBox(view))
-    
-    #until here, it never crashed, i tried 5 times
+        view.AddRenderable(s)      
+      view.AddRenderable(self.skybox)
 
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
-    # game().logic.Add(Plane(scene))
     
+    # game().logic.Add(Plane(scene))
     # self.coordinatecross = CoordinateCross(self.view)
     # game().logic.Add(self.coordinatecross)
     

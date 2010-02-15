@@ -10,12 +10,10 @@ namespace Graphics {
 
 class SkyBox : public Mesh {
 public:	
-    SkyBox(const Camera& camera);
+  SkyBox();
 	virtual void Draw(IDirect3DDevice9* device) const;
 	void SetMesh(ID3DXMesh* mesh);
-    
-protected:
-    const Camera& camera_;
+  
 };
 
 

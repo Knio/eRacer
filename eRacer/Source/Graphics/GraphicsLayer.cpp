@@ -83,7 +83,7 @@ int GraphicsLayer::Init( HWND hWnd )
 	//Shaders
 	DWORD dwShaderFlags = D3DXFX_NOT_CLONEABLE | D3DXSHADER_DEBUG;
 	// dwShaderFlags |= D3DXSHADER_FORCE_VS_SOFTWARE_NOOPT;
-    dwShaderFlags |= D3DXSHADER_FORCE_PS_SOFTWARE_NOOPT; //Force software shader since not everything is textured
+    // dwShaderFlags |= D3DXSHADER_FORCE_PS_SOFTWARE_NOOPT; //Force software shader since not everything is textured
 	
 	assert(SUCCEEDED(D3DXCreateEffectFromFile(
 		m_pd3dDevice, 
