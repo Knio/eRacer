@@ -31,7 +31,7 @@ class Starfield : public Renderable
 public:
 	Starfield(int n, float s);
 	void Update();
-	virtual void Draw(LPDIRECT3DDEVICE9) const;
+	virtual void Draw(IDirect3DDevice9*) const;
 };
 
 }

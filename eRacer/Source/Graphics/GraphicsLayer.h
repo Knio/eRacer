@@ -31,7 +31,7 @@ private:
 	static GraphicsLayer *m_pGlobalGLayer;
 
 	LPDIRECT3D9						m_pD3D;				//Used to create the D3DDevice
-	LPDIRECT3DDEVICE9   	m_pd3dDevice;	//Our rendering device
+	IDirect3DDevice9*   	m_pd3dDevice;	//Our rendering device
 	FontManager						m_fontManager;
 	D3DPRESENT_PARAMETERS m_presentationParameters;
 
@@ -39,19 +39,21 @@ private:
 	void resetDevice();
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
-	void SetCamera(Camera& camera);
+	Camera *camera;
 
 public:
 	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
 	
-	Camera *camera;
+	void 		SetCamera(Camera& camera);
+	Camera* GetCamera() { return camera; }
 
+	IDirect3DDevice9* GetDevice() const { return m_pd3dDevice; }
+	
 	~GraphicsLayer();	//Destructor
 	int Init( HWND hWnd );
 
 	void WriteString(const char* msg, const char* fontName, int size, const Vector3 &pos, const RGB &color=WHITE);
 	
-	LPDIRECT3DDEVICE9 GetDevice() const { return m_pd3dDevice; }
 
 	void PreRender();
 	void RenderView(const View& view);

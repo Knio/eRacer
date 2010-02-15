@@ -13,7 +13,7 @@ SkyBox::SkyBox() {}
 
 void SkyBox::Draw(IDirect3DDevice9* device) const {
 	if (!initialized) return;
-	Camera& cam = *GraphicsLayer::GetInstance()->camera;
+	Camera& cam = *GraphicsLayer::GetInstance()->GetCamera();
 	
 	//should be far/sqrt(2), but not enough for some reason
 	Matrix transform = CreateMatrix(cam.GetPosition(), cam.GetFar()*0.5f);

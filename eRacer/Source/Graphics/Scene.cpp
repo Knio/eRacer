@@ -48,7 +48,7 @@ StaticMeshNode* Scene::CreateStaticGeometry(const string& name, const Matrix& tr
 
 void Scene::Draw(IDirect3DDevice9* m_pd3dDevice) const
 {
-	Camera* cam = GraphicsLayer::GetInstance()->camera;
+	Camera* cam = GraphicsLayer::GetInstance()->GetCamera();
 	vector<Renderable*> renderables;
   GetVisibleRenderables(*cam, renderables);
 	

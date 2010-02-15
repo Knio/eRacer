@@ -1,5 +1,6 @@
 from Core.Globals   import *
 from Window         import Window
+from View           import View
 
 class Graphics(Module):
   def __init__(self, game):
@@ -44,8 +45,11 @@ class Graphics(Module):
         return
     
     self.graphics.PreRender();
-    while self.views:
-      self.graphics.RenderView(self.views.pop())
+        
+    for view in self.views:
+      view.Draw()
+    self.views = []
+    
     self.graphics.PostRender();
     
   

@@ -89,7 +89,7 @@ void Starfield::Update()
 {
   
   GraphicsLayer* g = GraphicsLayer::GetInstance();
-  camera = g->camera;
+  camera = g->GetCamera();
   
   // TODO rotate with bigger circular buffer
   view[1] = view[0];
@@ -101,7 +101,7 @@ void Starfield::Update()
   _Update();
 }
   
-void Starfield::Draw(LPDIRECT3DDEVICE9 dev) const
+void Starfield::Draw(IDirect3DDevice9* dev) const
 {
   
   dev->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);

@@ -15,7 +15,7 @@ class Ship(Entity):
         return
       self.graphics.initialized = True
       
-    game().io.LoadMeshAsync(load, self.graphics, "Ship_06.x")
+    game().io.LoadMeshAsync(load, self.graphics, "Ship1.x")
     
   def Tick(self, time):
     pass

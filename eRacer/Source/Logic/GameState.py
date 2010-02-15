@@ -3,7 +3,10 @@ import threading
 from Core.Globals   import *
 from Game.State     import State
 
-from MenuState  import PauseMenuState
+from GameMapping    import GameMapping
+from MenuState      import PauseMenuState
+
+# Entities
 from Box        import Box
 from Plane      import Plane
 from Track      import Track
@@ -11,12 +14,16 @@ from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
 from Starfield  import Starfield
-from Graphics.SkyBox     import SkyBox
 
-from CoordinateCross import CoordinateCross
-from GameMapping    import GameMapping
+# View stuff
+from Graphics.View    import View
+from Graphics.SkyBox  import SkyBox
+# from CoordinateCross  import CoordinateCross
 
-
+# TODO
+# need a lock so that loading of IO does not happen
+# inside BegineScene()/EndScene() pairs, or else the 
+# driver will freak out
 class LoadingState(State):
   def __init__(self, func):
     State.__init__(self)    
@@ -54,15 +61,19 @@ class GameState(State):
     self.load()
     
   def Activate(self):
+    State.Activate(self)
     #if not self.loaded:
     #  game().PushState(LoadingState(self.load))
     print "Activate game state"
-    pass
+    
     
   def load(self):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
+
+    # TODO
+    # can we render a fake loading screen here until the real one works?
 
     scene = eRacer.Scene()
     self.scene = scene
@@ -76,13 +87,13 @@ class GameState(State):
     self.viewIndex = 0
     
     cam = game().logic.Add(ChasingCamera(self.player))
-    self.views.append(eRacer.View(self.scene, cam.camera))
+    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
     
     cam = game().logic.Add(FirstPersonCamera())
-    self.views.append(eRacer.View(self.scene, cam.camera))
+    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
     
     cam = game().logic.Add(CarCamera(self.player))
-    self.views.append(eRacer.View(self.scene, cam.camera))
+    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
     
     # without this, the skyboxes are garbage collected because the 
     # reference in view does not count because view is a c++ object (not python)
@@ -134,5 +145,5 @@ class GameState(State):
     game().PushState(PauseMenuState())
 
   def PlayJaguarSoundEvent(self):
-      game().sound.PlaySound2D("jaguar.wav")          
-   
+    game().sound.PlaySound2D("jaguar.wav")
+

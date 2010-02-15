@@ -1,23 +1,19 @@
-from Core.Globals import *
-from Game.State   import State
-
-from Camera       import CirclingCamera
-from MenuMapping  import MainMenuMapping, PauseMenuMapping
+from Core.Globals   import *
+from Game.State     import State
+  
+from Camera         import CirclingCamera
+from MenuMapping    import MainMenuMapping, PauseMenuMapping
+from Graphics.View  import View
 
 class MenuState(State):
   MENU = []
   def __init__(self):
     State.__init__(self)
-    self.scene  = eRacer.Scene()
-    self.camera = CirclingCamera()
     self.selected = 0
     
   def Tick(self, time):
     State.Tick(self, time)
-
-    game().graphics.views.append(eRacer.View(self.scene, self.camera.camera))
-    #game().graphics.scene  = self.scene
-    #game().graphics.camera = self.camera
+    game().graphics.views.append(View())
     
     y = 200
     for i,m in enumerate(self.MENU):

@@ -23,8 +23,9 @@ class IO
 
 protected:
 	static IO* g_IO;
-	LPDIRECT3DDEVICE9 d3dd;
-	IO(LPDIRECT3DDEVICE9 d) { g_IO = this; d3dd = d; }
+	// TODO don't store this pointer
+	IDirect3DDevice9* d3dd;
+	IO(IDirect3DDevice9* d) { g_IO = this; d3dd = d; }
 
 	
 public:
