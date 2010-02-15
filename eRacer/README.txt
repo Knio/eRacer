@@ -42,9 +42,9 @@ CONTROLS
 
 In Menu:
   
-  ESC                           Go back
+  ESC, Start button             Go back
   UP-DOWN, left control stick   Move
-  ENTER                         Select Item
+  ENTER, A-button               Select Item
 
 
 In Game:
@@ -52,14 +52,15 @@ In Game:
   ESC                           Pause
 
   W, right trigger:             Accelerate
-  S, left trigger:              Brake
+  S, left trigger:              Reverse
+  Left Shift, B-button:		  Brake
   A-D, left control stick:      Steering
 
-  C                             Cycle cameras (3rd person, in car, and free flying)
+  C, Y-button                   Cycle cameras (3rd person, in car, and free flying)
   ARROWS                        Move flying camera
 
-  R                             Reload Config/eRacer.cnf file
-  TAB                           Toggle debug variables
+  R, A-button                   Reload Config/eRacer.cnf file
+  TAB, X-button                 Toggle debug variables
   SPACEBAR                      RAWR!
 
 
