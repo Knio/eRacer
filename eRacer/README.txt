@@ -42,7 +42,7 @@ CONTROLS
 
 In Menu:
   
-  ESC, Start button             Go back
+  ESC, B-button                 Go back
   UP-DOWN, left control stick   Move
   ENTER, A-button               Select Item
 
@@ -53,7 +53,7 @@ In Game:
 
   W, right trigger:             Accelerate
   S, left trigger:              Reverse
-  Left Shift, B-button:		  Brake
+  Left Shift, B-button:		      Brake
   A-D, left control stick:      Steering
 
   C, Y-button                   Cycle cameras (3rd person, in car, and free flying)
