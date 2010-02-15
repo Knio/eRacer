@@ -26,7 +26,12 @@ Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
     stars[i].pos.x = random(-1, 1)*SIZE;
     stars[i].pos.y = random(-1, 1)*SIZE;
     stars[i].pos.z = random(-1, 1)*SIZE;
-    stars[i].color = D3DCOLOR_COLORVALUE(random(0.5, 1.0), random(0.5, 1.0), random(0.5, 1.0), 1.0f);
+    stars[i].color = D3DCOLOR_COLORVALUE(
+      random(0.7, 1.0), 
+      random(0.7, 1.0), 
+      random(0.7, 1.0),
+      1.0f
+    );
     
   }
   view = new Matrix[2];
@@ -103,6 +108,11 @@ void Starfield::Update()
   
 void Starfield::Draw(IDirect3DDevice9* dev) const
 {
+  
+  dev->SetRenderState(D3DRS_AMBIENT, D3DCOLOR_RGBA(255,255,255,255));
+  dev->SetRenderState(D3DRS_COLORVERTEX, TRUE);
+  dev->SetRenderState(D3DRS_DIFFUSEMATERIALSOURCE, D3DMCS_COLOR1);
+  dev->SetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_COLOR1);
   
   dev->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
   dev->SetStreamSource(0, vb, 0, sizeof(Star));

@@ -29,7 +29,7 @@ setup(
       ],
       'bundle_files': 3,
       'compressed': True,
-      'dist_dir':'T:/dist'
+      # 'dist_dir':'T:/dist'
     }
   },
   data_files=[
