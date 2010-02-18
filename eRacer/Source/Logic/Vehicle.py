@@ -44,7 +44,7 @@ class Vehicle(Entity):
       self.SIZE   # bounds
     )
     
-    self.graphics = scene.CreateMovingGeometry("vehicle")
+    self.graphics = scene.CreateMovingMeshNode("vehicle")
     self.graphics.thisown = 0
 
     self.physics.SetCentreOfMass(self.MASS_CENTRE)

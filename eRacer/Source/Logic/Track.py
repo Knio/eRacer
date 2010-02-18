@@ -5,7 +5,7 @@ class Track(Entity):
     Entity.__init__(self)
 
     self.physics = eRacer.TriMesh()
-    self.graphics = scene.CreateStaticGeometry("track")
+    self.graphics = scene.CreateStaticMeshNode("track")
     # self.graphics.visible = False
         
     def load(r):
@@ -13,6 +13,7 @@ class Track(Entity):
         print 'Failed to load mesh!!'
         return
       self.graphics.initialized = True
+      print "num faces in track: ",self.graphics.GetMesh()
       self.physics.Init(self.graphics.mesh());
       
     # game().io.LoadMeshAsync(load, self.graphics, "Track.x")   

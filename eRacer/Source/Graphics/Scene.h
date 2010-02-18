@@ -50,31 +50,33 @@ public:
 	void GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const;
 
 	/**
-	 * @brief Factory method to create new non-moving geometry in the scene
+	 * @brief Factory method to create new non-moving mesh nodes in the scene
 	 *
-	 * Static geometry does not change its transform or its mesh over time.
+	 * Static mesh nodes do not change their transform or meshes over time.
 	 * This is useful for optimization of the culling process.
 	 * 
 	 * @param name
-	 *			a name for the geometry - for debugging
+	 *			a name for the mesh node - for debugging
 	 * @param transform
-	 *			a transformation matrix for the geometry
-	 * @return a pointer to the newly created geometry
+	 *			a transformation matrix for the node
+	 * @return a pointer to the newly created node
 	 *
-	 * @see CreateGeometry
+	 * @see CreateMovingMeshNode
 	 */ 
-	StaticMeshNode* CreateStaticGeometry(const string& name, const Matrix& transform=IDENTITY);
+	StaticMeshNode* CreateStaticMeshNode(const string& name, const Matrix& transform=IDENTITY);
 
 	/**
-	 * @brief Factory method to create new geometry in the scene
+	 * @brief Factory method to create new moving mesh nodes in the scene
 	 *
 	 * @param name
-	 *			a name for the geometry - for debugging
+	 *			a name for the mesh node - for debugging
 	 * @param transform
-	 *			a transformation matrix for the geometry
-	 * @return a pointer to the newly created geometry
+	 *			a transformation matrix for the node
+	 * @return a pointer to the newly created node
+	 *
+	 * @see CreateStaticMeshNode
 	 */ 
-	MovingMeshNode* CreateMovingGeometry(const string& name, const Matrix& transform=IDENTITY);
+	MovingMeshNode* CreateMovingMeshNode(const string& name, const Matrix& transform=IDENTITY);
 	
 	void Draw(IDirect3DDevice9* m_pd3dDevice) const;
 	

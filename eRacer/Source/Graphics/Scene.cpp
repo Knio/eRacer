@@ -34,13 +34,13 @@ void Scene::GetVisibleRenderables(const Camera& camera, vector<Renderable*>& vis
 	}
 }
 
-MovingMeshNode* Scene::CreateMovingGeometry(const string& name, const Matrix& transform) {
+MovingMeshNode* Scene::CreateMovingMeshNode(const string& name, const Matrix& transform) {
 	MovingMeshNode* result = new MovingMeshNode(name);
 	result->SetTransform(transform);
 	meshNodes_.push_back(result);
 	return result;
 }
-StaticMeshNode* Scene::CreateStaticGeometry(const string& name, const Matrix& transform) {
+StaticMeshNode* Scene::CreateStaticMeshNode(const string& name, const Matrix& transform) {
 	StaticMeshNode* result = new StaticMeshNode(name, transform);
 	meshNodes_.push_back(result);
 	return result;

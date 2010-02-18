@@ -5,7 +5,7 @@ class Box(Entity):
     Entity.__init__(self)
     self.position = position
     self.physics = eRacer.Box(False, 4000, position)
-    self.graphics = scene.CreateMovingGeometry("Box")
+    self.graphics = scene.CreateMovingMeshNode("Box")
     self.graphics.thisown = 0
     self.graphics.SetTransform(self.transform)
         

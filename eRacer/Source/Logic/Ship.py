@@ -5,7 +5,7 @@ class Ship(Entity):
     Entity.__init__(self)
     
     # no physics yet..
-    self.graphics = scene.CreateMovingGeometry("Old Ship Model")
+    self.graphics = scene.CreateMovingMeshNode("Old Ship Model")
     self.graphics.thisown = 0
     self.transform = eRacer.CreateMatrix(Vector3(10,3,4))
         
