@@ -44,16 +44,6 @@ public:
 	 */
 	void SetTransform(const Matrix& transform);
 
-	/**
-	 * @brief setter for the mesh
-	 *
-	 * This setter can only be called once. It also updates the bounding volumes.
-	 *
-	 * @param mesh
-	 *			a pointer to the mesh for this geometry
-	 */
-	virtual void SetMesh(ID3DXMesh* mesh);
-private:
 };
 
 

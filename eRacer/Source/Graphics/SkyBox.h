@@ -1,4 +1,10 @@
-
+/**
+ * @file SkyBox.h
+ * @brief Definition of the SkyBox class
+ *
+ * @date 07.02.2010
+ * @author: Ole Rehmsen
+ */
 
 #pragma once
 
@@ -8,20 +14,18 @@
 
 namespace Graphics {
 
+/**
+ * @brief A skybox that always centers around a camera
+ */
 class SkyBox : public Mesh {
 public:	
-  SkyBox();
+	/**
+	 * @brief draw the sky box
+	 *
+	 * @param device 
+	 *			the device to draw to
+	 */
 	virtual void Draw(IDirect3DDevice9* device) const;
-	void SetMesh(ID3DXMesh* mesh);
-  
 };
-
-
-inline void SkyBox::SetMesh(ID3DXMesh* mesh){
-	//this method can only be called once
-	assert(NULL == mesh_);
-	assert(NULL != mesh);
-	mesh_ = mesh;
-}
 
 }

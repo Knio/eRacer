@@ -113,6 +113,13 @@ void MeshNode::UpdateBounds(){
 	worldBoundingVolume_.set(min, max);
 }
 
+void MeshNode::SetMesh(ID3DXMesh* mesh){
+	//this method can only be called once
+	assert(NULL == mesh_);
+	
+	Mesh::SetMesh(mesh);
+	
+	UpdateBounds();
+}
 
-
-};
+}

@@ -25,14 +25,7 @@ StaticMeshNode::StaticMeshNode(const string& name, const Matrix& transform)
 StaticMeshNode::~StaticMeshNode(){
 }
 
-void StaticMeshNode::SetMesh(ID3DXMesh* mesh){
-	//this method can only be called once
-	assert(NULL == mesh_);
-	assert(NULL != mesh);
-	mesh_ = mesh;
-	
-	UpdateBounds();
-}
+
 
 
 };

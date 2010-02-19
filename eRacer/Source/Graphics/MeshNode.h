@@ -59,9 +59,21 @@ public:
 	 */
 	virtual void cullRecursive(const Camera&, vector<const MeshNode*>& visibleNodes) const;
 
-	const Matrix& GetTransform() const { return transform_; }
+	/**
+	 * @brief Getter for the world space transform
+	 * @return the world space transform of this node
+	 */
+	const Matrix& GetTransform() const;
 
-
+	/**
+	 * @brief Setter for the mesh
+	 * 
+	 * Also updates the bounding volume. This setter can only be called once.
+	 *
+	 * @param mesh 
+	 *			the Direct3D mesh to set
+	 */
+	virtual void SetMesh(ID3DXMesh* mesh);
 
 protected:
 	/**
@@ -86,6 +98,10 @@ protected:
 	Matrix transform_;
 
 };
+
+inline const Matrix& MeshNode::GetTransform() const { 
+	return transform_; 
+}
 
 
 

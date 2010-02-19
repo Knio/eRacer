@@ -1,15 +1,20 @@
-#include <iostream>
+/**
+ * @file SkyBox.cpp
+ * @brief Implementation of the SkyBox class
+ *
+ * @date 07.02.2010
+ * @author: Ole Rehmsen
+ */
 
 #include "SkyBox.h"
+
 #include "GraphicsLayer.h"
+
+#include <iostream>
 
 using namespace std;
 
 namespace Graphics{
-	
-	
-SkyBox::SkyBox() {}
-
 
 void SkyBox::Draw(IDirect3DDevice9* device) const {
 	if (!initialized) return;
@@ -18,7 +23,7 @@ void SkyBox::Draw(IDirect3DDevice9* device) const {
 	//should be far/sqrt(2), but not enough for some reason
 	Matrix transform = CreateMatrix(cam.GetPosition(), cam.GetFar()*0.5f);
 
-  device->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
+	device->SetTransform(  D3DTS_WORLDMATRIX(0), &transform );
 	Mesh::Draw(device);
 }	
 }

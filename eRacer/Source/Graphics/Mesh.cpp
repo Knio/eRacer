@@ -8,7 +8,7 @@
 
 #include "Mesh.h"
 
-#include <cassert>
+
 
 namespace Graphics {
 
@@ -38,5 +38,7 @@ void Mesh::Draw(IDirect3DDevice9* device) const{
         mesh_->DrawSubset(i);
     }
 }
+
+
 
 }

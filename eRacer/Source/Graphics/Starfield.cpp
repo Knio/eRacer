@@ -27,9 +27,9 @@ Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
     stars[i].pos.y = random(-1, 1)*SIZE;
     stars[i].pos.z = random(-1, 1)*SIZE;
     stars[i].color = D3DCOLOR_COLORVALUE(
-      random(0.7, 1.0), 
-      random(0.7, 1.0), 
-      random(0.7, 1.0),
+      random(0.7f, 1.0f), 
+      random(0.7f, 1.0f), 
+      random(0.7f, 1.0f),
       1.0f
     );
     

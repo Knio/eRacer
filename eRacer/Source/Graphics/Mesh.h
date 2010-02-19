@@ -16,6 +16,7 @@
 #include <d3dx9mesh.h>
 
 #include <vector>
+#include <cassert>
 
 using namespace std;
 
@@ -58,14 +59,12 @@ public:
 	ID3DXMesh& mesh() { return *mesh_; };
 	
 	/**
-	 * @brief setter for the mesh. Has to be implemented by subclasses
-	 *
-	 * It also updates the bounding volume(s)
+	 * @brief setter for the mesh. Can be overidden by subclasses
 	 *
 	 * @param mesh
 	 *			a pointer to the mesh for this geometry
 	 */
-	virtual void SetMesh(ID3DXMesh* mesh) = 0;
+	virtual void SetMesh(ID3DXMesh* mesh);
 
 	/**
 	 * @brief read access to the vector of materials
@@ -130,6 +129,10 @@ inline vector<IDirect3DTexture9*>& Mesh::Textures(){
 	return textures_;
 }
 
+inline void Mesh::SetMesh(ID3DXMesh* mesh){
+	assert(NULL != mesh);
+	mesh_ = mesh;
+}
 
 
 
