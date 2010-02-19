@@ -9,33 +9,42 @@
 #pragma once
 
 #include "Spatial.h"
-#include <vector>
-#include "Renderable.h"
-#include "d3d9types.h"
-#include "d3dx9mesh.h"
 #include "Mesh.h"
 
+#include "d3d9types.h"
+#include "d3dx9mesh.h"
+
+#include <vector>
 
 using namespace std;
 
 namespace Graphics {
 
 /**
- * @brief A mesh that is part of the scene graph
+ * @brief Abstract base class for meshes that are part of the scene graph
  * 
- * @see MovingGeometry
- * @see StaticGeometry
+ * @see Mesh
+ * @see MovingMeshNode
+ * @see StaticMeshNode
  */
 class MeshNode : public Spatial, public Mesh
 {
 public:
 	/**
-	 * @brief Destructor stub. Virtual so that subclasse's constructors will be called
+	 * @brief Destructor stub. Virtual so that sub class' destructors will be called
 	 *
 	 */
 	virtual ~MeshNode();
 
-
+	/**
+	 * @brief Draw the mesh associated with this mesh node.
+	 * 
+	 * In addition to mesh drawing, this method uses the world transform
+	 * matrix to position the mesh at the correct position
+	 *
+	 * @param device 
+	 *			the direct 3d device to use for drawing
+	 */
 	virtual void Draw(IDirect3DDevice9* device) const;
 
 	/**
@@ -48,7 +57,7 @@ public:
 	 *
 	 * @see Spatial::cullRecursive
 	 */
-	virtual void cullRecursive(const Camera& camera, vector<const MeshNode*>& visibleNodes) const;
+	virtual void cullRecursive(const Camera&, vector<const MeshNode*>& visibleNodes) const;
 
 	const Matrix& GetTransform() const { return transform_; }
 
@@ -63,9 +72,17 @@ protected:
 	 */
 	MeshNode(const string& name);
 
+	/**
+	 * @brief update the bounding volume from the mesh data
+	 *
+	 * This method should be called whenever vertex data changes (i.e. after loading)
+	 * to bring the bounding volume up to date.
+	 */
 	void UpdateBounds();
 
-
+	/**
+	 * @brief the world transformation matrix to apply to all vertices to allow for instancing
+	 */
 	Matrix transform_;
 
 };

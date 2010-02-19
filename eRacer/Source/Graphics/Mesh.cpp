@@ -1,4 +1,13 @@
+/**
+ * @file Mesh.cpp
+ * @brief Implementation of the Mesh class
+ *
+ * @date 07.02.2010
+ * @author: Ole Rehmsen
+ */
+
 #include "Mesh.h"
+
 #include <cassert>
 
 namespace Graphics {

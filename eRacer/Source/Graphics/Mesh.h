@@ -1,10 +1,19 @@
+/**
+ * @file Mesh.h
+ * @brief Definition of the Mesh class
+ *
+ * @date 07.02.2010
+ * @author: Ole Rehmsen
+ */
+
 #pragma once
+
+#include "Renderable.h"
 
 #define NOMINMAX
 #include <windows.h>
 #include <d3d9types.h>
 #include <d3dx9mesh.h>
-#include "Renderable.h"
 
 #include <vector>
 
@@ -12,10 +21,23 @@ using namespace std;
 
 namespace Graphics{
 
+/**
+ * @brief Wrapper for a d3d mesh that can render itself
+ */
 class Mesh : public Renderable {
 public:
+	/**
+	 * @brief Constructor. Setup a mesh in uninitialized state.
+	 */
 	Mesh();
 
+	/**
+	 * @brief draw the mesh
+	 *
+	 * @param device
+	 *			the Direct3D device to draw to
+	 * @see Renderable::Draw
+	 */
 	virtual void Draw(IDirect3DDevice9* device) const;
 
 	/**
@@ -25,7 +47,14 @@ public:
 	 */
 	const ID3DXMesh* GetMesh() const;
 
-	//TODO comment or remove
+	//TODO remove
+	/**
+	 * @brief Hack to allow physics to read mesh data
+	 *
+	 * This method will be removed as soon as there is another way for 
+	 * physics to get to the vertex data - unfortunately, even locking
+	 * the buffer for read-only access is not a constant operation in DX.
+	 */
 	ID3DXMesh& mesh() { return *mesh_; };
 	
 	/**
@@ -66,6 +95,11 @@ public:
 	 */
 	vector<IDirect3DTexture9*>& Textures();
 
+	/**
+	 * @brief flag to indicate whether the mesh is already initialized. 
+	 *
+	 * This prevents the mesh from drawing itself before it is properly loaded.
+	 */
 	bool initialized;
 protected:
 	ID3DXMesh* mesh_;
