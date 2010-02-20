@@ -26,8 +26,6 @@ class PhysicsObject{
 public:
 	/**
 	* @brief Constructor stub.
-	* @param dynamic Whether the object can be moved or not.
-	* @param mass The mass of the object in kilograms. Set as 0 for static objects.
 	*/
 	PhysicsObject();
 	

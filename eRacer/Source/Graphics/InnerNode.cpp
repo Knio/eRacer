@@ -1,6 +1,6 @@
 /**
- * @file .cpp
- * @brief Implementation of the  class
+ * @file InnerNode.cpp
+ * @brief Implementation of the InnerNode class
  *
  * @date 12.01.2010
  * @author: Ole Rehmsen

@@ -63,7 +63,7 @@ public:
 	/**
 	 * @brief For 3D Sound. Set the listener parameter and orientation
 	 * 
-	 * @param listerPos Listener Position. Usually the camera position
+	 * @param listenerPos Listener Position. Usually the camera position
 	 * @param listenerVel Listener Velocity for doppler effects. In meters per second
 	 * @param atVector The direction the listener is facing
 	 * @param upVector The up direction for the listener
@@ -108,9 +108,6 @@ public:
 
 	/**
 	 * @brief Stop looped music
-	 * 
-	 * @param name Resource file name
-	 * @return The channel the sound is playing on
 	 */
 	int StopMusic();
 

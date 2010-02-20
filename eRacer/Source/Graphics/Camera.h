@@ -30,7 +30,7 @@ public:
 	 * 			the eye point of the camera - default: (0,0,0)
 	 * @param lookAt
 	 * 			the point the camera should point at - default: (0,0,1)
-	 * @param up
+	 * @param approxUp
 	 * 			a vector that approximates the up direction. The actual up vector
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 * 			- default: (0,1,0)
@@ -52,7 +52,7 @@ public:
 	 * 			the eye point of the camera
 	 * @param lookAt
 	 * 			the point the camera should point at
-	 * @param up
+	 * @param approxUp
 	 * 			a vector that approximates the up direction. The actual up vector
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 */

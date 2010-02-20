@@ -63,7 +63,7 @@ public:
 
 	/**
 	 * @brief Initialization
-	 * @param hwnd
+	 * @param hWnd
 	 *			Handle to the window to listen to
 	 * @param directInput
 	 * 			a pointer to the DirectInput object

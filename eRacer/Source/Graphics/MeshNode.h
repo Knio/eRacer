@@ -50,8 +50,6 @@ public:
 	/**
 	 * @brief Add myself to the list
 	 *
-	 * @param camera
-	 *			The camera to cull against - not needed here
 	 * @param visibleNodes
 	 * 			A vector to push this node to
 	 *

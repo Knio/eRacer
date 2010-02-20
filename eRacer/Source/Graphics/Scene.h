@@ -43,7 +43,7 @@ public:
 	 *
 	 * @param camera 
 	 *			a camera defining the view frustum against which the scene is culled
-	 * @param renderables
+	 * @param visibleRenderables
 	 *			the vector the visible renderables are appended to 
 	 *
 	 */
