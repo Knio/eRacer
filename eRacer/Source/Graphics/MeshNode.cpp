@@ -113,11 +113,11 @@ void MeshNode::UpdateBounds(){
 	worldBoundingVolume_.set(min, max);
 }
 
-void MeshNode::SetMesh(ID3DXMesh* mesh){
+void MeshNode::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures){
 	//this method can only be called once
-	assert(NULL == mesh_);
+	assert(!initialized);
 	
-	Mesh::SetMesh(mesh);
+	Mesh::Init(mesh,nMaterials, materials, textures);
 	
 	UpdateBounds();
 }

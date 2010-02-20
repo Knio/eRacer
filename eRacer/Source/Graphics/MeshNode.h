@@ -66,14 +66,19 @@ public:
 	const Matrix& GetTransform() const;
 
 	/**
-	 * @brief Setter for the mesh
-	 * 
-	 * Also updates the bounding volume. This setter can only be called once.
+	 * @brief initialize this mesh. Can be overidden by subclasses
 	 *
-	 * @param mesh 
-	 *			the Direct3D mesh to set
+	 * @param mesh
+	 *			a pointer to the Direct3D mesh
+	 * @param nMaterials
+	 *			the number of materials and textures
+	 * @param materials
+	 *			a pointer to the memory location where the materials are stored
+	 * @param textures
+	 *			a pointer to the memory location where the pointers to the textures are stored
 	 */
-	virtual void SetMesh(ID3DXMesh* mesh);
+	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
+
 
 protected:
 	/**

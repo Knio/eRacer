@@ -59,40 +59,46 @@ public:
 	ID3DXMesh& mesh() { return *mesh_; };
 	
 	/**
-	 * @brief setter for the mesh. Can be overidden by subclasses
+	 * @brief initialize this mesh. Can be overidden by subclasses
 	 *
 	 * @param mesh
-	 *			a pointer to the mesh for this geometry
+	 *			a pointer to the Direct3D mesh
+	 * @param nMaterials
+	 *			the number of materials and textures
+	 * @param materials
+	 *			a pointer to the memory location where the materials are stored
+	 * @param textures
+	 *			a pointer to the memory location where the pointers to the textures are stored
 	 */
-	virtual void SetMesh(ID3DXMesh* mesh);
+	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
 
 	/**
 	 * @brief read access to the vector of materials
 	 *
 	 * @return read-only referece to the vector of materials
 	 */
-	const vector<D3DMATERIAL9*>& Materials() const;
+	//const vector<D3DMATERIAL9*>& Materials() const;
 	
 	/**
 	 * @brief read/write access to the vector of materials
 	 * 
 	 * @return read/write reference to the vector of materials
 	 */
-	vector<D3DMATERIAL9*>& Materials();
+	//vector<D3DMATERIAL9*>& Materials();
 
 	/**
 	 * @brief read access to the vector of textures
 	 *
 	 * @return read-only referece to the vector of textures
 	 */
-	const vector<IDirect3DTexture9*>& Textures() const;
+	//const vector<IDirect3DTexture9*>& Textures() const;
 
 	/**
 	 * @brief read/write access to the vector of textures
 	 * 
 	 * @return read/write reference to the vector of textures
 	 */
-	vector<IDirect3DTexture9*>& Textures();
+	//vector<IDirect3DTexture9*>& Textures();
 
 	/**
 	 * @brief flag to indicate whether the mesh is already initialized. 
@@ -100,10 +106,12 @@ public:
 	 * This prevents the mesh from drawing itself before it is properly loaded.
 	 */
 	bool initialized;
+
 protected:
 	ID3DXMesh* mesh_;
-	vector<D3DMATERIAL9*> materials_;
-	vector<IDirect3DTexture9*> textures_;
+	unsigned int nMaterials_;
+	D3DMATERIAL9* materials_;
+	IDirect3DTexture9** textures_;
 };
 
 
@@ -112,7 +120,7 @@ inline const ID3DXMesh* Mesh::GetMesh() const{
 	return mesh_;
 }
 
-
+/*
 inline const vector<D3DMATERIAL9*>& Mesh::Materials() const{
 	return materials_;
 }
@@ -128,11 +136,9 @@ inline const vector<IDirect3DTexture9*>& Mesh::Textures() const{
 inline vector<IDirect3DTexture9*>& Mesh::Textures(){
 	return textures_;
 }
+*/
 
-inline void Mesh::SetMesh(ID3DXMesh* mesh){
-	assert(NULL != mesh);
-	mesh_ = mesh;
-}
+
 
 
 

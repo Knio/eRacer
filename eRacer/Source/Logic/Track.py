@@ -12,8 +12,8 @@ class Track(Entity):
       if r:
         print 'Failed to load mesh!!'
         return
-      self.graphics.initialized = True
-      print "num faces in track: ",self.graphics.GetMesh()
+      #self.graphics.initialized = True
+      #print "num faces in track: ",self.graphics.GetMesh()
       self.physics.Init(self.graphics.mesh());
       
     # game().io.LoadMeshAsync(load, self.graphics, "Track.x")   

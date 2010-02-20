@@ -7,15 +7,23 @@
 #include <d3d9types.h>
 #include <d3dx9mesh.h>
 
+
+#include <iostream>
+using namespace std;
+
 #include "Graphics\Mesh.h"
 
 
 struct MeshStruct
 {
-	DWORD				n;
-	LPD3DXMESH			mesh;
+	DWORD				nMaterials;
+	ID3DXMesh*			d3dMesh;
 	D3DMATERIAL9*		materials;
-	PDIRECT3DTEXTURE9*	textures;
+	IDirect3DTexture9**	textures;
+
+	/** Check if a mesh is valid */
+	bool IsValid() { return nMaterials != -1; }
+
 };
 
 class IO 
@@ -43,8 +51,6 @@ public:
 	
 	/** Check if a texture is valid */
 	static bool valid(LPDIRECT3DTEXTURE9 t) { return t != (LPDIRECT3DTEXTURE9)-1; }
-	/** Check if a mesh is valid */
-	static bool valid(MeshStruct &m) { return m.n != -1; }
 
 	// private
 	MeshStruct _LoadMesh(const char* file);

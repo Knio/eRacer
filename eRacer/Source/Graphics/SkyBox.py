@@ -9,6 +9,6 @@ class SkyBox(eRacer.SkyBox):
       if r:
         print 'Failed to load mesh!!'
         return
-      self.initialized = True      
+      #self.initialized = True      
     game().io.LoadMeshAsync(load, self, "skybox2.x")   
     

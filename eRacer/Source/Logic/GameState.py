@@ -99,7 +99,7 @@ class GameState(State):
     # reference in view does not count because view is a c++ object (not python)
     self.skybox = SkyBox()
 
-    self.starfeilds = [
+    self.starfields = [
       game().logic.Add(Starfield(1024, 1000.0)),
       game().logic.Add(Starfield(1024, 100.0)),
       game().logic.Add(Starfield(1024, 20.0)),    
@@ -107,7 +107,7 @@ class GameState(State):
     
     for view in self.views:
       view.AddRenderable(self.scene)
-      for s in self.starfeilds:
+      for s in self.starfields:
         view.AddRenderable(s)      
       view.AddRenderable(self.skybox)
 

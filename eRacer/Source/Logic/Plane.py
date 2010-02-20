@@ -12,7 +12,7 @@ class Plane(Entity):
       if r:
         print 'Failed to load mesh!!'
         return
-      self.graphics.initialized = True
+      #self.graphics.initialized = True
       
     game().io.LoadMeshAsync(load, self.graphics, "plane.x")   
     

@@ -52,14 +52,13 @@ class IO(Module, eRacer.IO):
     print "Loading mesh %s" % name
     if not name in self.meshes:
       r = self._LoadMesh(name)
-      if not self.valid(r):
+      if not r.IsValid():
         print 'Failed to load mesh "%s"' % name
         return -1
       print "Loaded mesh %s" % name
       self.meshes[name] = r
 
-    mesh = self.meshes[name]    
-    self._SetMesh(node, mesh)
+    self._SetMesh(node, self.meshes[name])
     return 0
   
   LoadMeshAsync = asynchronous(LoadMesh)
@@ -75,7 +74,6 @@ class IO(Module, eRacer.IO):
         print 'Failed to load texture "%s", using default' % name
         return self.defaulttex
       self.textures[name] = r
-    
     return self.textures[name]
 
   def Loaded(self):
