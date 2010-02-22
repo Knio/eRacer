@@ -109,19 +109,19 @@ int GraphicsLayer::Init( HWND hWnd )
     // create a new surface
     // http://www.borgsoft.de/renderToSurface.html
     assert(SUCCEEDED(m_pd3dDevice->CreateRenderTarget(
-      desc.Width, desc.Height,
-      D3DFMT_A8R8G8B8,
-      D3DMULTISAMPLE_2_SAMPLES, 0,
-      false,
-      &msaasurf,
-      NULL
+        desc.Width, desc.Height,
+        D3DFMT_A8R8G8B8,
+        D3DMULTISAMPLE_4_SAMPLES, 0,
+        false,
+        &msaasurf,
+        NULL
     )));
     
     // create a depth buffer to go with it
     assert(SUCCEEDED(m_pd3dDevice->CreateDepthStencilSurface(
         desc.Width, desc.Height,
         D3DFMT_D16,
-        D3DMULTISAMPLE_2_SAMPLES, 0,
+        D3DMULTISAMPLE_4_SAMPLES, 0,
         TRUE,
         &depthsurf,
         NULL
@@ -136,7 +136,7 @@ void GraphicsLayer::resetPresentationParameters(){
     ZeroMemory( &m_presentationParameters, sizeof( m_presentationParameters ) );
     m_presentationParameters.Windowed = TRUE;
     m_presentationParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-    m_presentationParameters.MultiSampleType = D3DMULTISAMPLE_8_SAMPLES;
+    m_presentationParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
     m_presentationParameters.MultiSampleQuality = 0;
     m_presentationParameters.BackBufferFormat = D3DFMT_UNKNOWN;
     m_presentationParameters.EnableAutoDepthStencil = TRUE;
@@ -165,19 +165,17 @@ void GraphicsLayer::PostRender(){
      // draw overlay
     m_fontManager.Draw();
     
+    // do postprocessing here
     
-
-    // assert(SUCCEEDED(m_pd3dDevice->Present( NULL, NULL, NULL, NULL )));
-    
-    // End the scene
-    assert(SUCCEEDED(m_pd3dDevice->EndScene()));
-    
+    // copy msaasurf back to the screen
     assert(SUCCEEDED(m_pd3dDevice->SetRenderTarget(0, screen)));
     IDirect3DSurface9* backBuffer = NULL;
     assert(SUCCEEDED(m_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer)));
     assert(SUCCEEDED(m_pd3dDevice->StretchRect(msaasurf, NULL, backBuffer, NULL, D3DTEXF_LINEAR)));
     backBuffer->Release();
     
+    // End the scene
+    assert(SUCCEEDED(m_pd3dDevice->EndScene()));
 
     // Present the backbuffer contents to the display
 	HRESULT r = m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
