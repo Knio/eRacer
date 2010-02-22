@@ -98,7 +98,7 @@ Vector3 transformedAffine(const Matrix& T, const Vector3& u){
 	Vector4 temp;
 	D3DXVec3Transform(&temp, &u, &T);
 
-	Vector3 result;
+	Vector3 result(0,0,0);
 	memcpy(&result, &temp, sizeof(Vector3));
 	return result;
 

@@ -39,6 +39,10 @@ private:
 protected:
 	GraphicsLayer();	//Constructor, Singleton 
 	Camera *camera;
+	
+	IDirect3DSurface9* screen;
+	IDirect3DSurface9* msaasurf;
+	IDirect3DSurface9* depthsurf;
 
 public:
 	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
