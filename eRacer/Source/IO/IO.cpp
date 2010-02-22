@@ -3,7 +3,7 @@
 
 IO* IO::g_IO = NULL;
 
-LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
+IDirect3DTexture9* IO::_LoadTexture(const char* file)
 {
 	if (!file) return NULL;
 	PDIRECT3DTEXTURE9 t = NULL;
@@ -12,7 +12,7 @@ LPDIRECT3DTEXTURE9 IO::_LoadTexture(const char* file)
 		file,
 		&t
 	);
-	if (FAILED(r)) return (PDIRECT3DTEXTURE9)-1;
+	if (FAILED(r)) return (IDirect3DTexture9*)-1;
 	return t;
 }
 
@@ -59,7 +59,7 @@ MeshStruct IO::_LoadMesh(const char* file)
 }
 
 
-void IO::_FreeTexture(LPDIRECT3DTEXTURE9 t)
+void IO::_FreeTexture(IDirect3DTexture9* t)
 {
 	if (t)	t->Release();
 }

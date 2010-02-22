@@ -2,7 +2,7 @@ from Core.Globals   import *
 from Game.State     import State
   
 from Camera         import CirclingCamera, OrthographicCamera
-from Graphics.Sprite         import Sprite
+# from Graphics.Sprite         import Sprite
 from MenuMapping    import MainMenuMapping, PauseMenuMapping
 from Graphics.View  import View
 
@@ -15,11 +15,11 @@ class MenuState(State):
   def Tick(self, time):
     State.Tick(self, time)
     
-    self.view = View(OrthographicCamera(8,6))
+    self.view = View()
     #width and height should not be hardcoded!
     game().graphics.views.append(self.view)
     
-    game().logic.Add(Sprite(self.view,Point3(10,10,2)))
+    # game().logic.Add(Sprite(self.view,Point3(10,10,2)))
     
     
     

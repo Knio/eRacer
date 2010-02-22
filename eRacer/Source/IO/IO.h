@@ -47,16 +47,16 @@ public:
 	virtual int LoadMesh(Graphics::Mesh* model, const char* file)		{ assert(false); return 0; }
 
 	/** Load a texture. returns (LPDIRECT3DTEXTURE9)-1 on failure. NULL is a valid, empty texture */
-	virtual LPDIRECT3DTEXTURE9 LoadTexture(const char* file)			{ assert(false); return NULL; }
+	virtual IDirect3DTexture9* LoadTexture(const char* file)			{ assert(false); return NULL; }
 	
 	/** Check if a texture is valid */
-	static bool valid(LPDIRECT3DTEXTURE9 t) { return t != (LPDIRECT3DTEXTURE9)-1; }
+	static bool valid(IDirect3DTexture9* t) { return t != (IDirect3DTexture9*)-1; }
 
 	// private
 	MeshStruct _LoadMesh(const char* file);
 	void _SetMesh(Graphics::Mesh* model, MeshStruct &Mesh);
-	LPDIRECT3DTEXTURE9 _LoadTexture(const char* file);	
-	void _FreeTexture(LPDIRECT3DTEXTURE9 t);
+	IDirect3DTexture9* _LoadTexture(const char* file);	
+	void _FreeTexture(IDirect3DTexture9* t);
 	void _FreeMesh(MeshStruct &m);
 };
 

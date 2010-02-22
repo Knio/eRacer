@@ -25,15 +25,16 @@ class Event(eRacer.Event):
   def __getattribute__(self, attr):
     if attr.endswith('Event'):
       def f(*args, **kwargs):
-        # print '%s%r%r' % (attr, args, kwargs)
+        print '%s%r%r' % (attr, args, kwargs)
         for f in self.listeners.get(attr, []):
           try:
+            print f
             f(*args, **kwargs)
           except:
             import traceback
             print 'Error calling listener callback: %s %r' % (attr, f)
             traceback.print_exc()
-        try:        
+        try:
           s = game().states[-1]
           if hasattr(s, attr): getattr(s, attr)(*args, **kwargs)
         except:
@@ -46,11 +47,8 @@ class Event(eRacer.Event):
         except:
           import traceback
           print 'Error calling mapping'
-          traceback.print_exc()
-        
-          
-          
-        return 0        
+          traceback.print_exc() 
+        return 0
       return f
 
     return object.__getattribute__(self, attr)
