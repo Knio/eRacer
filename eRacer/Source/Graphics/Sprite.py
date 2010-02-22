@@ -4,8 +4,8 @@ class Sprite(eRacer.Sprite,Entity):
   def __init__(self, view,position):
     Entity.__init__(self)
     eRacer.Sprite.__init__(self)
-       
-    self.set_translation(position)   
+    
+    self.set_translation(position)
     self.SetTransform(self.transform)
         
     t = game().io.LoadTexture("eracer_logo.png")   
@@ -13,5 +13,4 @@ class Sprite(eRacer.Sprite,Entity):
     view.AddRenderable(self)
             
   def transform_changed(self):
-  	pass
-    # self.SetTransform(self.transform)
+    self.SetTransform(self.transform)

@@ -5,7 +5,7 @@ IO* IO::g_IO = NULL;
 
 IDirect3DTexture9* IO::_LoadTexture(const char* file)
 {
-	if (!file) return NULL;
+	if (!file) return (IDirect3DTexture9*)-1;
 	PDIRECT3DTEXTURE9 t = NULL;
 	HRESULT r = D3DXCreateTextureFromFileA(
 		d3dd,

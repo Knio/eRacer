@@ -58,6 +58,8 @@ void Camera::SetUp(const Vector3& approxUp)
 { 
 	approxUp_ = approxUp; 
 	UpdateUp(); 
+	
+	UpdateView();
 }
 
 void Camera::UpdateUp(){
@@ -161,7 +163,7 @@ void Camera::UpdateProjection(){
 	else
 	   D3DXMatrixOrthoLH(&projectionMatrix_,
 	                              height_*aspectRatio_,
-								  height_,
+		                            height_,
 	                              near_,
 	                              far_ );
 }
