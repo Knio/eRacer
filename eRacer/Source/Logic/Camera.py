@@ -14,6 +14,20 @@ class Camera(Entity):
   def Tick(self, time):
     Entity.Tick(self, time)
 
+class OrthographicCamera(Camera):
+    def __init__(self, width, height):
+        position = Point3(width/2., height/2., 0.)
+        lookAt = Point3(width/2., height/2., 1.)
+        up = Point3(0,1,0)
+        self.camera = eRacer.Camera(position,lookAt, up, False)
+        self.camera.SetHeight(height)
+        self.camera.SetAspectRatio(width/height)
+        self.camera.SetNear(1)
+        self.camera.SetFar(3)
+        
+    def Tick(self, time):
+        Camera.Tick(self, time)
+
 
 class CirclingCamera(Camera):
   def __init__(self):

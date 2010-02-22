@@ -35,6 +35,7 @@
 #include "..\Graphics\Starfield.h"
 #include "..\Graphics\SkyBox.h"
 #include "..\Graphics\CoordinateCross.h"
+#include "..\Graphics\Sprite.h"
 
 
 // Sound
@@ -123,6 +124,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Graphics\Starfield.h"
 %include "..\Graphics\CoordinateCross.h"
 %include "..\Graphics\SkyBox.h"
+%include "..\Graphics\Sprite.h"
 
 // Sound
 %include "..\Sound\SoundLayer.h"

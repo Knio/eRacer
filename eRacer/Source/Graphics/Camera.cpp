@@ -10,19 +10,85 @@
 
 namespace Graphics {
 
-Camera::Camera(const Point3& position, const Point3& lookAt, const Vector3& approxUp)
+Camera::Camera(const Point3& position, const Point3& lookAt, const Vector3& approxUp, bool perspective)
 	: position_(position),
 	  lookAt_(lookAt),
 	  near_(1.0f),
 	  far_(100.0f),
 	  aspectRatio_(0.75f),
-	  fovY_(PI*0.25f)
+	  fovY_(PI*0.25f),
+	  height_(800),
+	  perspective_(perspective)
 {
 	SetUp(approxUp);
 }
 
 Camera::~Camera() {
 }
+
+void Camera::SetFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp){
+	position_ = position;
+	lookAt_ = lookAt;
+	SetUp(approxUp);
+
+	UpdateView();
+}
+
+
+void Camera::SetPosition(const Point3& position){
+	position_ = position;
+
+	//adjust up so that it is perpendicular to view direction
+	UpdateUp();
+
+	UpdateView();
+}
+
+void Camera::SetLookAt(const Point3& lookAt){
+	lookAt_ = lookAt;
+
+	//adjust up so that it is perpendicular to view direction
+	UpdateUp();
+
+	UpdateView();
+}
+
+
+void Camera::SetUp(const Vector3& approxUp)
+{ 
+	approxUp_ = approxUp; 
+	UpdateUp(); 
+}
+
+void Camera::UpdateUp(){
+	up_ = approxUp_;
+	Vector3 viewDirection = lookAt_ - position_;
+	normalize(viewDirection);
+	normalize(up_);
+	up_ = cross(cross(viewDirection, up_),viewDirection);
+}
+
+void Camera::SetAspectRatio(float aspectRatio){
+	assert(aspectRatio>0);
+	aspectRatio_ = aspectRatio;
+	UpdateProjection();
+}
+
+void Camera::SetFovY(float fovY){
+	assert(fovY>0);
+	assert(fovY<PI);
+	assert(perspective_);
+	fovY_ = fovY;
+	UpdateProjection();
+}
+
+void Camera::SetHeight(float height){
+	assert(height>0);
+	assert(!perspective_);
+	height_ = height;
+	UpdateProjection();
+}
+
 
 void Camera::UpdatePlanes(){
 	Matrix combinedMatrix = viewMatrix_*projectionMatrix_;
@@ -84,5 +150,21 @@ void Camera::SetViewMatrix(const Matrix& viewMatrix){
 	approxUp_ = up_;
 
 }
+
+void Camera::UpdateProjection(){
+	if(perspective_)
+	   D3DXMatrixPerspectiveFovLH(&projectionMatrix_,
+	                              fovY_,
+	                              aspectRatio_,
+	                              near_,
+	                              far_ );
+	else
+	   D3DXMatrixOrthoLH(&projectionMatrix_,
+	                              height_*aspectRatio_,
+								  height_,
+	                              near_,
+	                              far_ );
+}
+
 
 }

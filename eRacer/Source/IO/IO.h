@@ -31,7 +31,7 @@ class IO
 
 protected:
 	static IO* g_IO;
-	// TODO don't store this pointer
+	// TODO don't stogitre this pointer
 	IDirect3DDevice9* d3dd;
 	IO(IDirect3DDevice9* d) { g_IO = this; d3dd = d; }
 

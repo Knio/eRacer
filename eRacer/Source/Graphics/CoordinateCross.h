@@ -7,12 +7,13 @@
 
 namespace Graphics{
 
-struct Vertex {
-	Point3 position;
-	DWORD color;
-};
+
 
 class CoordinateCross : public Renderable {
+	struct Vertex {
+		Point3 position;
+		DWORD color;
+	};
 public:
 	CoordinateCross();
 	virtual void Draw(LPDIRECT3DDEVICE9 device) const;
