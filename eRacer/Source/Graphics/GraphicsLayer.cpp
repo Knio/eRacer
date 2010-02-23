@@ -207,6 +207,7 @@ void GraphicsLayer::PostRender(){
     // End the scene
     assert(SUCCEEDED(m_pd3dDevice->EndScene()));
 
+    // TODO: performance: Calling Present() later instead of now will get us 20% more CPU time
     // Present the backbuffer contents to the display
 	HRESULT r = m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
 
