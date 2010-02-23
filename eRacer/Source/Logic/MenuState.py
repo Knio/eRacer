@@ -29,7 +29,7 @@ class MenuState(State):
     game().graphics.views.append(self.view)
     
     
-    y = 200
+    y = 240
     for i,m in enumerate(self.MENU):
       name = m[0]
       game().graphics.graphics.WriteString(
