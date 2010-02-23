@@ -1,10 +1,14 @@
 from Core.Globals   import *
 from Game.State     import State
   
-from Camera         import CirclingCamera, OrthographicCamera
-from Graphics.Sprite         import Sprite
+from Camera         import Camera, CirclingCamera, OrthographicCamera
+from Graphics.Sprite  import Sprite
 from MenuMapping    import MainMenuMapping, PauseMenuMapping
 from Graphics.View  import View
+
+
+from Box import Box
+
 
 class MenuState(State):
   MENU = []
@@ -12,15 +16,22 @@ class MenuState(State):
     State.__init__(self)
     self.selected = 0
     
+    #width and height should not be hardcoded!
+    
+    camera = OrthographicCamera(8,6)
+
+    self.view = View(camera)
+    self.scene = eRacer.Scene()
+    
+    
+    game().logic.Add(Sprite(self.view,Point3(4,3,0)))
+    self.view.Add(self.scene)
+    game().logic.Add(camera)
+    
+    
   def Tick(self, time):
     State.Tick(self, time)
-    
-    self.view = View(OrthographicCamera(8,6))
-    #width and height should not be hardcoded!
     game().graphics.views.append(self.view)
-    
-    game().logic.Add(Sprite(self.view,Point3(10,10,2)))
-    
     
     
     y = 200

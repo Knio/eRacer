@@ -9,6 +9,9 @@ class View(object):
   def AddRenderable(self, obj):
     self.renderables.append(obj)
     return obj
+
+  def Add(self, obj):
+    return self.AddRenderable(obj)
     
   def Draw(self):
     gfx = dev = game().graphics.graphics

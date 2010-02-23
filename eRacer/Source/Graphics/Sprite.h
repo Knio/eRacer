@@ -19,7 +19,7 @@ namespace Graphics{
 class Sprite : public Renderable {
 	struct Vertex {
 		Point3 position;
-		DWORD color;
+		//DWORD color;
 	    float u;
 	    float v;
 
