@@ -18,16 +18,11 @@ class MenuState(State):
     
     #width and height should not be hardcoded!
     
-    camera = OrthographicCamera(8,6)
+    camera = OrthographicCamera(800,600)
+    game().logic.Add(camera)
 
     self.view = View(camera)
-    self.scene = eRacer.Scene()
-    
-    
-    game().logic.Add(Sprite(self.view,Point3(4,3,0)))
-    self.view.Add(self.scene)
-    game().logic.Add(camera)
-    
+        
     
   def Tick(self, time):
     State.Tick(self, time)
@@ -65,17 +60,17 @@ class MainMenuState(MenuState):
   
   def __init__(self):
     MenuState.__init__(self)
+
+    logo = Sprite(self.view)
+    game().logic.Add(logo)
+
+    logo.scale(600,235,1)
+    logo.set_translation(Point3(400,450,0))
     
   def Menu_New_Game(self):
     game().PushState(GameState())
         
   def Tick(self, time):
-    game().graphics.graphics.WriteString(
-      "eRacerX", 
-      "Verdana", 128, Point3(180,60,0)
-    )
-    
-    
     p = Point3(500,350,0)
     for i in ['Don Ha', 'John Stuart', 'Michael Blackadar', 'Tom Flanagan', 'Ole Rehmsen']:
       game().graphics.graphics.WriteString(

@@ -28,7 +28,7 @@ class Event(eRacer.Event):
         # print '%s%r%r' % (attr, args, kwargs)
         for f in self.listeners.get(attr, []):
           try:
-            print f
+            # print f
             f(*args, **kwargs)
           except:
             import traceback

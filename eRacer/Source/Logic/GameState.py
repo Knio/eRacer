@@ -113,7 +113,6 @@ class GameState(State):
       view.AddRenderable(self.scene)
       for s in self.starfields:
         view.AddRenderable(s)      
-        game().logic.Add(Sprite(view,Point3(0,0,0)))
       view.AddRenderable(self.skybox)
       
     game().logic.Add(Ship(scene))

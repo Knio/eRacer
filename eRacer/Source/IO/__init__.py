@@ -52,7 +52,6 @@ class IO(Module, eRacer.IO):
     print "Loading mesh %s" % name
     if not name in self.meshes:
       r = self._LoadMesh(name)
-      print "hi"
       if not r.IsValid():
         print 'Failed to load mesh "%s"' % name
         return -1
