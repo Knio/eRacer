@@ -38,8 +38,8 @@ class IO(Module, eRacer.IO):
     
     # cache
     self.defaulttex = self._LoadTexture(j(TEXPATH, "Default.png"))
-    self.textures = {}
-    self.meshes   = {}
+    self.textures   = {}
+    self.meshes     = {}
     
   def work(self):
     while 1:

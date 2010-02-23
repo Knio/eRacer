@@ -87,7 +87,7 @@ int GraphicsLayer::Init( HWND hWnd )
 	
 	assert(SUCCEEDED(D3DXCreateEffectFromFile(
 		m_pd3dDevice, 
-		"Shaders/BasicHLSL.fx", 
+		"Source/Shaders/BasicHLSL.fx", 
 		NULL, NULL, 
 		dwShaderFlags, NULL, 
 		&m_pEffect, NULL

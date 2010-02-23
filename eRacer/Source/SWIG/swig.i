@@ -71,52 +71,70 @@ If a class doesn't need to be exported to Python, it can be left out.
 */
 
 
-// SWIG
+// SWIG *******************************
 %include "std_string.i"
 %include "std_vector.i"
 
 
-// Core
-
-%rename(m11) D3DXMATRIX::_11;
-
+// Core *******************************
 %include "..\Core\d3dx.h"
 %include "..\Core\Math.h"
-%feature("director") Event;
-%include "..\Core\Event.h"
 %include "..\Core\Time.h"
 %include "..\Core\Consts.h"
 
 
 
-// Game
+// Game *******************************
+%include "..\Game\State.h"
+
+
+// Exception handling test. Currently only going to put director classes here
+%include "exception.i"
+
+%exception {
+  try {
+    $action
+  } catch (Swig::DirectorException) { 
+    SWIG_fail;
+  } catch(...) {
+    SWIG_exception(SWIG_RuntimeError,"Exception calling $fulldecl");
+  }
+}
+
+%feature("director:except") {
+    if ($error != NULL) {
+        throw Swig::DirectorMethodException();
+    }
+}
+
+// Core *******************************
+%feature("director") Event;
+%include "..\Core\Event.h"
+
+// Game *******************************
 %feature("director") Module;
 %include "..\Game\Module.h"
 %feature("director") Game;
 %include "..\Game\Game.h"
-%include "..\Game\State.h"
 
-
-// IO
+// IO *********************************
 %feature("director") IO;
 %include "..\IO\IO.h"
 
+%exception;
 
-
-// Graphics
-// %include "..\Graphics\Renderable.h"
+// Graphics ***************************
+// %include "..\Graphics\Renderable.h" // Something funny happens with this one. 
 
 %include "..\Graphics\Camera.h"
 
-// Python doesn't need these declarations
-// %include "..\Graphics\AxisAlignedBoundingBox.h"
-// %include "..\Graphics\Spatial.h"
 %include "..\Graphics\Mesh.h"
 %include "..\Graphics\MeshNode.h"
 
 %include "..\Graphics\StaticMeshNode.h"
 %include "..\Graphics\MovingMeshNode.h"
 %include "..\Graphics\Scene.h"
+
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
 %ignore Star;
@@ -124,26 +142,25 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Graphics\CoordinateCross.h"
 %include "..\Graphics\SkyBox.h"
 
-// Sound
+// Sound ******************************
 %include "..\Sound\SoundLayer.h"
 
-
-// Physics
+// Physics ****************************
 %include "..\Physics\PhysicsLayer.h"
 %include "..\Physics\PhysicsObject.h"
 %include "..\Physics\Box.h"
 %include "..\Physics\Plane.h"
 %include "..\Physics\TriMesh.h"
 
-
-// Input
-%include "..\Input\Device.h"
-%include "..\Input\Mouse.h"
-%include "..\Input\Keyboard.h"
-%include "..\Input\Gamepad.h"
+// Input ******************************
+// Does python acctually need these?
+// %include "..\Input\Device.h"
+// %include "..\Input\Mouse.h"
+// %include "..\Input\Keyboard.h"
+// %include "..\Input\Gamepad.h"
 %include "..\Input\Input.h"
-
 
 
 // Test
 %include "..\Test\Test.h"
+
