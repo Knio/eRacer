@@ -99,6 +99,34 @@ int GraphicsLayer::Init( HWND hWnd )
     m_pEffect->SetValue( "g_MaterialAmbientColor", &colorMtrlAmbient, sizeof( D3DXCOLOR ) );
     m_pEffect->SetValue( "g_MaterialDiffuseColor", &colorMtrlDiffuse, sizeof( D3DXCOLOR ) );
 
+    // save the screen surface
+    m_pd3dDevice->GetRenderTarget(0, &screen);
+    
+    
+    D3DSURFACE_DESC desc;
+    screen->GetDesc(&desc);
+    
+    // create a new surface
+    // http://www.borgsoft.de/renderToSurface.html
+    assert(SUCCEEDED(m_pd3dDevice->CreateRenderTarget(
+        desc.Width, desc.Height,
+        D3DFMT_A8R8G8B8,
+        D3DMULTISAMPLE_4_SAMPLES, 0,
+        false,
+        &msaasurf,
+        NULL
+    )));
+    
+    // create a depth buffer to go with it
+    assert(SUCCEEDED(m_pd3dDevice->CreateDepthStencilSurface(
+        desc.Width, desc.Height,
+        D3DFMT_D16,
+        D3DMULTISAMPLE_4_SAMPLES, 0,
+        TRUE,
+        &depthsurf,
+        NULL
+    )));
+    
     return S_OK;
 }
 
@@ -108,6 +136,8 @@ void GraphicsLayer::resetPresentationParameters(){
     ZeroMemory( &m_presentationParameters, sizeof( m_presentationParameters ) );
     m_presentationParameters.Windowed = TRUE;
     m_presentationParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    m_presentationParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
+    m_presentationParameters.MultiSampleQuality = 0;
     m_presentationParameters.BackBufferFormat = D3DFMT_UNKNOWN;
     m_presentationParameters.EnableAutoDepthStencil = TRUE;
     m_presentationParameters.AutoDepthStencilFormat = D3DFMT_D16;
@@ -116,26 +146,38 @@ void GraphicsLayer::resetPresentationParameters(){
 
 
 void GraphicsLayer::PreRender(){
-        // Clear the backbuffer and the zbuffer
+    
+    // render to offscreen surface
+    assert(SUCCEEDED(m_pd3dDevice->SetRenderTarget(0, msaasurf)));
+    assert(SUCCEEDED(m_pd3dDevice->SetDepthStencilSurface(depthsurf)));
+    
+    // Clear the backbuffer and the zbuffer
     assert(SUCCEEDED(m_pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB( 0, 0, 0 ), 1.0f, 0 )));
 
     // Begin the scene
     //In the future this will be done inside a loop to handle each shader/effect
     assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
+    assert(SUCCEEDED(m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY)));
 }
 
 void GraphicsLayer::PostRender(){
-    assert(SUCCEEDED(m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY)));
 
      // draw overlay
     m_fontManager.Draw();
     
+    // do postprocessing here
+    
+    // copy msaasurf back to the screen
+    assert(SUCCEEDED(m_pd3dDevice->SetRenderTarget(0, screen)));
+    IDirect3DSurface9* backBuffer = NULL;
+    assert(SUCCEEDED(m_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer)));
+    assert(SUCCEEDED(m_pd3dDevice->StretchRect(msaasurf, NULL, backBuffer, NULL, D3DTEXF_LINEAR)));
+    backBuffer->Release();
     
     // End the scene
     assert(SUCCEEDED(m_pd3dDevice->EndScene()));
-    
-    // Present the backbuffer contents to the display
 
+    // Present the backbuffer contents to the display
 	HRESULT r = m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
 
 	switch(r){
