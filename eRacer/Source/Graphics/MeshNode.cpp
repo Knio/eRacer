@@ -89,7 +89,7 @@ void MeshNode::UpdateBounds(){
 
 	vertices+=bytesPerVertex;
     
-	int n = mesh_->GetNumVertices();
+	unsigned int n = mesh_->GetNumVertices();
 	for (unsigned int i=1; i<n; i++) {
 		position = transformedAffine(transform_,*(Point3*)vertices);
         if(position.x < min.x)
