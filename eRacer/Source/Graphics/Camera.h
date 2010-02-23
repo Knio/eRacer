@@ -35,7 +35,7 @@ public:
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 * 			- default: (0,1,0)
 	 */
-	Camera(const Point3& position = -Z, const Point3& lookAt = ORIGIN, const Vector3& approxUp=Y);
+	Camera(const Point3& position = -Z, const Point3& lookAt = ORIGIN, const Vector3& approxUp=Y, bool perspective = true);
 
 	/**
 	 * @brief Destructor stub.
@@ -118,10 +118,10 @@ public:
 	void SetFar(float far);
 
 	/**
-	 * @brief set the aspect ratio (height/width)
+	 * @brief set the aspect ratio (width/height)
 	 *
 	 * @param aspectRatio
-	 * 			the ratio between the height and the width of the view frustum - must
+	 * 			the ratio between the width and the height of the view frustum - must
 	 * 			be positive
 	 */
 	void SetAspectRatio(float aspectRatio);
@@ -129,11 +129,29 @@ public:
 	/**
 	 * @brief set the field of view in y direction in radiants
 	 *
+	 * This method may only be called if using perspective projection!
+	 * The field of view in x direction is deducted using the aspect ratio
+	 *
 	 * @param fovY
 	 * 			the field of view in y direction in radiants - must be positive and
 	 * 			smaller than PI (180 degrees)
+	 * @see SetWidth
+	 * @see SetAspectRatio
 	 */
 	void SetFovY(float fovY);
+
+	/**
+	 * @brief set the height of the viewing volume
+	 *
+	 * This method may only be called if using orthographic projection!
+	 * The width is deducted using the aspect ratio
+	 *
+	 * @param height
+	 * 			the height of the viewing volume - must be positive
+	 * @see SetFovY
+	 * @see SetAspectRatio
+	 */
+	void SetHeight(float height);
 
 	/**
 	 * @brief get the view matrix
@@ -192,54 +210,18 @@ private:
 	float far_;
 	float aspectRatio_;
 	float fovY_;
+	float height_;
+
+	bool perspective_;
 
 	Plane planes_[6];
 };
 
-inline void Camera::SetFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp){
-	position_ = position;
-	lookAt_ = lookAt;
-	SetUp(approxUp);
-
-	UpdateView();
-}
-
-
-inline void Camera::SetPosition(const Point3& position){
-	position_ = position;
-
-	//adjust up so that it is perpendicular to view direction
-	UpdateUp();
-
-	UpdateView();
-}
 
 inline const Point3& Camera::GetPosition() const{
 	return position_;
 }
 
-inline void Camera::SetLookAt(const Point3& lookAt){
-	lookAt_ = lookAt;
-
-	//adjust up so that it is perpendicular to view direction
-	UpdateUp();
-
-	UpdateView();
-}
-
-
-inline void Camera::SetUp(const Vector3& approxUp)
-{ 
-	approxUp_ = approxUp; 
-	UpdateUp(); 
-}
-inline void Camera::UpdateUp(){
-	up_ = approxUp_;
-	Vector3 viewDirection = lookAt_ - position_;
-	normalize(viewDirection);
-	normalize(up_);
-	up_ = cross(cross(viewDirection, up_),viewDirection);
-}
 
 inline void Camera::UpdateView(){
 	D3DXMatrixLookAtLH(&viewMatrix_,
@@ -267,28 +249,6 @@ inline void Camera::SetFar(float fa){
 }
 
 
-inline void Camera::SetAspectRatio(float aspectRatio){
-	assert(aspectRatio>0);
-	aspectRatio_ = aspectRatio;
-	UpdateProjection();
-}
-
-inline void Camera::SetFovY(float fovY){
-	assert(fovY>0);
-	assert(fovY<PI);
-	fovY_ = fovY;
-	UpdateProjection();
-	
-}
-
-
-inline void Camera::UpdateProjection(){
-	   D3DXMatrixPerspectiveFovLH(&projectionMatrix_,
-	                              fovY_,
-	                              aspectRatio_,
-	                              near_,
-	                              far_ );
-}
 
 inline const Matrix& Camera::GetViewMatrix() const{
 	return viewMatrix_;

@@ -269,3 +269,9 @@ Matrix Inverse(const Matrix& m)
 	return r;
 }
 
+Matrix& Scale(Matrix& matrix, float x, float y, float z){
+	Matrix scaling;
+	D3DXMatrixScaling(&scaling, x,y,z);
+	return matrix*=scaling;
+}
+

@@ -127,6 +127,36 @@ int GraphicsLayer::Init( HWND hWnd )
         NULL
     )));
     
+    //set a default material so that even stuff without material or shaders renders
+    D3DMATERIAL9 material;
+
+    // Set the RGBA for diffuse reflection.
+    material.Diffuse.r = 1.0f;
+    material.Diffuse.g = 1.0f;
+    material.Diffuse.b = 1.0f;
+    material.Diffuse.a = 1.0f;
+    
+    // Set the RGBA for ambient reflection.
+    material.Ambient.r = 1.0f;
+    material.Ambient.g = 1.0f;
+    material.Ambient.b = 1.0f;
+    material.Ambient.a = 1.0f;
+    
+    // Set the color and sharpness of specular highlights.
+    material.Specular.r = 1.0f;
+    material.Specular.g = 1.0f;
+    material.Specular.b = 1.0f;
+    material.Specular.a = 1.0f;
+    material.Power = 50.0f;
+    
+    // Set the RGBA for emissive color.
+    material.Emissive.r = 0.0f;
+    material.Emissive.g = 0.0f;
+    material.Emissive.b = 0.0f;
+    material.Emissive.a = 0.0f;
+
+    m_pd3dDevice->SetMaterial(&material);
+    
     return S_OK;
 }
 

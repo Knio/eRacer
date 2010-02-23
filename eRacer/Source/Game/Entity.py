@@ -46,6 +46,10 @@ class Entity(object):
   def rotate(self, yaw, pitch, roll):
     eRacer.Rotate(self.__transform,yaw, pitch, roll)
     self.transform_changed()
+    
+  def scale(self, x,y,z):
+    eRacer.Scale(self.__transform,x,y,z)
+    self.transform_changed()
  
     
   transform = property(get_transform, set_transform)

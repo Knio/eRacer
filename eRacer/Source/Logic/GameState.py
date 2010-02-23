@@ -18,6 +18,8 @@ from Starfield  import Starfield
 # View stuff
 from Graphics.View    import View
 from Graphics.SkyBox  import SkyBox
+
+from Graphics.Sprite  import Sprite
 # from CoordinateCross  import CoordinateCross
 
 # TODO
@@ -95,6 +97,8 @@ class GameState(State):
     cam = game().logic.Add(CarCamera(self.player))
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
     
+    
+    
     # without this, the skyboxes are garbage collected because the 
     # reference in view does not count because view is a c++ object (not python)
     self.skybox = SkyBox()
@@ -110,9 +114,10 @@ class GameState(State):
       for s in self.starfields:
         view.AddRenderable(s)      
       view.AddRenderable(self.skybox)
-
+      
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
+    
     
     # game().logic.Add(Plane(scene))
     # self.coordinatecross = CoordinateCross(self.view)

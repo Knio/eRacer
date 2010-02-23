@@ -1,9 +1,14 @@
 from Core.Globals   import *
 from Game.State     import State
   
-from Camera         import CirclingCamera
+from Camera         import Camera, CirclingCamera, OrthographicCamera
+from Graphics.Sprite  import Sprite
 from MenuMapping    import MainMenuMapping, PauseMenuMapping
 from Graphics.View  import View
+
+
+from Box import Box
+
 
 class MenuState(State):
   MENU = []
@@ -11,11 +16,20 @@ class MenuState(State):
     State.__init__(self)
     self.selected = 0
     
+    #width and height should not be hardcoded!
+    
+    camera = OrthographicCamera(800,600)
+    game().logic.Add(camera)
+
+    self.view = View(camera)
+        
+    
   def Tick(self, time):
     State.Tick(self, time)
-    game().graphics.views.append(View())
+    game().graphics.views.append(self.view)
     
-    y = 200
+    
+    y = 240
     for i,m in enumerate(self.MENU):
       name = m[0]
       game().graphics.graphics.WriteString(
@@ -46,17 +60,17 @@ class MainMenuState(MenuState):
   
   def __init__(self):
     MenuState.__init__(self)
+
+    logo = Sprite(self.view)
+    game().logic.Add(logo)
+
+    logo.scale(600,235,1)
+    logo.set_translation(Point3(400,450,0))
     
   def Menu_New_Game(self):
     game().PushState(GameState())
         
   def Tick(self, time):
-    game().graphics.graphics.WriteString(
-      "eRacerX", 
-      "Verdana", 128, Point3(180,60,0)
-    )
-    
-    
     p = Point3(500,350,0)
     for i in ['Don Ha', 'John Stuart', 'Michael Blackadar', 'Tom Flanagan', 'Ole Rehmsen']:
       game().graphics.graphics.WriteString(
