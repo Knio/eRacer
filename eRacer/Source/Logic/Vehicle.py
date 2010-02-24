@@ -43,6 +43,7 @@ class Vehicle(Entity):
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
+    self.transform = Matrix()
     
     self.graphics = scene.CreateMovingMeshNode("vehicle")
     self.graphics.thisown = 0
@@ -217,13 +218,15 @@ class Vehicle(Entity):
       self.crashtime = 0
       print "Crash! resetting car"
       self.resetCar()
+
     self.transform = tx
+    self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * tx)
 
-  def set_transform(self, transform):
-    Entity.set_transform(self, transform)
-    self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * transform)
+  # def set_transform(self, transform):
+  #   Entity.set_transform(self, transform)
+  #   self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * transform)
 
-  transform = property(Entity.get_transform, set_transform)   
+  # transform = property(Entity.get_transform, set_transform)   
   
   def PrintDebug(self):
     if not CONSTS.CAR_DEBUG: return
