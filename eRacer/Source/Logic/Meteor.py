@@ -7,6 +7,9 @@ class Meteor(Entity):
   BASE_FORCE = 5000.
   VARIABLE_FORCE = 1000.
   
+  MIN_SIZE = 0.1
+  MAX_SIZE = 100.
+  
   # between 0 and 1 
   SCATTERING = 0.3
   
@@ -46,8 +49,11 @@ class Meteor(Entity):
     force.z *= random.uniform(1.0-self.SCATTERING, 1.0+self.SCATTERING)
     
     forcePos = Point3(r(),r(),r())*self.TUMBLING
-    
-    self.physics.SetPosition(pos)
+    scale = random.uniform(self.MIN_SIZE, self.MAX_SIZE)
+    #scaling does not work because physics ignores it.
+    self.transform = eRacer.CreateMatrix(pos,scale)
+    eRacer.debug(self.transform)
+    self.physics.SetTransform(self.transform)
     self.physics.AddWorldForceAtLocalPos(force, forcePos)    
     
     
