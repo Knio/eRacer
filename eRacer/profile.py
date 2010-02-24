@@ -15,8 +15,12 @@ import run
 import cProfile as profile
 import pstats
 
+
+
 profile.run('run.run()', 'profile.data')
 
 stats = pstats.Stats('profile.data')
 stats.sort_stats('cumulative') 
-stats.print_stats()
+stats.print_stats(0.1)
+stats.print_callees(0.1)
+

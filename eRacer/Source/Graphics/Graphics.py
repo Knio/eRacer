@@ -34,7 +34,8 @@ class Graphics(Module):
     self.window.Poll()
     
     fps = time.Fps()
-    self.window.SetTitle("eRacerX - %.2f FPS" % fps)
+    if not game().ticks % 20: 
+      self.window.SetTitle("eRacerX - %.2f FPS" % fps) # somehow this is really slow! go windows
         
     if 1.0/fps > CONSTS.PHYS_MAX_TIMESTEP:
       # we are lagging

@@ -1,9 +1,9 @@
 import eRacer
-
+BUFFERLEN = 20
 class Time(eRacer.Time):
   def __init__(self):
     eRacer.Time.__init__(self)
-    self.buffer = [0]*10
+    self.buffer = [0]*BUFFERLEN
     self.pos = 0
     
   def Tick(self, speed):
@@ -15,7 +15,7 @@ class Time(eRacer.Time):
   def Fps(self):
     return self.RESOLUTION \
      * float(len(self.buffer)-1) \
-     / (self.buffer[(self.pos-1) % 10] - self.buffer[self.pos])
+     / (self.buffer[(self.pos-1) % BUFFERLEN] - self.buffer[self.pos])
      
   def get_seconds(self):
     return float(self.game_total) / self.RESOLUTION

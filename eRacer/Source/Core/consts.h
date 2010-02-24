@@ -22,6 +22,7 @@ struct Constants
 	int		CAR_DEBUG;
 	
 	float	CAR_MASS;
+	float CAR_GRAVITY;
 	
 	float	SPRING_MAGIC;
 	float	DAMPING_MAGIC;

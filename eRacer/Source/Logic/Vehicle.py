@@ -16,25 +16,31 @@ class Vehicle(Entity):
   ]
   DISPLACEMENT = 0.30  # from wheel rest position  
   INITIAL_POS = Vector3(80, 2, 0)
-
-  def __init__(self, scene):
-    Entity.__init__(self)
-    
+  
+  def ReloadedConstsEvent(self):
     self.MASS = CONSTS.CAR_MASS
-    self.SPRING_MAGIC = CONSTS.SPRING_MAGIC
-    self.DAMPING_MAGIC = CONSTS.DAMPING_MAGIC
-    self.MASS_CENTRE = Point3(CONSTS.MASS_CENTRE_X, CONSTS.MASS_CENTRE_Y, CONSTS.MASS_CENTRE_Z)
-    self.REV_ALPHA = CONSTS.REV_ALPHA
-    self.TURN_ALPHA = CONSTS.TURN_ALPHA
-    self.DRAG_COEFF = CONSTS.DRAG_COEFF
+    # can't set mass or centre of mass on the fly due to Physx
+    # self.physics.SetMass(self.MASS) #setting the mass breaks the suspension for some reason
+    # maybe physx is still running
+    self.SPRING_MAGIC     = CONSTS.SPRING_MAGIC
+    self.DAMPING_MAGIC    = CONSTS.DAMPING_MAGIC
+    self.MASS_CENTRE      = Point3(CONSTS.MASS_CENTRE_X, CONSTS.MASS_CENTRE_Y, CONSTS.MASS_CENTRE_Z)
+    self.REV_ALPHA        = CONSTS.REV_ALPHA
+    self.TURN_ALPHA       = CONSTS.TURN_ALPHA
+    self.DRAG_COEFF       = CONSTS.DRAG_COEFF
     self.MAX_ENG_FORCE    = CONSTS.MAX_ENG_FORCE       
     self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
     self.FRICTION_STATIC  = CONSTS.FRICTION_STATIC
     self.FRICTION_MAX     = CONSTS.FRICTION_MAX
     self.FRICTION_SLIDING = CONSTS.FRICTION_SLIDING
-    self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
-    self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
+    self.SPRING_K         = (self.MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
+    self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
+
+  def __init__(self, scene):
+    Entity.__init__(self)
     
+    self.ReloadedConstsEvent()
+        
     # self.physics = eRacer.TriMesh()    
     self.physics = eRacer.Box(
       True,       # dynamic
@@ -43,6 +49,7 @@ class Vehicle(Entity):
       Matrix(),   # orientation
       self.SIZE   # bounds
     )
+    self.transform = Matrix()
     
     self.graphics = scene.CreateMovingMeshNode("vehicle")
     self.graphics.thisown = 0
@@ -105,12 +112,21 @@ class Vehicle(Entity):
     # suspension axis (pointing down from car)
     axis  = mul0(tx, -Y)
     
+    # drag
     bodyVel = phys.GetVelocity();
     dragForceMag = self.DRAG_COEFF * length(bodyVel) ** 2
     dragDir = normalize(bodyVel) * -1.0
     dragForce = dragDir * dragForceMag
     phys.AddWorldForceAtLocalPos(dragForce, self.MASS_CENTRE)
     #print dragForce.x, dragForce.y, dragForce.z
+    
+    # gravity
+    worldroadnormal = Vector3()
+    center = Vector3(0, -1.1, 0)
+    if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
+      gravity = worldroadnormal * (-CONSTS.CAR_GRAVITY * self.MASS)
+      phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
+    
     
     crashed = True
     for i,localpos in enumerate(self.WHEELS):
@@ -217,13 +233,15 @@ class Vehicle(Entity):
       self.crashtime = 0
       print "Crash! resetting car"
       self.resetCar()
+
     self.transform = tx
+    self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * tx)
 
-  def set_transform(self, transform):
-    Entity.set_transform(self, transform)
-    self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * transform)
+  # def set_transform(self, transform):
+  #   Entity.set_transform(self, transform)
+  #   self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * transform)
 
-  transform = property(Entity.get_transform, set_transform)   
+  # transform = property(Entity.get_transform, set_transform)   
   
   def PrintDebug(self):
     if not CONSTS.CAR_DEBUG: return
@@ -278,26 +296,6 @@ class Vehicle(Entity):
     #speedDelta = (forceMag+brakeMag) * timeStep
     #return speedDelta
     
-    
-  def ReloadedConstsEvent(self):
-    #can't set mass or centre of mass on the fly due to Physx
-    #self.MASS = CONSTS.CAR_MASS
-    #self.physics.SetMass(self.MASS) #setting the mass breaks the suspension for some reason
-    #maybe physx is still running
-    self.SPRING_MAGIC = CONSTS.SPRING_MAGIC
-    self.DAMPING_MAGIC = CONSTS.DAMPING_MAGIC
-    self.SPRING_K = (self.MASS * 9.81) / (len(self.WHEELS) * self.DISPLACEMENT)
-    self.DAMPING       = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
-
-    #self.MASS_CENTRE = Point3(CONSTS.MASS_CENTRE_X, CONSTS.MASS_CENTRE_Y, CONSTS.MASS_CENTRE_Z)
-    self.REV_ALPHA = CONSTS.REV_ALPHA
-    self.TURN_ALPHA = CONSTS.TURN_ALPHA
-    self.DRAG_COEFF = CONSTS.DRAG_COEFF
-    self.MAX_ENG_FORCE    = CONSTS.MAX_ENG_FORCE       
-    self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
-    self.FRICTION_STATIC  = CONSTS.FRICTION_STATIC
-    self.FRICTION_MAX     = CONSTS.FRICTION_MAX
-    self.FRICTION_SLIDING = CONSTS.FRICTION_SLIDING
     
   def resetCar(self):
       phys  = self.physics

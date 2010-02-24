@@ -15,7 +15,7 @@ class View(object):
     
   def Draw(self):
     gfx = dev = game().graphics.graphics
-    gfx.SetCamera(self.camera.camera)
+    gfx.SetCamera(self.camera)
     d3d = gfx.GetDevice()
     
     for i in self.renderables:

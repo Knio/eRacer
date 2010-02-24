@@ -26,12 +26,13 @@ Camera::Camera(const Point3& position, const Point3& lookAt, const Vector3& appr
 Camera::~Camera() {
 }
 
-void Camera::SetFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp){
+void Camera::SetFrame(const Point3& position, const Point3& lookAt, const Vector3& approxUp, bool perspective){
 	position_ = position;
 	lookAt_ = lookAt;
+  perspective_ = perspective;
 	SetUp(approxUp);
-
 	UpdateView();
+	UpdateProjection();
 }
 
 
