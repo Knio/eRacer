@@ -1,4 +1,5 @@
 import threading
+import random
 
 from Core.Globals   import *
 from Game.State     import State
@@ -14,6 +15,7 @@ from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
 from Starfield  import Starfield
+from Meteor     import Meteor
 
 # View stuff
 from Graphics.View    import View
@@ -138,7 +140,8 @@ class GameState(State):
     for i in range(-191, -230, -5):
         game().logic.Add(Box(scene, Vector3(-1850, 32, i)))
 
-
+    self.lastMeteorTime =0 
+    self.meteors = []
     
     game().time.Zero()
     self.loaded = True
@@ -147,15 +150,41 @@ class GameState(State):
     return self.views[self.viewIndex]
     
   view = property(get_view)
+  
+  METEOR_INTERVAL = 1000000
     
   def Tick(self, time):
     State.Tick(self, time)
     game().graphics.views.append(self.view)
     
+    if(time.game_total - self.lastMeteorTime>self.METEOR_INTERVAL):
+      self.SpawnMeteor()
+      self.lastMeteorTime = time.game_total
+    
     # if time.seconds > self.boxcount:
     #   self.boxcount += min(self.boxcount+1, 20)
     #   game().logic.Add(Box(self.scene))
+  
+  METEOR_DISTANCE = 0.
+  
+  def SpawnMeteor(self):
+    r = random.random
+    # the meteor is spawned in a random location on a sphere
+    #v = 
+    #printvec(v)
+    direction = normalize(Vector3(r(),r(),r()))
     
+    printvec(direction)
+    pos = direction * self.METEOR_DISTANCE
+    printvec(direction)
+    force = direction * r() * -5000.
+    printvec(direction)
+    #printvec(force)
+    
+    forcePos = Point3(r(),r(),r())
+    m = Meteor(self.scene, "leather-box.x", pos, force, forcePos)
+    game().logic.Add(m)
+    self.meteors.append(m)
       
   def CameraChangedEvent(self):
     self.viewIndex = (self.viewIndex+1) % len(self.views)

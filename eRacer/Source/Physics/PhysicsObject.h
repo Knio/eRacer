@@ -121,7 +121,7 @@ public:
 		return NxVec3_Vector3(Actor->getLocalPointVelocity(Vector3_NxVec3(pos)));
 	}
 	
-	/** adds a WORLD force at a LOCAL position */
+	/** adds a WORLD force at a WORLD position */
 	void AddWorldForceAtWorldPos(const Vector3 &force, const Point3 &pos)
 	{
 		return Actor->addForceAtPos(Vector3_NxVec3(force), Vector3_NxVec3(pos));

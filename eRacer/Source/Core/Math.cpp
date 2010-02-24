@@ -53,7 +53,8 @@ float dot(const Vector3 &A, const Vector3 &B)
 
 Vector3& normalize(Vector3& A){
 	D3DXVec3Normalize(&A, &A);
-	return A;
+	//cout << "normalized: " << A << endl;
+	return A; ///= length(A);
 }
 
 Vector3 project(const Vector3 &a, const Vector3 &b)

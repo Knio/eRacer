@@ -1,24 +1,23 @@
 from Core.Globals import *
 
 class Meteor(Entity):
-  def __init__(self, scene, position, force):
+  def __init__(self, scene, model, position, force, forcePosition):
     Entity.__init__(self)
-    self.position = position
-    self.force = force
-    self.physics = eRacer.Box(True, 4000, position)
+    #self.position = position
+    #self.force = force
+    self.physics = eRacer.Box(True, 4, position)
     self.graphics = scene.CreateMovingMeshNode("Meteor")
     self.graphics.thisown = 0
-    self.graphics.SetTransform(self.transform)
-        
+    # self.graphics.SetTransform(self.transform)
         
         
     def load(r):
       if r:
         print 'Failed to load mesh!!'
         return
-      #self.graphics.initialized = True
+      self.physics.AddWorldForceAtLocalPos(force, forcePosition)    
       
-    game().io.LoadMeshAsync(load, self.graphics, "leather-box.x")   
+    game().io.LoadMeshAsync(load, self.graphics, model)   
     
   def Tick(self, time):
     Entity.Tick(self, time)

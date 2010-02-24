@@ -40,7 +40,7 @@ class Graphics(Module):
       # we are lagging
       # alternately skip this frame so that physx gets more sim time
       if game().ticks % 2: 
-        print 'skipping rendering'
+        #print 'skipping rendering'
         self.views = []
         return
     
