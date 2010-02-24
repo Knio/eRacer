@@ -19,8 +19,9 @@ MovingMeshNode::~MovingMeshNode(){
 
 void MovingMeshNode::SetTransform(const  Matrix& transform){
 	transform_ = transform;
-	if(NULL != mesh_)
-		UpdateBounds();
+  // This is not used
+	// if(NULL != mesh_)
+	// 	UpdateBounds();
 }
 
 

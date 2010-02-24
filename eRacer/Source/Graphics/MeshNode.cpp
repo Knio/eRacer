@@ -58,6 +58,10 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 
 
 void MeshNode::UpdateBounds(){
+	
+	// TODO: This is *way* too expensive. (Currently 26% CPU usage) Should just be computed once, and then the AABB be transformed
+	return;
+	
 	assert(NULL != mesh_);
 	
 	unsigned int bytesPerVertex = mesh_->GetNumBytesPerVertex();
