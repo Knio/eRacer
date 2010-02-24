@@ -1,33 +1,33 @@
 from Core.Globals import *
 
-class Camera(Entity):
+class Camera(Entity, eRacer.Camera):
   def __init__(self):
     Entity.__init__(self)
-    self.camera = eRacer.Camera()
+    eRacer.Camera.__init__(self)
     
-    self.camera.SetNear(2)
+    self.SetNear(2)
     #very high for now, can be reduced once we have some fogging
-    self.camera.SetFar(4000) 
-    self.camera.SetFovY(math.pi/4.0)
-    self.camera.SetAspectRatio(8./6.)
+    self.SetFar(4000) 
+    self.SetFovY(math.pi/4.0)
+    self.SetAspectRatio(8./6.)
 
   def Tick(self, time):
     Entity.Tick(self, time)
 
 class OrthographicCamera(Camera):
-    def __init__(self, width, height):
-        position = Point3(width/2., height/2., -2.)
-        lookAt = Point3(width/2., height/2., 0.)
-        up = Point3(0,1,0)
-        self.camera = eRacer.Camera(position,lookAt, up, False)
-        self.camera.SetHeight(height)
-        self.camera.SetAspectRatio(float(width)/height)
-        self.camera.SetNear(1)
-        self.camera.SetFar(3)
-        
-    def Tick(self, time):
-        Camera.Tick(self, time)
-
+  def __init__(self, width, height):
+    Entity.__init__(self)
+    eRacer.Camera.__init__(self)
+    position = Point3(width/2., height/2., -2.)
+    lookAt   = Point3(width/2., height/2.,  0.)
+    self.SetFrame(position, lookAt, Y, False)
+    self.SetHeight(height)
+    self.SetAspectRatio(float(width)/height)
+    self.SetNear(1)
+    self.SetFar(3)
+    
+  def Tick(self, time):
+    Camera.Tick(self, time)
 
 class CirclingCamera(Camera):
   def __init__(self):
@@ -45,7 +45,7 @@ class CirclingCamera(Camera):
     )
     pos *= 20
     
-    self.camera.SetPosition(pos)
+    self.SetPosition(pos)
 
 
 class ChasingCamera(Camera):
@@ -81,13 +81,13 @@ class ChasingCamera(Camera):
     pos = self.position
     
     
-    self.camera.SetPosition(pos)    
-    self.camera.SetFovY(self.fov)
+    self.SetPosition(pos)    
+    self.SetFovY(self.fov)
     
     targetPosition  = eRacer.ExtractPosition(self.target.transform)
     targetPosition.y += 5
     
-    self.camera.SetLookAt(targetPosition)
+    self.SetLookAt(targetPosition)
     
 class CarCamera(Camera):
   def __init__(self, target): 
@@ -103,7 +103,7 @@ class CarCamera(Camera):
     lookworld = mul1(self.target.transform, Point3(0,1,2))
     upworld   = mul0(self.target.transform, Y)
     
-    self.camera.SetFrame(posworld, lookworld, upworld)
+    self.SetFrame(posworld, lookworld, upworld)
       
 
 class FirstPersonCamera(Camera):
@@ -147,5 +147,5 @@ class FirstPersonCamera(Camera):
     # printvec(self.position)
     # printvec(lookat)
     
-    self.camera.SetFrame(self.position, lookat)
+    self.SetFrame(self.position, lookat)
     

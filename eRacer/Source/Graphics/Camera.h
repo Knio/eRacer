@@ -56,7 +56,7 @@ public:
 	 * 			a vector that approximates the up direction. The actual up vector
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 */
-	void SetFrame(const Point3& position=ORIGIN, const Point3& lookAt=Z, const Vector3& approxUp=Y);
+	void SetFrame(const Point3& position=ORIGIN, const Point3& lookAt=Z, const Vector3& approxUp=Y, bool perspective = TRUE);
 
 	/**
 	 * @brief set position
