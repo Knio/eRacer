@@ -16,6 +16,8 @@ class Meteor(Entity):
   def __init__(self, scene, model):
     Entity.__init__(self)
 
+    self.transform = Matrix()
+
     self.physics = eRacer.Box(True, 4)
     self.graphics = scene.CreateMovingMeshNode("Meteor")
     self.graphics.thisown = 0
@@ -52,8 +54,8 @@ class Meteor(Entity):
   def Tick(self, time):
     Entity.Tick(self, time)
     self.transform = self.physics.GetTransform()
-    if(length(self.get_translation())>self.SPAWNING_DISTANCE):
+    self.graphics.SetTransform(self.transform)  
+    
+    if(length(eRacer.ExtractPosition(self.transform))>self.SPAWNING_DISTANCE):
       self.respawn()
     
-  def transform_changed(self):
-    self.graphics.SetTransform(self.transform)  
