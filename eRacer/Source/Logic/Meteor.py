@@ -3,7 +3,7 @@ import random
 from Core.Globals import *
 
 class MeteorManager(Entity):
-  SPAWNING_DISTANCE = 500.
+  SPAWNING_DISTANCE = 1500.
 
   MIN_FORCE = 10000.
   MAX_FORCE = 20000.
@@ -11,7 +11,7 @@ class MeteorManager(Entity):
   # between 0 and 1 
   SCATTERING = 0.3
   
-  MIN_SIZE = 1.
+  MIN_SIZE = 0.2
   MAX_SIZE = 10.
 
   # between 0 and the radius of the meteor
@@ -69,7 +69,9 @@ class MeteorManager(Entity):
     Entity.Tick(self, time)
     
     for meteor in self.meteors:
-      if(length(eRacer.ExtractPosition(meteor.transform))>self.SPAWNING_DISTANCE):
+      pos = eRacer.ExtractPosition(meteor.transform)
+      if(length(pos)>self.SPAWNING_DISTANCE):
+        print "respawning at position ",pos," with distance ",length(pos)," from origin." 
         self.respawnRandom(meteor) 
 
 class Meteor(Entity):
@@ -106,7 +108,6 @@ class Meteor(Entity):
   def Tick(self, time):
     Entity.Tick(self, time)
     self.transform = self.physics.GetTransform()
-    
     
     self.graphics.SetTransform(eRacer.Scaled(self.transform, self.scale,self.scale,self.scale))  
         

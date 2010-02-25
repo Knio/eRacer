@@ -143,7 +143,7 @@ class GameState(State):
     self.meteorManager = MeteorManager(self.scene)
     game().logic.Add(self.meteorManager)
         
-    for i in range(1,30):
+    for i in range(1,60):
       m = self.meteorManager.spawnRandom()
       game().logic.Add(m)
     
