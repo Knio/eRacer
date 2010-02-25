@@ -43,9 +43,12 @@ protected:
 	IDirect3DSurface9* screen;
 	IDirect3DSurface9* msaasurf;
 	IDirect3DSurface9* depthsurf;
+	std::map<std::string, ID3DXEffect*> effects;
 
 public:
 	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
+	
+	ID3DXEffect* GraphicsLayer::GetEffect(char* file);
 	
 	void 		SetCamera(Camera& camera);
 	Camera* GetCamera() { return camera; }

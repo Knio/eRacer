@@ -26,7 +26,7 @@ class Starfield : public Renderable
 	Star* stars;
 	LPDIRECT3DVERTEXBUFFER9 vb;
 	
-	void _Update();
+	ID3DXEffect* effect;
 	
 public:
 	Starfield(int n, float s);

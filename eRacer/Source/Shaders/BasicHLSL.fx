@@ -8,13 +8,13 @@
 //--------------------------------------------------------------------------------------
 // Global variables, sent once per renderable
 //--------------------------------------------------------------------------------------
-float4 g_MaterialAmbientColor;      // Material's ambient color
-float4 g_MaterialDiffuseColor;      // Material's diffuse color
-texture g_MeshTexture;              // Color texture for mesh
+const float4 g_MaterialAmbientColor;      // Material's ambient color
+const float4 g_MaterialDiffuseColor;      // Material's diffuse color
+const texture g_MeshTexture;              // Color texture for mesh
 
-float4x4 g_ProjectionMatrix;
-float4x4 g_ViewMatrix;
-float4x4 g_WorldMatrix;
+const float4x4 g_ProjectionMatrix;
+const float4x4 g_ViewMatrix;
+const float4x4 g_WorldMatrix;
 
 //--------------------------------------------------------------------------------------
 // Texture samplers
@@ -122,7 +122,6 @@ struct PS_OUTPUT
     float4 RGBColor : COLOR0;  // Pixel color    
 };
 
-
 //--------------------------------------------------------------------------------------
 // This shader outputs the pixel's color by modulating the texture's
 //       color with diffuse material color
@@ -137,9 +136,10 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In,
         Output.RGBColor = tex2D(MeshTextureSampler, In.TextureUV) * In.Diffuse;
     else
         Output.RGBColor = In.Diffuse;
-
+    
     return Output;
 }
+
 
 
 //--------------------------------------------------------------------------------------

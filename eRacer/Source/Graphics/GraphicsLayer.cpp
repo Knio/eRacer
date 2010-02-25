@@ -39,6 +39,46 @@ void GraphicsLayer::SetCamera(Camera& cam)
 	hr = m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
 }
 
+ID3DXEffect* GraphicsLayer::GetEffect(char* file)
+{
+    std::string path = "Source/Shaders/";
+    path += file;
+    if (!effects.count(path))
+    {
+        LPD3DXBUFFER buffer;
+        assert(SUCCEEDED(D3DXCreateBuffer(
+            10240,
+            &buffer
+        )));
+        
+        DWORD flags = D3DXFX_NOT_CLONEABLE;
+        #ifdef _DEBUG
+            flags |= D3DXSHADER_DEBUG;
+        #endif
+        
+        ID3DXEffect* effect;
+        if (!SUCCEEDED(D3DXCreateEffectFromFile(
+            m_pd3dDevice, 
+            path.c_str(), 
+            NULL, NULL, 
+            flags,
+            NULL,
+            &effect, 
+            &buffer
+        )))
+        {
+            char* errors = (char*)buffer->GetBufferPointer();
+            printf(
+                "Error loading effect %s:\n%s", 
+                path.c_str(), errors
+            );
+            throw runtime_error(errors);
+        }
+        effects[path] = effect;
+    }    
+    return effects[path];
+}
+
 int GraphicsLayer::Init( HWND hWnd ) 
 {
     // Create the D3D object.
@@ -81,17 +121,8 @@ int GraphicsLayer::Init( HWND hWnd )
     assert(SUCCEEDED(m_pd3dDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE)));
     
 	//Shaders
-	DWORD dwShaderFlags = D3DXFX_NOT_CLONEABLE | D3DXSHADER_DEBUG;
-	// dwShaderFlags |= D3DXSHADER_FORCE_VS_SOFTWARE_NOOPT;
-    // dwShaderFlags |= D3DXSHADER_FORCE_PS_SOFTWARE_NOOPT; //Force software shader since not everything is textured
 	
-	assert(SUCCEEDED(D3DXCreateEffectFromFile(
-		m_pd3dDevice, 
-		"Source/Shaders/BasicHLSL.fx", 
-		NULL, NULL, 
-		dwShaderFlags, NULL, 
-		&m_pEffect, NULL
-	)));
+    m_pEffect = GetEffect("BasicHLSL.fx");
 
     // Set effect variables as needed
     D3DXCOLOR colorMtrlDiffuse( 1.0f, 1.0f, 1.0f, 1.0f );
