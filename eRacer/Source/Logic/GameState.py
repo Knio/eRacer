@@ -15,7 +15,7 @@ from Ship       import Ship
 from Vehicle    import Vehicle
 from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
 from Starfield  import Starfield
-from Meteor     import Meteor
+from Meteor     import Meteor, MeteorManager
 
 # View stuff
 from Graphics.View    import View
@@ -140,9 +140,11 @@ class GameState(State):
     for i in range(-191, -230, -5):
         game().logic.Add(Box(scene, Vector3(-1850, 32, i)))
         
+    self.meteorManager = MeteorManager(self.scene)
+    
         
     for i in range(1,30):
-      m = Meteor(self.scene, "leather-box.x")
+      m = self.meteorManager.spawnRandom()
       game().logic.Add(m)
     
     game().time.Zero()
