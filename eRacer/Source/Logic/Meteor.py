@@ -3,19 +3,19 @@ import random
 from Core.Globals import *
 
 class MeteorManager(Entity):
-  SPAWNING_DISTANCE = 200.
+  SPAWNING_DISTANCE = 500.
 
   MIN_FORCE = 10000.
-  MAX_FORCE = 50000.
+  MAX_FORCE = 20000.
 
   # between 0 and 1 
   SCATTERING = 0.3
   
-  MIN_SIZE = 0.1
-  MAX_SIZE = 100.
+  MIN_SIZE = 1.
+  MAX_SIZE = 10.
 
   # between 0 and the radius of the meteor
-  TUMBLING = 0.2
+  TUMBLING = 0.9
   
   MODEL = "leather-box.x"
 
@@ -27,14 +27,16 @@ class MeteorManager(Entity):
   
   
   def spawn(self, pos, scale, forceDir, forceMag, tumbling):
-    meteor = Meteor(self.scene, self.MODEL)
+    meteor = Meteor(self.scene, self.MODEL,scale)
     #needs improvement - probably better angular velocity
     forcePos = Point3(tumbling,tumbling,tumbling)
-    meteor.respawn(pos,scale, forceDir, forceMag, forcePos)
+    meteor.respawn(pos,forceDir, forceMag, forcePos)
     return meteor
     
   def spawnRandom(self):
-    meteor = Meteor(self.scene, "leather-box.x")
+    scale = random.uniform(self.MIN_SIZE, self.MAX_SIZE)
+
+    meteor = Meteor(self.scene, "leather-box.x",scale)
     self.meteors.append(meteor)
     self.respawnRandom(meteor)
     return meteor
@@ -49,8 +51,7 @@ class MeteorManager(Entity):
     direc = normalized(Vector3(u(-1.,1.),u(-1.,1.),u(-1.,1.)))
     
     pos = direc * self.SPAWNING_DISTANCE
-    mag = u(self.MIN_FORCE, self.MAX_FORCE)
-    print mag
+    mag = u(self.MIN_FORCE, self.MAX_FORCE)*meteor.scale
 
     direc.x *= -1.+u(-self.SCATTERING, self.SCATTERING)
     direc.y *= -1.+u(-self.SCATTERING, self.SCATTERING)
@@ -61,9 +62,8 @@ class MeteorManager(Entity):
     forcePos.x = u(-self.TUMBLING, self.TUMBLING)
     forcePos.x = u(-self.TUMBLING, self.TUMBLING)
     
-    scale = u(self.MIN_SIZE, self.MAX_SIZE)
     
-    meteor.respawn(pos,scale, normalized(direc), mag, forcePos)
+    meteor.respawn(pos,normalized(direc), mag, forcePos)
     
   def Tick(self, time):
     Entity.Tick(self, time)
@@ -73,12 +73,15 @@ class MeteorManager(Entity):
         self.respawnRandom(meteor) 
 
 class Meteor(Entity):
-  def __init__(self, scene, model):
+  def __init__(self, scene, model, scale=1):
     Entity.__init__(self)
 
-    self.transform = Matrix()
+    #hack: scale has to be stored separatly because physiscs will keep overriding it 
+    self.scale = scale
+    print self.scale
+    self.transform = eRacer.CreateMatrix()
 
-    self.physics = eRacer.Box(True, 4)
+    self.physics = eRacer.Box(True, 4, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
     self.graphics = scene.CreateMovingMeshNode("Meteor")
     self.graphics.thisown = 0
         
@@ -90,9 +93,9 @@ class Meteor(Entity):
       
     game().io.LoadMeshAsync(load, self.graphics, model)   
     
-  def respawn(self, pos, scale, forceDir, forceMag, forcePos):
+  def respawn(self, pos, forceDir, forceMag, forcePos):
     #scaling does not work because physics ignores it.
-    self.transform = eRacer.CreateMatrix(pos,scale)
+    self.transform = eRacer.CreateMatrix(pos)
     self.physics.SetTransform(self.transform)
     
     force = forceDir * forceMag
@@ -103,5 +106,7 @@ class Meteor(Entity):
   def Tick(self, time):
     Entity.Tick(self, time)
     self.transform = self.physics.GetTransform()
-    self.graphics.SetTransform(self.transform)  
+    
+    
+    self.graphics.SetTransform(eRacer.Scaled(self.transform, self.scale,self.scale,self.scale))  
         

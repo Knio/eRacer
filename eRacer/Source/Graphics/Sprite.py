@@ -17,7 +17,7 @@ class Sprite(eRacer.Sprite,Entity):
             
             
   def scale(self, x,y,z):
-    eRacer.Scale(self.transform,x,y,z)
+    self.transform = eRacer.Scaled(self.transform,x,y,z)
     self.transform_changed()   
 
   def transform_changed(self):

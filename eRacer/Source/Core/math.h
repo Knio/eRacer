@@ -236,6 +236,6 @@ Matrix& Rotate(Matrix& matrix, float yaw, float pitch, float roll);
 Matrix  Rotated(const Matrix& matrix, float yaw, float pitch, float roll);
 Matrix  Inverse(const Matrix& m);
 
-Matrix& Scale(Matrix& matrix, float x, float y, float z);
+Matrix Scaled(const Matrix& matrix, float x, float y, float z);
 
 #endif

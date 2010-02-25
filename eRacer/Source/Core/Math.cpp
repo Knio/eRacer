@@ -266,13 +266,14 @@ Matrix Rotated(const Matrix& matrix, float yaw, float pitch, float roll){
 Matrix Inverse(const Matrix& m)
 {
 	Matrix r;
-  D3DXMatrixInverse(&r, NULL, &m);
+	D3DXMatrixInverse(&r, NULL, &m);
 	return r;
 }
 
-Matrix& Scale(Matrix& matrix, float x, float y, float z){
+Matrix Scaled(const Matrix& matrix, float x, float y, float z){
+	Matrix result;
 	Matrix scaling;
 	D3DXMatrixScaling(&scaling, x,y,z);
-	return matrix*=scaling;
+	return result = scaling*matrix;
 }
 
