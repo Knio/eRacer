@@ -5,19 +5,20 @@ from Core.Globals import *
 class MeteorManager(Entity):
   SPAWNING_DISTANCE = 1500.
 
-  MIN_FORCE = 10000.
-  MAX_FORCE = 20000.
+  MIN_FORCE = 10000000.
+  MAX_FORCE = 80000000.
 
   # between 0 and 1 
   SCATTERING = 0.3
   
   MIN_SIZE = 0.2
   MAX_SIZE = 10.
+  
 
   # between 0 and the radius of the meteor
   TUMBLING = 0.9
   
-  MODEL = "leather-box.x"
+  MODELS = ["Meteor1.x", "Meteor2.x"]
 
 
   def __init__(self, scene):
@@ -30,7 +31,7 @@ class MeteorManager(Entity):
 
   
   def spawn(self, pos, scale, forceDir, forceMag, tumbling):
-    meteor = Meteor(self.scene, self.MODEL,scale)
+    meteor = Meteor(self.scene, self.MODELS[random.randrange(len(self.MODELS))],scale)
     #needs improvement - probably better angular velocity
     forcePos = Point3(tumbling,tumbling,tumbling)
     meteor.respawn(pos,forceDir, forceMag, forcePos)
@@ -39,7 +40,7 @@ class MeteorManager(Entity):
   def spawnRandom(self):
     scale = random.uniform(self.MIN_SIZE, self.MAX_SIZE)
 
-    meteor = Meteor(self.scene, "leather-box.x",scale)
+    meteor = Meteor(self.scene, self.MODELS[random.randrange(len(self.MODELS))], scale)
     self.meteors.append(meteor)
     self.respawnRandom(meteor)
     return meteor
@@ -54,7 +55,7 @@ class MeteorManager(Entity):
     direc = normalized(Vector3(u(-1.,1.),u(-1.,1.),u(-1.,1.)))
     
     pos = direc * self.SPAWNING_DISTANCE
-    mag = u(self.MIN_FORCE, self.MAX_FORCE)*meteor.scale
+    mag = u(self.MIN_FORCE, self.MAX_FORCE)
 
     direc.x *= -1.+u(-self.SCATTERING, self.SCATTERING)
     direc.y *= -1.+u(-self.SCATTERING, self.SCATTERING)
@@ -89,6 +90,9 @@ class MeteorManager(Entity):
 
 
 class Meteor(Entity):
+  MASS = 3000.
+
+
   def __init__(self, scene, model, scale=1):
     Entity.__init__(self)
 
@@ -97,7 +101,7 @@ class Meteor(Entity):
 
     self.transform = eRacer.CreateMatrix()
 
-    self.physics = eRacer.Box(True, 4, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
+    self.physics = eRacer.Box(True, self.MASS, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
     self.physics.SetGroup(eRacer.METEOR)
     self.graphics = scene.CreateMovingMeshNode("Meteor")
     self.graphics.thisown = 0
