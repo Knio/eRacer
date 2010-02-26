@@ -56,7 +56,7 @@ public:
 	  isLooping = true;
 	  position = Point3(0,0,0);
 	  velocity = Vector3(0,0,0);
-	  maxDist = 10000.0f;
+	  maxDist = 1000000000.0f;
 	  minDist = 50.0f;
    }
    ~SoundFx()
