@@ -5,9 +5,10 @@ class GameMapping(Mapping):
   def KeyPressedEvent(self, key):
     if   key == KEY.W:      return E.PlayerAccelerateEvent  (+1.0)
     elif key == KEY.S:      return E.PlayerAccelerateEvent  (-1.0)
-    elif key == KEY.LSHIFT:  return E.PlayerBrakeEvent       (True)
+    elif key == KEY.LSHIFT: return E.PlayerBrakeEvent       (True)
     elif key == KEY.A:      return E.PlayerTurnEvent        (-1.0)
     elif key == KEY.D:      return E.PlayerTurnEvent        (+1.0)
+    elif key == KEY.CAPITAL:return E.PlayerBoostEvent       (    )
     elif key == KEY.UP:     return E.CameraAccelerateEvent  (+1.0)
     elif key == KEY.DOWN:   return E.CameraAccelerateEvent  (-1.0)
     elif key == KEY.LEFT:   return E.CameraStrafeEvent      (-1.0)
@@ -17,11 +18,10 @@ class GameMapping(Mapping):
     elif key == KEY.R:      return E.ReloadConstsEvent      (    )
     elif key == KEY.SPACE:  return E.PlayJaguarSoundEvent   (    )
 
-
   def KeyReleasedEvent(self, key):
     if   key == KEY.W:     return E.PlayerAccelerateEvent ( 0)
     elif key == KEY.S:     return E.PlayerAccelerateEvent ( 0)
-    elif key == KEY.LSHIFT: return E.PlayerBrakeEvent     (False)
+    elif key == KEY.LSHIFT:return E.PlayerBrakeEvent      (False)
     elif key == KEY.A:     return E.PlayerTurnEvent       ( 0)
     elif key == KEY.D:     return E.PlayerTurnEvent       ( 0)
     elif key == KEY.UP:    return E.CameraAccelerateEvent (-1.0)

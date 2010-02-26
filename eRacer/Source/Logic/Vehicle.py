@@ -75,8 +75,11 @@ class Vehicle(Entity):
     self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
     self.crashtime = 0      # time since wheels were last in contact with the ground
     
+    self.boosting = 0.
+    
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
+    game().event.Register(self.PlayerBoostEvent)
     game().event.Register(self.PlayerBrakeEvent)
     game().event.Register(self.ReloadedConstsEvent)
     
@@ -89,6 +92,9 @@ class Vehicle(Entity):
 
   def PlayerTurnEvent(self, turn):
     self.steerPos = turn
+  
+  def PlayerBoostEvent(self):
+    self.boosting = 2.0
   
   def Tick(self, time):
     Entity.Tick(self, time)
@@ -234,6 +240,8 @@ class Vehicle(Entity):
       print "Crash! resetting car"
       self.resetCar()
 
+    self.boosting = max(0, self.boosting - delta)
+
     self.transform = tx
     self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * tx)
 
@@ -279,6 +287,8 @@ class Vehicle(Entity):
   def GetWheelSpeed(self, timeStep, normalForce):
     gravityMag = 9.81 #should change based on track segment
     forceMag = self.MAX_ENG_FORCE * self.acceleration
+    if self.boosting:
+      forceMag = self.MAX_ENG_FORCE * CONSTS.BOOST_MULT
     if self.physics.GetSpeed() < 1:
       brakeMag =0
     else:

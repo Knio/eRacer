@@ -40,6 +40,7 @@ struct Constants
 	float	FRICTION_STATIC;
 	float	FRICTION_MAX;
 	float	FRICTION_SLIDING;
+	float BOOST_MULT;
 	
 };
 
