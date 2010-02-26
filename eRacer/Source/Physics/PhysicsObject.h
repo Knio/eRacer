@@ -143,6 +143,9 @@ public:
 	}
 	float GetSpeed();
 
+
+	void SetGroup(CollisionGroups group) { Actor->setGroup(group); }
+
 protected:
 	/**
 	* @brief The PhysX object that is used to control behaviour.

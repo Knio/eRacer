@@ -23,10 +23,16 @@ using namespace std;
 
 namespace Physics{
 
+enum CollisionGroups{
+	TRACK,
+	CAR,
+	METEOR
+};
+
 /**
 * @brief The physics SDK object that the main game loop will use to store actors and return the results of their collisions
 */
-class PhysicsLayer   : public Listener
+class PhysicsLayer   : public Listener, public NxUserContactReport
 {
 public:
 	static PhysicsLayer *g_PhysicsLayer;
@@ -129,6 +135,8 @@ public:
 	* @brief Returns the instance of the scene
 	*/
 	NxScene* ReturnScene();
+
+	virtual void onContactNotify(NxContactPair& pair, NxU32 events);
 
 
 protected:

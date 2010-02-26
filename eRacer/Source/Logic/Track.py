@@ -18,6 +18,7 @@ class Track(Entity):
       
     # game().io.LoadMeshAsync(load, self.graphics, "Track.x")   
     game().io.LoadMeshAsync(load, self.graphics, "Track1.x")
+    self.physics.SetGroup(eRacer.TRACK)
     
     
   def Tick(self, time):

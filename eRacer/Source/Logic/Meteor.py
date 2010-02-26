@@ -71,7 +71,7 @@ class MeteorManager(Entity):
     for meteor in self.meteors:
       pos = eRacer.ExtractPosition(meteor.transform)
       if(length(pos)>self.SPAWNING_DISTANCE):
-        print "respawning at position ",pos," with distance ",length(pos)," from origin." 
+        #print "respawning at position ",pos," with distance ",length(pos)," from origin." 
         self.respawnRandom(meteor) 
 
 class Meteor(Entity):
@@ -80,10 +80,11 @@ class Meteor(Entity):
 
     #hack: scale has to be stored separatly because physiscs will keep overriding it 
     self.scale = scale
-    print self.scale
+
     self.transform = eRacer.CreateMatrix()
 
     self.physics = eRacer.Box(True, 4, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
+    self.physics.SetGroup(eRacer.METEOR)
     self.graphics = scene.CreateMovingMeshNode("Meteor")
     self.graphics.thisown = 0
         
