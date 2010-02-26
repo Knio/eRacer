@@ -39,6 +39,8 @@ class Vehicle(Entity):
   def __init__(self, scene):
     Entity.__init__(self)
     
+    self.behavior = None
+        
     self.ReloadedConstsEvent()
         
     # self.physics = eRacer.TriMesh()    
@@ -83,31 +85,28 @@ class Vehicle(Entity):
     self.sound.isPaused = True
     self.sound.minDist  = 50.0
     game().sound.sound.LoadSoundFx("Resources/Sounds/SpaceEngine.wav", self.sound)
-    
-    
-    
-    
-    game().event.Register(self.PlayerAccelerateEvent)
-    game().event.Register(self.PlayerTurnEvent)
-    game().event.Register(self.PlayerBoostEvent)
-    game().event.Register(self.PlayerBrakeEvent)
+
     game().event.Register(self.ReloadedConstsEvent)
+
     
   # control events
-  def PlayerBrakeEvent(self, brake):
+  def Brake(self, brake):
     self.brake = brake
 
-  def PlayerAccelerateEvent(self, changeThrottle):
+  def Accelerate(self, changeThrottle):
     self.throttle = changeThrottle
 
-  def PlayerTurnEvent(self, turn):
+  def Turn(self, turn):
     self.steerPos = turn
   
-  def PlayerBoostEvent(self):
+  def Boost(self):
     self.boosting = 2.0
   
   def Tick(self, time):
     Entity.Tick(self, time)
+    
+    if self.behavior: 
+      self.behavior.Tick(time)
     
     
     

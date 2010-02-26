@@ -45,8 +45,17 @@ class MeteorManager(Entity):
     self.respawnRandom(meteor)
     return meteor
             
-  def spawnAimed(self, aim, dir, force, tumbling):
-    pass
+  def spawnAimed(self, aim, forceDir, forceMag, tumbling):
+    pos = aim - dir * SPAWNING_DISTANCE
+
+    scale = random.uniform(self.MIN_SIZE, self.MAX_SIZE)
+
+    meteor = Meteor(self.scene, self.MODELS[random.randrange(len(self.MODELS))], scale)
+    self.meteors.append(meteor)
+    forcePos = Point3(tumbling,tumbling,tumbling)
+
+    meteor.respawn(pos,normalized(forceDir), forceMag, forcePos)
+    
     
   def respawnRandom(self, meteor):
     r = random.random
@@ -68,6 +77,7 @@ class MeteorManager(Entity):
     
     
     meteor.respawn(pos,normalized(direc), mag, forcePos)
+    
     
   def Tick(self, time):
     Entity.Tick(self, time)
