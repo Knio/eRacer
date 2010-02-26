@@ -1,4 +1,5 @@
 from Core.Globals import *
+from AI.Raceline import Raceline
 
 class Behavior(object):
   def __init__(self, parent):
@@ -31,8 +32,11 @@ class PlayerBehavior(Behavior):
 
 
 class AIBehavior(Behavior):
-  def __init__(self, parent):
+  def __init__(self, parent, raceline):
     Behavior.__init__(self,parent)
+    self.line = raceline
   
   def Tick(self,time):
-    pass
+    pos = self.parent.physics.GetPosition()
+    #print pos
+    self.line.UpdateWaypoint(self.parent.physics.GetPosition())

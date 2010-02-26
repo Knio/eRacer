@@ -21,6 +21,7 @@ from Meteor     import Meteor, MeteorManager
 
 # AI stuff
 from AI.Behavior import PlayerBehavior, AIBehavior
+from AI.Raceline import Raceline
 
 # View stuff
 from Graphics.View    import View
@@ -88,7 +89,9 @@ class GameState(State):
 
     # TODO
     # can we render a fake loading screen here until the real one works?
-
+    lineData = [Point3(80, 2, 20), Point3(80, 0, 100)]
+    raceline = Raceline(lineData)
+    
     scene = eRacer.Scene()
     self.scene = scene
         
@@ -96,10 +99,13 @@ class GameState(State):
     
     playerBehavior = PlayerBehavior(self.player)
     self.player.behavior = playerBehavior
-
-
+  
+    self.ai1 = Vehicle(self.scene, Vector3(80, 2, -20))
+    self.ai1.behavior = AIBehavior(self.ai1, raceline)
     
+
     game().logic.Add(self.player)
+    game().logic.Add(self.ai1)
     
     
 
