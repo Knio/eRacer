@@ -16,13 +16,18 @@ from Vehicle    import Vehicle
 from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
 from Starfield  import Starfield
 from Meteor     import Meteor, MeteorManager
+# from CoordinateCross  import CoordinateCross
+
+
+# AI stuff
+from AI.Behavior import PlayerBehavior, AIBehavior
 
 # View stuff
 from Graphics.View    import View
 from Graphics.SkyBox  import SkyBox
 
 from Graphics.Sprite  import Sprite
-# from CoordinateCross  import CoordinateCross
+
 
 # TODO
 # need a lock so that loading of IO does not happen
@@ -89,8 +94,14 @@ class GameState(State):
         
     self.player = Vehicle(self.scene)
     
-    # OK
+    playerBehavior = PlayerBehavior(self.player)
+    self.player.behavior = playerBehavior
+
+
+    
     game().logic.Add(self.player)
+    
+    
 
     self.views = []
     self.viewIndex = 0
