@@ -15,7 +15,6 @@ class Vehicle(Entity):
     Point3(480, 380, 0),
   ]
   DISPLACEMENT = 0.30  # from wheel rest position  
-  INITIAL_POS = Vector3(80, 2, 0)
   
   def ReloadedConstsEvent(self):
     self.MASS = CONSTS.CAR_MASS
@@ -36,9 +35,9 @@ class Vehicle(Entity):
     self.SPRING_K         = (self.MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
 
-  def __init__(self, scene):
+  def __init__(self, scene, position = Vector3(80, 2, 0)):
     Entity.__init__(self)
-    
+    self.INITIAL_POS = position
     self.behavior = None
         
     self.ReloadedConstsEvent()
