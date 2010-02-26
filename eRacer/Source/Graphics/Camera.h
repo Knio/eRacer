@@ -193,7 +193,10 @@ public:
 	Point3 lookAt_;
 	Vector3 approxUp_;
 	Vector3 up_;
-
+	Point3 GetPosition() 	{ return position_; }
+	Point3 GetLookAt() 		{ return lookAt_; }
+	Point3 GetUp() 				{ return up_; }
+	
 	void SetViewMatrix(const Matrix& viewMatrix);
 
 private:

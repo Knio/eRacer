@@ -4,8 +4,9 @@ namespace Sound {
 
 SoundLayer* SoundLayer::m_pGlobalSoundLayer = NULL;
 
-SoundLayer::SoundLayer() : m_fmodule(NULL)
+SoundLayer::SoundLayer()
 {
+	m_musicSample = NULL;
 }
 
 SoundLayer::~SoundLayer()
@@ -16,12 +17,77 @@ SoundLayer::~SoundLayer()
 	}
 }
 
+
+void SoundLayer::LoadSoundFx(const string& filename, SoundFx* samp)
+{
+	if (NULL != samp->soundsample) {
+		FSOUND_Sample_Free(m_musicSample);
+		samp->soundsample = NULL;
+	}
+
+	//Can't dynamically change from a 2D sound to a 3D sound, so must be set here
+	unsigned int mode = 0;
+	if (samp->isLooping)
+		mode |= FSOUND_LOOP_NORMAL;
+	else
+		mode |= FSOUND_LOOP_OFF;
+	
+	if (!samp->is3D)
+		mode |= FSOUND_2D;
+	else
+		mode |= FSOUND_HW3D;
+
+	samp->soundsample = FSOUND_Sample_Load(FSOUND_FREE, filename.c_str(), mode, 0, 0);
+	samp->channel = FSOUND_PlaySoundEx(FSOUND_FREE, samp->soundsample, NULL, TRUE);
+	
+	FSOUND_SetFrequency(samp->channel, samp->pitch);
+
+	if (samp->is3D) {
+		FSOUND_Sample_SetMinMaxDistance(samp->soundsample, samp->minDist, samp->maxDist);
+		FSOUND_3D_SetAttributes( samp->channel, (float*)&samp->position, (float*)&samp->velocity);
+	}
+
+	if (!samp->isPaused)
+		FSOUND_SetPaused(samp->channel, FALSE);
+}
+
+void SoundLayer::UpdateSoundFx(SoundFx* samp)
+{
+	if (NULL == samp->soundsample)
+		return;
+
+	FSOUND_SetFrequency(samp->channel, samp->pitch);
+
+	if (samp->is3D) {
+		FSOUND_Sample_SetMinMaxDistance(samp->soundsample, samp->minDist, samp->maxDist);
+		FSOUND_3D_SetAttributes( samp->channel, (float*)&samp->position, (float*)&samp->velocity);
+	}
+
+	if (samp->isLooping)
+		FSOUND_Sample_SetMode(samp->soundsample, FSOUND_LOOP_NORMAL);
+	else
+		FSOUND_Sample_SetMode(samp->soundsample, FSOUND_LOOP_OFF);
+
+	char pause = FALSE;
+	if (samp->isPaused)
+		pause = TRUE;
+	FSOUND_SetPaused(samp->channel, pause);
+}
+
 int SoundLayer::Init()
 {
+	/*char* str;
+	if(!FSOUND_SetOutput(FSOUND_OUTPUT_DSOUND))
+		str = FMOD_ErrorString(FSOUND_GetError());
+	if(!FSOUND_SetDriver(0))
+		str = FMOD_ErrorString(FSOUND_GetError());
+	if(!FSOUND_SetMixer(FSOUND_MIXER_AUTODETECT));
+		str = FMOD_ErrorString(FSOUND_GetError());*/
+
 	if (FSOUND_GetVersion() < FMOD_VERSION)
 		return -1; //Outdated DLL
 
-	if (!FSOUND_Init(32000, 64, 0))
+	if (!FSOUND_Init(44100, 32, 0))
     {
 		return -1; //Failed to Initialize
         printf("%s\n", FMOD_ErrorString(FSOUND_GetError()));
@@ -51,9 +117,6 @@ int SoundLayer::Update()
 
 int SoundLayer::Shutdown()
 {
-	if (m_fmodule)
-		FMUSIC_FreeSong(m_fmodule);
-	
 	//Clear the Cache
     for( FontCache::const_iterator it = m_SoundCache2D.begin(); it != m_SoundCache2D.end(); ++it)
 		FSOUND_Sample_Free(it->second);
@@ -66,49 +129,33 @@ int SoundLayer::Shutdown()
 
 int SoundLayer::LoopMusic(const string& name)
 {
-	//Potentially multiple songs can be playing at once
-	//But this design only allows for one
-	//The game will forseeably need to keep better track of channels being used 
-	m_fmodule = FMUSIC_LoadSong(name.c_str());
-    if (!m_fmodule) //failed to load the song
-		return -1;
+	if (NULL != m_musicSample)
+		StopMusic();
 
-    int chan = FMUSIC_PlaySong(m_fmodule);  
+	m_musicSample = FSOUND_Sample_Load(FSOUND_FREE, name.c_str(), FSOUND_LOOP_NORMAL, 0, 0);
+    int chan = FSOUND_PlaySound(FSOUND_FREE, m_musicSample);
+
+	//Playlist functionality should be added in the future
+
 	return chan;
 }
 
 int SoundLayer::StopMusic()
 {
-	FMUSIC_StopAllSongs();
+	FSOUND_Sample_Free(m_musicSample);
+	m_musicSample = NULL;
 	return 0;
 }
 
 int SoundLayer::PlaySound3D(const string& name, const Point3& pos, const Vector3& vel)
 {
-	//float p[3] = { pos.x, pos.y, pos.z };
-	//float v[3] = { vel.x, vel.y, vel.z };
-
-	FontCache::iterator sound;
-	if ((sound = m_SoundCache3D.find(name)) == m_SoundCache3D.end()) { //Cache Miss
-		FSOUND_SAMPLE  *soundClip = NULL;
-		soundClip = FSOUND_Sample_Load(FSOUND_FREE, name.c_str(), FSOUND_HW3D, 0, 0);
-		if (!soundClip)
-			return -1; //Failed to load
-		FSOUND_Sample_SetMinMaxDistance(soundClip, 4.0f, 10000.0f);
-
-		sound = m_SoundCache3D.insert(make_pair(name, soundClip)).first;
-	}
-
-	int chan = FSOUND_PlaySound(FSOUND_FREE, sound->second);
-	//The channel is given a 3D position
-	FSOUND_3D_SetAttributes( chan, (float*)&pos, (float*)&vel);
-
-	return chan;
+	//OBSOLETE
+	return 0;
 }
 
 int SoundLayer::ChangePitch(int channel, int pitch)
 {
-	FSOUND_SetFrequency(channel, pitch); //Can alter the pitch of the sound by altering the playback frequency
+	//OBSOLETE
 	return 0;
 }
 

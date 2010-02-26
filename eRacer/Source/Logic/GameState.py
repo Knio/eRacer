@@ -69,6 +69,11 @@ class GameState(State):
     #if not self.loaded:
     #  game().PushState(LoadingState(self.load))
     print "Activate game state"
+
+  def Deactivate(self):
+    State.Deactivate(self)    
+    self.sound.isPaused = True
+    game().sound.sound.UpdateSoundFx(self.sound)
     
     
   def load(self):
@@ -148,6 +153,16 @@ class GameState(State):
       game().logic.Add(m)
     
     game().time.Zero()
+    
+    
+    
+    self.sound = eRacer.SoundFx();
+    self.sound.looping = True
+    self.sound.is3D = False
+    self.sound.isPaused = True
+    game().sound.sound.LoadSoundFx("Resources/Sounds/90s.mp3", self.sound)
+    
+    
     self.loaded = True
     
   def get_view(self):
@@ -157,12 +172,19 @@ class GameState(State):
   
     
   def Tick(self, time):
+    # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
+    cam = self.view.camera
+    game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
+    
+    
+    
     State.Tick(self, time)
     game().graphics.views.append(self.view)
-        
+    
     # if time.seconds > self.boxcount:
     #   self.boxcount += min(self.boxcount+1, 20)
     #   game().logic.Add(Box(self.scene))
+  
   
 
       

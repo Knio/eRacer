@@ -77,6 +77,17 @@ class Vehicle(Entity):
     
     self.boosting = 0.
     
+    self.sound = eRacer.SoundFx();
+    self.sound.looping  = True
+    self.sound.is3D     = True
+    self.sound.isPaused = True
+    self.sound.minDist  = 5000.0
+    
+    game().sound.sound.LoadSoundFx("Resources/Sounds/SpaceEngine.wav", self.sound)
+    
+    
+    
+    
     game().event.Register(self.PlayerAccelerateEvent)
     game().event.Register(self.PlayerTurnEvent)
     game().event.Register(self.PlayerBoostEvent)
@@ -98,6 +109,8 @@ class Vehicle(Entity):
   
   def Tick(self, time):
     Entity.Tick(self, time)
+    
+    
     
     if not time.game_delta:
       return
@@ -132,6 +145,15 @@ class Vehicle(Entity):
     if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
       gravity = worldroadnormal * (-CONSTS.CAR_GRAVITY * self.MASS)
       phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
+    
+    
+    vel = phys.GetLocalPointWorldVelocity(ORIGIN)
+    self.sound.isPaused = False
+    self.sound.position = mul1(tx, ORIGIN)
+    self.sound.velocity = vel
+    self.sound.pitch = int(44100 * length(vel) / 60.0)
+    game().sound.sound.UpdateSoundFx(self.sound)
+    
     
     
     crashed = True

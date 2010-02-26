@@ -67,6 +67,18 @@ class MainMenuState(MenuState):
     logo.scale(600,235,1)
     logo.set_translation(Point3(400,450,0))
     
+    self.sound = eRacer.SoundFx();
+    self.sound.looping = True
+    self.sound.is3D = False
+    self.sound.isPaused = False
+    game().sound.sound.LoadSoundFx("Resources/Sounds/Terran5.ogg", self.sound)
+    
+  def Deactivate(self):
+    MenuState.Deactivate(self)
+    self.sound.isPaused = True
+    game().sound.sound.UpdateSoundFx(self.sound)
+    
+    
   def Menu_New_Game(self):
     game().PushState(GameState())
         

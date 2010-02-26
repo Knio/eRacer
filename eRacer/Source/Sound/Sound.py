@@ -17,6 +17,7 @@ class Sound(Module):
     Module.Tick(self, time)
     self.sound.Update()
     
+    
   def Quit(self):
     Module.Quit(self)
     self.sound.StopMusic()
