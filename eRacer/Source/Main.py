@@ -40,8 +40,8 @@ class Main(Game):
     self.AddModule(self.sound)
     self.AddModule(self.physics)
     self.AddModule(self.graphics)
-    # if hasattr(eRacer, 'TestModule'):
-    #     self.test = eRacer.TestModule();
+    if hasattr(eRacer, 'TestModule'):
+        self.test = eRacer.TestModule();
     
     self.event.Register(self.QuitEvent)
     self.event.Register(self.MouseButtonPressedEvent)

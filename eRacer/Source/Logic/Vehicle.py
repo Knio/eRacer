@@ -79,10 +79,9 @@ class Vehicle(Entity):
     
     self.sound = eRacer.SoundFx();
     self.sound.looping  = True
-    self.sound.is3D     = True
+    self.sound.is3D     = False
     self.sound.isPaused = True
-    self.sound.minDist  = 5000.0
-    
+    self.sound.minDist  = 50.0
     game().sound.sound.LoadSoundFx("Resources/Sounds/SpaceEngine.wav", self.sound)
     
     
@@ -149,8 +148,8 @@ class Vehicle(Entity):
     
     vel = phys.GetLocalPointWorldVelocity(ORIGIN)
     self.sound.isPaused = False
-    self.sound.position = mul1(tx, ORIGIN)
-    self.sound.velocity = vel
+    self.sound.position = ORIGIN # mul1(tx, ORIGIN)
+    self.sound.velocity = ORIGIN #vel
     self.sound.pitch = int(44100 * length(vel) / 60.0)
     game().sound.sound.UpdateSoundFx(self.sound)
     

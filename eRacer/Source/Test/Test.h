@@ -44,6 +44,11 @@ public:
 	void Start()
 	{
 		// main loop is about to start!
+		Sound::SoundFx sound;
+		sound.isPaused 	= FALSE;
+		sound.is3D 			= FALSE;
+		Sound::Sound()->LoadSoundFx("Resources/Sounds/drumloop.wav", &sound);
+		
 	}
 	void Tick(Time& t)
 	{

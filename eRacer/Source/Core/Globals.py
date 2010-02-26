@@ -51,6 +51,8 @@ project   = eRacer.project
 mul1      = eRacer.mul1
 mul0      = eRacer.mul0
 
+CreateMatrix = eRacer.CreateMatrix
+
 PI    = math.pi
 ZERO  = 1e-5
 def printvec(v):

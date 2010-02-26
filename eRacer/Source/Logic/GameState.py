@@ -158,8 +158,9 @@ class GameState(State):
     
     self.sound = eRacer.SoundFx();
     self.sound.looping = True
-    self.sound.is3D = False
-    self.sound.isPaused = True
+    self.sound.is3D = True
+    self.sound.isPaused = False
+    self.sound.position = ORIGIN
     game().sound.sound.LoadSoundFx("Resources/Sounds/90s.mp3", self.sound)
     
     
