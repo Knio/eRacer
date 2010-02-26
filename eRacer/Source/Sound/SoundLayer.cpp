@@ -43,7 +43,8 @@ void SoundLayer::LoadSoundFx(const string& filename, SoundFx* samp)
 	FSOUND_SetFrequency(samp->channel, samp->pitch);
 
 	if (samp->is3D) {
-		FSOUND_Sample_SetMinMaxDistance(samp->soundsample, samp->minDist, samp->maxDist);
+		//FSOUND_Sample_SetMinMaxDistance(samp->soundsample, samp->minDist, samp->maxDist);
+		FSOUND_3D_SetMinMaxDistance(samp->channel, samp->minDist, samp->maxDist);
 		FSOUND_3D_SetAttributes( samp->channel, (float*)&samp->position, (float*)&samp->velocity);
 	}
 
