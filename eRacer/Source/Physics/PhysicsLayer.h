@@ -23,7 +23,7 @@ using namespace std;
 
 namespace Physics{
 
-enum CollisionGroups{
+enum CollisionGroup{
 	TRACK,
 	CAR,
 	METEOR

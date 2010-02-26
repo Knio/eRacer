@@ -24,7 +24,10 @@ class MeteorManager(Entity):
     Entity.__init__(self)
     self.scene = scene 
     self.meteors = []
-  
+    game().event.Register(self.MeteorMeteorCollisionEvent)
+    game().event.Register(self.MeteorCarCollisionEvent)
+    game().event.Register(self.MeteorTrackCollisionEvent)
+
   
   def spawn(self, pos, scale, forceDir, forceMag, tumbling):
     meteor = Meteor(self.scene, self.MODEL,scale)
@@ -73,6 +76,17 @@ class MeteorManager(Entity):
       if(length(pos)>self.SPAWNING_DISTANCE):
         #print "respawning at position ",pos," with distance ",length(pos)," from origin." 
         self.respawnRandom(meteor) 
+        
+        
+  def MeteorMeteorCollisionEvent(self, pair):
+    print "MM Collision reported to MeteorManager"
+
+  def MeteorTrackCollisionEvent(self, pair):
+    print "MT Collision reported to MeteorManager"
+
+  def MeteorCarCollisionEvent(self, pair):
+    print "MC Collision reported to MeteorManager"
+
 
 class Meteor(Entity):
   def __init__(self, scene, model, scale=1):

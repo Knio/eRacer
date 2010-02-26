@@ -144,7 +144,7 @@ public:
 	float GetSpeed();
 
 
-	void SetGroup(CollisionGroups group) { Actor->setGroup(group); }
+	void SetGroup(CollisionGroup group) { Actor->setGroup(group); }
 
 protected:
 	/**

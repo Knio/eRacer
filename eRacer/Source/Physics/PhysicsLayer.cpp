@@ -145,7 +145,15 @@ NxScene* PhysicsLayer::ReturnScene()
 }
 
 void PhysicsLayer::onContactNotify(NxContactPair& pair, NxU32 events){
-	cout << "Collision!" << endl;
+	NxActorGroup g1 = pair.actors[0]->getGroup();
+	NxActorGroup g2 = pair.actors[1]->getGroup();
+	
+	if(g1==METEOR && g2==METEOR)
+		EVENT(MeteorMeteorCollisionEvent(pair));
+	else if(g1==METEOR && g2==CAR || g1==CAR && g2==METEOR)
+		EVENT(MeteorCarCollisionEvent(pair));
+	else if (g1==METEOR && g2==TRACK || g1==TRACK && g2==METEOR)
+		EVENT(MeteorTrackCollisionEvent(pair));
 }
 
 

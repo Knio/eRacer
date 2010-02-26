@@ -63,8 +63,11 @@ If you get an error in this file, it is because:
 */
 
 
+//#include <NxUserContactReport.h> 
 #include <assert.h>
 #include "Game/State.h"
+
+class NxContactPair;
 
 #define EVENT(x) Event::GetInstance()->x
 #define REGISTER(obj, evt) EVENT(Register(obj, #evt))
@@ -118,6 +121,11 @@ public:
 	DEFINE_EVENT(ReloadedConstsEvent)
 
 	DEFINE_EVENT(GameStateChangeEvent, State* state)
+	
+	DEFINE_EVENT(MeteorMeteorCollisionEvent, NxContactPair& pair)
+	DEFINE_EVENT(MeteorTrackCollisionEvent, NxContactPair& pair)
+	DEFINE_EVENT(MeteorCarCollisionEvent, NxContactPair& pair)
+
 	
 };
 
