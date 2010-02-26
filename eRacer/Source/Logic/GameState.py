@@ -159,9 +159,9 @@ class GameState(State):
     self.meteorManager = MeteorManager(self.scene)
     game().logic.Add(self.meteorManager)
         
-    for i in range(1,100):
-      m = self.meteorManager.spawnRandom()
-      game().logic.Add(m)
+    #for i in range(1,100):
+    #  m = self.meteorManager.spawnRandom()
+    #  game().logic.Add(m)
     
     game().time.Zero()
     
@@ -173,6 +173,7 @@ class GameState(State):
     self.sound.isPaused = True
     game().sound.sound.LoadSoundFx("Resources/Sounds/90s.mp3", self.sound)
     
+    self.lastMeteorTime = 0
     
     self.loaded = True
     
@@ -192,9 +193,11 @@ class GameState(State):
     State.Tick(self, time)
     game().graphics.views.append(self.view)
     
-    # if time.seconds > self.boxcount:
-    #   self.boxcount += min(self.boxcount+1, 20)
-    #   game().logic.Add(Box(self.scene))
+    self.lastMeteorTime += time.game_delta
+    if self.lastMeteorTime > 5.*time.RESOLUTION:
+      self.lastMeteorTime = 0
+      m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
+      game().logic.Add(m)
   
   
 

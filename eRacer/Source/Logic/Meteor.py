@@ -7,6 +7,11 @@ class MeteorManager(Entity):
 
   MIN_FORCE = 10000000.
   MAX_FORCE = 80000000.
+  
+  AIMED_MIN_FORCE = 500000000
+  AIMED_MAX_FORCE = 600000000
+  
+  AIMED_SCATTERING = 0.1
 
   # between 0 and 1 
   SCATTERING = 0.3
@@ -45,16 +50,24 @@ class MeteorManager(Entity):
     self.respawnRandom(meteor)
     return meteor
             
-  def spawnAimed(self, aim, forceDir, forceMag, tumbling):
-    pos = aim - dir * SPAWNING_DISTANCE
+  def spawnAimed(self, aim):
+    u = random.uniform
+    forceDir = Vector3(0,-1,0)
+    forceDir.x *= 1.+u(-self.AIMED_SCATTERING, self.AIMED_SCATTERING)
+    forceDir.y *= 1.+u(-self.AIMED_SCATTERING, self.AIMED_SCATTERING)
+    forceDir.z *= 1.+u(-self.AIMED_SCATTERING, self.AIMED_SCATTERING)
+    
+    pos = aim - forceDir * self.SPAWNING_DISTANCE
 
     scale = random.uniform(self.MIN_SIZE, self.MAX_SIZE)
 
     meteor = Meteor(self.scene, self.MODELS[random.randrange(len(self.MODELS))], scale)
     self.meteors.append(meteor)
-    forcePos = Point3(tumbling,tumbling,tumbling)
-
-    meteor.respawn(pos,normalized(forceDir), forceMag, forcePos)
+    
+    forceMag = random.uniform(self.AIMED_MIN_FORCE, self.AIMED_MAX_FORCE)
+    
+    meteor.respawn(pos,normalized(forceDir), forceMag, self.randomForcePosition())
+    return meteor
     
     
   def respawnRandom(self, meteor):
@@ -64,20 +77,26 @@ class MeteorManager(Entity):
     direc = normalized(Vector3(u(-1.,1.),u(-1.,1.),u(-1.,1.)))
     
     pos = direc * self.SPAWNING_DISTANCE
-    mag = u(self.MIN_FORCE, self.MAX_FORCE)
 
     direc.x *= -1.+u(-self.SCATTERING, self.SCATTERING)
     direc.y *= -1.+u(-self.SCATTERING, self.SCATTERING)
     direc.z *= -1.+u(-self.SCATTERING, self.SCATTERING)
-    
+        
+    forcePos = self.randomForcePosition()
+   
+    meteor.respawn(pos,normalized(direc), self.randomForceMagnitude(), forcePos)
+  
+  def randomForcePosition(self):
+    u = random.uniform
     forcePos = Point3()
     forcePos.x = u(-self.TUMBLING, self.TUMBLING)
-    forcePos.x = u(-self.TUMBLING, self.TUMBLING)
-    forcePos.x = u(-self.TUMBLING, self.TUMBLING)
+    forcePos.y = u(-self.TUMBLING, self.TUMBLING)
+    forcePos.z = u(-self.TUMBLING, self.TUMBLING)
+    return forcePos
     
-    
-    meteor.respawn(pos,normalized(direc), mag, forcePos)
-    
+  def randomForceMagnitude(self):
+    u = random.uniform
+    return u(self.MIN_FORCE, self.MAX_FORCE)
     
   def Tick(self, time):
     Entity.Tick(self, time)
