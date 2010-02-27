@@ -144,7 +144,7 @@ class FirstPersonCamera(Camera):
     lookat          = self.position + mul0(self.transform, Z)
     
     # print self.look
-    # printvec(self.position)
+    # print self.position
     # printvec(lookat)
     
     self.SetFrame(self.position, lookat)

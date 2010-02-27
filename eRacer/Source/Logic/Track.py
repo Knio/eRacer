@@ -17,7 +17,7 @@ class Track(Entity):
       self.physics.Init(self.graphics.mesh());
       
     # game().io.LoadMeshAsync(load, self.graphics, "Track.x")   
-    game().io.LoadMeshAsync(load, self.graphics, "Track1.x")
+    game().io.LoadMeshAsync(load, self.graphics, "Track2.x")
     self.physics.SetGroup(eRacer.TRACK)
     
     

@@ -96,16 +96,14 @@ class GameState(State):
     self.scene = scene
         
     self.player = Vehicle(self.scene)
-    
-    playerBehavior = PlayerBehavior(self.player)
-    self.player.behavior = playerBehavior
+    self.player.behavior = PlayerBehavior(self.player)
   
-    self.ai1 = Vehicle(self.scene, Vector3(80, 2, -20))
-    self.ai1.behavior = AIBehavior(self.ai1, raceline)
+    # self.ai1 = Vehicle(self.scene, Vector3(80, 2, -20))
+    # self.ai1.behavior = AIBehavior(self.ai1, raceline)
     
 
     game().logic.Add(self.player)
-    game().logic.Add(self.ai1)
+    # game().logic.Add(self.ai1)
     
     
 
@@ -151,25 +149,24 @@ class GameState(State):
     #  for i in range(-191, -225, -2):
     #    game().logic.Add(Box(scene, Vector3(-1850, j, i)))
         
-    for i in range(-191, -230, -5):
-        game().logic.Add(Box(scene, Vector3(-1850, 24, i)))
-    for i in range(-193, -230, -5):
-        game().logic.Add(Box(scene, Vector3(-1850, 26, i)))
-    for i in range(-195, -235, -5):
-        game().logic.Add(Box(scene, Vector3(-1850, 28, i)))
-    for i in range(-193, -230, -5):
-        game().logic.Add(Box(scene, Vector3(-1850, 30, i)))
-    for i in range(-191, -230, -5):
-        game().logic.Add(Box(scene, Vector3(-1850, 32, i)))
+    # for i in range(-191, -230, -5):
+    #     game().logic.Add(Box(scene, Vector3(-1850, 24, i)))
+    # for i in range(-193, -230, -5):
+    #     game().logic.Add(Box(scene, Vector3(-1850, 26, i)))
+    # for i in range(-195, -235, -5):
+    #     game().logic.Add(Box(scene, Vector3(-1850, 28, i)))
+    # for i in range(-193, -230, -5):
+    #     game().logic.Add(Box(scene, Vector3(-1850, 30, i)))
+    # for i in range(-191, -230, -5):
+    #     game().logic.Add(Box(scene, Vector3(-1850, 32, i)))
         
-    self.meteorManager = MeteorManager(self.scene)
-    game().logic.Add(self.meteorManager)
-        
-    for i in range(1,100):
-      m = self.meteorManager.spawnRandom()
-      game().logic.Add(m)
+    # # self.meteorManager = MeteorManager(self.scene)
+    # game().logic.Add(self.meteorManager)
     
-    game().time.Zero()
+    # for i in range(1,100):
+    #   m = self.meteorManager.spawnRandom()
+    #   game().logic.Add(m)
+    
     
     
     
@@ -181,6 +178,7 @@ class GameState(State):
     game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
     
     
+    game().time.Zero()
     self.loaded = True
     
   def get_view(self):
