@@ -12,15 +12,12 @@ class MeteorManager(Entity):
     game().event.Register(self.MeteorMeteorCollisionEvent)
     game().event.Register(self.MeteorCarCollisionEvent)
     game().event.Register(self.MeteorTrackCollisionEvent)
+    
+
 
   
   def spawn(self, pos, scale, forceDir, forceMag, tumbling):
     pass
-    # meteor = Meteor(self.scene, self.MODELS[random.randrange(len(self.MODELS))],scale)
-    # #needs improvement - probably better angular velocity
-    # forcePos = Point3(tumbling,tumbling,tumbling)
-    # meteor.respawn(pos,forceDir, forceMag, forcePos)
-    # return meteor
     
   def spawnRandom(self):
     m = RandomMeteor(self.scene)
@@ -32,53 +29,6 @@ class MeteorManager(Entity):
     self.meteors.append(m)
     return m
 
-    # u = random.uniform
-    # forceDir = Vector3(0,-1,0)
-    # forceDir.x *= 1.+u(-self.AIMED_SCATTERING, self.AIMED_SCATTERING)
-    # forceDir.y *= 1.+u(-self.AIMED_SCATTERING, self.AIMED_SCATTERING)
-    # forceDir.z *= 1.+u(-self.AIMED_SCATTERING, self.AIMED_SCATTERING)
-    
-    # pos = aim - forceDir * self.SPAWNING_DISTANCE
-
-    # scale = random.uniform(self.MIN_SIZE, self.MAX_SIZE)
-
-    # meteor = Meteor(self.scene, self.MODELS[random.randrange(len(self.MODELS))], scale)
-    # self.meteors.append(meteor)
-    
-    # forceMag = random.uniform(self.AIMED_MIN_FORCE, self.AIMED_MAX_FORCE)
-    
-    # meteor.respawn(pos,normalized(forceDir), forceMag, self.randomForcePosition())
-    # return meteor
-    
-    
-  # def respawnRandom(self, meteor):
-
-  #   r = random.random
-  #   u = random.uniform
-  #   # the meteor is spawned in a random location on a sphere
-  #   direc = normalized(Vector3(u(-1.,1.),u(-1.,1.),u(-1.,1.)))
-    
-  #   pos = direc * self.SPAWNING_DISTANCE
-
-  #   direc.x *= -1.+u(-self.SCATTERING, self.SCATTERING)
-  #   direc.y *= -1.+u(-self.SCATTERING, self.SCATTERING)
-  #   direc.z *= -1.+u(-self.SCATTERING, self.SCATTERING)
-        
-  #   forcePos = self.randomForcePosition()
-   
-  #   meteor.respawn(pos,normalized(direc), self.randomForceMagnitude(), forcePos)
-  
-  # def randomForcePosition(self):
-  #   u = random.uniform
-  #   forcePos = Point3()
-  #   forcePos.x = u(-self.TUMBLING, self.TUMBLING)
-  #   forcePos.y = u(-self.TUMBLING, self.TUMBLING)
-  #   forcePos.z = u(-self.TUMBLING, self.TUMBLING)
-  #   return forcePos
-    
-  # def randomForceMagnitude(self):
-  #   u = random.uniform
-  #   return u(self.MIN_FORCE, self.MAX_FORCE)
     
   def Tick(self, time):
     Entity.Tick(self, time)
@@ -89,7 +39,8 @@ class MeteorManager(Entity):
         #print "respawning at position ",pos," with distance ",length(pos)," from origin." 
         if(not meteor.reset()):
           self.meteors.remove(meteor)
-          
+    
+      
         
         
   def MeteorMeteorCollisionEvent(self, pair):
@@ -103,8 +54,8 @@ class MeteorManager(Entity):
 
 
 class Meteor(Entity):
-  MASS              = 3000.
-  MODELS = ["Meteor1.x", "Meteor2.x"]
+  DENSITY   = 100.
+  MODELS    = ["Meteor1.x", "Meteor2.x"]
 
   
     
@@ -116,7 +67,7 @@ class Meteor(Entity):
 
     self.transform = eRacer.CreateMatrix()
 
-    self.physics = eRacer.Box(True, self.MASS, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
+    self.physics = eRacer.Box(True, self.DENSITY*self.scale*self.scale*self.scale, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
     self.physics.SetGroup(eRacer.METEOR)
     self.graphics = scene.CreateMovingMeshNode("Meteor")
     self.graphics.thisown = 0
@@ -140,7 +91,7 @@ class Meteor(Entity):
     self.transform = self.physics.GetTransform()    
     self.graphics.SetTransform(eRacer.Scaled(self.transform, self.scale,self.scale,self.scale))  
 
-  def randomDirection():
+  def randomDirection(self):
     u = random.uniform
     return normalized(Vector3(u(-1.,1.),u(-1.,1.),u(-1.,1.)))
 
@@ -150,37 +101,36 @@ class RandomMeteor(Meteor):
   # between 0 and 1 
   SCATTERING = 0.3
   
-  MIN_SPEED = 50
   MIN_SPEED = 200
-  MIN_SIZE = 0.2
+  MAX_SPEED = 600
+  MIN_SIZE = .5
   MAX_SIZE = 10.
 
   # between 0 and the radius of the meteor
   TUMBLING = 0.9
   
   def __init__(self, scene):
-    Meteor.__init__(self,scene, u(MIN_SIZE,MAX_SIZE))
+    Meteor.__init__(self,scene, random.uniform(self.MIN_SIZE,self.MAX_SIZE))
     
     self.reset()
     
     
   def reset(self):
-    r = random.random
     u = random.uniform
     
     # the meteor is spawned in a random location on a sphere
     direction = self.randomDirection()
     position = direction * self.SPAWNING_DISTANCE
     
-    velocity = direction * -u(MIN_SPEED, MAX_SPEED)
+    velocity = direction * -(u(self.MIN_SPEED, self.MAX_SPEED)/self.scale)
 
     velocity.x *= 1.+u(-self.SCATTERING, self.SCATTERING)
     velocity.y *= 1.+u(-self.SCATTERING, self.SCATTERING)
     velocity.z *= 1.+u(-self.SCATTERING, self.SCATTERING)
     
-    angular_velocity = self.TUMBLING*self.randomDirection()
+    angular_velocity = self.randomDirection() * self.TUMBLING
    
-    self.physics.SetTransform(CreateMatrix(position))
+    self.physics.SetTransform(Matrix(position))
     self.physics.SetVelocity(velocity)
     self.physics.SetAngVelocity(angular_velocity)  
     return True  
@@ -189,14 +139,13 @@ class AimedMeteor(Meteor):
   #in seconds
   AIR_TIME = 3.
   
-  
   # between 0 and 1 
   SCATTERING = 0.3
   
   MIN_SPEED = 150
-  MIN_SPEED = 200
-  MIN_SIZE = 0.2
-  MAX_SIZE = 1.
+  MAX_SPEED = 200
+  MIN_SIZE = 0.5
+  MAX_SIZE = 2.
 
   # between 0 and the radius of the meteor
   TUMBLING = 0.3
@@ -214,11 +163,9 @@ class AimedMeteor(Meteor):
     
     position = aim - velocity * self.AIR_TIME
 
-    angular_velocity = self.TUMBLING*self.randomDirection()    
-    
-    forceMag = random.uniform(self.AIMED_MIN_FORCE, self.AIMED_MAX_FORCE)
-    
-    self.physics.SetTransform(CreateMatrix(position))
+    angular_velocity = self.randomDirection() * self.TUMBLING    
+        
+    self.physics.SetTransform(Matrix(position))
     self.physics.SetVelocity(velocity)
     self.physics.SetAngVelocity(angular_velocity)    
   

@@ -159,9 +159,10 @@ class GameState(State):
     self.meteorManager = MeteorManager(self.scene)
     game().logic.Add(self.meteorManager)
         
-    #for i in range(1,100):
-    #  m = self.meteorManager.spawnRandom()
-    #  game().logic.Add(m)
+
+    for i in range(1,100):
+      m = self.meteorManager.spawnRandom()
+      game().logic.Add(m)
     
     game().time.Zero()
     
@@ -182,6 +183,8 @@ class GameState(State):
     
   view = property(get_view)
   
+  
+  AIMED_METEOR_INTERVAL = 5.
     
   def Tick(self, time):
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
@@ -194,7 +197,7 @@ class GameState(State):
     game().graphics.views.append(self.view)
     
     self.lastMeteorTime += time.game_delta
-    if self.lastMeteorTime > 5.*time.RESOLUTION:
+    if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
       self.lastMeteorTime = 0
       m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
       game().logic.Add(m)
