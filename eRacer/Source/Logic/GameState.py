@@ -78,8 +78,8 @@ class GameState(State):
 
   def Deactivate(self):
     State.Deactivate(self)    
-    self.sound.isPaused = True
-    game().sound.sound.UpdateSoundFx(self.sound)
+    # self.sound.isPaused = True
+    # game().sound.sound.UpdateSoundFx(self.sound)
     
     
   def load(self):
@@ -160,20 +160,22 @@ class GameState(State):
     # for i in range(-191, -230, -5):
     #     game().logic.Add(Box(scene, Vector3(-1850, 32, i)))
         
+    self.meteorManager = MeteorManager(self.scene)
+    game().logic.Add(self.meteorManager)
 
     for i in range(1,100):
       m = self.meteorManager.spawnRandom()
       game().logic.Add(m)
     
-    
-    self.sound = eRacer.SoundFx();
-    self.sound.looping  = True
-    self.sound.is3D     = False
-    self.sound.isPaused = False
-    
-    game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
-    
     self.lastMeteorTime = 0
+    
+      
+    # self.sound = eRacer.SoundFx();
+    # self.sound.looping  = True
+    # self.sound.is3D     = False
+    # self.sound.isPaused = False
+    # game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
+    
     
     game().time.Zero()
     self.loaded = True
