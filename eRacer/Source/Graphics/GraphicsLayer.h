@@ -47,6 +47,7 @@ protected:
 
 public:
 	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
+	D3DMATERIAL9 DefaultMaterial(); // also a hack
 	
 	ID3DXEffect* GraphicsLayer::GetEffect(char* file);
 	

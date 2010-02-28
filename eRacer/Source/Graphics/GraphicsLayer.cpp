@@ -157,7 +157,14 @@ int GraphicsLayer::Init( HWND hWnd )
         &depthsurf,
         NULL
     )));
+    D3DMATERIAL9 m = DefaultMaterial();
+    m_pd3dDevice->SetMaterial(&m);
     
+    return S_OK;
+}
+
+D3DMATERIAL9 GraphicsLayer::DefaultMaterial()
+{
     //set a default material so that even stuff without material or shaders renders
     D3DMATERIAL9 material;
 
@@ -185,10 +192,8 @@ int GraphicsLayer::Init( HWND hWnd )
     material.Emissive.g = 0.0f;
     material.Emissive.b = 0.0f;
     material.Emissive.a = 0.0f;
-
-    m_pd3dDevice->SetMaterial(&material);
     
-    return S_OK;
+    return material;
 }
 
 void GraphicsLayer::resetPresentationParameters(){

@@ -21,6 +21,8 @@
 // IO
 #include "..\IO\IO.h"
 
+// Logic
+#include "..\Logic\Track.h"
 
 // Graphics
 #include "..\Graphics\Renderable.h"
@@ -123,6 +125,10 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\IO\IO.h"
 
 %exception;
+
+
+// Logic
+%include "..\Logic\Track.h"
 
 // Graphics ***************************
 // %include "..\Graphics\Renderable.h" // Something funny happens with this one. 
