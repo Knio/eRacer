@@ -6,6 +6,8 @@
  * @author: Ole Rehmsen
  */
 
+#pragma once
+
 #include "Core/Types.h"
 #include "Core/Math.h"
 

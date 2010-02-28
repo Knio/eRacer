@@ -10,6 +10,8 @@
 
 #include "Renderable.h"
 
+#include "BoundingSphere.h"
+
 #define NOMINMAX
 #include <windows.h>
 #include <d3d9types.h>
@@ -80,10 +82,22 @@ public:
 	bool initialized;
 
 protected:
+	/**
+	 * @brief update the local bounding volume from the mesh data
+	 *
+	 * This method should be called whenever vertex data changes (i.e. after loading)
+	 * to bring the bounding volume up to date.
+	 */
+	void UpdateLocalBounds();
+
+
 	ID3DXMesh* mesh_;
 	unsigned int nMaterials_;
 	D3DMATERIAL9* materials_;
 	IDirect3DTexture9** textures_;
+
+	BoundingSphere localBounds_;
+
 };
 
 

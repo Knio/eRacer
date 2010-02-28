@@ -57,33 +57,6 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 }
 
 
-void MeshNode::UpdateLocalBounds(){
-	assert(NULL != mesh_);
-	
-	unsigned int positionOffset = -1;
-
-	D3DVERTEXELEMENT9 vertexElement[MAX_FVF_DECL_SIZE];
-	mesh_->GetDeclaration(vertexElement);
-
-	unsigned int i=0;
-	while(i<MAX_FVF_DECL_SIZE && vertexElement[i].Stream != 0xFF){
-		if(D3DDECLUSAGE_POSITION==vertexElement[i].Usage){
-			positionOffset = vertexElement[i].Offset;
-		}
-		i++;
-	}
-	assert(positionOffset>=0);
-
-	unsigned char* vertices;
-		
-	assert(SUCCEEDED(mesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
-
-	localBounds_.recompute(vertices, mesh_->GetNumVertices(), mesh_->GetNumBytesPerVertex());	
-
-	mesh_->UnlockVertexBuffer();
-
-	UpdateWorldBounds();
-}
 
 void MeshNode::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures){
 	//this method can only be called once
@@ -91,7 +64,8 @@ void MeshNode::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* mate
 	
 	Mesh::Init(mesh,nMaterials, materials, textures);
 	
-	UpdateLocalBounds();
+	UpdateWorldBounds();
+
 }
 
 }

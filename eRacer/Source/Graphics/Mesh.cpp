@@ -30,6 +30,8 @@ void Mesh::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* material
 	materials_ = materials;
 	textures_ = textures;
 	initialized = true;
+
+	UpdateLocalBounds();
 }
 
 void Mesh::Draw(IDirect3DDevice9* device) const{
@@ -49,6 +51,34 @@ void Mesh::Draw(IDirect3DDevice9* device) const{
         mesh_->DrawSubset(i);
     }
 }
+
+void Mesh::UpdateLocalBounds(){
+	assert(NULL != mesh_);
+	
+	unsigned int positionOffset = -1;
+
+	D3DVERTEXELEMENT9 vertexElement[MAX_FVF_DECL_SIZE];
+	mesh_->GetDeclaration(vertexElement);
+
+	unsigned int i=0;
+	while(i<MAX_FVF_DECL_SIZE && vertexElement[i].Stream != 0xFF){
+		if(D3DDECLUSAGE_POSITION==vertexElement[i].Usage){
+			positionOffset = vertexElement[i].Offset;
+		}
+		i++;
+	}
+	assert(positionOffset>=0);
+
+	unsigned char* vertices;
+		
+	assert(SUCCEEDED(mesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
+
+	localBounds_.recompute(vertices, mesh_->GetNumVertices(), mesh_->GetNumBytesPerVertex());	
+
+	mesh_->UnlockVertexBuffer();
+
+}
+
 
 
 

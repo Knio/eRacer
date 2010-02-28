@@ -78,17 +78,6 @@ protected:
 	MeshNode(const string& name);
 
 	/**
-	 * @brief update the local bounding volume from the mesh data
-	 *
-	 * This method should be called whenever vertex data changes (i.e. after loading)
-	 * to bring the bounding volume up to date.
-	 * If only the transformation changes, use UpdateWorldBounds() instead.
-	 *
-	 * @see UpdateWorldBounds()
-	 */
-	void UpdateLocalBounds();
-
-	/**
 	 * @brief update the world bounding volume by transforming the local bounding volume
 	 *
 	 * This method should be called whenever the transform of the mesh node changes.
@@ -111,7 +100,6 @@ protected:
 	 */
 	Matrix transform_;
 
-	BoundingSphere localBounds_;
 
 };
 
