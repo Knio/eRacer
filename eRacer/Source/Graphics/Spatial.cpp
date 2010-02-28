@@ -21,16 +21,16 @@ Spatial::Spatial(const string& name)
 Spatial::~Spatial(){
 }
 
-void Spatial::cull(const Camera& camera, vector<const MeshNode*>& visibleNodes) const{
+void Spatial::cull(const Camera& camera, vector<const Renderable*>& visibleRenderables) const{
 	if(!visible)
 		return;
 
 	for(int i=0; i<6; i++){
-		if(worldBoundingVolume_.cull(camera.GetPlane(i)))
+		if(worldBounds_.cull(camera.GetPlane(i)))
 			return;
 	}
 
-	cullRecursive(camera, visibleNodes);
+	cullRecursive(camera, visibleRenderables);
 }
 
 

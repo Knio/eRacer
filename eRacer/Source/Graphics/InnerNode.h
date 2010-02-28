@@ -38,12 +38,12 @@ public:
 	 *
 	 * @param camera
 	 *			The camera to cull against
-	 * @param visibleNodes
+	 * @param visibleRenderables
 	 * 			A vector to push all visible nodes to
 	 * 
 	 * @see Spatial::cullRecursive
 	 */
-	virtual void cullRecursive(const Camera& camera, vector<const MeshNode*>& visibleNodes) const;
+	virtual void cullRecursive(const Camera& camera, vector<const Renderable*>& visibleRenderables) const;
 
 	/**
 	 * @brief add a child to this node

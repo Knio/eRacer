@@ -91,30 +91,6 @@ Point3	mul1(const Matrix &m, const Point3  &v)
 	return r;
 }
 
-Vector3 transformedAffine(const Matrix& T, const Vector3& u){
-	//Make sure the matrix is affine
-	assert(affine(T));
-
-
-	Vector4 temp;
-	D3DXVec3Transform(&temp, &u, &T);
-
-	Vector3 result(0,0,0);
-	memcpy(&result, &temp, sizeof(Vector3));
-	return result;
-
-}
-
-const Vector3& transformAffine(const Matrix& T, Vector3& u){
-	//Make sure the matrix is affine
-	assert(affine(T));
-
-	Vector4 temp;
-	D3DXVec3Transform(&temp, &u, &T);
-
-	memcpy(&u, &temp, sizeof(Vector3));
-	return u;
-}
 
 Matrix CreateMatrix(const Point3& position, const Matrix& orientation)
 {
@@ -175,7 +151,7 @@ void ExtractScaling(const Matrix& matrix, float& scaleX, float& scaleY, float& s
 	static Vector3 scale;
 	static Vector3 translation;
 	static D3DXQUATERNION rotation;
-	assert(D3DXMatrixDecompose(&scale,&rotation,&translation, &matrix));
+	assert(SUCCEEDED(D3DXMatrixDecompose(&scale,&rotation,&translation, &matrix)));
 	scaleX = scale.x;
 	scaleY = scale.y;
 	scaleZ = scale.z;
@@ -185,7 +161,7 @@ void ExtractRotation(const Matrix& matrix, Matrix& rotationMatrix){
 	static Vector3 translation;
 	static D3DXQUATERNION rotation;
 	float angle;
-	assert(D3DXMatrixDecompose(&scaleOrAxis,&rotation,&translation, &matrix));
+	assert(SUCCEEDED(D3DXMatrixDecompose(&scaleOrAxis,&rotation,&translation, &matrix)));
 	D3DXQuaternionToAxisAngle(&rotation,&scaleOrAxis, &angle);
 	D3DXMatrixRotationAxis(&rotationMatrix, &scaleOrAxis,angle);
 }
@@ -195,7 +171,7 @@ void ExtractAngleAxis(const Matrix& matrix, float& angle, Vector3& axis){
 	static Vector3 scale;
 	static Vector3 translation;
 	static D3DXQUATERNION rotation;
-	assert(D3DXMatrixDecompose(&scale,&rotation,&translation, &matrix));
+	assert(SUCCEEDED(D3DXMatrixDecompose(&scale,&rotation,&translation, &matrix)));
 	D3DXQuaternionToAxisAngle(&rotation,&axis, &angle);
 }
 
@@ -206,7 +182,7 @@ void Decompose(const Matrix& matrix, Point3& position, Matrix& rotation, float& 
 	static D3DXQUATERNION quat;
 	
 	float angle;
-	assert(D3DXMatrixDecompose(&scaleOrAxis,&quat,&position, &matrix));
+	assert(SUCCEEDED(D3DXMatrixDecompose(&scaleOrAxis,&quat,&position, &matrix)));
 	scaleX = scaleOrAxis.x;
 	scaleY = scaleOrAxis.y;
 	scaleZ = scaleOrAxis.z;

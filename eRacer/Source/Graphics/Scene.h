@@ -47,7 +47,7 @@ public:
 	 *			the vector the visible renderables are appended to 
 	 *
 	 */
-	void GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const;
+	void GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const;
 
 	/**
 	 * @brief Factory method to create new non-moving mesh nodes in the scene

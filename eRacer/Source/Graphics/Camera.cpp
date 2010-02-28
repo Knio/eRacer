@@ -147,9 +147,9 @@ void Camera::SetViewMatrix(const Matrix& viewMatrix){
 	lookAt_ = Z;
 	up_ = Y;
 
-	transformAffine(viewMatrix, position_);
-	transformAffine(viewMatrix, lookAt_);
-	transformAffine(viewMatrix, up_);
+	mul1(viewMatrix, position_);
+	mul1(viewMatrix, lookAt_);
+	mul0(viewMatrix, up_);
 	approxUp_ = up_;
 
 }

@@ -10,8 +10,9 @@
 
 #include <string>
 #include <vector>
-#include "AxisAlignedBoundingBox.h"
+#include "BoundingSphere.h"
 #include "Camera.h"
+#include "Renderable.h"
 
 namespace Graphics {
 
@@ -42,11 +43,13 @@ public:
 	 *
 	 * @param camera
 	 *			The camera to cull against
-	 * @param visibleNodes
+	 * @param visibleRenderables
 	 * 			A vector to push all visible nodes to
 	 */
-	void cull(const Camera& camera, vector<const MeshNode*>& visibleNodes) const;
-	const AxisAlignedBoundingBox& getWorldBoundingVolume() const;
+	void cull(const Camera& camera, vector<const Renderable*>& visibleRenderables) const;
+
+
+	const BoundingSphere& getWorldBounds() const;
 
 	bool visible;
 protected:
@@ -58,13 +61,13 @@ protected:
 	 * @param visibleNodes
 	 * 			A vector to push all visible nodes to
 	 */
-	virtual void cullRecursive(const Camera& camera, vector<const MeshNode*>& visibleNodes) const = 0;
+	virtual void cullRecursive(const Camera& camera, vector<const Renderable*>& visibleRenderables) const = 0;
 	string name_;	
-	AxisAlignedBoundingBox worldBoundingVolume_;
+	BoundingSphere worldBounds_;
 };
 
-inline const AxisAlignedBoundingBox& Spatial::getWorldBoundingVolume() const{
-	return worldBoundingVolume_;
+inline const BoundingSphere& Spatial::getWorldBounds() const{
+	return worldBounds_;
 }
 
 };

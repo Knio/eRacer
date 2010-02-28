@@ -73,34 +73,6 @@ public:
 	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
 
 	/**
-	 * @brief read access to the vector of materials
-	 *
-	 * @return read-only referece to the vector of materials
-	 */
-	//const vector<D3DMATERIAL9*>& Materials() const;
-	
-	/**
-	 * @brief read/write access to the vector of materials
-	 * 
-	 * @return read/write reference to the vector of materials
-	 */
-	//vector<D3DMATERIAL9*>& Materials();
-
-	/**
-	 * @brief read access to the vector of textures
-	 *
-	 * @return read-only referece to the vector of textures
-	 */
-	//const vector<IDirect3DTexture9*>& Textures() const;
-
-	/**
-	 * @brief read/write access to the vector of textures
-	 * 
-	 * @return read/write reference to the vector of textures
-	 */
-	//vector<IDirect3DTexture9*>& Textures();
-
-	/**
 	 * @brief flag to indicate whether the mesh is already initialized. 
 	 *
 	 * This prevents the mesh from drawing itself before it is properly loaded.

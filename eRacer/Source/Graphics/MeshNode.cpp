@@ -27,8 +27,8 @@ MeshNode::MeshNode(const string& name)
 MeshNode::~MeshNode(){
 }
 
-void MeshNode::cullRecursive(const Camera&, vector<const MeshNode*>& visibleNodes) const{
-	visibleNodes.push_back(this);
+void MeshNode::cullRecursive(const Camera&, vector<const Renderable*>& visibleRenderables) const{
+	visibleRenderables.push_back(this);
 }
 
 void MeshNode::Draw(IDirect3DDevice9* device) const{
@@ -57,14 +57,9 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 }
 
 
-void MeshNode::UpdateBounds(){
-	
-	// TODO: This is *way* too expensive. (Currently 26% CPU usage) Should just be computed once, and then the AABB be transformed
-	return;
-	
+void MeshNode::UpdateLocalBounds(){
 	assert(NULL != mesh_);
 	
-	unsigned int bytesPerVertex = mesh_->GetNumBytesPerVertex();
 	unsigned int positionOffset = -1;
 
 	D3DVERTEXELEMENT9 vertexElement[MAX_FVF_DECL_SIZE];
@@ -83,40 +78,11 @@ void MeshNode::UpdateBounds(){
 		
 	assert(SUCCEEDED(mesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
 
-
-	Point3 min, max;
-	Point3 position = transformedAffine(transform_,*(Point3*)(vertices+positionOffset));
-	min.x = max.x = position.x;
-	min.y = max.y = position.y;
-	min.z = max.z = position.z;
-    
-
-	vertices+=bytesPerVertex;
-    
-	unsigned int n = mesh_->GetNumVertices();
-	for (unsigned int i=1; i<n; i++) {
-		position = transformedAffine(transform_,*(Point3*)vertices);
-        if(position.x < min.x)
-			min.x = position.x;
-		else if(position.x > max.x)
-			max.x = position.x;
-
-		if(position.y < min.y)
-			min.y = position.y;
-		else if(position.y > max.y)
-			max.y = position.y;
-
-		if(position.z < min.z)
-			min.z = position.z;
-		else if(position.z > max.z)
-			max.z = position.z;
-
-        vertices+=bytesPerVertex;
-    }
+	localBounds_.recompute(vertices, mesh_->GetNumVertices(), mesh_->GetNumBytesPerVertex());	
 
 	mesh_->UnlockVertexBuffer();
 
-	worldBoundingVolume_.set(min, max);
+	UpdateWorldBounds();
 }
 
 void MeshNode::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures){
@@ -125,7 +91,7 @@ void MeshNode::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* mate
 	
 	Mesh::Init(mesh,nMaterials, materials, textures);
 	
-	UpdateBounds();
+	UpdateLocalBounds();
 }
 
 }

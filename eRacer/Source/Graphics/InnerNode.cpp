@@ -24,19 +24,20 @@ InnerNode::~InnerNode(){
 	}
 }
 
-void InnerNode::cullRecursive(const Camera& camera, vector<const MeshNode*>& visibleNodes) const{
+void InnerNode::cullRecursive(const Camera& camera, vector<const Renderable*>& visibleRenderables) const{
 	for(vector<Spatial*>::const_iterator i = children_.begin();
 		i != children_.end(); i++){
-		(*i)->cull(camera,visibleNodes);
+		(*i)->cull(camera,visibleRenderables);
 	}
 }
 
 void InnerNode::addChild(Spatial* spatial){
 	children_.push_back(spatial);
-	worldBoundingVolume_.merge(spatial->getWorldBoundingVolume());
+	worldBounds_.merge(spatial->getWorldBounds());
 }
 
 void InnerNode::removeChild(Spatial* spatial){
+	assert(false);
 	/*
 	worldBoundingVolume_.reset();
 	for(vector<Spatial*>::iterator i = children_.begin();

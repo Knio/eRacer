@@ -15,4 +15,11 @@ struct Plane {
 	float distance;
 };
 
+struct Sphere {
+	Sphere() : center(ORIGIN), radius(0.0f) {}
+
+	Point3 center;
+	float radius;
+};
+
 #endif // TYPES_H_

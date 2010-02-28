@@ -95,8 +95,6 @@ Point3	mul1(const Matrix &m, const Point3  &v);
 
 Vector3 project(const Vector3 &a, const Vector3 &b);
 
-Vector3 transformedAffine(const Matrix& T, const Vector3& u);
-const Vector3& transformAffine(const Matrix& T, Vector3& u);
 
 
 bool affine(const Matrix& m);
