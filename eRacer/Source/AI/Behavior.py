@@ -38,5 +38,9 @@ class AIBehavior(Behavior):
   
   def Tick(self,time):
     pos = self.parent.physics.GetPosition()
-    #print pos
     self.line.UpdateWaypoint(self.parent.physics.GetPosition())
+    cur = self.line.Peek(0)
+    game().graphics.graphics.WriteString(
+      "cur waypoint: " + str(cur),
+      "Verdana", 12, Point3(0,0,0)
+    )
