@@ -120,7 +120,7 @@ public:
       {
           arclen[dist] = i;
           Vector3 fw = track[(i+1)%d].position - track[i].position;
-          track[i].fw = fw;
+          track[i].fw = normalized(fw);
           track[i].dist = dist;
           dist += length(fw);
       }
@@ -152,24 +152,59 @@ public:
     for (int i=0;i<N;i++)
     {      
       Frame frame = track[i];
-      Matrix tx;
-      Point3 fw = frame.position + frame.fw;
-      D3DXMatrixLookAtLH(
-        &tx, 
-        &frame.position,
-        &fw,
-        &frame.up
-      );
+      Vector3 &ap = frame.position;
+      Vector3 &ay = frame.up;
+      Vector3 &az = frame.fw;      
+      Vector3  ax = cross(ay, az);
+      /*
       
-      debug(tx);
+      http://msdn.microsoft.com/en-us/library/ee422511(VS.85).aspx
+
+                            ( ax.x  ay.x  az.x    0 )
+                            ( ax.y  ay.y  az.y    0 )
+                            ( ax.z  ay.z  az.z    0 )
+                          * ( ap.x  ap.y  ap.z    1 )      
+      ( 1  0  0  0  )     = (                       )
+      
+            
+      */
+      Matrix tx(
+         ax.x, ax.y, ax.z,   0,
+         ay.x, ay.y, ay.z,   0,
+         az.x, az.y, az.z,   0,
+           
+         ap.x, ap.y, ap.z,   1
+      );
+      // debug(ax);
+      // debug(ay);
+      // debug(az);
+      // debug(ap);
+      
+      // debug(mul0(tx, X));
+      // debug(mul0(tx, Y));
+      // debug(mul0(tx, Z));
+      // debug(mul1(tx, ORIGIN));
+      
+      // assert(length(mul0(tx, X)      - ax) < 0.01);
+      // assert(length(mul0(tx, Y)      - ay) < 0.01);
+      // assert(length(mul0(tx, Z)      - az) < 0.01);
+      // assert(length(mul1(tx, ORIGIN) - ap) < 0.01);
+      
+      // Point3 fw = frame.position + frame.fw;
+      // D3DXMatrixLookAtLH(
+      //   &tx, 
+      //   &frame.position,
+      //   &fw,
+      //   &frame.up
+      // );
       
       for (int j=0;j<D;j++)  
       {
         TrackVertex& v = meshverts[i*D + j];
         v.position = mul1(tx, profile[j].position);
         v.normal   = mul0(tx, profile[j].normal);
-        v.tu = frame.dist;
-        v.tv = profile[j].tv;
+        v.tu = profile[j].tu;
+        v.tv = profile[j].tv * frame.dist;
         
         
         /* Index buffer
@@ -188,6 +223,7 @@ public:
         |\  |\  |\  |\  |\
         
         
+        vertex buffer:
         
         4--5
         |\ |
@@ -196,6 +232,8 @@ public:
         |\ |
         | \|
         0--1
+        
+        idx buffer:
         
         0 1 2
         1 2 3

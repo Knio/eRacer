@@ -95,7 +95,7 @@ class GameState(State):
     scene = eRacer.Scene()
     self.scene = scene
         
-    self.player = Vehicle(self.scene)
+    self.player = Vehicle(self.scene, Point3(0, 13, 0))
     self.player.behavior = PlayerBehavior(self.player)
   
     # self.ai1 = Vehicle(self.scene, Vector3(80, 2, -20))
@@ -137,7 +137,7 @@ class GameState(State):
         view.AddRenderable(s)      
       view.AddRenderable(self.skybox)
       
-    game().logic.Add(Ship(scene))
+    # game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
     
     
