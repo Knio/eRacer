@@ -29,28 +29,34 @@ using namespace std;
 
 namespace Sound {
 
-typedef map<string, FSOUND_SAMPLE*> FontCache;
+typedef map<string, FSOUND_SAMPLE*> FilenameCache;
+typedef pair<string, int> SoundDescription;
 
-struct SoundFx 
+
+class SoundFx 
 {
 public:
 	FSOUND_SAMPLE* soundsample;
+
 	int channel;
 	int pitch;
-	bool isPaused;
-	bool isLooping;
-
-	//3D positional info
-	bool is3D;
+	unsigned char volume;
 	Point3 position;
 	Vector3 velocity;
 	float maxDist;
 	float minDist;
+	
+	bool isPaused;
+	bool isLooping;
+	bool is3D;
+
 
    SoundFx() 
    {
+	  soundsample = NULL;
       channel = -1;
 	  pitch = 44100;
+	  volume = 128;
 	  isPaused = false;
 	  is3D = false;
 	  isLooping = true;
@@ -74,11 +80,10 @@ class SoundLayer
 private:
 	static SoundLayer *m_pGlobalSoundLayer;
 
-	FSOUND_SAMPLE* m_musicSample;
+	FilenameCache m_SoundCache2D;
+	map<SoundDescription, FSOUND_SAMPLE*> m_SoundCacheSimple;
 
-	//map<const char*, FMUSIC_MODULE*> m_MusicCache;
-	FontCache m_SoundCache2D;
-	FontCache m_SoundCache3D;
+	//TODO: GLOBAL_VOLUME
 
 protected:
 	SoundLayer();	//Constructor, Singleton 
@@ -95,12 +100,7 @@ public:
 	void LoadSoundFx(const string& filename, SoundFx* samp);
 	void UpdateSoundFx(SoundFx* samp);
 
-	int LoopMusic(const string& name);
-	int StopMusic();
-
-	int PlaySound3D(const string& name, const Point3& pos, const Vector3& vel);
 	int PlaySound2D(const string& name);
-	int ChangePitch(int channel, int pitch);
 
 	int Shutdown();
 
