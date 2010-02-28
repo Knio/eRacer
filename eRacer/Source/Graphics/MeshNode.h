@@ -76,7 +76,7 @@ public:
 	 *			a pointer to the memory location where the pointers to the textures are stored
 	 */
 	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
-
+	virtual void Init(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture);
 
 protected:
 	/**

@@ -24,7 +24,7 @@ struct TrackVertex
   Point3  position;
   Vector3 normal;
   float tu, tv;
-  TrackVertex(const Point3 &p, const Vector3 &n, float tu, float tv) : 
+  TrackVertex(const Point3 &p=ORIGIN, const Vector3 &n=Y, float tu=0.f, float tv=0.f) : 
     position(p),
     normal(n),
     tu(tu),
@@ -38,7 +38,7 @@ class Track
   vector<Frame>  track;
   
   float dist;
-  std::map<double, int> arclen;
+  std::map<float, int> arclen;
 
 public:
   Track()
@@ -58,7 +58,7 @@ public:
     // find the 'next' curve point
     while (d >= dist) d -= dist;
     while (d < 0)     d += dist;
-    std::map<double, int>::iterator l = arclen.lower_bound(d);
+    std::map<float, int>::iterator l = arclen.lower_bound(d);
     
     assert(l!=arclen.end());
     
@@ -98,6 +98,9 @@ public:
               Vector3 n1 = r1[i].up     *(3/4.) + r1[(i-1+d)%d].up      *(1/8.) + r1[(i+1)%d].up     *(1/8.);
               Vector3 n2 = r1[i].up     *(2/4.) + r1[(i+1  )%d].up      *(2/4.);
               
+              debug(p1);
+              debug(p2);
+              
               normalize(n1);
               normalize(n2);
               
@@ -124,7 +127,7 @@ public:
       arclen[dist] = 0;
   }
   
-  ID3DXMesh* CreateMesh(vector<TrackVertex> profile)
+  ID3DXMesh* CreateMesh(const vector<TrackVertex>& profile)
   {
     int N = track.size();
     int D = profile.size();
@@ -135,14 +138,14 @@ public:
     assert(SUCCEEDED(D3DXCreateMeshFVF(
       N*(D-1)*2,                  // DWORD NumFaces,
       N*D,                        // DWORD NumVertices,
-      D3DXMESH_USEHWONLY,         // DWORD Options,
+      0, //D3DXMESH_USEHWONLY,         // DWORD Options,
       Vertex_Format,              // DWORD FVF,
       Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
       &mesh                       // LPD3DXMESH * ppMesh
     )));
     
     TrackVertex* meshverts;
-    unsigned int* meshidx;
+    unsigned short* meshidx;
     assert(SUCCEEDED(mesh->LockVertexBuffer(0, (void**)&meshverts)));
     assert(SUCCEEDED(mesh->LockIndexBuffer(0,  (void**)&meshidx)));
     
@@ -157,6 +160,8 @@ public:
         &fw,
         &frame.up
       );
+      
+      debug(tx);
       
       for (int j=0;j<D;j++)  
       {
@@ -182,17 +187,32 @@ public:
         *---*---*---*---*- i+0
         |\  |\  |\  |\  |\
         
+        
+        
+        4--5
+        |\ |
+        | \|
+        2--3
+        |\ |
+        | \|
+        0--1
+        
+        0 1 2
+        1 2 3
+        2 3 4
+        3 4 5
+        
         */
         
         if (j == D-1) continue;
         
-        meshidx[(i*(D-1)*2 + j*2 + 0)*3 + 0] = (i+0)*D + (j + 0);
-        meshidx[(i*(D-1)*2 + j*2 + 0)*3 + 1] = (i+0)*D + (j + 1);
-        meshidx[(i*(D-1)*2 + j*2 + 0)*3 + 2] = (i+1)*D + (j + 0);
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 0] = ((i+0)%N)*D + ((j + 0)%D);
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 1] = ((i+0)%N)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
         
-        meshidx[(i*(D-1)*2 + j*2 + 1)*3 + 1] = (i+0)*D + (j + 1);
-        meshidx[(i*(D-1)*2 + j*2 + 1)*3 + 2] = (i+1)*D + (j + 0);
-        meshidx[(i*(D-1)*2 + j*2 + 1)*3 + 0] = (i+1)*D + (j + 1);
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 0] = ((i+0)%N)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 1] = ((i+1)%N)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
         
       }
     }

@@ -32,6 +32,23 @@ void Mesh::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* material
 	initialized = true;
 }
 
+void Mesh::Init(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture){
+  assert(NULL != mesh);
+  assert(NULL != texture);
+
+  mesh_ = mesh;
+  nMaterials_ = 1;
+  materials_  = new D3DMATERIAL9[1];
+  textures_   = new IDirect3DTexture9*[1];
+  
+  materials_[0] = material;
+  textures_[0]  = texture;
+  
+  initialized = true;
+}
+
+
+
 /*
 void Mesh::Init(ID3DXMesh* mesh, IDirect3DTexture9* textures){
   assert(NULL != mesh);

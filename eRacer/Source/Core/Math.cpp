@@ -18,6 +18,9 @@ _41 = %10.4f, _42 = %10.4f _43 = %10.4f _44 = %10.4f\n\
 		m._41, m._42, m._43, m._44);
 		
 }
+void debug(const Point3 &m){
+	printf("(%6.2f %6.2f %6.2f)\n", m.x, m.y, m.z);
+}
 
 ostream& operator<<(ostream& s, const Vector3& v){
 	return s << "(" << v.x << ", " << v.y << ", " << v.z << ")";

@@ -127,5 +127,13 @@ void MeshNode::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* mate
 	
 	UpdateBounds();
 }
+void MeshNode::Init(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture){
+	assert(!initialized);
+	
+	Mesh::Init(mesh, material, texture);
+	
+	UpdateBounds();
+}
+
 
 }

@@ -41,6 +41,7 @@ class Event(eRacer.Event):
           import traceback
           print 'Error calling state top'
           traceback.print_exc()
+          raise
         try:        
           s = game().states[-1].mapping
           if s and hasattr(s, attr): getattr(s, attr)(*args, **kwargs)
@@ -48,6 +49,7 @@ class Event(eRacer.Event):
           import traceback
           print 'Error calling mapping'
           traceback.print_exc() 
+          raise
         return 0
       return f
 
