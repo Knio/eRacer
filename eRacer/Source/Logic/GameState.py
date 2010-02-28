@@ -86,16 +86,21 @@ class GameState(State):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
-
-    # TODO
-    # can we render a fake loading screen here until the real one works?
-    lineData = [Point3(80, 2, 20), Point3(80, 0, 100)]
-    raceline = Raceline(lineData)
-    
     scene = eRacer.Scene()
     self.scene = scene
+    
+    # TODO
+    # can we render a fake loading screen here until the real one works?
+    lineData = [Point3(80, 0, -80), Point3(80, 2, 0), Point3(80, 1, 100), Point3(60, 0, 200), 
+    Point3(30, -30, 300), Point3(-50, -35, 400), Point3(-170, -75, 500), Point3(-300, -100, 600),
+    Point3(-350, -100, 675), Point3(-400, -95, 750), Point3(-460, -90, 800), 
+    Point3(-550, -95, 780), Point3(-100, 0, 200), Point3(-100, 0, 50)]
+    raceline = Raceline(lineData)
+    #debug waypoint boxes, static
+    for point in lineData:
+      game().logic.Add(Box(scene, point))
         
-    self.player = Vehicle(self.scene)
+    self.player = Vehicle(self.scene, Vector3(90, 2, -20))
     
     playerBehavior = PlayerBehavior(self.player)
     self.player.behavior = playerBehavior
@@ -146,10 +151,6 @@ class GameState(State):
     # game().logic.Add(Plane(scene))
     # self.coordinatecross = CoordinateCross(self.view)
     # game().logic.Add(self.coordinatecross)
-    
-    #for j in range (24, 35, 3):
-    #  for i in range(-191, -225, -2):
-    #    game().logic.Add(Box(scene, Vector3(-1850, j, i)))
         
     for i in range(-191, -230, -5):
         game().logic.Add(Box(scene, Vector3(-1850, 24, i)))
@@ -178,8 +179,8 @@ class GameState(State):
     self.sound.looping  = True
     self.sound.is3D     = False
     self.sound.isPaused = False
-    
-    game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
+    self.sound.volume = 128
+    game().sound.sound.LoadSoundFx("Resources/Sounds/90s.mp3", self.sound)
     
     self.lastMeteorTime = 0
     
@@ -209,8 +210,6 @@ class GameState(State):
       m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
       game().logic.Add(m)
   
-  
-
       
   def CameraChangedEvent(self):
     self.viewIndex = (self.viewIndex+1) % len(self.views)

@@ -17,6 +17,8 @@
 #include "Core/Time.h"
 #include "Core/Event.h"
 #include "Core/Consts.h"
+#include "Core/Math.h"
+#include "Convert.h"
 
 
 using namespace std;
@@ -137,7 +139,15 @@ public:
 	NxScene* ReturnScene();
 
 	virtual void onContactNotify(NxContactPair& pair, NxU32 events);
-
+	/**
+	* @brief casts a ray from pos and returns the distance to the closest object, 
+	* and its normal.
+	* @param pos the position to raycast from
+	* @param dir the direction of the ray
+	* @param normHit the normal of the hit object, overwrittin
+	* @return the distance to the hit object
+	*/
+	float Raycast(const Point3& pos, const Vector3& dir, Vector3& normHit = Vector3(0, 0, 0));
 
 protected:
 	// Physics SDK globals
