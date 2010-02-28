@@ -91,13 +91,16 @@ class GameState(State):
     
     # TODO
     # can we render a fake loading screen here until the real one works?
-    lineData = [Point3(80, 2, -80), Point3(80, 2, 0), Point3(80, 0, 100), Point3(60, 0, 200), Point3(-100, 0, 200), Point3(-100, 0, 50)]
+    lineData = [Point3(80, 0, -80), Point3(80, 2, 0), Point3(80, 1, 100), Point3(60, 0, 200), 
+    Point3(30, -15, 300), Point3(-30, -35, 400), Point3(-150, -75, 500), Point3(-300, -100, 600),
+    Point3(-370, -100, 675), Point3(-420, -100, 750), Point3(-460, -100, 800), 
+    Point3(-550, -100, 780), Point3(-100, 0, 200), Point3(-100, 0, 50)]
     raceline = Raceline(lineData)
     #debug waypoint boxes, static
     for point in lineData:
       game().logic.Add(Box(scene, point))
         
-    self.player = Vehicle(self.scene)
+    self.player = Vehicle(self.scene, Vector3(90, 2, -20))
     
     playerBehavior = PlayerBehavior(self.player)
     self.player.behavior = playerBehavior

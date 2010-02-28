@@ -44,3 +44,22 @@ class AIBehavior(Behavior):
       "cur waypoint: " + str(cur),
       "Verdana", 12, Point3(0,0,0)
     )
+    tx    = self.parent.physics.GetTransform()
+    bodyForward = mul0(tx, Z) # forward direction of body
+    bodyRight = mul0(tx, X) #vector pointing right of body
+    toWaypoint = normalized(cur-pos) # vector towards waypoint
+    #print toWaypoint.x, toWaypoint.y, toWaypoint.z
+    turnProj = project(toWaypoint, bodyRight)
+    
+    turnScale = 1.0
+    turnSize = length(turnProj) * turnScale # probably use a damping factor
+    if length(turnProj) > 0:
+      costheta = dot(turnProj, bodyRight) / length(turnProj)
+   
+      if 0.999 < costheta < 1.001:#right turn
+        self.parent.Turn(turnSize)
+      else:
+        self.parent.Turn(-turnSize)
+    
+    
+    self.parent.Accelerate(0.3)
