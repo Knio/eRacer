@@ -80,8 +80,8 @@ class Vehicle(Entity):
     self.sound.looping = True
     self.sound.is3D   = True
     self.sound.isPaused = True
-    self.sound.volume = 92
-    self.sound.minDist = 1
+    self.sound.volume = 250
+    self.sound.minDist = 50
     game().sound.sound.LoadSoundFx("Resources/Sounds/DrumLoop.wav", self.sound)
     
     
@@ -151,6 +151,8 @@ class Vehicle(Entity):
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
     self.sound.pitch = int(44100 * length(vel) / 60.0)
+    if self.crashtime > 0:
+      self.sound.pitch = int(54100 * self.throttle + self.sound.pitch)
     game().sound.sound.UpdateSoundFx(self.sound)
     
     

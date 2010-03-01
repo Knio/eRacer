@@ -175,7 +175,7 @@ class GameState(State):
     self.sound.looping  = True
     self.sound.is3D     = False
     self.sound.isPaused = False
-    self.sound.volume = 128
+    self.sound.volume = 72
     game().sound.sound.LoadSoundFx("Resources/Sounds/90s.mp3", self.sound)
     
     self.lastMeteorTime = 0
