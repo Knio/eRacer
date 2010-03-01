@@ -22,6 +22,7 @@ Spatial::~Spatial(){
 }
 
 void Spatial::cull(const Camera& camera, vector<const Renderable*>& visibleRenderables) const{
+	
 	if(!visible)
 		return;
 

@@ -5,10 +5,9 @@ class SkyBox(eRacer.SkyBox):
     # why can python not call default constructor?
     eRacer.SkyBox.__init__(self)
     
-    def load(r):
-      if r:
-        print 'Failed to load mesh!!'
-        return
-      #self.initialized = True      
-    game().io.LoadMeshAsync(load, self, "skybox2.x")   
+    def load(mesh):
+      if mesh:
+        self.Init(mesh)
+
+    game().io.LoadMeshAsync(load, "skybox2.x")   
     

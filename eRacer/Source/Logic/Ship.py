@@ -9,13 +9,11 @@ class Ship(Entity):
     self.graphics.thisown = 0
     self.transform = eRacer.CreateMatrix(Vector3(10,3,4))
         
-    def load(r):
-      if r:
-        print 'Failed to load mesh!!'
-        return
-      #self.graphics.initialized = True
+    def load(mesh):
+      if mesh:
+        self.graphics.Init(mesh)
       
-    game().io.LoadMeshAsync(load, self.graphics, "Ship1.x")
+    game().io.LoadMeshAsync(load, "Ship1.x")
     
   def Tick(self, time):
     pass

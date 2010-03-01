@@ -19,7 +19,7 @@ MovingMeshNode::~MovingMeshNode(){
 
 void MovingMeshNode::SetTransform(const  Matrix& transform){
 	transform_ = transform;
-	if(NULL != mesh_)	
+	if(initialized)	
 		UpdateWorldBounds();
 }
 

@@ -18,7 +18,9 @@ namespace Graphics {
 
 MeshNode::MeshNode(const string& name)
 	: Spatial(name),
-	  transform_(IDENTITY)
+	  transform_(IDENTITY),
+	  initialized(false),
+	  mesh_(NULL)
 {
 	
 }
@@ -49,7 +51,7 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 	for(UINT iPass = 0; iPass < cPasses; iPass++ )
 	{
 			GraphicsLayer::GetInstance()->m_pEffect->BeginPass( iPass ) ;
-			Mesh::Draw(device);
+			mesh_->Draw(device);
 			assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->EndPass()));
 	}
 	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->End()));
@@ -58,14 +60,15 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 
 
 
-void MeshNode::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures){
+void MeshNode::Init(Mesh* mesh){
 	//this method can only be called once
 	assert(!initialized);
+	assert(NULL != mesh);
 	
-	Mesh::Init(mesh,nMaterials, materials, textures);
+	mesh_ = mesh;
 	
 	UpdateWorldBounds();
-
+	initialized = true;
 }
 
 }

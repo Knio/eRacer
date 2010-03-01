@@ -20,5 +20,6 @@ class Sound(Module):
     
   def Quit(self):
     Module.Quit(self)
-    self.sound.StopMusic()
+    #this method does not exist anymore. Don or Tom should check whether it needs replacement
+    #self.sound.StopMusic()
     self.sound.Shutdown()

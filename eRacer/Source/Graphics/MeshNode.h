@@ -27,7 +27,7 @@ namespace Graphics {
  * @see MovingMeshNode
  * @see StaticMeshNode
  */
-class MeshNode : public Spatial, public Mesh
+class MeshNode : public Spatial, public Renderable
 {
 public:
 	/**
@@ -57,17 +57,11 @@ public:
 	 * @brief initialize this mesh. Can be overidden by subclasses
 	 *
 	 * @param mesh
-	 *			a pointer to the Direct3D mesh
-	 * @param nMaterials
-	 *			the number of materials and textures
-	 * @param materials
-	 *			a pointer to the memory location where the materials are stored
-	 * @param textures
-	 *			a pointer to the memory location where the pointers to the textures are stored
+	 *			a pointer to a mesh wrapper
 	 */
-	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
+	virtual void Init(Mesh* mesh);
 
-
+	bool initialized;
 protected:
 	/**
 	 * @brief Constructor. Only for inheriting classes because this class is abstract.
@@ -100,6 +94,8 @@ protected:
 	 */
 	Matrix transform_;
 
+	Mesh* mesh_;
+
 
 };
 
@@ -108,10 +104,10 @@ inline const Matrix& MeshNode::GetTransform() const {
 }
 
 inline void MeshNode::UpdateWorldBounds(){
-	worldBounds_.center = mul0(transform_, localBounds_.center);
+	worldBounds_.center = mul0(transform_, mesh_->localBounds.center);
 	float x, y, z;
 	ExtractScaling(transform_,x,y,z);
-	worldBounds_.radius = localBounds_.radius * max(max(x,y),z);
+	worldBounds_.radius = mesh_->localBounds.radius * max(max(x,y),z);
 }
 
 

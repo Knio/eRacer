@@ -13,19 +13,28 @@
 namespace Graphics {
 
 Mesh::Mesh()
-:   mesh_(NULL), 
+:   d3dMesh_(NULL), 
 	materials_(NULL),
 	textures_(NULL),
     initialized(false)
 {
 }
 
+Mesh::~Mesh(){
+	if(initialized){
+		delete [] materials_;
+		delete [] textures_;
+		d3dMesh_->Release();
+	}
+}
+
 void Mesh::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures){
+	assert(!initialized);
 	assert(NULL != mesh);
 	assert(NULL != materials);
 	assert(NULL != textures);
 
-	mesh_ = mesh;
+	d3dMesh_ = mesh;
 	nMaterials_ = nMaterials;
 	materials_ = materials;
 	textures_ = textures;
@@ -46,19 +55,19 @@ void Mesh::Draw(IDirect3DDevice9* device) const{
         device->SetTexture(0, textures_[i]);
         
         //make sure the mesh has been initialized at this point
-        assert(NULL != mesh_);
+        assert(NULL != d3dMesh_);
 
-        mesh_->DrawSubset(i);
+        d3dMesh_->DrawSubset(i);
     }
 }
 
 void Mesh::UpdateLocalBounds(){
-	assert(NULL != mesh_);
+	assert(NULL != d3dMesh_);
 	
 	unsigned int positionOffset = -1;
 
 	D3DVERTEXELEMENT9 vertexElement[MAX_FVF_DECL_SIZE];
-	mesh_->GetDeclaration(vertexElement);
+	d3dMesh_->GetDeclaration(vertexElement);
 
 	unsigned int i=0;
 	while(i<MAX_FVF_DECL_SIZE && vertexElement[i].Stream != 0xFF){
@@ -71,11 +80,11 @@ void Mesh::UpdateLocalBounds(){
 
 	unsigned char* vertices;
 		
-	assert(SUCCEEDED(mesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
+	assert(SUCCEEDED(d3dMesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
 
-	localBounds_.recompute(vertices, mesh_->GetNumVertices(), mesh_->GetNumBytesPerVertex());	
+	localBounds.recompute(vertices, d3dMesh_->GetNumVertices(), d3dMesh_->GetNumBytesPerVertex());	
 
-	mesh_->UnlockVertexBuffer();
+	d3dMesh_->UnlockVertexBuffer();
 
 }
 

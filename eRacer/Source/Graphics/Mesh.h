@@ -34,6 +34,8 @@ public:
 	 */
 	Mesh();
 
+	virtual ~Mesh();
+
 	/**
 	 * @brief draw the mesh
 	 *
@@ -58,7 +60,7 @@ public:
 	 * physics to get to the vertex data - unfortunately, even locking
 	 * the buffer for read-only access is not a constant operation in DX.
 	 */
-	ID3DXMesh& mesh() { return *mesh_; };
+	ID3DXMesh& mesh() { return *d3dMesh_; };
 	
 	/**
 	 * @brief initialize this mesh. Can be overidden by subclasses
@@ -81,6 +83,9 @@ public:
 	 */
 	bool initialized;
 
+	BoundingSphere localBounds;
+
+	//friend class IO;
 protected:
 	/**
 	 * @brief update the local bounding volume from the mesh data
@@ -91,38 +96,20 @@ protected:
 	void UpdateLocalBounds();
 
 
-	ID3DXMesh* mesh_;
+	ID3DXMesh* d3dMesh_;
 	unsigned int nMaterials_;
 	D3DMATERIAL9* materials_;
 	IDirect3DTexture9** textures_;
 
-	BoundingSphere localBounds_;
 
 };
 
 
 
 inline const ID3DXMesh* Mesh::GetMesh() const{
-	return mesh_;
+	return d3dMesh_;
 }
 
-/*
-inline const vector<D3DMATERIAL9*>& Mesh::Materials() const{
-	return materials_;
-}
-
-inline vector<D3DMATERIAL9*>& Mesh::Materials(){
-	return materials_;
-}
-
-inline const vector<IDirect3DTexture9*>& Mesh::Textures() const{
-	return textures_;
-}
-
-inline vector<IDirect3DTexture9*>& Mesh::Textures(){
-	return textures_;
-}
-*/
 
 
 

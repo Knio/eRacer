@@ -147,11 +147,7 @@ class GameState(State):
     game().logic.Add(Ship(scene))
     game().logic.Add(Track(scene))
     
-    
-    # game().logic.Add(Plane(scene))
-    # self.coordinatecross = CoordinateCross(self.view)
-    # game().logic.Add(self.coordinatecross)
-        
+            
     for i in range(-191, -230, -5):
         game().logic.Add(Box(scene, Vector3(-1850, 24, i)))
     for i in range(-193, -230, -5):

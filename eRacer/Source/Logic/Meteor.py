@@ -73,13 +73,11 @@ class Meteor(Entity):
     self.graphics.thisown = 0
         
         
-        
-    def load(r):
-      if r:
-        print 'Failed to load mesh!!'
-        return
+    def load(mesh):
+      if mesh:
+        self.graphics.Init(mesh)    
       
-    game().io.LoadMeshAsync(load, self.graphics, self.MODELS[random.randrange(len(self.MODELS))])   
+    game().io.LoadMeshAsync(load, self.MODELS[random.randrange(len(self.MODELS))])   
     
   def reset(self):
     return True

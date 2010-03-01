@@ -26,6 +26,7 @@
 #include "..\Graphics\Renderable.h"
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
+#include "..\Graphics\BoundingSphere.h"
 #include "..\Graphics\Mesh.h"
 #include "..\Graphics\MeshNode.h"
 #include "..\Graphics\StaticMeshNode.h"
@@ -129,6 +130,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 
 %include "..\Graphics\Camera.h"
 
+%include "..\Graphics\BoundingSphere.h"
 %include "..\Graphics\Mesh.h"
 %include "..\Graphics\MeshNode.h"
 

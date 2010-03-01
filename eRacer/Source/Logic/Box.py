@@ -10,13 +10,11 @@ class Box(Entity):
     self.graphics.thisown = 0
     self.graphics.SetTransform(self.transform)
   
-    def load(r):
-      if r:
-        print 'Failed to load mesh!!'
-        return
-      self.graphics.initialized = True
+    def load(mesh):
+      if mesh:
+        self.graphics.Init(mesh)
       
-    game().io.LoadMeshAsync(load, self.graphics, "leather-box.x")   
+    game().io.LoadMeshAsync(load, "leather-box.x")   
     
   def Tick(self, time):
     Entity.Tick(self, time)

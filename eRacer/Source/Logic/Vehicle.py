@@ -57,14 +57,11 @@ class Vehicle(Entity):
 
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
 
-    def load(r):
-      if not r:
-        # self.physics.Init(self.graphics.mesh());
-        self.graphics.initialized = True
-      else:
-        print 'Failed to load mesh!'      
+    def load(mesh):
+      if mesh:
+        self.graphics.Init(mesh)    
     
-    game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
+    game().io.LoadMeshAsync(load, self.MODEL)   
   
     self.throttle = 0.      # position of the throttle on game controller from 0 to 1
     self.brake    = False   # brake button
