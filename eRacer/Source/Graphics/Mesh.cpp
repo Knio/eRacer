@@ -7,7 +7,7 @@
  */
 
 #include "Mesh.h"
-
+#include "GraphicsLayer.h"
 
 
 namespace Graphics {
@@ -52,8 +52,8 @@ void Mesh::Draw(IDirect3DDevice9* device) const{
     // Meshes are divided into subsets, one for each material. Render them in a loop
     for(unsigned int i = 0; i<nMaterials_; i++){
         device->SetMaterial( &materials_[i] );
+        // GraphicsLayer::GetInstance()->SetTexture(0, textures_[i]);
         device->SetTexture(0, textures_[i]);
-        
         //make sure the mesh has been initialized at this point
         assert(NULL != d3dMesh_);
 
