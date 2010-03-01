@@ -37,10 +37,10 @@ void SoundLayer::LoadSoundFx(const string& filename, SoundFx* samp)
 		mode |= FSOUND_HW3D;
 
 	samp->soundsample = FSOUND_Sample_Load(FSOUND_FREE, filename.c_str(), mode, 0, 0);
-	if ((!samp->soundsample)&&(samp->is3D)) {//If hardware loading failed, force software
+	/*if ((!samp->soundsample)&&(samp->is3D)) {//If hardware loading failed, force software
 		mode ^= FSOUND_HW3D; 
 		samp->soundsample = FSOUND_Sample_Load(FSOUND_FREE, filename.c_str(), mode, 0, 0);
-	}
+	}*/
 
 	samp->channel = FSOUND_PlaySoundEx(FSOUND_FREE, samp->soundsample, NULL, TRUE);
 	

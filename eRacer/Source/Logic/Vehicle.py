@@ -82,7 +82,7 @@ class Vehicle(Entity):
     self.sound.isPaused = True
     self.sound.volume = 92
     self.sound.minDist = 1
-    game().sound.sound.LoadSoundFx("Resources/Sounds/SpaceEngine.wav", self.sound)
+    game().sound.sound.LoadSoundFx("Resources/Sounds/DrumLoop.wav", self.sound)
     
     
     
