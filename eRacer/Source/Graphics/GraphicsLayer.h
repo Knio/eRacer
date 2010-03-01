@@ -65,6 +65,14 @@ public:
 	void PostRender();
 	
 	void Shutdown();
+	
+	
+	void SetTexture(UINT id, IDirect3DTexture9* tex)
+	{
+		static IDirect3DTexture9* oldtex[16] =  {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+		if (tex != oldtex[id])
+			m_pd3dDevice->SetTexture(0, oldtex[id]=tex);
+	}
 
 	static GraphicsLayer *GetInstance()
 	{

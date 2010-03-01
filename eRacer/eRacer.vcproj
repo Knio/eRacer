@@ -297,6 +297,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\BoundingSphere.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\BoundingSphere.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Camera.cpp"
 					>
 				</File>

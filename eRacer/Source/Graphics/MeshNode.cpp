@@ -18,7 +18,9 @@ namespace Graphics {
 
 MeshNode::MeshNode(const string& name)
 	: Spatial(name),
-	  transform_(IDENTITY)
+	  transform_(IDENTITY),
+	  initialized(false),
+	  mesh_(NULL)
 {
 	
 }
@@ -27,8 +29,8 @@ MeshNode::MeshNode(const string& name)
 MeshNode::~MeshNode(){
 }
 
-void MeshNode::cullRecursive(const Camera&, vector<const MeshNode*>& visibleNodes) const{
-	visibleNodes.push_back(this);
+void MeshNode::cullRecursive(const Camera&, vector<const Renderable*>& visibleRenderables) const{
+	visibleRenderables.push_back(this);
 }
 
 void MeshNode::Draw(IDirect3DDevice9* device) const{
@@ -50,7 +52,7 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 	for(UINT iPass = 0; iPass < cPasses; iPass++ )
 	{
 			GraphicsLayer::GetInstance()->m_pEffect->BeginPass( iPass ) ;
-			Mesh::Draw(device);
+			mesh_->Draw(device);
 			assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->EndPass()));
 	}
 	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->End()));
@@ -58,82 +60,16 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 }
 
 
-void MeshNode::UpdateBounds(){
-	
-	// TODO: This is *way* too expensive. (Currently 26% CPU usage) Should just be computed once, and then the AABB be transformed
-	return;
-	
-	assert(NULL != mesh_);
-	
-	unsigned int bytesPerVertex = mesh_->GetNumBytesPerVertex();
-	unsigned int positionOffset = -1;
 
-	D3DVERTEXELEMENT9 vertexElement[MAX_FVF_DECL_SIZE];
-	mesh_->GetDeclaration(vertexElement);
-
-	unsigned int i=0;
-	while(i<MAX_FVF_DECL_SIZE && vertexElement[i].Stream != 0xFF){
-		if(D3DDECLUSAGE_POSITION==vertexElement[i].Usage){
-			positionOffset = vertexElement[i].Offset;
-		}
-		i++;
-	}
-	assert(positionOffset>=0);
-
-	unsigned char* vertices;
-		
-	assert(SUCCEEDED(mesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
-
-
-	Point3 min, max;
-	Point3 position = transformedAffine(transform_,*(Point3*)(vertices+positionOffset));
-	min.x = max.x = position.x;
-	min.y = max.y = position.y;
-	min.z = max.z = position.z;
-    
-
-	vertices+=bytesPerVertex;
-    
-	unsigned int n = mesh_->GetNumVertices();
-	for (unsigned int i=1; i<n; i++) {
-		position = transformedAffine(transform_,*(Point3*)vertices);
-        if(position.x < min.x)
-			min.x = position.x;
-		else if(position.x > max.x)
-			max.x = position.x;
-
-		if(position.y < min.y)
-			min.y = position.y;
-		else if(position.y > max.y)
-			max.y = position.y;
-
-		if(position.z < min.z)
-			min.z = position.z;
-		else if(position.z > max.z)
-			max.z = position.z;
-
-        vertices+=bytesPerVertex;
-    }
-
-	mesh_->UnlockVertexBuffer();
-
-	worldBoundingVolume_.set(min, max);
-}
-
-void MeshNode::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures){
+void MeshNode::Init(Mesh* mesh){
 	//this method can only be called once
 	assert(!initialized);
+	assert(NULL != mesh);
 	
-	Mesh::Init(mesh,nMaterials, materials, textures);
+	mesh_ = mesh;
 	
-	UpdateBounds();
-}
-void MeshNode::Init(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture){
-	assert(!initialized);
-	
-	Mesh::Init(mesh, material, texture);
-	
-	UpdateBounds();
+	UpdateWorldBounds();
+	initialized = true;
 }
 
 

@@ -57,14 +57,11 @@ class Vehicle(Entity):
 
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
 
-    def load(r):
-      if not r:
-        # self.physics.Init(self.graphics.mesh());
-        self.graphics.initialized = True
-      else:
-        print 'Failed to load mesh!'      
+    def load(mesh):
+      if mesh:
+        self.graphics.Init(mesh)    
     
-    game().io.LoadMeshAsync(load, self.graphics, self.MODEL)   
+    game().io.LoadMeshAsync(load, self.MODEL)   
   
     self.throttle = 0.      # position of the throttle on game controller from 0 to 1
     self.brake    = False   # brake button
@@ -83,7 +80,9 @@ class Vehicle(Entity):
     self.sound.looping = True
     self.sound.is3D   = True
     self.sound.isPaused = True
-    game().sound.sound.LoadSoundFx("Resources/Sounds/drumloop.wav", self.sound)
+    self.sound.volume = 250
+    self.sound.minDist = 50
+    game().sound.sound.LoadSoundFx("Resources/Sounds/DrumLoop.wav", self.sound)
     
     
     
@@ -152,6 +151,8 @@ class Vehicle(Entity):
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
     self.sound.pitch = int(44100 * length(vel) / 60.0)
+    if self.crashtime > 0:
+      self.sound.pitch = int(54100 * self.throttle + self.sound.pitch)
     game().sound.sound.UpdateSoundFx(self.sound)
     
     

@@ -17,8 +17,12 @@ namespace Graphics {
 /**
  * @brief A skybox that always centers around a camera
  */
-class SkyBox : public Mesh {
+class SkyBox : public Renderable {
 public:	
+	SkyBox();
+
+	void Init(Mesh* mesh);
+
 	/**
 	 * @brief draw the sky box
 	 *
@@ -26,6 +30,10 @@ public:
 	 *			the device to draw to
 	 */
 	virtual void Draw(IDirect3DDevice9* device) const;
+
+	bool initialized;
+private:
+	Mesh* mesh_;
 };
 
 }

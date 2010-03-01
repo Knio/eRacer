@@ -26,15 +26,14 @@ PROFILE = [
 class Track(Entity):
   def __init__(self, scene):
     Entity.__init__(self)
-
+    
     self.physics  = eRacer.TriMesh()
     self.graphics = scene.CreateStaticMeshNode("track")
-    # self.graphics.visible = False
-        
+    
     self.track = eRacer.Track()
     for i in TRACK:
       self.track.Add(i)
-      
+    
     self.track.Subdivide(6)
     
     profile = eRacer.VectorTrackVertex()
@@ -46,10 +45,17 @@ class Track(Entity):
     mat  = game().graphics.graphics.DefaultMaterial()
     mesh.disown()
     mat.disown()
+    self.mesh = eRacer.Mesh(mesh, mat, tex)
     
-    self.graphics.Init(mesh, mat, tex)
+    self.graphics.Init(self.mesh)
     self.physics.Init(mesh)
     self.physics.SetGroup(eRacer.TRACK)
+    
+    
+  def GetPosition(self, dist):
+    return self.track.Get(dist)
+    
+  def FindPosition(self, pos, hint=None):
     
     
   def Tick(self, time):

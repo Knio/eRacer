@@ -14,18 +14,6 @@ using namespace std;
 #include "Graphics\Mesh.h"
 
 
-struct MeshStruct
-{
-	DWORD				nMaterials;
-	ID3DXMesh*			d3dMesh;
-	D3DMATERIAL9*		materials;
-	IDirect3DTexture9**	textures;
-
-	/** Check if a mesh is valid */
-	bool IsValid() { return nMaterials != -1; }
-
-};
-
 class IO 
 {
 
@@ -53,11 +41,9 @@ public:
 	static bool valid(IDirect3DTexture9* t) { return t != (IDirect3DTexture9*)-1; }
 
 	// private
-	MeshStruct _LoadMesh(const char* file);
-	void _SetMesh(Graphics::Mesh* model, MeshStruct &Mesh);
+	bool _LoadMesh(const char* file, Graphics::Mesh& mesh);
 	IDirect3DTexture9* _LoadTexture(const char* file);	
 	void _FreeTexture(IDirect3DTexture9* t);
-	void _FreeMesh(MeshStruct &m);
 };
 
 inline IO* IO::GetInstance(){

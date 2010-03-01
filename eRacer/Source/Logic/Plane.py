@@ -8,13 +8,11 @@ class Plane(Entity):
     self.graphics = scene.CreateMovingMeshNode("plane")
     self.graphics.thisown = 0
     
-    def load(r):
-      if r:
-        print 'Failed to load mesh!!'
-        return
-      #self.graphics.initialized = True
+    def load(mesh):
+      if mesh:
+        self.graphics.Init(mesh)
       
-    game().io.LoadMeshAsync(load, self.graphics, "plane.x")   
+    game().io.LoadMeshAsync(load,"plane.x")   
     
   def Tick(self, time):
      Entity.Tick(self, time)

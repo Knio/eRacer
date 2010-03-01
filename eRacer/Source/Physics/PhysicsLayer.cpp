@@ -155,6 +155,18 @@ void PhysicsLayer::onContactNotify(NxContactPair& pair, NxU32 events){
 	else if (g1==METEOR && g2==TRACK || g1==TRACK && g2==METEOR)
 		EVENT(MeteorTrackCollisionEvent(pair));
 }
+float PhysicsLayer::Raycast(const Point3& pos, const Vector3& dir, Vector3& normHit){
+	Vector3 vec = normalized(dir);
 
+	NxRay ray(Vector3_NxVec3(pos),  Vector3_NxVec3(vec));
+	
+	NxScene *scene = PhysicsLayer::g_PhysicsLayer->ReturnScene();
+	NxRaycastHit hit;
+	NxShape* hitShape = scene->raycastClosestShape(ray, NX_ALL_SHAPES, hit);
+	normHit = NxVec3_Vector3(hit.worldNormal);
+	normalize(normHit);
+	
+	return hit.distance;
+}
 
 }

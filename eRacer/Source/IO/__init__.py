@@ -47,19 +47,19 @@ class IO(Module, eRacer.IO):
       r = func(self, *args, **kwargs)
       callback(r)
 
-  def LoadMesh(self, node, name):
+  def LoadMesh(self, name):
     name = j(MODELPATH,name)
     # print "Loading mesh %s" % name
     if not name in self.meshes:
-      r = self._LoadMesh(name)
-      if not r.IsValid():
+      mesh = eRacer.Mesh()
+      r = self._LoadMesh(name,mesh)
+      if not r:
         print 'Failed to load mesh "%s"' % name
-        return -1
+        return None # should throw exception
       print "Loaded mesh %s" % name
-      self.meshes[name] = r
+      self.meshes[name] = mesh
 
-    self._SetMesh(node, self.meshes[name])
-    return 0
+    return self.meshes[name]
   
   LoadMeshAsync = asynchronous(LoadMesh)
     
@@ -86,5 +86,6 @@ class IO(Module, eRacer.IO):
       self._FreeTexture(t)
     self.textures = {}
     for k,m in self.meshes.items():
-      self._FreeMesh(m)
+      #how do i call destructor?
+      pass
     self.meshes = {}

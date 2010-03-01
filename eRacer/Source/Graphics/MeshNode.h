@@ -27,7 +27,7 @@ namespace Graphics {
  * @see MovingMeshNode
  * @see StaticMeshNode
  */
-class MeshNode : public Spatial, public Mesh
+class MeshNode : public Spatial, public Renderable
 {
 public:
 	/**
@@ -48,16 +48,6 @@ public:
 	virtual void Draw(IDirect3DDevice9* device) const;
 
 	/**
-	 * @brief Add myself to the list
-	 *
-	 * @param visibleNodes
-	 * 			A vector to push this node to
-	 *
-	 * @see Spatial::cullRecursive
-	 */
-	virtual void cullRecursive(const Camera&, vector<const MeshNode*>& visibleNodes) const;
-
-	/**
 	 * @brief Getter for the world space transform
 	 * @return the world space transform of this node
 	 */
@@ -67,17 +57,11 @@ public:
 	 * @brief initialize this mesh. Can be overidden by subclasses
 	 *
 	 * @param mesh
-	 *			a pointer to the Direct3D mesh
-	 * @param nMaterials
-	 *			the number of materials and textures
-	 * @param materials
-	 *			a pointer to the memory location where the materials are stored
-	 * @param textures
-	 *			a pointer to the memory location where the pointers to the textures are stored
+	 *			a pointer to a mesh wrapper
 	 */
-	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
-	virtual void Init(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture);
+	virtual void Init(Mesh* mesh);
 
+	bool initialized;
 protected:
 	/**
 	 * @brief Constructor. Only for inheriting classes because this class is abstract.
@@ -88,23 +72,44 @@ protected:
 	MeshNode(const string& name);
 
 	/**
-	 * @brief update the bounding volume from the mesh data
+	 * @brief update the world bounding volume by transforming the local bounding volume
 	 *
-	 * This method should be called whenever vertex data changes (i.e. after loading)
-	 * to bring the bounding volume up to date.
+	 * This method should be called whenever the transform of the mesh node changes.
 	 */
-	void UpdateBounds();
+	void UpdateWorldBounds();
+
+	/**
+	 * @brief Add myself to the list
+	 *
+	 * @param visibleRenderables
+	 * 			A vector to push this node to
+	 *
+	 * @see Spatial::cullRecursive
+	 */
+	virtual void cullRecursive(const Camera&, vector<const Renderable*>& visibleRenderables) const;
+
 
 	/**
 	 * @brief the world transformation matrix to apply to all vertices to allow for instancing
 	 */
 	Matrix transform_;
 
+	Mesh* mesh_;
+
+
 };
 
 inline const Matrix& MeshNode::GetTransform() const { 
 	return transform_; 
 }
+
+inline void MeshNode::UpdateWorldBounds(){
+	worldBounds_.center = mul0(transform_, mesh_->localBounds.center);
+	float x, y, z;
+	ExtractScaling(transform_,x,y,z);
+	worldBounds_.radius = mesh_->localBounds.radius * max(max(x,y),z);
+}
+
 
 
 

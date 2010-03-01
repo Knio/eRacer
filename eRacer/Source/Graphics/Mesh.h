@@ -10,6 +10,8 @@
 
 #include "Renderable.h"
 
+#include "BoundingSphere.h"
+
 #define NOMINMAX
 #include <windows.h>
 #include <d3d9types.h>
@@ -31,6 +33,23 @@ public:
 	 * @brief Constructor. Setup a mesh in uninitialized state.
 	 */
 	Mesh();
+
+	Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture) :
+		d3dMesh_(mesh), 
+		nMaterials_(1)
+	{
+		materials_ = new D3DMATERIAL9[1];
+		materials_[0] = material;
+		textures_ = new IDirect3DTexture9*[1];
+		textures_[0] = texture;
+		
+		initialized = true;
+
+		UpdateLocalBounds();
+		
+	}
+
+	virtual ~Mesh();
 
 	/**
 	 * @brief draw the mesh
@@ -56,7 +75,7 @@ public:
 	 * physics to get to the vertex data - unfortunately, even locking
 	 * the buffer for read-only access is not a constant operation in DX.
 	 */
-	ID3DXMesh& mesh() { return *mesh_; };
+	ID3DXMesh& mesh() { return *d3dMesh_; };
 	
 	/**
 	 * @brief initialize this mesh. Can be overidden by subclasses
@@ -71,37 +90,7 @@ public:
 	 *			a pointer to the memory location where the pointers to the textures are stored
 	 */
 	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
-	// single subset
-	virtual void Init(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture);
-
-	/**
-	 * @brief read access to the vector of materials
-	 *
-	 * @return read-only referece to the vector of materials
-	 */
-	//const vector<D3DMATERIAL9*>& Materials() const;
 	
-	/**
-	 * @brief read/write access to the vector of materials
-	 * 
-	 * @return read/write reference to the vector of materials
-	 */
-	//vector<D3DMATERIAL9*>& Materials();
-
-	/**
-	 * @brief read access to the vector of textures
-	 *
-	 * @return read-only referece to the vector of textures
-	 */
-	//const vector<IDirect3DTexture9*>& Textures() const;
-
-	/**
-	 * @brief read/write access to the vector of textures
-	 * 
-	 * @return read/write reference to the vector of textures
-	 */
-	//vector<IDirect3DTexture9*>& Textures();
-
 	/**
 	 * @brief flag to indicate whether the mesh is already initialized. 
 	 *
@@ -109,36 +98,33 @@ public:
 	 */
 	bool initialized;
 
+	BoundingSphere localBounds;
+
+	//friend class IO;
 protected:
-	ID3DXMesh* mesh_;
+	/**
+	 * @brief update the local bounding volume from the mesh data
+	 *
+	 * This method should be called whenever vertex data changes (i.e. after loading)
+	 * to bring the bounding volume up to date.
+	 */
+	void UpdateLocalBounds();
+
+
+	ID3DXMesh* d3dMesh_;
 	unsigned int nMaterials_;
 	D3DMATERIAL9* materials_;
 	IDirect3DTexture9** textures_;
+
+
 };
 
 
 
 inline const ID3DXMesh* Mesh::GetMesh() const{
-	return mesh_;
+	return d3dMesh_;
 }
 
-/*
-inline const vector<D3DMATERIAL9*>& Mesh::Materials() const{
-	return materials_;
-}
-
-inline vector<D3DMATERIAL9*>& Mesh::Materials(){
-	return materials_;
-}
-
-inline const vector<IDirect3DTexture9*>& Mesh::Textures() const{
-	return textures_;
-}
-
-inline vector<IDirect3DTexture9*>& Mesh::Textures(){
-	return textures_;
-}
-*/
 
 
 

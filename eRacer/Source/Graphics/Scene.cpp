@@ -26,11 +26,11 @@ Scene::~Scene(){
 		delete *i;
 }
 
-void Scene::GetVisibleRenderables(const Camera& camera, vector<Renderable*>& visibleRenderables) const {
-	for (vector<MeshNode*>::const_iterator i = meshNodes_.begin(); i != meshNodes_.end(); i++)
+void Scene::GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const {
+	for (vector<MeshNode*>::const_iterator meshNode = meshNodes_.begin(); 
+		meshNode != meshNodes_.end(); meshNode++)
 	{
-		if ((*i)->visible)
-			visibleRenderables.push_back(*i);
+		(*meshNode)->cull(camera,visibleRenderables);
 	}
 }
 
@@ -49,10 +49,10 @@ StaticMeshNode* Scene::CreateStaticMeshNode(const string& name, const Matrix& tr
 void Scene::Draw(IDirect3DDevice9* m_pd3dDevice) const
 {
 	Camera* cam = GraphicsLayer::GetInstance()->GetCamera();
-	vector<Renderable*> renderables;
-  GetVisibleRenderables(*cam, renderables);
+	vector<const Renderable*> renderables;
+	GetVisibleRenderables(*cam, renderables);
 	
-	for (vector<Renderable*>::const_iterator i = renderables.begin(); 
+	for (vector<const Renderable*>::const_iterator i = renderables.begin(); 
 		i != renderables.end(); i++){
 		(*i)->Draw(m_pd3dDevice);
 	}
