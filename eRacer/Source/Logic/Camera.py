@@ -54,6 +54,7 @@ class ChasingCamera(Camera):
     self.target   = target
     self.position = Point3(0, 50, -1)
     self.fov      = math.pi/2.1
+    self.upworld  = Y
   
   def Tick(self, time):
     Camera.Tick(self, time)
@@ -63,17 +64,21 @@ class ChasingCamera(Camera):
     #eRacer.mul0(self.target.physics.GetTransform(), Z)
     
 
-    capBack = math.pow(vel, 0.7)
+    capBack = math.pow(vel, 0.6)
     originlocal = ORIGIN
     behindlocal = Point3(0,8,-10-capBack);
     originworld = mul1(self.target.transform, originlocal)
     behindworld = mul1(self.target.transform, behindlocal)
     
-    fov = math.pi/2.5/(vel*0.02+1)
+    fov = math.pi/2.5/(vel*0.01+1)
     
     alpha = math.pow(0.04, float(time.game_delta) / time.RESOLUTION)
     self.position = self.position*alpha + behindworld*(1-alpha)
     self.fov      = self.fov*alpha      + fov*(1-alpha)
+
+    alpha = math.pow(0.85, float(time.game_delta) / time.RESOLUTION)
+    upworld = mul0(self.target.transform, Y*10)
+    self.upworld = self.upworld*alpha + upworld*(1-alpha)
     
     # lateral = project(self.position-originworld, mul1(self.target.transform, X))
     # pos = self.position - lateral * 2
@@ -81,13 +86,14 @@ class ChasingCamera(Camera):
     pos = self.position
     
     
-    self.SetPosition(pos)    
+    #self.SetPosition(pos)    
     self.SetFovY(self.fov)
     
     targetPosition  = eRacer.ExtractPosition(self.target.transform)
-    targetPosition.y += 5
+    #targetPosition.y += 5
     
-    self.SetLookAt(targetPosition)
+    #self.SetLookAt(targetPosition)
+    self.SetFrame(pos, targetPosition, self.upworld)
     
 class CarCamera(Camera):
   def __init__(self, target): 
