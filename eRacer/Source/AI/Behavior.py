@@ -32,12 +32,12 @@ class PlayerBehavior(Behavior):
 
 
 
-
 class AIBehavior(Behavior):
-  def __init__(self, parent, track):
+  def __init__(self, parent, track, arrow=None):
     Behavior.__init__(self,parent)
     self.line = track
-    self.trackpos = 0.
+    self.arrow = arrow
+    self.trackpos = None
     
     self.curState = AIState.DRIVE
   
@@ -45,8 +45,9 @@ class AIBehavior(Behavior):
     pos = self.parent.physics.GetPosition()
     self.trackpos = self.line.FindPosition(pos, self.trackpos)
     
-    curFrame = self.line.GetPosition(self.trackpos + 20.0)
+    curFrame = self.line.GetFrame(self.trackpos + 200.0)
     cur = curFrame.position
+    if self.arrow: self.arrow.position = cur
     
     game().graphics.graphics.WriteString(
       "cur waypoint: " + str(cur),

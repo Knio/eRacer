@@ -46,6 +46,8 @@ public:
     
   }
   
+  float GetTotalDist() { return dist; }
+  
   void Add(const Frame &f)
   {
     track.push_back(f);

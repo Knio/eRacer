@@ -9,6 +9,7 @@ from MenuState      import PauseMenuState
 
 # Entities
 from Box        import Box
+from Arrow      import Arrow
 from Plane      import Plane
 from Track      import Track
 from Ship       import Ship
@@ -91,26 +92,28 @@ class GameState(State):
     
     # TODO
     # can we render a fake loading screen here until the real one works?
-    lineData = [Point3(80, 0, -80), Point3(80, 2, 0), Point3(80, 1, 100), Point3(60, 0, 200), 
-    Point3(30, -30, 300), Point3(-50, -35, 400), Point3(-170, -75, 500), Point3(-300, -100, 600),
-    Point3(-350, -100, 675), Point3(-400, -95, 750), Point3(-460, -90, 800), 
-    Point3(-550, -95, 780), Point3(-100, 0, 200), Point3(-100, 0, 50)]
-    raceline = Raceline(lineData)
     
-    #debug waypoint boxes, static
-    for point in lineData:
-      game().logic.Add(Box(scene, point))
+    self.track = Track(scene)
+    game().logic.Add(self.track)
+    
+    self.arrow = Arrow(scene)
+    game().logic.Add(self.arrow)
+    
+    # for i in xrange(200):
+    #   f = self.track.GetFrame(i*50.0)
+    #   p = Point3(f.position.x, f.position.y, f.position.z)
+    #   print p
+    #   game().logic.Add(Arrow(scene, p))
+    
     
     self.player = Vehicle(self.scene, Point3(0, 13, 0))
     self.player.behavior = PlayerBehavior(self.player)
   
-    # self.ai1 = Vehicle(self.scene, Vector3(2, 13, 10))
-    # self.ai1.behavior = AIBehavior(self.ai1, raceline)
+    self.ai1 = Vehicle(self.scene, Vector3(2, 13, 10))
+    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow)
     
     game().logic.Add(self.player)
-    # game().logic.Add(self.ai1)
-    
-    
+    game().logic.Add(self.ai1)
 
     self.views = []
     self.viewIndex = 0
@@ -143,28 +146,12 @@ class GameState(State):
       view.AddRenderable(self.skybox)
       
     # game().logic.Add(Ship(scene))
-    game().logic.Add(Track(scene))
     
     
     # game().logic.Add(Plane(scene))
     # self.coordinatecross = CoordinateCross(self.view)
     # game().logic.Add(self.coordinatecross)
     
-    #for j in range (24, 35, 3):
-    #  for i in range(-191, -225, -2):
-    #    game().logic.Add(Box(scene, Vector3(-1850, j, i)))
-        
-    # for i in range(-191, -230, -5):
-    #     game().logic.Add(Box(scene, Vector3(-1850, 24, i)))
-    # for i in range(-193, -230, -5):
-    #     game().logic.Add(Box(scene, Vector3(-1850, 26, i)))
-    # for i in range(-195, -235, -5):
-    #     game().logic.Add(Box(scene, Vector3(-1850, 28, i)))
-    # for i in range(-193, -230, -5):
-    #     game().logic.Add(Box(scene, Vector3(-1850, 30, i)))
-    # for i in range(-191, -230, -5):
-    #     game().logic.Add(Box(scene, Vector3(-1850, 32, i)))
-            
     # self.meteorManager = MeteorManager(self.scene)
     # game().logic.Add(self.meteorManager)
 
@@ -195,8 +182,8 @@ class GameState(State):
   def Tick(self, time):
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
     cam = self.view.camera
+    # TODO camera velocity
     game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
-    
     
     
     State.Tick(self, time)
@@ -221,4 +208,5 @@ class GameState(State):
 
   def PlayJaguarSoundEvent(self):
     game().sound.PlaySound2D("jaguar.wav")
+    
 
