@@ -1,6 +1,5 @@
 from Core.Globals import *
 class Vehicle(Entity):
-  MODEL   = "Racer.x"
   SIZE    = Vector3(3, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2, -1.5,  4), # front left
@@ -35,7 +34,7 @@ class Vehicle(Entity):
     self.SPRING_K         = (self.MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
 
-  def __init__(self, scene, position = Vector3(47.67, 602.66, -60.16)):
+  def __init__(self, scene, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
     Entity.__init__(self)
     self.INITIAL_POS = position
     self.behavior = None
@@ -61,7 +60,7 @@ class Vehicle(Entity):
       if mesh:
         self.graphics.Init(mesh)    
     
-    game().io.LoadMeshAsync(load, self.MODEL)   
+    game().io.LoadMeshAsync(load, model)   
   
     self.throttle = 0.      # position of the throttle on game controller from 0 to 1
     self.brake    = False   # brake button

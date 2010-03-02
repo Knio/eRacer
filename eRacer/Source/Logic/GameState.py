@@ -96,8 +96,10 @@ class GameState(State):
     self.track = Track(scene)
     game().logic.Add(self.track)
     
-    self.arrow = Arrow(scene)
-    game().logic.Add(self.arrow)
+    self.arrow1 = Arrow(scene)
+    game().logic.Add(self.arrow1)
+    self.arrow2 = Arrow(scene)
+    game().logic.Add(self.arrow2)
     
     # for i in xrange(200):
     #   f = self.track.GetFrame(i*50.0)
@@ -106,14 +108,20 @@ class GameState(State):
     #   game().logic.Add(Arrow(scene, p))
     
     
-    self.player = Vehicle(self.scene, Point3(0, 13, 0))
+    self.player = Vehicle(self.scene, Point3(0, 3, 0))
     self.player.behavior = PlayerBehavior(self.player)
   
-    self.ai1 = Vehicle(self.scene, Vector3(2, 13, 10))
-    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow)
+    self.ai1 = Vehicle(self.scene, Vector3( 2, 3, 10), 'Racer2.x')
+    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
+
+    self.ai2 = Vehicle(self.scene, Vector3(-2, 3, 10), 'Racer5.x')
+    self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
+
     
     game().logic.Add(self.player)
+
     game().logic.Add(self.ai1)
+    game().logic.Add(self.ai2)
 
     self.views = []
     self.viewIndex = 0

@@ -52,10 +52,12 @@ class Track(Entity):
     self.physics.Init(mesh)
     self.physics.SetGroup(eRacer.TRACK)
     
-    
   def GetFrame(self, dist):
+    # ******** WARNING! DANGER! *********
+    # if frame goes out of scope, any references to 
+    # frame.position, frame.up, etc are invalid!
+    # make explicit copies or keep a reference to frame
     frame = self.track.Get(dist)
-    print frame.position
     return frame
     
   def FindPosition(self, pos, hint=None):

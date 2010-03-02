@@ -1,5 +1,5 @@
 from Core.Globals import *
-from AI.Raceline import Raceline
+
 
 class Behavior(object):
   def __init__(self, parent):

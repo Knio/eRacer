@@ -72,7 +72,6 @@ public:
     float d1 = (l==arclen.begin() ? --arclen.end() : --l) ->first;
     float alpha = (d-d1)/(d2-d1);
     
-    
     Point3  pos = track[i1].position * (1-alpha)   + track[i2].position * alpha;
     Vector3 up  = track[i1].up       * (1-alpha)   + track[i2].up       * alpha;
     Vector3 fw  = track[i1].fw       * (1-alpha)   + track[i2].fw       * alpha;
@@ -99,9 +98,6 @@ public:
 
               Vector3 n1 = r1[i].up     *(3/4.) + r1[(i-1+d)%d].up      *(1/8.) + r1[(i+1)%d].up     *(1/8.);
               Vector3 n2 = r1[i].up     *(2/4.) + r1[(i+1  )%d].up      *(2/4.);
-              
-              debug(p1);
-              debug(p2);
               
               normalize(n1);
               normalize(n2);
@@ -177,28 +173,11 @@ public:
            
          ap.x, ap.y, ap.z,   1
       );
-      // debug(ax);
-      // debug(ay);
-      // debug(az);
-      // debug(ap);
-      
-      // debug(mul0(tx, X));
-      // debug(mul0(tx, Y));
-      // debug(mul0(tx, Z));
-      // debug(mul1(tx, ORIGIN));
-      
+      // does the frame make sense?
       // assert(length(mul0(tx, X)      - ax) < 0.01);
       // assert(length(mul0(tx, Y)      - ay) < 0.01);
       // assert(length(mul0(tx, Z)      - az) < 0.01);
       // assert(length(mul1(tx, ORIGIN) - ap) < 0.01);
-      
-      // Point3 fw = frame.position + frame.fw;
-      // D3DXMatrixLookAtLH(
-      //   &tx, 
-      //   &frame.position,
-      //   &fw,
-      //   &frame.up
-      // );
       
       for (int j=0;j<D;j++)  
       {
