@@ -13,7 +13,7 @@ class Vehicle(Entity):
     Point3(280, 380, 0),
     Point3(480, 380, 0),
   ]
-  DISPLACEMENT = 0.30  # from wheel rest position  
+  DISPLACEMENT = 0.40  # from wheel rest position
   
   def ReloadedConstsEvent(self):
     self.MASS = CONSTS.CAR_MASS

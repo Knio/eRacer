@@ -2,22 +2,22 @@ from Core.Globals import *
 
 TRACK = [
    
-  eRacer.Frame(Point3( 1000,   0,    00), Y),
-  eRacer.Frame(Point3(-1000,   0,    00), Y),  
-  eRacer.Frame(Point3(-1000,   5,  1000), normalized(Vector3( 1,0,-1))),
-  eRacer.Frame(Point3(   00,  10,  1000), Y),
-  eRacer.Frame(Point3(   00,  10, -1000), Y),  
-  eRacer.Frame(Point3( 1000,   5, -1000), normalized(Vector3(-1,0, 1))),
+  eRacer.Frame(Point3(  500,   0,   00), Y),
+  eRacer.Frame(Point3( -500,   0,   00), Y),  
+  eRacer.Frame(Point3( -500,  25,  500), normalized(Vector3( 1,0,-1))),
+  eRacer.Frame(Point3(   00,  50,  500), -Y),
+  eRacer.Frame(Point3(   00,  50, -500), -Y),  
+  eRacer.Frame(Point3(  500,  25, -500), normalized(Vector3(-1,0, 1))),
   
 ]
 
 PROFILE = [
   eRacer.TrackVertex(Point3(  25, -1,  0),  Y, 0.00, 0.01),
   eRacer.TrackVertex(Point3(  25,  1,  0),  Y, 0.00, 0.01),
-  eRacer.TrackVertex(Point3(  25,  0,  0),  Y, 0.10, 0.01),
-  eRacer.TrackVertex(Point3( -25,  0,  0),  Y, 0.90, 0.01),  
+  eRacer.TrackVertex(Point3(  25,  0,  0),  Y, 0.05, 0.01),
+  eRacer.TrackVertex(Point3( -25,  0,  0),  Y, 0.95, 0.01),  
   eRacer.TrackVertex(Point3( -25,  1,  0),  Y, 1.00, 0.01),
-  eRacer.TrackVertex(Point3( -25, -1,  0),  Y, 0.00, 0.01),  
+  eRacer.TrackVertex(Point3( -25, -1,  0),  Y, 0.00, 0.01),
   
   eRacer.TrackVertex(Point3(  25, -1,  0),  Y, 1.00, 0.01),
   
@@ -63,7 +63,7 @@ class Track(Entity):
   def FindPosition(self, pos, hint=None):
     mind = 1e99
     if hint is None:
-      for i in xrange(0, self.dist, self.dist/100.0):
+      for i in xrange(0, self.dist, self.dist/500.0):
         t = length(pos - self.track.Get(i).position)
         if t < mind:
           mind = t

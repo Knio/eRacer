@@ -45,7 +45,7 @@ class AIBehavior(Behavior):
     pos = self.parent.physics.GetPosition()
     self.trackpos = self.line.FindPosition(pos, self.trackpos)
     
-    curFrame = self.line.GetFrame(self.trackpos + 200.0)
+    curFrame = self.line.GetFrame(self.trackpos + 100.0)
     cur = curFrame.position
     if self.arrow: self.arrow.position = cur
     
