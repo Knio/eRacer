@@ -2,10 +2,10 @@ from Core.Globals import *
 class Vehicle(Entity):
   SIZE    = Vector3(3, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
-    Point3(-2, -1.5,  4), # front left
-    Point3( 2, -1.5,  4), # front right
-    Point3(-2, -1.5, -4), # back left
-    Point3( 2, -1.5, -4), # back right
+    Point3(-2, -1.6,  4), # front left
+    Point3( 2, -1.6,  4), # front right
+    Point3(-2, -1.6, -4), # back left
+    Point3( 2, -1.6, -4), # back right
   ]
   DEBUG   = [ # location of debug strings in screen space
     Point3(280, 180, 0),

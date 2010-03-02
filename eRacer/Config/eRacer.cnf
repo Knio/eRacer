@@ -10,7 +10,7 @@ PHYS_SKIN_WIDTH =  0.05
 
 CAR_DEBUG       =  0
 CAR_MASS        =  5000.0
-CAR_GRAVITY     =  20.0
+CAR_GRAVITY     =  100.0
 
 SPRING_MAGIC    =  0.5
 DAMPING_MAGIC   =  0.2

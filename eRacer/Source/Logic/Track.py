@@ -6,6 +6,12 @@ TRACK = [
   eRacer.Frame(Point3( -500,   0,   00), Y),  
   eRacer.Frame(Point3( -500,  25,  500), normalized(Vector3( 1,0,-1))),
   eRacer.Frame(Point3(   00,  50,  500), -Y),
+  
+  eRacer.Frame(Point3(  -37,  50, -250), -Y),
+  eRacer.Frame(Point3(   00,-350, -200), -X),
+  eRacer.Frame(Point3(   00,-350, +200), +Y-Z),
+  eRacer.Frame(Point3(  +37,  50, +250), -Y),
+  
   eRacer.Frame(Point3(   00,  50, -500), -Y),  
   eRacer.Frame(Point3(  500,  25, -500), normalized(Vector3(-1,0, 1))),
   
@@ -34,7 +40,7 @@ class Track(Entity):
     for i in TRACK:
       self.track.Add(i)
     
-    self.track.Subdivide(7)
+    self.track.Subdivide(6)
     
     self.dist = self.track.GetTotalDist()
     

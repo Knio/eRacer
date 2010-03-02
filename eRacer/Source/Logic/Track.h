@@ -99,6 +99,12 @@ public:
               Vector3 n1 = r1[i].up     *(3/4.) + r1[(i-1+d)%d].up      *(1/8.) + r1[(i+1)%d].up     *(1/8.);
               Vector3 n2 = r1[i].up     *(2/4.) + r1[(i+1  )%d].up      *(2/4.);
               
+              Vector3 fw = p2 - p1;
+              normalize(fw);
+              
+              n1 = cross(fw, cross(n1, fw));
+              n2 = cross(fw, cross(n2, fw));
+              
               normalize(n1);
               normalize(n2);
               
@@ -150,10 +156,10 @@ public:
     for (int i=0;i<N;i++)
     {      
       Frame frame = track[i];
-      Vector3 &ap = frame.position;
-      Vector3 &ay = frame.up;
-      Vector3 &az = frame.fw;      
-      Vector3  ax = cross(ay, az);
+      Vector3 ap = frame.position;
+      Vector3 az = frame.fw;      
+      Vector3 ax = normalized(cross(frame.up, az));
+      Vector3 ay = cross(az, ax);
       /*
       
       http://msdn.microsoft.com/en-us/library/ee422511(VS.85).aspx
