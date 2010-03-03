@@ -9,7 +9,7 @@ from Core.Event         import Event
 from Core.Config        import Config
 from Logic.MenuState    import MainMenuState
 
-from IO                 import IO
+from IO.IO              import IO
 from Input.Input        import Input
 from Logic.Logic        import Logic
 from Sound.Sound        import Sound
