@@ -70,7 +70,9 @@ class Track(Entity):
     mind = 1e99
     if hint is None:
       for i in xrange(0, self.dist, self.dist/500.0):
-        t = length(pos - self.track.Get(i).position)
+        frame = self.track.Get(i)
+        t = length(pos - frame.position)
+        
         if t < mind:
           mind = t
           hint = i
@@ -95,4 +97,6 @@ class Track(Entity):
     
   def Tick(self, time):
      Entity.Tick(self, time)
+
+     
 
