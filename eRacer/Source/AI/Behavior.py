@@ -47,7 +47,7 @@ class AIBehavior(Behavior):
     
     curFrame = self.line.GetFrame(self.trackpos + 100.0)
     cur = curFrame.position
-    if self.arrow: self.arrow.position = cur
+    if self.arrow: self.arrow.position = Point3(cur.x, cur.y, cur.z)
     
     game().graphics.graphics.WriteString(
       "cur waypoint: " + str(cur),

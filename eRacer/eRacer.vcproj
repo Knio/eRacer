@@ -681,6 +681,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Logic\Track.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Logic\Track.h"
 					>
 				</File>

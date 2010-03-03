@@ -29,26 +29,26 @@ PROFILE = [
   
 ]
 
-class Track(Entity):
+class Track(Entity, eRacer.Track):
   def __init__(self, scene):
     Entity.__init__(self)
+    eRacer.Track.__init__(self)
     
     self.physics  = eRacer.TriMesh()
     self.graphics = scene.CreateStaticMeshNode("track")
     
-    self.track = eRacer.Track()
     for i in TRACK:
-      self.track.Add(i)
+      self.Add(i)
     
-    self.track.Subdivide(6)
+    self.Subdivide(6)
     
-    self.dist = self.track.GetTotalDist()
+    self.dist = self.GetTotalDist()
     
     profile = eRacer.VectorTrackVertex()
     for i in PROFILE:
       profile.push_back(i)
     
-    mesh = self.track.CreateMesh(profile)
+    mesh = self.CreateMesh(profile)
     tex  = game().io.LoadTexture('concrete_plates.jpg')
     mat  = game().graphics.graphics.DefaultMaterial()
     mesh.disown()
@@ -58,19 +58,11 @@ class Track(Entity):
     self.physics.Init(mesh)
     self.physics.SetGroup(eRacer.TRACK)
     
-  def GetFrame(self, dist):
-    # ******** WARNING! DANGER! *********
-    # if frame goes out of scope, any references to 
-    # frame.position, frame.up, etc are invalid!
-    # make explicit copies or keep a reference to frame
-    frame = self.track.Get(dist)
-    return frame
-    
   def FindPosition(self, pos, hint=None):
     mind = 1e99
     if hint is None:
       for i in xrange(0, self.dist, self.dist/500.0):
-        frame = self.track.Get(i)
+        frame = self.GetFrame(i)
         t = length(pos - frame.position)
         
         if t < mind:
@@ -79,9 +71,9 @@ class Track(Entity):
     
     r = 100.0
     while r > 0.1:
-      d1 = length(pos - self.track.Get(hint - r).position)
-      d2 = length(pos - self.track.Get(hint    ).position)
-      d3 = length(pos - self.track.Get(hint + r).position)
+      d1 = length(pos - self.GetPositionAt(hint - r))
+      d2 = length(pos - self.GetPositionAt(hint    ))
+      d3 = length(pos - self.GetPositionAt(hint + r))
       
       if d2 <= d1 and d2 <= d3:
         r /= 2.0
