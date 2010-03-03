@@ -145,8 +145,10 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Graphics\MovingMeshNode.h"
 %include "..\Graphics\Scene.h"
 
+%ignore debugRenderable;
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
+
 %ignore Star;
 %include "..\Graphics\Starfield.h"
 %include "..\Graphics\CoordinateCross.h"

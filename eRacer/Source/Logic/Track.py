@@ -21,6 +21,7 @@ PROFILE = [
   eRacer.TrackVertex(Point3(  25, -1,  0),  Y, 0.00, 0.01),
   eRacer.TrackVertex(Point3(  25,  1,  0),  Y, 0.00, 0.01),
   eRacer.TrackVertex(Point3(  25,  0,  0),  Y, 0.05, 0.01),
+  eRacer.TrackVertex(Point3(   0,  0,  0),  Y, 0.50, 0.01),  
   eRacer.TrackVertex(Point3( -25,  0,  0),  Y, 0.95, 0.01),  
   eRacer.TrackVertex(Point3( -25,  1,  0),  Y, 1.00, 0.01),
   eRacer.TrackVertex(Point3( -25, -1,  0),  Y, 0.00, 0.01),

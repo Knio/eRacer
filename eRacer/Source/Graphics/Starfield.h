@@ -23,6 +23,8 @@ class Starfield : public Renderable
 	Matrix* view;
 	Point3 	pos;
 	
+	
+	
 	Star* stars;
 	LPDIRECT3DVERTEXBUFFER9 vb;
 	

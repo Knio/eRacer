@@ -139,6 +139,10 @@ ID3DXMesh* Track::CreateMesh(const vector<TrackVertex>& profile)
     // assert(length(mul0(tx, Z)      - az) < 0.01);
     // assert(length(mul1(tx, ORIGIN) - ap) < 0.01);
     
+    // Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ax, D3DCOLOR_COLORVALUE(0,1,0,1));
+    // Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ay, D3DCOLOR_COLORVALUE(1,0,0,1));
+    // Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, az, D3DCOLOR_COLORVALUE(0,0,1,1));
+    
     for (int j=0;j<D;j++)  
     {
       TrackVertex& v = meshverts[i*D + j];
@@ -146,6 +150,9 @@ ID3DXMesh* Track::CreateMesh(const vector<TrackVertex>& profile)
       v.normal   = mul0(tx, profile[j].normal);
       v.tu = profile[j].tu;
       v.tv = profile[j].tv * frame.dist;
+      
+      // Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(v.position, v.normal);
+      
       
       
       /* Index buffer

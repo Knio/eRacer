@@ -160,6 +160,9 @@ int GraphicsLayer::Init( HWND hWnd )
     D3DMATERIAL9 m = DefaultMaterial();
     m_pd3dDevice->SetMaterial(&m);
     
+    
+    debugRenderable = new DebugRenderable();
+    
     return S_OK;
 }
 
@@ -228,6 +231,10 @@ void GraphicsLayer::PreRender(){
 
 void GraphicsLayer::PostRender(){
 
+    // draw debug
+    debugRenderable->Draw(m_pd3dDevice);
+    
+    
      // draw overlay
     m_fontManager.Draw();
     

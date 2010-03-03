@@ -321,6 +321,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\DebugRenderable.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\DebugRenderable.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\FontManager.cpp"
 					>
 				</File>
