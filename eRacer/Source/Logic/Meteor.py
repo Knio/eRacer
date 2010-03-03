@@ -1,9 +1,10 @@
 import random
+import math
 
 from Core.Globals import *
 
 class MeteorManager(Entity):
-  VANISHING_DISTANCE = 1500.
+  VANISHING_DISTANCE = 600.
 
   def __init__(self, scene):
     Entity.__init__(self)
@@ -44,13 +45,16 @@ class MeteorManager(Entity):
         
         
   def MeteorMeteorCollisionEvent(self, pair):
-    print "MM Collision reported to MeteorManager"
+    pass
+    #print "MM Collision reported to MeteorManager"
 
   def MeteorTrackCollisionEvent(self, pair):
-    print "MT Collision reported to MeteorManager"
+    pass
+    #print "MT Collision reported to MeteorManager"
 
   def MeteorCarCollisionEvent(self, pair):
-    print "MC Collision reported to MeteorManager"
+    pass
+    #print "MC Collision reported to MeteorManager"
 
 
 class Meteor(Entity):
@@ -94,15 +98,15 @@ class Meteor(Entity):
     return normalized(Vector3(u(-1.,1.),u(-1.,1.),u(-1.,1.)))
 
 class RandomMeteor(Meteor):
-  SPAWNING_DISTANCE = 1500.
+  SPAWNING_DISTANCE = 600.
   
   # between 0 and 1 
   SCATTERING = 0.3
   
-  MIN_SPEED = 200
-  MAX_SPEED = 600
+  MIN_SPEED = 500
+  MAX_SPEED = 700
   MIN_SIZE = .5
-  MAX_SIZE = 10.
+  MAX_SIZE = 5.
 
   # between 0 and the radius of the meteor
   TUMBLING = 0.9
@@ -120,7 +124,7 @@ class RandomMeteor(Meteor):
     direction = self.randomDirection()
     position = direction * self.SPAWNING_DISTANCE
     
-    velocity = direction * -(u(self.MIN_SPEED, self.MAX_SPEED)/self.scale)
+    velocity = direction * -(u(self.MIN_SPEED, self.MAX_SPEED)/math.sqrt(self.scale))
 
     velocity.x *= 1.+u(-self.SCATTERING, self.SCATTERING)
     velocity.y *= 1.+u(-self.SCATTERING, self.SCATTERING)
@@ -140,8 +144,8 @@ class AimedMeteor(Meteor):
   # between 0 and 1 
   SCATTERING = 0.3
   
-  MIN_SPEED = 150
-  MAX_SPEED = 200
+  MIN_SPEED = 100
+  MAX_SPEED = 150
   MIN_SIZE = 0.5
   MAX_SIZE = 2.
 

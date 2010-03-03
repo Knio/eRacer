@@ -152,22 +152,15 @@ class GameState(State):
       for s in self.starfields:
         view.AddRenderable(s)      
       view.AddRenderable(self.skybox)
-      
-    # game().logic.Add(Ship(scene))
-    
-    
-    # game().logic.Add(Plane(scene))
-    # self.coordinatecross = CoordinateCross(self.view)
-    # game().logic.Add(self.coordinatecross)
-    
-    # self.meteorManager = MeteorManager(self.scene)
-    # game().logic.Add(self.meteorManager)
+   
+    self.meteorManager = MeteorManager(self.scene)
+    game().logic.Add(self.meteorManager)
 
-    # for i in range(1,100):
-    #   m = self.meteorManager.spawnRandom()
-    #   game().logic.Add(m)
+    for i in range(1,20):
+      m = self.meteorManager.spawnRandom()
+      game().logic.Add(m)
     
-    # self.lastMeteorTime = 0
+    self.lastMeteorTime = 0
     
       
     # self.sound = eRacer.SoundFx();
