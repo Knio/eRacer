@@ -2,10 +2,10 @@ from Core.Globals import *
 class Vehicle(Entity):
   SIZE    = Vector3(3, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
-    Point3(-2, -1.6,  4), # front left
-    Point3( 2, -1.6,  4), # front right
-    Point3(-2, -1.6, -4), # back left
-    Point3( 2, -1.6, -4), # back right
+    Point3(-3, -1.6,  4.5), # front left
+    Point3( 3, -1.6,  4.5), # front right
+    Point3(-3, -1.6, -4.5), # back left
+    Point3( 3, -1.6, -4.5), # back right
   ]
   DEBUG   = [ # location of debug strings in screen space
     Point3(280, 180, 0),
@@ -13,7 +13,7 @@ class Vehicle(Entity):
     Point3(280, 380, 0),
     Point3(480, 380, 0),
   ]
-  DISPLACEMENT = 0.40  # from wheel rest position
+  DISPLACEMENT = 0.80  # from wheel rest position
   
   def ReloadedConstsEvent(self):
     self.MASS = CONSTS.CAR_MASS
@@ -31,7 +31,7 @@ class Vehicle(Entity):
     self.FRICTION_STATIC  = CONSTS.FRICTION_STATIC
     self.FRICTION_MAX     = CONSTS.FRICTION_MAX
     self.FRICTION_SLIDING = CONSTS.FRICTION_SLIDING
-    self.SPRING_K         = (self.MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
+    self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
 
   def __init__(self, scene, track, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
@@ -119,7 +119,7 @@ class Vehicle(Entity):
     
     phys  = self.physics
     tx    = phys.GetTransform()
-    delta = float(time.game_delta) / time.RESOLUTION
+    delta = min(float(time.game_delta) / time.RESOLUTION, CONSTS.PHYS_MAX_TIMESTEP)
     worldpos   = mul1(tx, ORIGIN)
     self.trackpos = self.track.FindPosition(worldpos, self.trackpos)
     frame = self.track.GetFrame(self.trackpos)
@@ -173,7 +173,7 @@ class Vehicle(Entity):
       worldvel   = phys.GetLocalPointWorldVelocity(localpos)
       
       #raycast down from suspension point
-      upamount = 1.0
+      upamount = 3.0
       worldroadnormal = Vector3()
       localsuspoint   = Point3(localpos.x, localpos.y + upamount, localpos.z)
       worldsuspoint   = mul1(tx, localsuspoint)

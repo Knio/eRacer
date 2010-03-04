@@ -108,25 +108,25 @@ class GameState(State):
     #   game().logic.Add(Arrow(scene, p))
     
     
-    self.player = Vehicle(self.scene, self.track, Point3(0, 3, 0))
+    self.player = Vehicle(self.scene, self.track, Point3(0, 10, 0))
     self.player.behavior = PlayerBehavior(self.player)
   
-    self.ai1    = Vehicle(self.scene, self.track, Vector3( 2, 3, 10), 'Racer2.x')
-    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
+    # self.ai1    = Vehicle(self.scene, self.track, Vector3( 2, 3, 10), 'Racer2.x')
+    # self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
 
-    self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')
-    self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
+    # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')
+    # self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
 
     def CarTrackCollisionEvent(car, track, force):
-      print car, track, force
+      print 'CAR-TRACK:', car, track, force
       
     game().event.Register(CarTrackCollisionEvent)
     
     
     game().logic.Add(self.player)
 
-    game().logic.Add(self.ai1)
-    game().logic.Add(self.ai2)
+    # game().logic.Add(self.ai1)
+    # game().logic.Add(self.ai2)
 
     self.views = []
     self.viewIndex = 0

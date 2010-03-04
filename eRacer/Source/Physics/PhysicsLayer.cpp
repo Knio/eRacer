@@ -96,7 +96,7 @@ void PhysicsLayer::InitScene()
 	gScene->setTiming(1.0f/500, 100, NX_TIMESTEP_VARIABLE);
 	gScene->setActorGroupPairFlags(METEOR,METEOR,NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_FORCES );
 	gScene->setActorGroupPairFlags(METEOR,TRACK, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_FORCES );
-	gScene->setActorGroupPairFlags(CAR,   TRACK, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_FORCES );
+	gScene->setActorGroupPairFlags(TRACK,   CAR, NX_NOTIFY_ON_TOUCH | NX_NOTIFY_FORCES );
 	gScene->setUserContactReport(this);
 	gPhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect ("localhost", 5425);
 }
