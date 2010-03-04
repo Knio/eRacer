@@ -66,6 +66,7 @@ If you get an error in this file, it is because:
 //#include <NxUserContactReport.h> 
 #include <assert.h>
 #include "Game/State.h"
+#include "Core/Math.h"
 
 class NxContactPair;
 
@@ -122,9 +123,9 @@ public:
 
 	DEFINE_EVENT(GameStateChangeEvent, State* state)
 	
-	DEFINE_EVENT(MeteorMeteorCollisionEvent, NxContactPair& pair)
-	DEFINE_EVENT(MeteorTrackCollisionEvent, NxContactPair& pair)
-	DEFINE_EVENT(MeteorCarCollisionEvent, NxContactPair& pair)
+	DEFINE_EVENT(MeteorMeteorCollisionEvent, int meteorId1, int meteorId2, Vector3 force)
+	DEFINE_EVENT(MeteorTrackCollisionEvent, int meteorId, int trackId, Vector3 force)
+	DEFINE_EVENT(MeteorCarCollisionEvent, int meteorId, int carId, Vector3 force)
 
 	
 };

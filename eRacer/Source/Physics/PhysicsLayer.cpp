@@ -145,15 +145,26 @@ NxScene* PhysicsLayer::ReturnScene()
 }
 
 void PhysicsLayer::onContactNotify(NxContactPair& pair, NxU32 events){
-	NxActorGroup g1 = pair.actors[0]->getGroup();
-	NxActorGroup g2 = pair.actors[1]->getGroup();
+	NxActor* a1 = pair.actors[0];
+	NxActor* a2 = pair.actors[1];
+	
+	NxActorGroup g1 = a1->getGroup();
+	NxActorGroup g2 = a2->getGroup();
+	
+	int id1 = (int)a1->userData;
+	int id2 = (int)a2->userData;
+	Vector3 force = NxVec3_Vector3(pair.sumNormalForce);
 	
 	if(g1==METEOR && g2==METEOR)
-		EVENT(MeteorMeteorCollisionEvent(pair));
-	else if(g1==METEOR && g2==CAR || g1==CAR && g2==METEOR)
-		EVENT(MeteorCarCollisionEvent(pair));
-	else if (g1==METEOR && g2==TRACK || g1==TRACK && g2==METEOR)
-		EVENT(MeteorTrackCollisionEvent(pair));
+		EVENT(MeteorMeteorCollisionEvent(id1,id2,force));
+	else if(g1==METEOR && g2==CAR)
+		EVENT(MeteorCarCollisionEvent(id1,id2,force));
+	else if (g1==CAR && g2==METEOR)
+		EVENT(MeteorCarCollisionEvent(id2,id1,force));
+	else if (g1==METEOR && g2==TRACK)
+		EVENT(MeteorTrackCollisionEvent(id1,id2,force));
+	else if (g1==TRACK && g2==METEOR)
+		EVENT(MeteorTrackCollisionEvent(id2,id1,force));
 }
 float PhysicsLayer::Raycast(const Point3& pos, const Vector3& dir, Vector3& normHit){
 	Vector3 vec = normalized(dir);

@@ -178,7 +178,7 @@ class GameState(State):
   view = property(get_view)
   
   
-  AIMED_METEOR_INTERVAL = 5.
+  AIMED_METEOR_INTERVAL = 2.
     
   def Tick(self, time):
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound

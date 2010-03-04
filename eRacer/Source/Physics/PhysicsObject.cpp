@@ -12,7 +12,7 @@ PhysicsObject::~PhysicsObject()
 
 void PhysicsObject::SetMass(float mass)
 {
-	if(isDynamic()){
+	if(IsDynamic()){
 		Actor->setMass((NxReal)mass);
 		Actor->updateMassFromShapes(0, mass);
 	}
@@ -20,7 +20,7 @@ void PhysicsObject::SetMass(float mass)
 
 float PhysicsObject::GetMass()
 {
-	if(isDynamic())
+	if(IsDynamic())
 		return (float)Actor->getMass();
 	else
 		return 0;
@@ -35,7 +35,7 @@ Vector3 PhysicsObject::GetPosition()
 
 void PhysicsObject::SetPosition(const Vector3 &pos)
 {
-	assert(isDynamic());
+	assert(IsDynamic());
 	Actor->setGlobalPosition(Vector3_NxVec3(pos));
 }
 
@@ -65,7 +65,7 @@ Matrix PhysicsObject::GetTransform()
 
 void PhysicsObject::SetOrientation(const Matrix &o)
 {
-	assert(isDynamic());
+	assert(IsDynamic());
 	Actor->setGlobalOrientation(Matrix_NxMat33(o));
 }
 
@@ -76,7 +76,7 @@ NxActor* PhysicsObject::GetActor()
 
 Vector3 PhysicsObject::GetVelocity()
 {
-	if(isDynamic())
+	if(IsDynamic())
 		return NxVec3_Vector3(Actor->getLinearVelocity());
 	else
 		return Vector3(0, 0, 0);
@@ -84,11 +84,11 @@ Vector3 PhysicsObject::GetVelocity()
 
 void PhysicsObject::SetVelocity(const Vector3 &vel)
 {
-	assert(isDynamic());
+	assert(IsDynamic());
 	Actor->setLinearVelocity(Vector3_NxVec3(vel));
 }
 
-bool PhysicsObject::isDynamic(){
+bool PhysicsObject::IsDynamic(){
 	return Actor->isDynamic();
 }
 
@@ -109,7 +109,7 @@ float PhysicsObject::GetSpeed(){
 
 Vector3 PhysicsObject::GetAngVelocity()
 {
-	if(isDynamic())
+	if(IsDynamic())
 		return NxVec3_Vector3(Actor->getAngularVelocity());
 	else
 		return Vector3(0, 0, 0);
@@ -117,7 +117,7 @@ Vector3 PhysicsObject::GetAngVelocity()
 
 void PhysicsObject::SetAngVelocity(const Vector3 &vel)
 {
-	assert(isDynamic());
+	assert(IsDynamic());
 	Actor->setAngularVelocity(Vector3_NxVec3(vel));
 }
 

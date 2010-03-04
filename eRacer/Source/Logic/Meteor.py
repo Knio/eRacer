@@ -44,15 +44,14 @@ class MeteorManager(Entity):
       
         
         
-  def MeteorMeteorCollisionEvent(self, pair):
+  def MeteorMeteorCollisionEvent(self, meteorId1, meteorId2, force):
     pass
     #print "MM Collision reported to MeteorManager"
 
-  def MeteorTrackCollisionEvent(self, pair):
-    pass
-    #print "MT Collision reported to MeteorManager"
+  def MeteorTrackCollisionEvent(self, meteorId, trackId, force):
+    Entity.entities[meteorId].hitTrack(force)
 
-  def MeteorCarCollisionEvent(self, pair):
+  def MeteorCarCollisionEvent(self, meteorId, carId, force):
     pass
     #print "MC Collision reported to MeteorManager"
 
@@ -73,6 +72,8 @@ class Meteor(Entity):
 
     self.physics = eRacer.Box(True, self.DENSITY*self.scale*self.scale*self.scale, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
     self.physics.SetGroup(eRacer.METEOR)
+    self.physics.SetId(self.id)
+    
     self.graphics = scene.CreateMovingMeshNode("Meteor")
     self.graphics.thisown = 0
         
@@ -85,8 +86,17 @@ class Meteor(Entity):
     
   def reset(self):
     return True
-
     
+  def hitTrack(self,force):
+    if(self.scale<1.8):
+      print "Meteor ",self.id," hit track with force ",force
+      print "going to sleep"
+      self.physics.PutToSleep()
+      direction = normalized(force)
+      pos = self.physics.GetPosition()+direction*self.scale
+      
+      self.physics.SetPosition(pos)
+        
     
   def Tick(self, time):
     Entity.Tick(self, time)
@@ -103,8 +113,8 @@ class RandomMeteor(Meteor):
   # between 0 and 1 
   SCATTERING = 0.3
   
-  MIN_SPEED = 500
-  MAX_SPEED = 700
+  MIN_SPEED = 300
+  MAX_SPEED = 500
   MIN_SIZE = .5
   MAX_SIZE = 5.
 
@@ -142,10 +152,10 @@ class AimedMeteor(Meteor):
   AIR_TIME = 3.
   
   # between 0 and 1 
-  SCATTERING = 0.3
+  SCATTERING = 0.0
   
-  MIN_SPEED = 100
-  MAX_SPEED = 150
+  MIN_SPEED = 50
+  MAX_SPEED = 80
   MIN_SIZE = 0.5
   MAX_SIZE = 2.
 
@@ -170,6 +180,7 @@ class AimedMeteor(Meteor):
     self.physics.SetTransform(Matrix(position))
     self.physics.SetVelocity(velocity)
     self.physics.SetAngVelocity(angular_velocity)    
+  
   
   def reset(self):
     return False
