@@ -26,9 +26,10 @@ using namespace std;
 namespace Physics{
 
 enum CollisionGroup{
-	TRACK,
+	INVALID,
+	METEOR,
 	CAR,
-	METEOR
+	TRACK
 };
 
 /**

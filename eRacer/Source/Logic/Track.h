@@ -54,6 +54,7 @@ public:
   Frame GetFrame(float d);
   
   Point3 GetPositionAt(float d);
+  Vector3 GetNormalAt(float d);
   
   void Subdivide(int NSUBDIV=5);
   

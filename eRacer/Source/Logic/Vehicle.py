@@ -57,6 +57,7 @@ class Vehicle(Entity):
     self.graphics.thisown = 0
 
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
+    self.physics.SetGroup(eRacer.CAR)
 
     def load(mesh):
       if mesh:

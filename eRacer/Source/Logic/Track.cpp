@@ -35,6 +35,11 @@ Point3 Track::GetPositionAt(float d){
 	return GetFrame(d).position;
 }
 
+Vector3 Track::GetNormalAt(float d){
+  return GetFrame(d).up;
+}
+
+
 void Track::Subdivide(int NSUBDIV)
 {
     

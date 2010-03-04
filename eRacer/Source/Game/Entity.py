@@ -6,10 +6,13 @@ from Core.Globals import *
 
 
 class Entity(object):
+  idCounter = 0
+  entities = {}
+  
   def __init__(self):
-    pass
-    # self.__transform = Matrix()
-	
+    Entity.idCounter+=1
+    self.id = Entity.idCounter
+    self.entities[self.id] = self	
     
   def Tick(self, time):
     pass

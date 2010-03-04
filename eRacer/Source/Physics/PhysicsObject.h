@@ -111,7 +111,7 @@ public:
 	* @brief Checks if the object is movable or not
 	* @return The state of the object
 	*/
-	bool isDynamic();
+	bool IsDynamic();
 
 	NxActor* CreateActor(const NxActorDesc& actorDesc);
 
@@ -143,8 +143,22 @@ public:
 	}
 	float GetSpeed();
 
-
+	/**
+	 * @brief set the collision group of this physics object
+	 */
 	void SetGroup(CollisionGroup group) { Actor->setGroup(group); }
+	
+	/**
+	 * @brief set the id of this object. 
+	 *
+	 * Needed to find the associated entity in case of a collision
+	 *
+	 * @param id 
+	 *				the id of the associated entity
+	 */
+	void SetId(int id){Actor->userData = (void*)id; }
+	
+	void PutToSleep(){Actor->putToSleep(); }
 
 protected:
 	/**

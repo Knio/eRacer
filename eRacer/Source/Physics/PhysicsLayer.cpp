@@ -95,7 +95,8 @@ void PhysicsLayer::InitScene()
 	SetupParameters();
 	gScene->setTiming(1.0f/500, 100, NX_TIMESTEP_VARIABLE);
 	gScene->setActorGroupPairFlags(METEOR,METEOR,NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_FORCES );
-	gScene->setActorGroupPairFlags(METEOR,TRACK,NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_FORCES );
+	gScene->setActorGroupPairFlags(METEOR,TRACK, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_FORCES );
+	gScene->setActorGroupPairFlags(CAR,   TRACK, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_FORCES );
 	gScene->setUserContactReport(this);
 	gPhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect ("localhost", 5425);
 }
@@ -144,19 +145,30 @@ NxScene* PhysicsLayer::ReturnScene()
 	return gScene;
 }
 
-void PhysicsLayer::onContactNotify(NxContactPair& pair, NxU32 events){
-	NxActorGroup g1 = pair.actors[0]->getGroup();
-	NxActorGroup g2 = pair.actors[1]->getGroup();
+void PhysicsLayer::onContactNotify(NxContactPair& pair, NxU32 events){	
+	bool flip = pair.actors[0]->getGroup() > pair.actors[1]->getGroup();
+
+	NxActor* a1 = pair.actors[ flip];
+	NxActor* a2 = pair.actors[!flip];
 	
-	if (g1<g1) { NxActorGroup t = g1; g1 = g2; g2=t; }
+	NxActorGroup g1 = a1->getGroup();
+	NxActorGroup g2 = a2->getGroup();
+	
+	int id1 = (int)a1->userData;
+	int id2 = (int)a2->userData;
+	
+	Vector3 force = NxVec3_Vector3(pair.sumNormalForce);
+	if (flip) force *= -1;
 	
 	if(g1==METEOR && g2==METEOR)
-		EVENT(MeteorMeteorCollisionEvent(pair));
-	else if(g1==METEOR && g2==CAR || g1==CAR && g2==METEOR)
-		EVENT(MeteorCarCollisionEvent(pair));
-	else if (g1==METEOR && g2==TRACK || g1==TRACK && g2==METEOR)
-		EVENT(MeteorTrackCollisionEvent(pair));
-	else if (g1==CAR && g2==TRACK || g1==TRACK && g2==METEOR)
+		EVENT(MeteorMeteorCollisionEvent(id1,id2,force));
+	else if(g1==METEOR && g2==CAR)
+		EVENT(MeteorCarCollisionEvent		(id1,id2,force));
+	else if (g1==METEOR && g2==TRACK)
+		EVENT(MeteorTrackCollisionEvent	(id1,id2,force));
+	else if (g1==CAR && g2==TRACK)
+		EVENT(CarTrackCollisionEvent		(id1,id2,force));
+		
 }
 float PhysicsLayer::Raycast(const Point3& pos, const Vector3& dir, Vector3& normHit){
 	Vector3 vec = normalized(dir);
