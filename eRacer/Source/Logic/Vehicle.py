@@ -34,11 +34,13 @@ class Vehicle(Entity):
     self.SPRING_K         = (self.MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
 
-  def __init__(self, scene, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
+  def __init__(self, scene, track, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
     Entity.__init__(self)
     self.INITIAL_POS = position
     self.behavior = None
-        
+    self.trackpos = None
+    self.track = track
+    
     self.ReloadedConstsEvent()
         
     # self.physics = eRacer.TriMesh()    
@@ -113,9 +115,16 @@ class Vehicle(Entity):
     if not time.game_delta:
       return
     
+    
     phys  = self.physics
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
+    worldpos   = mul1(tx, ORIGIN)
+    self.trackpos = self.track.FindPosition(worldpos, self.trackpos)
+    frame = self.track.GetFrame(self.trackpos)
+    up    = Vector3(frame.up.x, frame.up.y, frame.up.z)
+    fw    = Vector3(frame.fw.x, frame.fw.y, frame.fw.z)
+    
 
     self.PrintDebug()
     # do engine/brake/steering/user input forces    
@@ -138,12 +147,12 @@ class Vehicle(Entity):
     #print dragForce.x, dragForce.y, dragForce.z
     
     # gravity
+    
     worldroadnormal = Vector3()
     center = Vector3(0, -1.1, 0)
     if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
       gravity = worldroadnormal * (-CONSTS.CAR_GRAVITY * self.MASS)
       phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
-    
     
     vel = phys.GetLocalPointWorldVelocity(ORIGIN)
     self.sound.isPaused = False
@@ -170,6 +179,7 @@ class Vehicle(Entity):
       dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
       disp = (self.DISPLACEMENT - dist)
       
+      worldroadnormal = up
 
       _debug = [self.DEBUG[i]]
       def debug(s):

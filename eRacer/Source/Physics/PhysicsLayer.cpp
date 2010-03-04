@@ -148,12 +148,15 @@ void PhysicsLayer::onContactNotify(NxContactPair& pair, NxU32 events){
 	NxActorGroup g1 = pair.actors[0]->getGroup();
 	NxActorGroup g2 = pair.actors[1]->getGroup();
 	
+	if (g1<g1) { NxActorGroup t = g1; g1 = g2; g2=t; }
+	
 	if(g1==METEOR && g2==METEOR)
 		EVENT(MeteorMeteorCollisionEvent(pair));
 	else if(g1==METEOR && g2==CAR || g1==CAR && g2==METEOR)
 		EVENT(MeteorCarCollisionEvent(pair));
 	else if (g1==METEOR && g2==TRACK || g1==TRACK && g2==METEOR)
 		EVENT(MeteorTrackCollisionEvent(pair));
+	else if (g1==CAR && g2==TRACK || g1==TRACK && g2==METEOR)
 }
 float PhysicsLayer::Raycast(const Point3& pos, const Vector3& dir, Vector3& normHit){
 	Vector3 vec = normalized(dir);
