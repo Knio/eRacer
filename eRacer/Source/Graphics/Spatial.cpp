@@ -26,12 +26,11 @@ void Spatial::cull(const Camera& camera, vector<const Renderable*>& visibleRende
 	if(!visible)
 		return;
 
-	// for(int i=0; i<6; i++){
-	// 	if(worldBounds_.cull(camera.GetPlane(i)))
-	// 		return;
-	// }
+	for(int i=0; i<6; i++){
+		if(worldBounds_.cull(camera.GetPlane(i)))
+	 		return;
+	}
 
-	// does this still do anyting??
 	cullRecursive(camera, visibleRenderables);
 }
 

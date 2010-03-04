@@ -13,6 +13,12 @@
 struct Plane {
 	Vector3 normal;
 	float distance;
+
+	void normalize() {
+		float l = length(normal);
+		normal/=l;
+		distance/=l;
+	};
 };
 
 struct Sphere {

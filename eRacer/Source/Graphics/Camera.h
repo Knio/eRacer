@@ -14,6 +14,15 @@
 
 namespace Graphics {
 
+enum PlaneIndices {
+	PI_LEFT,
+	PI_RIGHT,
+	PI_BOTTOM,
+	PI_TOP,
+	PI_NEAR,
+	PI_FAR
+};
+
 /**
  * @brief A camera, defining position, direction, up vector and the view frustum.
  */
