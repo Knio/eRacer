@@ -14,13 +14,14 @@
 
 namespace Graphics {
 
-enum PlaneIndices {
+enum PlaneIndex {
 	PI_LEFT,
 	PI_RIGHT,
 	PI_BOTTOM,
 	PI_TOP,
 	PI_NEAR,
-	PI_FAR
+	PI_FAR,
+	PI_NUM
 };
 
 /**
@@ -192,20 +193,21 @@ public:
 	 * @param planeIndex
 	 * 			The index of the plane to return
 	 * @return the specified plane
+	 * @see PlaneIndex
 	 */
 	const Plane& GetPlane(int planeIndex) const;
-
-	//hack
-	Point3 position_;
-	Point3 lookAt_;
-	Vector3 approxUp_;
-	Vector3 up_;
 	
 	const Point3& GetPosition() const 	{ return position_; }
 	const Point3& GetLookAt() 	const 	{ return lookAt_; }
 	const Point3& GetUp() 			const 	{ return up_; }
 	
 	void SetViewMatrix(const Matrix& viewMatrix);
+
+protected:
+	Point3 position_;
+	Point3 lookAt_;
+	Vector3 approxUp_;
+	Vector3 up_;
 
 private:
 	void UpdateView();

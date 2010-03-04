@@ -139,13 +139,13 @@ void Camera::UpdatePlanes(){
 	planes_[PI_FAR].normal.z = combinedMatrix._34 - combinedMatrix._33;
 	planes_[PI_FAR].distance = combinedMatrix._44 - combinedMatrix._43;
 
-	for(unsigned int i=0; i<6; i++)
+	for(unsigned int i=0; i<PI_NUM; i++)
 		planes_[i].normalize();
 }
 
 const Plane& Camera::GetPlane(int planeIndex) const {
 	assert(0 <= planeIndex);
-	assert(planeIndex < 6);
+	assert(planeIndex < PI_NUM);
 	return planes_[planeIndex];
 }
 
