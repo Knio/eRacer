@@ -42,7 +42,7 @@ class Vehicle(Entity):
     self.track = track
     
     self.ReloadedConstsEvent()
-        
+    
     # self.physics = eRacer.TriMesh()    
     self.physics = eRacer.Box(
       True,       # dynamic

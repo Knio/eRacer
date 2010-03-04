@@ -52,6 +52,5 @@ class GameMapping(Mapping):
     elif button == eRacer.BUTTON_Y:       return E.CameraChangedEvent()
     elif button == eRacer.BUTTON_X:       CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
     
-    
   def GamepadButtonReleasedEvent(self, button):
     if button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(False)
