@@ -33,6 +33,7 @@ void Camera::SetFrame(const Point3& position, const Point3& lookAt, const Vector
 	SetUp(approxUp);
 	UpdateView();
 	UpdateProjection();
+	UpdatePlanes();
 }
 
 
@@ -43,6 +44,7 @@ void Camera::SetPosition(const Point3& position){
 	UpdateUp();
 
 	UpdateView();
+	UpdatePlanes();
 }
 
 void Camera::SetLookAt(const Point3& lookAt){
@@ -52,6 +54,7 @@ void Camera::SetLookAt(const Point3& lookAt){
 	UpdateUp();
 
 	UpdateView();
+	UpdatePlanes();
 }
 
 
@@ -61,6 +64,7 @@ void Camera::SetUp(const Vector3& approxUp)
 	UpdateUp(); 
 	
 	UpdateView();
+	UpdatePlanes();
 }
 
 void Camera::UpdateUp(){
@@ -75,6 +79,7 @@ void Camera::SetAspectRatio(float aspectRatio){
 	assert(aspectRatio>0);
 	aspectRatio_ = aspectRatio;
 	UpdateProjection();
+	UpdatePlanes();
 }
 
 void Camera::SetFovY(float fovY){
@@ -83,6 +88,7 @@ void Camera::SetFovY(float fovY){
 	assert(perspective_);
 	fovY_ = fovY;
 	UpdateProjection();
+	UpdatePlanes();
 }
 
 void Camera::SetHeight(float height){
@@ -90,6 +96,7 @@ void Camera::SetHeight(float height){
 	assert(!perspective_);
 	height_ = height;
 	UpdateProjection();
+	UpdatePlanes();
 }
 
 

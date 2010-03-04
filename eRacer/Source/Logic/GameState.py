@@ -117,6 +117,11 @@ class GameState(State):
     self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')
     self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
 
+    def CarTrackCollisionEvent(car, track, force):
+      print car, track, force
+      
+    game().event.Register(CarTrackCollisionEvent)
+    
     
     game().logic.Add(self.player)
 
