@@ -88,12 +88,10 @@ class Meteor(Entity):
     return True
     
   def hitTrack(self,force):
-    if(self.scale<1.8):
-      print "Meteor ",self.id," hit track with force ",force
-      print "going to sleep"
+    if(self.scale<2.5):
       self.physics.PutToSleep()
       direction = normalized(force)
-      pos = self.physics.GetPosition()+direction*self.scale
+      pos = self.physics.GetPosition()-direction*self.scale
       
       self.physics.SetPosition(pos)
         
