@@ -112,10 +112,10 @@ class GameState(State):
     #   game().logic.Add(Arrow(scene, p))
     
     
-    self.player = Vehicle("YOU", self.scene, self.track, Point3(0, 3,-6))
+    self.player = Vehicle("YOU", self.scene, self.track, Point3(0, 7,-6))
     self.player.behavior = PlayerBehavior(self.player)
   
-    self.ai1    = Vehicle("AI1", self.scene, self.track, Point3(0, 3, 6), 'Racer2.x')
+    self.ai1    = Vehicle("AI1", self.scene, self.track, Point3(0, 7, 6), 'Racer2.x')
     self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
 
     # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')

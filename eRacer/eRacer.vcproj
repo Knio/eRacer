@@ -601,6 +601,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Physics\Capsule.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Physics\Capsule.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Physics\Convert.cpp"
 					>
 				</File>

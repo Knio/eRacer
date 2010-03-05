@@ -49,6 +49,7 @@
 #include "..\Physics\PhysicsLayer.h"
 #include "..\Physics\PhysicsObject.h"
 #include "..\Physics\Box.h"
+#include "..\Physics\Capsule.h"
 #include "..\Physics\Plane.h"
 #include "..\Physics\TriMesh.h"
 
@@ -162,6 +163,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Physics\PhysicsLayer.h"
 %include "..\Physics\PhysicsObject.h"
 %include "..\Physics\Box.h"
+%include "..\Physics\Capsule.h"
 %include "..\Physics\Plane.h"
 %include "..\Physics\TriMesh.h"
 

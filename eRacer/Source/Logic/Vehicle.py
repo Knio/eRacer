@@ -44,14 +44,21 @@ class Vehicle(Entity):
     
     self.ReloadedConstsEvent()
     
-    # self.physics = eRacer.TriMesh()    
-    self.physics = eRacer.Box(
-      True,       # dynamic
-      self.MASS,  # mass
-      self.INITIAL_POS, # position
-      Matrix(),   # orientation
-      self.SIZE   # bounds
+    self.physics = eRacer.Capsule(
+      True, 
+      self.MASS, 
+      self.INITIAL_POS,
+      Matrix(self.INITIAL_POS, PI/2.0, X), #orientation
+      8.0,  #height
+      1.0  #radius
     )
+    #self.physics = eRacer.Box(
+    #  True,       # dynamic
+    #  self.MASS,  # mass
+    #  self.INITIAL_POS, # position
+    #  Matrix(),   # orientation
+    #  self.SIZE   # bounds
+    #)
     self.transform = Matrix()
     
     self.graphics = scene.CreateMovingMeshNode("vehicle")
@@ -156,7 +163,11 @@ class Vehicle(Entity):
     
     worldroadnormal = Vector3()
     center = Vector3(0, -1.1, 0)
-    if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
+    
+    dir = mul0(tx, -Y)
+    normalize(dir)
+    #if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
+    if 0 < game().physics.physics.Raycast(mul1(tx, center), dir, worldroadnormal) < 20:
       worldroadnormal = up      
       gravity = worldroadnormal * (-CONSTS.CAR_GRAVITY * self.MASS)
       if delta: phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
@@ -180,11 +191,11 @@ class Vehicle(Entity):
       worldvel   = phys.GetLocalPointWorldVelocity(localpos)
       
       #raycast down from suspension point
-      upamount = 4.0
+      upamount = 2.0
       worldroadnormal = Vector3()
       localsuspoint   = Point3(localpos.x, localpos.y + upamount, localpos.z)
       worldsuspoint   = mul1(tx, localsuspoint)
-      # dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
+      #dist = game().physics.physics.Raycast(worldsuspoint, dir, worldroadnormal) - upamount
       dist = dot(up, (worldsuspoint - frame.position)) - upamount
       disp = (self.DISPLACEMENT - dist)
 
