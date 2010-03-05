@@ -34,12 +34,13 @@ class Vehicle(Entity):
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
 
-  def __init__(self, scene, track, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
+  def __init__(self, name, scene, track, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
     Entity.__init__(self)
     self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = None
-    self.track = track
+    self.track  = track
+    self.name   = name
     
     self.ReloadedConstsEvent()
     
@@ -76,7 +77,7 @@ class Vehicle(Entity):
     self.crashtime = 0      # time since wheels were last in contact with the ground
     
     self.boosting = 0.
-
+    self.lapcount = 0
     
     self.sound = eRacer.SoundFx();
     self.sound.looping  = True
@@ -84,10 +85,8 @@ class Vehicle(Entity):
     self.sound.isPaused = True
     self.sound.volume   = 250
     self.sound.minDist  = 50
-    game().sound.sound.LoadSoundFx("Resources/Sounds/DrumLoop.wav", self.sound)
-    
-    
-    
+
+    game().sound.sound.LoadSoundFx("Resources/Sounds/motorsound2.wav", self.sound)
 
     game().event.Register(self.ReloadedConstsEvent)
 
@@ -105,13 +104,11 @@ class Vehicle(Entity):
   def Boost(self):
     self.boosting = 2.0
   
+  
+  
+  
   def Tick(self, time):
     Entity.Tick(self, time)
-    
-    if self.behavior: 
-      self.behavior.Tick(time)
-    
-    
     
     # if not time.game_delta:
     #   return
@@ -126,6 +123,14 @@ class Vehicle(Entity):
     up    = Vector3(frame.up.x, frame.up.y, frame.up.z)
     fw    = Vector3(frame.fw.x, frame.fw.y, frame.fw.z)
   
+    lapcount = int(self.trackpos / self.track.dist)
+    if (lapcount > self.lapcount):
+      game().event.LapEvent(self, lapcount)
+    self.lapcount = lapcount
+  
+    if self.behavior: 
+      self.behavior.Tick(time)
+    
 
     self.PrintDebug()
     # do engine/brake/steering/user input forces    
@@ -160,7 +165,7 @@ class Vehicle(Entity):
     self.sound.isPaused = False
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
-    self.sound.pitch = max(44100, int(44100 * length(vel) / 60.0))
+    self.sound.pitch = max(45000, int(45000 * length(vel) / 60.0))
     if self.crashtime > 0:
       self.sound.pitch = int(54100 * self.throttle + self.sound.pitch)
     game().sound.sound.UpdateSoundFx(self.sound)

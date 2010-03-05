@@ -37,15 +37,12 @@ class AIBehavior(Behavior):
     Behavior.__init__(self,parent)
     self.line = track
     self.arrow = arrow
-    self.trackpos = None
     
     self.curState = AIState.DRIVE
   
-  def Tick(self,time):
+  def Tick(self,time):    
     pos = self.parent.physics.GetPosition()
-    self.trackpos = self.line.FindPosition(pos, self.trackpos)
-    
-    curFrame = self.line.GetFrame(self.trackpos + 100.0)
+    curFrame = self.line.GetFrame(self.parent.trackpos + 100.0)
     cur = curFrame.position
     if self.arrow: self.arrow.position = Point3(cur.x, cur.y, cur.z)
     

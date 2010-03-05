@@ -6,6 +6,7 @@ from Game.State     import State
 
 from GameMapping    import GameMapping
 from MenuState      import PauseMenuState
+from GameEndState   import GameEndState
 
 # Entities
 from Box        import Box
@@ -38,7 +39,6 @@ from Graphics.Sprite  import Sprite
 class LoadingState(State):
   def __init__(self, func):
     State.__init__(self)    
-        
     def load():
       # do loading function
       func()
@@ -69,6 +69,10 @@ class GameState(State):
   def __init__(self):
     State.__init__(self)
     self.loaded = False
+    
+    self.laps   = 0 # TODO CONST
+    self.stats  = {}
+    
     self.load()
     
   def Activate(self):
@@ -108,10 +112,10 @@ class GameState(State):
     #   game().logic.Add(Arrow(scene, p))
     
     
-    self.player = Vehicle(self.scene, self.track, Point3(0, 10, 0))
+    self.player = Vehicle("YOU", self.scene, self.track, Point3(0, 3,-6))
     self.player.behavior = PlayerBehavior(self.player)
   
-    self.ai1    = Vehicle(self.scene, self.track, Vector3( 2, 3, 10), 'Racer2.x')
+    self.ai1    = Vehicle("AI1", self.scene, self.track, Point3(0, 3, 6), 'Racer2.x')
     self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
 
     # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')
@@ -196,12 +200,22 @@ class GameState(State):
     State.Tick(self, time)
     game().graphics.views.append(self.view)
     
+    if self.player.lapcount:
+      game().graphics.graphics.WriteString("%d / %d" % (min(self.player.lapcount, self.laps), self.laps), "Verdana", 48, Point3(650, 30, 0))
+    
     # self.lastMeteorTime += time.game_delta
     # if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
     #   self.lastMeteorTime = 0
     #   m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
     #   game().logic.Add(m)
   
+  
+  def LapEvent(self, vehicle, lap):
+    self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+        
+    if lap == self.laps+1 and vehicle == self.player:
+      game().PushState(GameEndState(self.stats))
+        
       
   def CameraChangedEvent(self):
     self.viewIndex = (self.viewIndex+1) % len(self.views)
