@@ -70,7 +70,7 @@ class GameState(State):
     State.__init__(self)
     self.loaded = False
     
-    self.laps   = 2 # TODO CONST
+    self.laps   = 0 # TODO CONST
     self.stats  = {}
     
     self.load()

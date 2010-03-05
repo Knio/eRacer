@@ -1,8 +1,11 @@
 from Core.Globals import *
 
-from Game.State import State
+from Game.State     import State
+from GameEndMapping import GameEndMapping
+from MenuState      import PauseMenuState
 
 class GameEndState(State):
+  MAPPING = GameEndMapping
   def __init__(self, stats):
     State.__init__(self)    
     self.stats = stats
@@ -39,10 +42,8 @@ class GameEndState(State):
       l.append(s[-1])
       stats.append(l)
     
-    print stats
     stats.sort(key=lambda x:x[-1])
-    print stats
-    
+   
     
     xd = 150
     yd = 30
@@ -70,7 +71,7 @@ class GameEndState(State):
         x += xd/2
       x += xd/2
       s = "%6.2f" % l[-1]
-      if l[i] == 99999: s = '---'
+      if l[-1] == 99999: s = '---'
       game().graphics.graphics.WriteString(s, "Verdana", 24, Point3(x,y,0))
       x = 100
       y += yd
@@ -81,3 +82,8 @@ class GameEndState(State):
   def LapEvent(self, vehicle, lap):
     self.parent.LapEvent(vehicle, lap)
   
+  def PauseEvent(self):
+    game().PushState(PauseMenuState())
+    
+  def CameraChangedEvent(self):
+    self.parent.CameraChangedEvent()
