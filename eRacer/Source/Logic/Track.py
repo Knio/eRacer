@@ -2,7 +2,6 @@ from Core.Globals import *
 
 TRACK = [
    
-  eRacer.Frame(Point3(  500,   0,   00), Y),
   eRacer.Frame(Point3( -500,   0,   00), Y),  
   eRacer.Frame(Point3( -500,  25,  500), normalized(Vector3( 1,0,-1))),
   eRacer.Frame(Point3(   00,  50,  500), -Y),
@@ -15,6 +14,7 @@ TRACK = [
   eRacer.Frame(Point3(   00,  50, -500), -Y),  
   eRacer.Frame(Point3(  500,  25, -500), normalized(Vector3(-1,0, 1))),
   
+  eRacer.Frame(Point3(  500,   0,   00), Y),
 ]
 
 PROFILE = [
@@ -56,6 +56,7 @@ class Track(Entity, eRacer.Track):
     tex  = game().io.LoadTexture('concrete_plates.jpg')
     mat  = game().graphics.graphics.DefaultMaterial()
     mesh.disown()
+    mat.disown()
     self.mesh = eRacer.Mesh(mesh, mat, tex)
     
     self.graphics.Init(self.mesh)
