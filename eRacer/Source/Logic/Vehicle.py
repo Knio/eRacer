@@ -84,7 +84,7 @@ class Vehicle(Entity):
     self.sound.isPaused = True
     self.sound.volume   = 250
     self.sound.minDist  = 50
-    game().sound.sound.LoadSoundFx("Resources/Sounds/motorsound.wav", self.sound)
+    game().sound.sound.LoadSoundFx("Resources/Sounds/motorsound2.wav", self.sound)
     
     
     
@@ -160,7 +160,7 @@ class Vehicle(Entity):
     self.sound.isPaused = False
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
-    self.sound.pitch = max(44100, int(44100 * length(vel) / 60.0))
+    self.sound.pitch = max(45000, int(45000 * length(vel) / 60.0))
     if self.crashtime > 0:
       self.sound.pitch = int(54100 * self.throttle + self.sound.pitch)
     game().sound.sound.UpdateSoundFx(self.sound)
