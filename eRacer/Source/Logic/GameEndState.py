@@ -39,7 +39,7 @@ class GameEndState(State):
         s[-1] = 99999
       s = [0.] + s
       
-      l.append(s[-1])
+      l.append(s[-1] - s[0])
       stats.append(l)
     
     stats.sort(key=lambda x:x[-1])
