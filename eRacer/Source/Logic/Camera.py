@@ -64,13 +64,15 @@ class ChasingCamera(Camera):
     #eRacer.mul0(self.target.physics.GetTransform(), Z)
     
 
-    capBack = math.pow(vel, 0.6)
+    capBack = math.pow(vel, 0.4)
     originlocal = ORIGIN
-    behindlocal = Point3(0,8,-10-capBack);
+    behindlocal = Point3(0,6,-8-capBack);
     originworld = mul1(self.target.transform, originlocal)
     behindworld = mul1(self.target.transform, behindlocal)
+    forwardlocal = Point3(0,0,15);
+    forwardworld = mul1(self.target.transform, forwardlocal)
     
-    fov = math.pi/2.5/(vel*0.01+1)
+    fov = math.pi/2.0/(vel*0.01+1)
     
     alpha = math.pow(0.04, float(time.game_delta) / time.RESOLUTION)
     self.position = self.position*alpha + behindworld*(1-alpha)
@@ -93,7 +95,7 @@ class ChasingCamera(Camera):
     #targetPosition.y += 5
     
     #self.SetLookAt(targetPosition)
-    self.SetFrame(pos, targetPosition, self.upworld)
+    self.SetFrame(pos, forwardworld, self.upworld)
     
 class CarCamera(Camera):
   def __init__(self, target): 
