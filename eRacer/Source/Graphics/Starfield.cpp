@@ -34,7 +34,7 @@ Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
       random(0.7f, 1.0f), 
       random(0.7f, 1.0f), 
       random(0.7f, 1.0f),
-      0,
+      0
     );
     
     starbuff[2*i+0] = t;

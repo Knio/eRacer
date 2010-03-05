@@ -9,7 +9,7 @@ from Core.Event         import Event
 from Core.Config        import Config
 from Logic.MenuState    import MainMenuState
 
-from IO                 import IO
+from IO.IO              import IO
 from Input.Input        import Input
 from Logic.Logic        import Logic
 from Sound.Sound        import Sound
@@ -44,10 +44,6 @@ class Main(Game):
         self.test = eRacer.TestModule();
     
     self.event.Register(self.QuitEvent)
-    self.event.Register(self.MouseButtonPressedEvent)
-    self.event.Register(self.MouseMovedEvent)
-    self.event.Register(self.GameStateChangeEvent)
-    
     self.PushState(MainMenuState())    
     
   def Init(self):
@@ -60,19 +56,7 @@ class Main(Game):
     
     self.states[-1].Tick(time)
     Game.Tick(self, time)
-    
-
-  def MouseButtonPressedEvent(self, mouseButton):
-    pass
-    # print "Mouse Button ",mouseButton,"pressed"  
-
-  def MouseMovedEvent(self, relativeX, relativeY):
-    pass
-    # print "Mouse moved by (",relativeX,",",relativeY,")"  
-	    
-      
+          
   def QuitEvent(self):
     self.state = 0
-    
-  def GameStateChangeEvent(self, state):
-    pass
+

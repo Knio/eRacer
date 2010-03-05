@@ -34,6 +34,6 @@ setup(
   },
   data_files=[
   ('Config', glob.glob('Config/*')),
-  ('Shaders', glob.glob('Shaders/*')),
+  ('Source/Shaders', glob.glob('Source/Shaders/*')),
   ] + [(i, glob.glob(i+'/*')) for i in glob.glob('Resources/*')]
 )

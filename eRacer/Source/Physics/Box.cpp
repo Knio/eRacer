@@ -6,9 +6,9 @@ Box::Box(bool dynamic, float mass, const Point3& pos, const Matrix& orient, cons
 	
 
 	NxMaterialDesc material;
-	material.restitution = 0.5;
-	material.dynamicFriction = 0.5;
-	material.staticFriction = 0.5;
+	material.restitution =		(NxReal)0.6;
+	material.dynamicFriction =	(NxReal)0.1;
+	material.staticFriction =	(NxReal)0.1;
 
 	// Add a single-shape actor to the scene
 	NxActorDesc actorDesc;

@@ -14,6 +14,16 @@
 
 namespace Graphics {
 
+enum PlaneIndex {
+	PI_LEFT,
+	PI_RIGHT,
+	PI_BOTTOM,
+	PI_TOP,
+	PI_NEAR,
+	PI_FAR,
+	PI_NUM
+};
+
 /**
  * @brief A camera, defining position, direction, up vector and the view frustum.
  */
@@ -68,8 +78,6 @@ public:
 	 * 			the eye point of the camera
 	 */
 	void SetPosition(const Point3& position);
-
-	const Point3& GetPosition() const;
 
 	/**
 	 * @brief set point where the camera should look at
@@ -185,19 +193,21 @@ public:
 	 * @param planeIndex
 	 * 			The index of the plane to return
 	 * @return the specified plane
+	 * @see PlaneIndex
 	 */
 	const Plane& GetPlane(int planeIndex) const;
+	
+	const Point3& GetPosition() const 	{ return position_; }
+	const Point3& GetLookAt() 	const 	{ return lookAt_; }
+	const Point3& GetUp() 			const 	{ return up_; }
+	
+	void SetViewMatrix(const Matrix& viewMatrix);
 
-	//hack
+protected:
 	Point3 position_;
 	Point3 lookAt_;
 	Vector3 approxUp_;
 	Vector3 up_;
-	Point3 GetPosition() 	{ return position_; }
-	Point3 GetLookAt() 		{ return lookAt_; }
-	Point3 GetUp() 				{ return up_; }
-	
-	void SetViewMatrix(const Matrix& viewMatrix);
 
 private:
 	void UpdateView();
@@ -207,6 +217,7 @@ private:
 
 	Matrix viewMatrix_;
 	Matrix projectionMatrix_;
+
 
 
 	float near_;
@@ -219,11 +230,6 @@ private:
 
 	Plane planes_[6];
 };
-
-
-inline const Point3& Camera::GetPosition() const{
-	return position_;
-}
 
 
 inline void Camera::UpdateView(){

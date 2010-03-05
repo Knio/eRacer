@@ -1,5 +1,5 @@
 from Core.Globals import *
-from AI.Raceline import Raceline
+
 
 class Behavior(object):
   def __init__(self, parent):
@@ -30,16 +30,25 @@ class PlayerBehavior(Behavior):
   def PlayerBoostEvent(self):
     self.parent.Boost()
 
+
+
 class AIBehavior(Behavior):
-  def __init__(self, parent, raceline):
+  def __init__(self, parent, track, arrow=None):
     Behavior.__init__(self,parent)
-    self.line = raceline
+    self.line = track
+    self.arrow = arrow
+    self.trackpos = None
+    
     self.curState = AIState.DRIVE
   
   def Tick(self,time):
     pos = self.parent.physics.GetPosition()
-    self.line.UpdateWaypoint(self.parent.physics.GetPosition())
-    cur = self.line.Peek(0)
+    self.trackpos = self.line.FindPosition(pos, self.trackpos)
+    
+    curFrame = self.line.GetFrame(self.trackpos + 100.0)
+    cur = curFrame.position
+    if self.arrow: self.arrow.position = Point3(cur.x, cur.y, cur.z)
+    
     game().graphics.graphics.WriteString(
       "cur waypoint: " + str(cur),
       "Verdana", 12, Point3(0,0,0)
@@ -63,15 +72,15 @@ class AIBehavior(Behavior):
       if length(turnProj) < 0.001:
         self.parent.Turn(0)
       else:
-        turnScale = 1.0
-        turnSize = length(turnProj) * turnScale # probably use a damping factor
+        turnScale = 2.0
+        turnSize = min(1.0, length(turnProj) * turnScale)
         costheta = dot(turnProj, bodyRight) / length(turnProj)
    
         if 0.999 < costheta < 1.001:#right turn
           self.parent.Turn(turnSize)
         else:
           self.parent.Turn(-turnSize)
-      self.parent.Accelerate(0.3)
+      self.parent.Accelerate(1.0)
       #now change state if needed
       if self.parent.physics.GetSpeed() < 10.0 and self.objectInFront(1.0, tx):
         #object close in front has almost stopped us
@@ -81,7 +90,7 @@ class AIBehavior(Behavior):
       self.parent.Accelerate(-0.5)
       self.parent.Turn(0)
       
-      if not self.objectInFront(3.0, tx):
+      if not self.objectInFront(5.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE
   
@@ -93,19 +102,20 @@ class AIBehavior(Behavior):
   def objectInFront(self, dist, tx):
     #these positions are just outside the physics box of the car
     bodyForward = mul0(tx, Z)
-    frontTopRight = Point3(self.parent.SIZE.x + 0.01, self.parent.SIZE.y + 0.01, self.parent.SIZE.z + 0.01)
+    eps = 0.0001
+    frontTopRight = Point3(self.parent.SIZE.x + eps, self.parent.SIZE.y + eps, self.parent.SIZE.z + eps)
     frontTopRight = mul1(tx, frontTopRight)
     dist1 = game().physics.physics.Raycast(frontTopRight, bodyForward)
         
-    frontBotRight = Point3(self.parent.SIZE.x + 0.01, -self.parent.SIZE.y - 0.01, self.parent.SIZE.z + 0.01)
+    frontBotRight = Point3(self.parent.SIZE.x + eps, -self.parent.SIZE.y - eps, self.parent.SIZE.z + eps)
     frontBotRight = mul1(tx, frontBotRight)
     dist2 = game().physics.physics.Raycast(frontBotRight, bodyForward)
     
-    frontTopLeft = Point3(-self.parent.SIZE.x - 0.01, self.parent.SIZE.y + 0.01, self.parent.SIZE.z + 0.01)
+    frontTopLeft = Point3(-self.parent.SIZE.x - eps, self.parent.SIZE.y + eps, self.parent.SIZE.z + eps)
     frontTopLeft = mul1(tx, frontTopLeft)
     dist3 = game().physics.physics.Raycast(frontTopLeft, bodyForward)
     
-    frontBotLeft = Point3(-self.parent.SIZE.x - 0.01, -self.parent.SIZE.y - 0.01, self.parent.SIZE.z + 0.01)
+    frontBotLeft = Point3(-self.parent.SIZE.x - eps, -self.parent.SIZE.y - eps, self.parent.SIZE.z + eps)
     frontBotLeft = mul1(tx, frontBotLeft)
     dist4 = game().physics.physics.Raycast(frontBotLeft, bodyForward)
     

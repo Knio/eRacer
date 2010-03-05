@@ -55,8 +55,6 @@ CreateMatrix = eRacer.CreateMatrix
 
 PI    = math.pi
 ZERO  = 1e-5
-def printvec(v):
-  print "(%6.2f %6.2f %6.2f)" % (v.x, v.y, v.z)
 
 def clamp(x, _min, _max):
   return min(max(x, _min), _max)

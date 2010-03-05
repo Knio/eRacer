@@ -34,6 +34,21 @@ public:
 	 */
 	Mesh();
 
+	Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture) :
+		d3dMesh_(mesh), 
+		nMaterials_(1)
+	{
+		materials_ = new D3DMATERIAL9[1];
+		materials_[0] = material;
+		textures_ = new IDirect3DTexture9*[1];
+		textures_[0] = texture;
+		
+		initialized = true;
+
+		UpdateLocalBounds();
+		
+	}
+
 	virtual ~Mesh();
 
 	/**
@@ -75,7 +90,7 @@ public:
 	 *			a pointer to the memory location where the pointers to the textures are stored
 	 */
 	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
-
+	
 	/**
 	 * @brief flag to indicate whether the mesh is already initialized. 
 	 *

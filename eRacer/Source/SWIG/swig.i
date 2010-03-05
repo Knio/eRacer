@@ -21,6 +21,8 @@
 // IO
 #include "..\IO\IO.h"
 
+// Logic
+#include "..\Logic\Track.h"
 
 // Graphics
 #include "..\Graphics\Renderable.h"
@@ -125,6 +127,11 @@ If a class doesn't need to be exported to Python, it can be left out.
 
 %exception;
 
+
+// Logic
+%template(VectorTrackVertex) std::vector<TrackVertex>;
+%include "..\Logic\Track.h"
+
 // Graphics ***************************
 // %include "..\Graphics\Renderable.h" // Something funny happens with this one. 
 
@@ -138,8 +145,10 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Graphics\MovingMeshNode.h"
 %include "..\Graphics\Scene.h"
 
+%ignore debugRenderable;
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
+
 %ignore Star;
 %include "..\Graphics\Starfield.h"
 %include "..\Graphics\CoordinateCross.h"
@@ -161,7 +170,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 // %include "..\Input\Device.h"
 // %include "..\Input\Mouse.h"
 // %include "..\Input\Keyboard.h"
-// %include "..\Input\Gamepad.h"
+%include "..\Input\Gamepad.h"
 %include "..\Input\Input.h"
 
 

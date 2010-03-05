@@ -58,6 +58,7 @@ const Matrix IDENTITY = Matrix(1,0,0,0,
 #include <strsafe.h>
 
 void debug(const Matrix &m);
+void debug(const Point3 &m);
 
 
 ostream& operator<<(ostream& s, const Vector3& v);
@@ -233,7 +234,6 @@ Matrix& SetRotation(Matrix& matrix, float yaw, float pitch, float roll);
 Matrix& Rotate(Matrix& matrix, float yaw, float pitch, float roll);
 Matrix  Rotated(const Matrix& matrix, float yaw, float pitch, float roll);
 Matrix  Inverse(const Matrix& m);
-
-Matrix Scaled(const Matrix& matrix, float x, float y, float z);
+Matrix  Scaled(const Matrix& matrix, float x, float y, float z);
 
 #endif

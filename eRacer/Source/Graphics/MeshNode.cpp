@@ -39,7 +39,8 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 			
 	assert(NULL != device);
 
-    // set the transform
+  // set the transform
+  
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &transform_);
 
     GraphicsLayer::GetInstance()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
@@ -70,5 +71,6 @@ void MeshNode::Init(Mesh* mesh){
 	UpdateWorldBounds();
 	initialized = true;
 }
+
 
 }
