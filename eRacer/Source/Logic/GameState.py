@@ -70,7 +70,7 @@ class GameState(State):
     State.__init__(self)
     self.loaded = False
     
-    self.laps   = 1 # TODO CONST
+    self.laps   = 2 # TODO CONST
     self.stats  = {}
     
     self.load()
@@ -112,10 +112,10 @@ class GameState(State):
     #   game().logic.Add(Arrow(scene, p))
     
     
-    self.player = Vehicle("YOU", self.scene, self.track, Point3(400, 20, -100))
+    self.player = Vehicle("YOU", self.scene, self.track, Point3(0, 3,-6))
     self.player.behavior = PlayerBehavior(self.player)
   
-    self.ai1    = Vehicle("AI1", self.scene, self.track, Point3(400, 20, -130), 'Racer2.x')
+    self.ai1    = Vehicle("AI1", self.scene, self.track, Point3(0, 3, 6), 'Racer2.x')
     self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
 
     # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')
@@ -200,9 +200,8 @@ class GameState(State):
     State.Tick(self, time)
     game().graphics.views.append(self.view)
     
-    print self.player.trackpos
-    
-    game().graphics.graphics.WriteString("%d / %d" % (max(self.player.lapcount+1, self.laps), self.laps), "Verdana", 48, Point3(650, 30, 0))
+    if self.player.lapcount:
+      game().graphics.graphics.WriteString("%d / %d" % (min(self.player.lapcount, self.laps), self.laps), "Verdana", 48, Point3(650, 30, 0))
     
     # self.lastMeteorTime += time.game_delta
     # if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
@@ -214,7 +213,7 @@ class GameState(State):
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
         
-    if lap == self.laps and vehicle == self.player:
+    if lap == self.laps+1 and vehicle == self.player:
       game().PushState(GameEndState(self.stats))
         
       
