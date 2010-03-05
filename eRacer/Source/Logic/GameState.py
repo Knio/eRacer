@@ -1,5 +1,5 @@
 import threading
-
+import time as _time
 
 from Core.Globals   import *
 from Game.State     import State
@@ -111,21 +111,23 @@ class GameState(State):
     self.player = Vehicle(self.scene, self.track, Point3(0, 10, 0))
     self.player.behavior = PlayerBehavior(self.player)
   
-    # self.ai1    = Vehicle(self.scene, self.track, Vector3( 2, 3, 10), 'Racer2.x')
-    # self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
+    self.ai1    = Vehicle(self.scene, self.track, Vector3( 2, 3, 10), 'Racer2.x')
+    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
 
     # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')
     # self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
 
     def CarTrackCollisionEvent(car, track, force):
       print 'CAR-TRACK:', car, track, force
+      # if length(force):
+      #   game().simspeed = 0.0
       
     game().event.Register(CarTrackCollisionEvent)
     
     
     game().logic.Add(self.player)
 
-    # game().logic.Add(self.ai1)
+    game().logic.Add(self.ai1)
     # game().logic.Add(self.ai2)
 
     self.views = []
@@ -138,9 +140,7 @@ class GameState(State):
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
     
     cam = game().logic.Add(CarCamera(self.player))
-    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
-    
-    
+    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
     
     # without this, the skyboxes are garbage collected because the 
     # reference in view does not count because view is a c++ object (not python)
@@ -161,7 +161,7 @@ class GameState(State):
     self.meteorManager = MeteorManager(self.scene)
     game().logic.Add(self.meteorManager)
 
-    for i in range(1,20):
+    for i in range(0):
       m = self.meteorManager.spawnRandom()
       game().logic.Add(m)
     
@@ -191,6 +191,7 @@ class GameState(State):
     # TODO camera velocity
     game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
     
+    # _time.sleep(1/100.)
     
     State.Tick(self, time)
     game().graphics.views.append(self.view)
@@ -215,4 +216,7 @@ class GameState(State):
   def PlayJaguarSoundEvent(self):
     game().sound.PlaySound2D("jaguar.wav")
     
+  def KeyPressedEvent(self, key):
+    if key == KEY.HOME:
+      game().simspeed = 1.0
 
