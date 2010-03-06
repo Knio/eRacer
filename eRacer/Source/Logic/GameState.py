@@ -105,12 +105,6 @@ class GameState(State):
     self.arrow2 = Arrow(scene)
     game().logic.Add(self.arrow2)
     
-    # for i in xrange(200):
-    #   f = self.track.GetFrame(i*50.0)
-    #   p = Point3(f.position.x, f.position.y, f.position.z)
-    #   print p
-    #   game().logic.Add(Arrow(scene, p))
-    
     self.player = Vehicle("Player", self.scene, self.track, Point3(-100, 4,  15))
     self.player.behavior = PlayerBehavior(self.player)
     game().logic.Add(self.player)
@@ -130,9 +124,6 @@ class GameState(State):
       #   game().simspeed = 0.0
       
     game().event.Register(CarTrackCollisionEvent)
-    
-    
-
 
     self.views = []
     self.viewIndex = 0

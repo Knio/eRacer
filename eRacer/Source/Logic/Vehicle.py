@@ -1,11 +1,11 @@
 from Core.Globals import *
 class Vehicle(Entity):
-  SIZE    = Vector3(3, 1, 4.5) # "radius" (double for length)
+  SIZE    = Vector3(2.5, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
-    Point3(-3, -2.0,  4.5), # front left
-    Point3( 3, -2.0,  4.5), # front right
-    Point3(-3, -2.0, -4.5), # back left
-    Point3( 3, -2.0, -4.5), # back right
+    Point3(-2.5, -2.0,  4.5), # front left
+    Point3( 2.5, -2.0,  4.5), # front right
+    Point3(-2.5, -2.0, -4.5), # back left
+    Point3( 2.5, -2.0, -4.5), # back right
   ]
   DEBUG   = [ # location of debug strings in screen space
     Point3(240,  80, 0),
@@ -41,14 +41,19 @@ class Vehicle(Entity):
     
     self.ReloadedConstsEvent()
     
-    # self.physics = eRacer.TriMesh()    
-    self.physics = eRacer.Box(
-      True,       # dynamic
-      self.MASS,  # mass
-      self.INITIAL_POS, # position
-      Matrix(),   # orientation
-      self.SIZE   # bounds
+    self.physics = eRacer.CarBody(
+      True, 
+      self.MASS, 
+      self.INITIAL_POS,
+      Matrix(self.INITIAL_POS, PI/2.0, X) #orientation
     )
+    #self.physics = eRacer.Box(
+    #  True,       # dynamic
+    #  self.MASS,  # mass
+    #  self.INITIAL_POS, # position
+    #  Matrix(),   # orientation
+    #  self.SIZE   # bounds
+    #)
     self.transform = Matrix()
     
     self.graphics = scene.CreateMovingMeshNode("vehicle")
@@ -154,7 +159,11 @@ class Vehicle(Entity):
     
     worldroadnormal = Vector3()
     center = Vector3(0, -1.1, 0)
-    if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
+    
+    dir = mul0(tx, -Y)
+    normalize(dir)
+    #if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
+    if 0 < game().physics.physics.Raycast(mul1(tx, center), dir, worldroadnormal) < 20:
       worldroadnormal = up      
       gravity = worldroadnormal * (-CONSTS.CAR_GRAVITY * self.MASS)
       if delta: phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
@@ -183,7 +192,7 @@ class Vehicle(Entity):
       
       
       #raycast down from suspension point
-      upamount = 4.0
+      upamount = 2.0
       worldroadnormal = Vector3()
       localsuspoint   = Point3(localpos.x, localpos.y + upamount, localpos.z)
       worldsuspoint   = mul1(tx, localsuspoint)
