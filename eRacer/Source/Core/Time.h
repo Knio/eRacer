@@ -4,6 +4,8 @@
 
 #define NOMINMAX
 #include <windows.h>
+#include "Consts.h"
+extern Constants CONSTS;
 
 struct Time
 {
@@ -32,12 +34,19 @@ struct Time
 		QueryPerformanceCounter(&tick);
 		return (long long)(RESOLUTION * tick.QuadPart / clockSpeed.QuadPart);
 	}
-
+	
 	long long Tick(float speed=1.0)
 	{
 		long long time = GetTime();
 		wall_delta = time - current;
 		game_delta = (long long)(speed * wall_delta);
+		
+		long long game_max = (long long)(CONSTS.MAX_TIMESTEP * RESOLUTION);
+		long long game_min = (long long)(CONSTS.MIN_TIMESTEP * RESOLUTION);
+		
+		if (game_delta > game_max) game_delta = game_max;
+		if (game_delta < game_min) game_delta = game_min;
+				
 		wall_total += wall_delta;
 		game_total += game_delta;
 		current = time;

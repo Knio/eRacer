@@ -20,18 +20,18 @@ TRACK = [
 ]
 
 PROFILE = [
-  eRacer.TrackVertex(Point3(  25, -5,  0),  Y, 0.00, 0.01),
-  eRacer.TrackVertex(Point3(  25,  5,  0),  Y, 0.00, 0.01),
+  eRacer.TrackVertex(Point3(  25, -2,  0),  Y, 0.00, 0.01),
+  eRacer.TrackVertex(Point3(  25,  2,  0),  Y, 0.00, 0.01),
   eRacer.TrackVertex(Point3(  25,  0,  0),  Y, 0.05, 0.01),
   eRacer.TrackVertex(Point3(  15,  0,  0),  Y, 0.20, 0.01),  
   eRacer.TrackVertex(Point3(   5,  0,  0),  Y, 0.40, 0.01),  
   eRacer.TrackVertex(Point3(  -5,  0,  0),  Y, 0.60, 0.01),  
   eRacer.TrackVertex(Point3( -15,  0,  0),  Y, 0.80, 0.01),  
   eRacer.TrackVertex(Point3( -25,  0,  0),  Y, 0.95, 0.01),  
-  eRacer.TrackVertex(Point3( -25,  5,  0),  Y, 1.00, 0.01),
-  eRacer.TrackVertex(Point3( -25, -5,  0),  Y, 0.00, 0.01),
+  eRacer.TrackVertex(Point3( -25,  2,  0),  Y, 1.00, 0.01),
+  eRacer.TrackVertex(Point3( -25, -2,  0),  Y, 0.00, 0.01),
   
-  eRacer.TrackVertex(Point3(  25, -5,  0),  Y, 1.00, 0.01),
+  eRacer.TrackVertex(Point3(  25, -2,  0),  Y, 1.00, 0.01),
   
 ]
 
@@ -65,16 +65,22 @@ class Track(Entity, eRacer.Track):
     self.physics.Init(mesh)
     self.physics.SetGroup(eRacer.TRACK)
     
-  def FindPosition(self, pos, hint=None):
+  def FindPositionFull(self, pos):
     mind = 1e99
-    if hint is None:
-      for i in xrange(0, self.dist, self.dist/500.0):
-        frame = self.GetFrame(i)
-        t = length(pos - frame.position)
-        
-        if t < mind:
-          mind = t
-          hint = i
+    hint = 0
+    for i in xrange(0, self.dist, self.dist/500.0):
+      frame = self.GetFrame(i)
+      t = length(pos - frame.position)
+      
+      if t < mind:
+        mind = t
+        hint = i
+    return hint
+    
+  def FindPosition(self, pos, hint=None):
+    if not hint or length(pos - self.GetPositionAt(hint)) > 25:
+      lap = hint and self.dist * int(hint/self.dist) or 0.
+      hint = self.FindPositionFull(pos) + lap
     
     r = 100.0
     while r > 0.1:
@@ -91,7 +97,7 @@ class Track(Entity, eRacer.Track):
         
       else:
         hint = hint + r
-      
+    
     return hint
     
   def Tick(self, time):

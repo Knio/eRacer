@@ -5,13 +5,14 @@ class State(eRacer.State):
   def __init__(self):
     self.parent   = None
     self.mapping  = self.MAPPING and self.MAPPING()
+    self.active   = False
     
   def Tick(self, time):
     pass
     
   def Activate(self):
-    pass
+    self.active = True
     
   def Deactivate(self):
-    pass
+    self.active = False
     

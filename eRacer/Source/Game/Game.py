@@ -34,6 +34,7 @@ class Game(eRacer.Game):
     print 'Game::PopState()'
     s = self.states.pop()
     s.Deactivate()
+    self.states[-1].Activate()
     return s
 
   def AddModule(self, module, name=None):
