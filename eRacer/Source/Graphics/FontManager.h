@@ -50,6 +50,8 @@ private:
 	ID3DXSprite*        m_pTextSprite;
 
 public:
+	const static char* CUSTOM_FONTS[1];
+
 	FontManager();
 	~FontManager();
 

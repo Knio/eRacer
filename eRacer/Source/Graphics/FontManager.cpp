@@ -27,11 +27,16 @@ namespace Graphics {
 
 	}
 
+	const char* FontManager::CUSTOM_FONTS[1] = {"Resources\\Fonts\\Sony_Sketch_EF.ttf"};
 
 	FontManager::FontManager()
 	{
 		m_pd3dDevice = NULL;
 		m_pTextSprite = NULL;
+
+		int nFontsLoaded = AddFontResource("Resources\\Fonts\\Sony_Sketch_EF.ttf");
+		cout << "Loaded "<< nFontsLoaded << " custom fonts."<< endl;
+
 	}
 
 	FontManager::~FontManager()

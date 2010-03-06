@@ -202,7 +202,11 @@ class GameState(State):
     game().graphics.views.append(self.view)
     
     if self.player.lapcount:
-      game().graphics.graphics.WriteString("%d / %d" % (min(self.player.lapcount, self.laps), self.laps), "Verdana", 48, Point3(650, 30, 0))
+      playerLaps = min(self.player.lapcount, self.laps)
+      
+      game().graphics.graphics.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
+      game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
+      game().graphics.graphics.WriteString("%d" % (self.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
     
     # self.lastMeteorTime += time.game_delta
     # if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
