@@ -8,10 +8,10 @@ class Vehicle(Entity):
     Point3( 3, -2.0, -4.5), # back right
   ]
   DEBUG   = [ # location of debug strings in screen space
-    Point3(280, 120, 0),
-    Point3(480, 120, 0),
-    Point3(280, 380, 0),
-    Point3(480, 380, 0),
+    Point3(240,  80, 0),
+    Point3(440,  80, 0),
+    Point3(240, 340, 0),
+    Point3(440, 340, 0),
   ]
   DISPLACEMENT = 0.40  # from wheel rest position
   
@@ -28,9 +28,6 @@ class Vehicle(Entity):
     self.DRAG_COEFF       = CONSTS.DRAG_COEFF
     self.MAX_ENG_FORCE    = CONSTS.MAX_ENG_FORCE       
     self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
-    self.FRICTION_STATIC  = CONSTS.FRICTION_STATIC
-    self.FRICTION_MAX     = CONSTS.FRICTION_MAX
-    self.FRICTION_SLIDING = CONSTS.FRICTION_SLIDING
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
 
@@ -116,7 +113,7 @@ class Vehicle(Entity):
     
     phys  = self.physics
     tx    = phys.GetTransform()
-    delta = min(float(time.game_delta) / time.RESOLUTION, CONSTS.PHYS_MAX_TIMESTEP)
+    delta = float(time.game_delta) / time.RESOLUTION
     worldpos   = mul1(tx, ORIGIN)
     self.trackpos = self.track.FindPosition(worldpos, self.trackpos)
     frame = self.track.GetFrame(self.trackpos)
@@ -184,8 +181,8 @@ class Vehicle(Entity):
       worldroadnormal = Vector3()
       localsuspoint   = Point3(localpos.x, localpos.y + upamount, localpos.z)
       worldsuspoint   = mul1(tx, localsuspoint)
-      # dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
-      dist = dot(up, (worldsuspoint - frame.position)) - upamount
+      dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
+      # dist = dot(up, (worldsuspoint - frame.position)) - upamount
       disp = (self.DISPLACEMENT - dist)
 
       # use track normal and not physx
@@ -195,7 +192,7 @@ class Vehicle(Entity):
       _debug = [self.DEBUG[i]]
       def debug(s):
         game().graphics.graphics.WriteString(s, "Verdana", 12, _debug[0])
-        _debug[0] = _debug[0] + Point3(0, 20, 0)
+        _debug[0] = _debug[0] + Point3(0, 15, 0)
       
       if D: debug("W-R: %6.3f" % dist)
       if D: debug("Disp: %6.3f" % disp)
@@ -230,16 +227,18 @@ class Vehicle(Entity):
       if delta: phys.AddWorldForceAtLocalPos(downforce, localapplypoint)
       
       # shock absorber forces
-      linearvel = -dot(worldvel, worldroadnormal)
+      linearvel = dot(worldvel, worldroadnormal)
+      linearvel = linearvel > 0 and -(linearvel**0.95) or (-linearvel)**0.95
       # linearvel = max(linearvel, 0.0)
       slowforce = worldroadnormal * linearvel * self.DAMPING * self.DAMPING_MAGIC
-      if D: debug("Shock: %2e" % dot(slowforce, worldroadnormal))
+      if D: debug("Shock: %6g %s" % (dot(slowforce, worldroadnormal), repr(slowforce)))
       if delta: phys.AddWorldForceAtLocalPos(slowforce, localapplypoint)
       
-      
+      weight = length(downforce+slowforce)
+      if D: debug("Weight: %6.2g" % weight)
       # do accelleration
       
-      forwardSpeed = self.GetWheelSpeed(delta, downforce)
+      forwardSpeed = self.GetWheelSpeed(delta, weight)
       #forwardSpeed = self.GetWheelSpeed(delta)
       if D: debug("FW: %6.2f" % forwardSpeed)
       
@@ -257,38 +256,64 @@ class Vehicle(Entity):
       worldrollingdir = mul0(tx, mul0(turning, Z))
       # motion along the wheel's rolling direction
       worldrollingvel = worldrollingdir * dot(worldrollingdir, worldvel)
-      worldrollingvelroad = worldrollingvel - (worldroadnormal * dot(worldrollingvel, worldroadnormal))
+      worldrollingvelroad = projectOnto(worldrollingvel, worldroadnormal)
       
       # motion the wheel WANTS to be going
       worldforwardvel = mul0(tx, mul0(turning, Z * forwardSpeed))
-      worldforwardvelroad = worldforwardvel - (worldroadnormal * dot(worldforwardvel, worldroadnormal))
+      worldforwardvelroad = projectOnto(worldforwardvel, worldroadnormal)
       
       
       # wheel's current velocity projected on the surface of the road
-      worldvelroad = worldvel - (worldroadnormal * dot(worldvel, worldroadnormal))
+      worldvelroad = projectOnto(worldvel,  worldroadnormal)
       assert(abs(dot(worldvelroad, worldroadnormal)) < 1e-3), dot(worldvelroad, worldroadnormal)
       
       # difference of where the wheel wants to go, and where it is really going.
       # this is where I start making shit up
-      powerforce = worldrollingvelroad + worldforwardvelroad - worldvelroad
-      assert(abs(dot(powerforce, worldroadnormal)) < 1e-3), dot(powerforce, worldroadnormal)
+      
+      # lateral force by friction
+      frictionforce = (worldrollingvelroad - worldvelroad)
+      if D: debug('Fr: '+repr(frictionforce))
+      # forward force by engine
+      powerforce    = worldforwardvelroad
+      if self.brake:  powerforce    = -worldrollingvelroad
+      totalforce    = frictionforce + powerforce
+      assert(abs(dot(totalforce, worldroadnormal)) < 1e-3), dot(totalforce, worldroadnormal)
       
       
-      staticfrictionmax = self.FRICTION_SLIDING * length(downforce+slowforce)
+      # staticfrictionmax = self.FRICTION_SLIDING * weight # weight on wheel
       
+      # sliding
       if self.sliding[i]:
-        powerforce = powerforce * self.FRICTION_SLIDING * length(downforce)
+        # never used so far
         if D: debug("SLIDING")
+
+        if length(totalforce) < 1.0:
+          # back to static
+          if D: debug("STATIC2")
+          self.sliding[i] = False
+        
+        totalforce = normalized(totalforce) * CONSTS.FRICTION_SLIDING * weight
+        ##############
+        
+      # static
       else:
-        if D: debug("STATIC")
-        powerforce = powerforce * self.FRICTION_STATIC * length(downforce)
-      if D: debug("(%6.2f %6.2f %6.2f)" % (powerforce.x, powerforce.y, powerforce.z))
-      if D: debug("Power:  %6.2f" % length(powerforce))
-      if D: debug("Static: %6.2f" % staticfrictionmax)
-      # debug("P.N: %6.2f" % dot(powerforce, worldroadnormal))
+        if length(totalforce) > 1.0:
+          # we're sliding!
+          totalforce = normalized(totalforce)
+          if D: debug("SLIDING2")
+          self.sliding[i] = True
+        else:
+          if D: debug("STATIC")
+        
+        totalforce = totalforce * CONSTS.FRICTION_STATIC  * weight
+              
+      if D: debug('To: '+repr(totalforce))
+      if D: debug("Power:  %6.2f" % length(totalforce))
+      # if D: debug("Static: %6.2f" % staticfrictionmax)
+      # debug("P.N: %6.2f" % dot(totalforce, worldroadnormal))
       
       # continue
-      if delta: phys.AddWorldForceAtLocalPos(powerforce, localapplypoint)
+      if delta: phys.AddWorldForceAtLocalPos(totalforce, localapplypoint)
       
     # no wheels are touching the ground.
     # reset the car
@@ -303,7 +328,9 @@ class Vehicle(Entity):
       self.resetCar()
 
     if self.brake and phys.GetSpeed() < 2:
-      phys.SetVelocity(ORIGIN)
+      pass
+      # phys.SetVelocity(ORIGIN)
+      # phys.SetAngVelocity(ORIGIN)
 
 
     self.boosting = max(0, self.boosting - delta)
@@ -350,43 +377,34 @@ class Vehicle(Entity):
   #needs the weight on this tire
   #returns a floating number, if negative, then a braking force was applied
   
-  def GetWheelSpeed(self, timeStep, normalForce):
+  def GetWheelSpeed(self, timeStep, weight):
     gravityMag = 9.81 #should change based on track segment
     forceMag = self.MAX_ENG_FORCE * self.acceleration
     if self.boosting:
       forceMag = self.MAX_ENG_FORCE * CONSTS.BOOST_MULT
     
+    if self.brake: return 0.
+    
     if self.physics.GetSpeed() < 1:
       brakeMag =0
     else:
       brakeMag = self.MAX_BRAKE_FORCE * self.brake
-    massOnTire = length(normalForce) / gravityMag
+    
+    massOnTire = weight / gravityMag
+    
     if forceMag > 0:
       speedDelta = (forceMag-brakeMag) / massOnTire
     else:
       speedDelta = (forceMag+brakeMag) / massOnTire
     return speedDelta
-  
-  #def GetWheelSpeed(self, timeStep):
-   # forceMag = self.maxEngForce * self.acceleration
-    #brakeMag = self.maxBrakeForce * self.brake * -1.0
-    #speedDelta = (forceMag+brakeMag) * timeStep
-    #return speedDelta
     
-    
+        
   def resetCar(self):
-      phys  = self.physics
-      tx    = phys.GetTransform()
-      normal = Y
-      forward = mul0(tx, Z)
-      forward = forward - normal * dot(normal, forward)
-      pos = self.INITIAL_POS
-      phys.SetVelocity(Vector3())
-      phys.SetOrientation(Matrix())
-      phys.SetAngVelocity(Vector3())
-      phys.SetPosition(pos)
-      # eRacer.ExtractPosition(tx, pos)
-      # pos.y = 1.5
-      #tx = Matrix(pos, math.atan2(forward.y, forward.x), Y)
-      #phys.SetTransform(tx)
+    phys  = self.physics
+    pos = self.INITIAL_POS
+    phys.SetOrientation(IDENTITY)
+    phys.SetAngVelocity(ORIGIN)
+    phys.SetVelocity(ORIGIN)
+    phys.SetPosition(pos)
+
     

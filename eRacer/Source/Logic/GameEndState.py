@@ -11,13 +11,13 @@ class GameEndState(State):
     self.stats = stats
     
   def Tick(self, time):
-    game().graphics.graphics.WriteString(
-      "GAME OVER",
-      "Verdana", 40, Point3(300,100,0)
-    )
+    if not self.active:
+      State.Tick(self, time)
+      self.parent.Tick(time)
+      return
     
     game().graphics.graphics.WriteString(
-      "",
+      "GAME OVER",
       "Verdana", 40, Point3(300,100,0)
     )
 

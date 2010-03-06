@@ -42,7 +42,8 @@ class AIBehavior(Behavior):
   
   def Tick(self,time):    
     pos = self.parent.physics.GetPosition()
-    curFrame = self.line.GetFrame(self.parent.trackpos + 100.0)
+    nowFrame  = self.line.GetFrame(self.parent.trackpos)
+    curFrame  = self.line.GetFrame(self.parent.trackpos + 100.0)
     cur = curFrame.position
     if self.arrow: self.arrow.position = Point3(cur.x, cur.y, cur.z)
     
@@ -77,7 +78,10 @@ class AIBehavior(Behavior):
           self.parent.Turn(turnSize)
         else:
           self.parent.Turn(-turnSize)
-      self.parent.Accelerate(1.0)
+      if length(pos-nowFrame.position) > 10:
+        self.parent.Accelerate(0.5)
+      else:
+        self.parent.Accelerate(1.0)
       #now change state if needed
       if self.parent.physics.GetSpeed() < 10.0 and self.objectInFront(1.0, tx):
         #object close in front has almost stopped us

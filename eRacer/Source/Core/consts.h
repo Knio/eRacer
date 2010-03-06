@@ -9,7 +9,9 @@ struct Constants
 	static Constants* g_Constants;
 	
 	// PhysX
-	float PHYS_MAX_TIMESTEP;
+	float MAX_TIMESTEP;
+	float MIN_TIMESTEP;
+	float SLEEP_TIME;
 
 	float	PHYS_GRAVITY_X;
 	float	PHYS_GRAVITY_Y;
@@ -20,6 +22,7 @@ struct Constants
 	
 	// Vehicle
 	int		CAR_DEBUG;
+	int 	TRACK_DEBUG;
 	
 	float	CAR_MASS;
 	float CAR_GRAVITY;
@@ -38,7 +41,6 @@ struct Constants
 	float	MAX_ENG_FORCE;
 	float	MAX_BRAKE_FORCE;
 	float	FRICTION_STATIC;
-	float	FRICTION_MAX;
 	float	FRICTION_SLIDING;
 	float BOOST_MULT;
 	

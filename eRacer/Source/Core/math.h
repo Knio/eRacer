@@ -66,12 +66,11 @@ ostream& operator<<(ostream& s, const Vector3& v);
 float abs(const Vector3 &A);
 Vector3 cross(const Vector3 &A, const Vector3 &B);
 float dot(const Vector3 &A, const Vector3 &B);
-
 /**
  * @brief normalize a vector in-place
  *
  * @param A
- * 			the vector to normalize
+ *      the vector to normalize
  * @return a reference to the vector - for chaining
  */
 Vector3& normalize(Vector3& A);
@@ -80,21 +79,22 @@ Vector3& normalize(Vector3& A);
  * @brief create a normalized version of a vector
  *
  * @param A
- * 			the vector to normalize - will not be changed!
+ *      the vector to normalize - will not be changed!
  * @return a new vector that is the normalized ve rsion of A
  */
 Vector3 normalized(const Vector3& A);
 
 
 inline float length(const Vector3& v){
-	return D3DXVec3Length(&v);
+  return D3DXVec3Length(&v);
 }
 
 
 Vector3 mul0(const Matrix &m, const Vector3 &v);
-Point3	mul1(const Matrix &m, const Point3  &v);
+Point3  mul1(const Matrix &m, const Point3  &v);
 
 Vector3 project(const Vector3 &a, const Vector3 &b);
+Vector3 projectOnto(const Vector3 &v, const Vector3 &normal);
 
 
 
