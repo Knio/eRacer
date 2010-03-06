@@ -228,7 +228,7 @@ class Vehicle(Entity):
           if D: debug("JUMP")
           crashed = False
         else:
-          debug("AIR")
+          if D: debug("AIR")
         continue
       
       crashed = False
@@ -313,6 +313,10 @@ class Vehicle(Entity):
       print "Crash! resetting car"
       self.resetCar()
 
+    if self.brake and phys.GetSpeed() < 2:
+      phys.SetVelocity(ORIGIN)
+
+
     self.boosting = max(0, self.boosting - delta)
 
     self.transform = tx
@@ -362,6 +366,7 @@ class Vehicle(Entity):
     forceMag = self.MAX_ENG_FORCE * self.acceleration
     if self.boosting:
       forceMag = self.MAX_ENG_FORCE * CONSTS.BOOST_MULT
+    
     if self.physics.GetSpeed() < 1:
       brakeMag =0
     else:

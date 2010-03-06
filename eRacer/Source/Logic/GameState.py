@@ -70,7 +70,7 @@ class GameState(State):
     State.__init__(self)
     self.loaded = False
     
-    self.laps   = 0 # TODO CONST
+    self.laps   = 2 # TODO CONST
     self.stats  = {}
     
     self.load()
@@ -122,7 +122,8 @@ class GameState(State):
     # self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
 
     def CarTrackCollisionEvent(car, track, force):
-      print 'CAR-TRACK:', car, track, force
+      pass
+      # print 'CAR-TRACK:', car, track, force
       # if length(force):
       #   game().simspeed = 0.0
       
@@ -212,9 +213,14 @@ class GameState(State):
   
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
-        
-    if lap == self.laps+1 and vehicle == self.player:
-      game().PushState(GameEndState(self.stats))
+  
+    for i,s in self.stats.items():
+      print i.name, s
+  
+    if lap == self.laps+1:
+      if vehicle == self.player:
+        game().PushState(GameEndState(self.stats))
+      vehicle.Brake(1)
         
       
   def CameraChangedEvent(self):
