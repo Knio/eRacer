@@ -162,7 +162,9 @@ class Vehicle(Entity):
     self.sound.isPaused = False
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
-    self.sound.pitch = max(45000, int(45000 * length(vel) / 60.0))
+    
+    
+    self.sound.pitch = max(50000, int(50000 * length(vel) / 60.0))
     if self.crashtime > 0:
       self.sound.pitch = int(54100 * self.throttle + self.sound.pitch)
     game().sound.sound.UpdateSoundFx(self.sound)
