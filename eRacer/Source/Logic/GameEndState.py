@@ -5,7 +5,7 @@ from GameEndMapping import GameEndMapping
 from MenuState      import PauseMenuState
 
 class GameEndState(State):
- MAPPING = GameEndMapping
+  MAPPING = GameEndMapping
   def __init__(self, stats):
     State.__init__(self)    
     self.stats = stats
