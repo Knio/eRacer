@@ -30,7 +30,7 @@ class Vehicle(Entity):
     self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
-
+    
   def __init__(self, name, scene, track, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
     Entity.__init__(self)
     self.INITIAL_POS = position
@@ -196,8 +196,8 @@ class Vehicle(Entity):
       worldroadnormal = Vector3()
       localsuspoint   = Point3(localpos.x, localpos.y + upamount, localpos.z)
       worldsuspoint   = mul1(tx, localsuspoint)
-      dist = phys.RaycastDown(worldsuspoint, worldroadnormal) - upamount
-      # dist = dot(up, (worldsuspoint - frame.position)) - upamount
+      # dist = dist = game().physics.physics.Raycast(worldsuspoint, dir, worldroadnormal) - upamount
+      dist = dot(up, (worldsuspoint - frame.position)) - upamount
       disp = (self.DISPLACEMENT - dist)
 
       # use track normal and not physx
