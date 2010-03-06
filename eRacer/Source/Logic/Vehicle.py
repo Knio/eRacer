@@ -31,8 +31,9 @@ class Vehicle(Entity):
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
     
-  def __init__(self, name, scene, track, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
+  def __init__(self, name, scene, track, position = Vector3(47.67, 602.66, -60.16), orient = IDENTITY, model='Racer1.x'):
     Entity.__init__(self)
+    self.INIT_ORIENT = orient
     self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = None
@@ -45,15 +46,8 @@ class Vehicle(Entity):
       True, 
       self.MASS, 
       self.INITIAL_POS,
-      Matrix(self.INITIAL_POS, PI/2.0, X) #orientation
+      self.INIT_ORIENT
     )
-    #self.physics = eRacer.Box(
-    #  True,       # dynamic
-    #  self.MASS,  # mass
-    #  self.INITIAL_POS, # position
-    #  Matrix(),   # orientation
-    #  self.SIZE   # bounds
-    #)
     self.transform = Matrix()
     
     self.graphics = scene.CreateMovingMeshNode("vehicle")
@@ -107,15 +101,11 @@ class Vehicle(Entity):
   def Boost(self):
     self.boosting = 2.0
   
-  
-  
-  
   def Tick(self, time):
     Entity.Tick(self, time)
     
     # if not time.game_delta:
     #   return
-    
     
     phys  = self.physics
     tx    = phys.GetTransform()
@@ -163,7 +153,9 @@ class Vehicle(Entity):
     dir = mul0(tx, -Y)
     normalize(dir)
     #if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
-    if 0 < game().physics.physics.Raycast(mul1(tx, center), dir, worldroadnormal) < 20:
+    tempD = game().physics.physics.Raycast(mul1(tx, center), dir, worldroadnormal)
+    #print tempD
+    if 0 < tempD < 20:
       worldroadnormal = up      
       gravity = worldroadnormal * (-CONSTS.CAR_GRAVITY * self.MASS)
       if delta: phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
@@ -280,7 +272,7 @@ class Vehicle(Entity):
       
       # wheel's current velocity projected on the surface of the road
       worldvelroad = projectOnto(avgworldvel,  worldroadnormal)
-      assert(abs(dot(worldvelroad, worldroadnormal)) < 1e-3), dot(worldvelroad, worldroadnormal)
+      # assert(abs(dot(worldvelroad, worldroadnormal)) < 1e-3), dot(worldvelroad, worldroadnormal)
       
       # difference of where the wheel wants to go, and where it is really going.
       # this is where I start making shit up
@@ -292,7 +284,7 @@ class Vehicle(Entity):
       powerforce    = worldforwardvelroad
       if self.brake:  powerforce    = -worldrollingvelroad
       totalforce    = frictionforce + powerforce
-      assert(abs(dot(totalforce, worldroadnormal)) < 1e-3), dot(totalforce, worldroadnormal)
+      # assert(abs(dot(totalforce, worldroadnormal)) < 1e-3), dot(totalforce, worldroadnormal)
       
       
       # staticfrictionmax = self.FRICTION_SLIDING * weight # weight on wheel
@@ -416,10 +408,8 @@ class Vehicle(Entity):
         
   def resetCar(self):
     phys  = self.physics
-    pos = self.INITIAL_POS
-    phys.SetOrientation(IDENTITY)
+    phys.SetOrientation(self.INIT_ORIENT)
     phys.SetAngVelocity(ORIGIN)
     phys.SetVelocity(ORIGIN)
-    phys.SetPosition(pos)
-
+    phys.SetPosition(self.INITIAL_POS)
     

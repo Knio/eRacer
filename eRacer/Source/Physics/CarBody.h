@@ -1,6 +1,7 @@
 #ifndef CAR_BODY_H
 #define CAR_BODY_H
 #include "PhysicsObject.h"
+#include "Core/Math.h"
 namespace Physics{
 class CarBody : public PhysicsObject
 {
