@@ -34,6 +34,7 @@ struct Constants
 	float	MASS_CENTRE_Y;
 	float	MASS_CENTRE_Z;
 	
+	float WHEELVEL_ALPHA;
 	float	REV_ALPHA;
 	float	TURN_ALPHA;
 	

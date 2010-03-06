@@ -71,6 +71,7 @@ class Vehicle(Entity):
     self.turning      = 0.  # physics steering setting. from 0 to 1
     
     self.sliding = [False] * len(self.WHEELS) # static vs sliding state of each wheel
+    self.wheelvel = [ORIGIN, ORIGIN, ORIGIN, ORIGIN]
     self.crashtime = 0      # time since wheels were last in contact with the ground
     
     self.boosting = 0.
@@ -169,14 +170,17 @@ class Vehicle(Entity):
       self.sound.pitch = int(54100 * self.throttle + self.sound.pitch)
     game().sound.sound.UpdateSoundFx(self.sound)
     
-    
-    
     crashed = True
     for i,localpos in enumerate(self.WHEELS):
       localapplypoint = Point3(localpos.x, -1, localpos.z)
       # wheel vectors in world space
       worldpos   = mul1(tx, localpos)
       worldvel   = phys.GetLocalPointWorldVelocity(localpos)
+      
+      # smooth out the velocity
+      self.wheelvel[i] = self.wheelvel[i] * (1-CONSTS.WHEELVEL_ALPHA) + worldvel * CONSTS.WHEELVEL_ALPHA
+      avgworldvel = self.wheelvel[i]
+      
       
       #raycast down from suspension point
       upamount = 4.0
@@ -248,7 +252,7 @@ class Vehicle(Entity):
       # direction of the wheel on the surface of the road
       # front wheel turns
       
-      angle = self.turning * min(1.,(60. / max(1.,length(worldvel))**1.4))
+      angle = self.turning * min(1.,(60. / max(1.,length(avgworldvel))**1.4))
       if D: debug("angle: %6.2f" % angle)
       if i < 2: turning = Matrix(ORIGIN, angle, Y)
       else:     turning = Matrix()
@@ -257,7 +261,7 @@ class Vehicle(Entity):
       # wheel rolling direction
       worldrollingdir = mul0(tx, mul0(turning, Z))
       # motion along the wheel's rolling direction
-      worldrollingvel = worldrollingdir * dot(worldrollingdir, worldvel)
+      worldrollingvel = project(avgworldvel, worldrollingdir)
       worldrollingvelroad = projectOnto(worldrollingvel, worldroadnormal)
       
       # motion the wheel WANTS to be going
@@ -266,7 +270,7 @@ class Vehicle(Entity):
       
       
       # wheel's current velocity projected on the surface of the road
-      worldvelroad = projectOnto(worldvel,  worldroadnormal)
+      worldvelroad = projectOnto(avgworldvel,  worldroadnormal)
       assert(abs(dot(worldvelroad, worldroadnormal)) < 1e-3), dot(worldvelroad, worldroadnormal)
       
       # difference of where the wheel wants to go, and where it is really going.
