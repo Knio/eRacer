@@ -111,14 +111,15 @@ class GameState(State):
     #   print p
     #   game().logic.Add(Arrow(scene, p))
     
+    forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
     
-    self.player = Vehicle("YOU", self.scene, self.track, Point3(0, 7,-6))
+    self.player = Vehicle("YOU", self.scene, self.track, Point3(0, 7,-6), forwardMat)
     self.player.behavior = PlayerBehavior(self.player)
   
-    self.ai1    = Vehicle("AI1", self.scene, self.track, Point3(0, 7, 6), 'Racer2.x')
+    self.ai1    = Vehicle("AI1", self.scene, self.track, Point3(0, 7, 6), forwardMat, 'Racer2.x')
     self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
 
-    # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')
+    # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), forwardMat, 'Racer5.x')
     # self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
 
     def CarTrackCollisionEvent(car, track, force):

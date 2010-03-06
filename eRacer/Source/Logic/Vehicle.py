@@ -34,8 +34,9 @@ class Vehicle(Entity):
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
 
-  def __init__(self, name, scene, track, position = Vector3(47.67, 602.66, -60.16), model='Racer1.x'):
+  def __init__(self, name, scene, track, position = Vector3(47.67, 602.66, -60.16), orient = IDENTITY, model='Racer1.x'):
     Entity.__init__(self)
+    self.INIT_ORIENT = orient
     self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = None
@@ -48,15 +49,8 @@ class Vehicle(Entity):
       True, 
       self.MASS, 
       self.INITIAL_POS,
-      Matrix(self.INITIAL_POS, PI/2.0, X) #orientation
+      self.INIT_ORIENT
     )
-    #self.physics = eRacer.Box(
-    #  True,       # dynamic
-    #  self.MASS,  # mass
-    #  self.INITIAL_POS, # position
-    #  Matrix(),   # orientation
-    #  self.SIZE   # bounds
-    #)
     self.transform = Matrix()
     
     self.graphics = scene.CreateMovingMeshNode("vehicle")
@@ -165,7 +159,9 @@ class Vehicle(Entity):
     dir = mul0(tx, -Y)
     normalize(dir)
     #if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
-    if 0 < game().physics.physics.Raycast(mul1(tx, center), dir, worldroadnormal) < 20:
+    tempD = game().physics.physics.Raycast(mul1(tx, center), dir, worldroadnormal)
+    #print tempD
+    if 0 < tempD < 20:
       worldroadnormal = up      
       gravity = worldroadnormal * (-CONSTS.CAR_GRAVITY * self.MASS)
       if delta: phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
@@ -195,7 +191,8 @@ class Vehicle(Entity):
       worldroadnormal = Vector3()
       localsuspoint   = Point3(localpos.x, localpos.y + upamount, localpos.z)
       worldsuspoint   = mul1(tx, localsuspoint)
-      #dist = game().physics.physics.Raycast(worldsuspoint, dir, worldroadnormal) - upamount
+      #rayDist = game().physics.physics.Raycast(worldsuspoint, dir, worldroadnormal)
+      #print rayDist
       dist = dot(up, (worldsuspoint - frame.position)) - upamount
       disp = (self.DISPLACEMENT - dist)
 
@@ -393,7 +390,7 @@ class Vehicle(Entity):
       forward = forward - normal * dot(normal, forward)
       pos = self.INITIAL_POS
       phys.SetVelocity(Vector3())
-      phys.SetOrientation(Matrix())
+      phys.SetOrientation(self.INIT_ORIENT)
       phys.SetAngVelocity(Vector3())
       phys.SetPosition(pos)
       # eRacer.ExtractPosition(tx, pos)
