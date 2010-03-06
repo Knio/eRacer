@@ -79,7 +79,7 @@ class AIBehavior(Behavior):
           self.parent.Turn(-turnSize)
       self.parent.Accelerate(1.0)
       #now change state if needed
-      if self.parent.physics.GetSpeed() < 10.0 and self.objectInFront(1.0, tx):
+      if self.parent.physics.GetSpeed() < 10.0 and self.objectInFront(1.5, tx):
         #object close in front has almost stopped us
         self.curState = AIState.STUCK
     
@@ -87,7 +87,7 @@ class AIBehavior(Behavior):
       self.parent.Accelerate(-0.5)
       self.parent.Turn(0)
       
-      if not self.objectInFront(5.0, tx):
+      if not self.objectInFront(8.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE
   
@@ -98,23 +98,32 @@ class AIBehavior(Behavior):
 #returns true or false
   def objectInFront(self, dist, tx):
     #these positions are just outside the physics box of the car
+    #should match with the values in the BodyObject
     bodyForward = mul0(tx, Z)
-    eps = 0.0001
-    frontTopRight = Point3(self.parent.SIZE.x + eps, self.parent.SIZE.y + eps, self.parent.SIZE.z + eps)
+    eps = -0.001
+   # frontTopRight = Point3(self.parent.SIZE.x + eps, self.parent.SIZE.y + eps, self.parent.SIZE.z + eps)
+    frontTopRight = Point3(2.2, 1.11, 6.1)
     frontTopRight = mul1(tx, frontTopRight)
     dist1 = game().physics.physics.Raycast(frontTopRight, bodyForward)
+    #print "d1", dist1
         
-    frontBotRight = Point3(self.parent.SIZE.x + eps, -self.parent.SIZE.y - eps, self.parent.SIZE.z + eps)
+    #frontBotRight = Point3(self.parent.SIZE.x + eps, -self.parent.SIZE.y - eps, self.parent.SIZE.z + eps)
+    frontBotRight = Point3(2.2, -1.11, 6.1)
     frontBotRight = mul1(tx, frontBotRight)
     dist2 = game().physics.physics.Raycast(frontBotRight, bodyForward)
+    #print "d2", dist2
     
-    frontTopLeft = Point3(-self.parent.SIZE.x - eps, self.parent.SIZE.y + eps, self.parent.SIZE.z + eps)
+   # frontTopLeft = Point3(-self.parent.SIZE.x - eps, self.parent.SIZE.y + eps, self.parent.SIZE.z + eps)
+    frontTopLeft = Point3(-2.2, 1.11, 6.1)
     frontTopLeft = mul1(tx, frontTopLeft)
     dist3 = game().physics.physics.Raycast(frontTopLeft, bodyForward)
+    #print "d3", dist3
     
-    frontBotLeft = Point3(-self.parent.SIZE.x - eps, -self.parent.SIZE.y - eps, self.parent.SIZE.z + eps)
+   # frontBotLeft = Point3(-self.parent.SIZE.x - eps, -self.parent.SIZE.y - eps, self.parent.SIZE.z + eps)
+    frontBotLeft = Point3(-2.2, -1.11, 6.1)
     frontBotLeft = mul1(tx, frontBotLeft)
     dist4 = game().physics.physics.Raycast(frontBotLeft, bodyForward)
+    #print "d4", dist4
     
     if dist1 < dist or dist2 < dist or dist3 < dist or dist4 < dist:
       return True
@@ -122,5 +131,5 @@ class AIBehavior(Behavior):
       return False
     
 class AIState:
-  DRIVE = 0
-  STUCK = 1
+  DRIVE = "DRIVE"
+  STUCK = "STUCK"

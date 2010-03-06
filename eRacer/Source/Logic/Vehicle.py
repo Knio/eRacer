@@ -1,11 +1,11 @@
 from Core.Globals import *
 class Vehicle(Entity):
-  SIZE    = Vector3(3, 1, 4.5) # "radius" (double for length)
+  SIZE    = Vector3(2.5, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
-    Point3(-3, -2.0,  4.5), # front left
-    Point3( 3, -2.0,  4.5), # front right
-    Point3(-3, -2.0, -4.5), # back left
-    Point3( 3, -2.0, -4.5), # back right
+    Point3(-2.5, -2.0,  4.5), # front left
+    Point3( 2.5, -2.0,  4.5), # front right
+    Point3(-2.5, -2.0, -4.5), # back left
+    Point3( 2.5, -2.0, -4.5), # back right
   ]
   DEBUG   = [ # location of debug strings in screen space
     Point3(280, 120, 0),
@@ -44,13 +44,11 @@ class Vehicle(Entity):
     
     self.ReloadedConstsEvent()
     
-    self.physics = eRacer.Capsule(
+    self.physics = eRacer.CarBody(
       True, 
       self.MASS, 
       self.INITIAL_POS,
-      Matrix(self.INITIAL_POS, PI/2.0, X), #orientation
-      8.0,  #height
-      1.0  #radius
+      Matrix(self.INITIAL_POS, PI/2.0, X) #orientation
     )
     #self.physics = eRacer.Box(
     #  True,       # dynamic
