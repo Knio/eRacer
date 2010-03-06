@@ -44,35 +44,35 @@ class GameEndState(State):
     
     stats.sort(key=lambda x:x[-1])
    
-    
+    font = "Sony Sketch EF"
     xd = 150
     yd = 30
     
     laps = ''.join('Lap %s     ' % i for i in range(1, len(stats[0])-1))
     x = 100
     y = 200
-    game().graphics.graphics.WriteString("Name", "Verdana", 28, Point3(x,y,0))
+    game().graphics.graphics.WriteString("Name", font, 28, Point3(x,y,0))
     x += xd
     for i in range(1, len(stats[0])-1):
-      game().graphics.graphics.WriteString("Lap %d" % i, "Verdana", 28, Point3(x,y,0))
+      game().graphics.graphics.WriteString("Lap %d" % i, font, 28, Point3(x,y,0))
       x += xd/2
     x += xd/2
-    game().graphics.graphics.WriteString("Total", "Verdana", 28, Point3(x,y,0))
+    game().graphics.graphics.WriteString("Total", font, 28, Point3(x,y,0))
     
     y += yd
     x = 100
     for l in stats:
-      game().graphics.graphics.WriteString(l[0].name, "Verdana", 24, Point3(x,y,0))
+      game().graphics.graphics.WriteString(l[0].name, font, 24, Point3(x,y,0))
       x += xd
       for i in range(1, len(l)-1):
         s = "%6.2f" % l[i]
         if l[i] == 99999: s = '---'
-        game().graphics.graphics.WriteString(s, "Verdana", 24, Point3(x,y,0))
+        game().graphics.graphics.WriteString(s, font, 24, Point3(x,y,0))
         x += xd/2
       x += xd/2
       s = "%6.2f" % l[-1]
       if l[-1] == 99999: s = '---'
-      game().graphics.graphics.WriteString(s, "Verdana", 24, Point3(x,y,0))
+      game().graphics.graphics.WriteString(s, font, 24, Point3(x,y,0))
       x = 100
       y += yd
     
