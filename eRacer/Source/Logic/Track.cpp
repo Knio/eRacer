@@ -1,6 +1,6 @@
 #include "Track.h"
-
-
+#include "Core/Consts.h"
+extern Constants CONSTS;
 
 Frame Track::GetFrame(float d)
 {
@@ -144,9 +144,9 @@ ID3DXMesh* Track::CreateMesh(const vector<TrackVertex>& profile)
     // assert(length(mul0(tx, Z)      - az) < 0.01);
     // assert(length(mul1(tx, ORIGIN) - ap) < 0.01);
     
-    Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ax, D3DCOLOR_COLORVALUE(0,1,0,1));
-    Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ay, D3DCOLOR_COLORVALUE(1,0,0,1));
-    Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, az, D3DCOLOR_COLORVALUE(0,0,1,1));
+    if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ax, D3DCOLOR_COLORVALUE(0,1,0,1));
+    if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ay, D3DCOLOR_COLORVALUE(1,0,0,1));
+    if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, az, D3DCOLOR_COLORVALUE(0,0,1,1));
     
     for (int j=0;j<D;j++)  
     {

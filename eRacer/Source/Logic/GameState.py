@@ -105,23 +105,19 @@ class GameState(State):
     self.arrow2 = Arrow(scene)
     game().logic.Add(self.arrow2)
     
-    # for i in xrange(200):
-    #   f = self.track.GetFrame(i*50.0)
-    #   p = Point3(f.position.x, f.position.y, f.position.z)
-    #   print p
-    #   game().logic.Add(Arrow(scene, p))
-    
     forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
-    
-    self.player = Vehicle("YOU", self.scene, self.track, Point3(0, 7,-6), forwardMat)
+    self.player = Vehicle("Player", self.scene, self.track, Point3(-100, 4,  15), forwardMat)
     self.player.behavior = PlayerBehavior(self.player)
+    game().logic.Add(self.player)
   
-    self.ai1    = Vehicle("AI1", self.scene, self.track, Point3(0, 7, 6), forwardMat, 'Racer2.x')
-    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
+    # self.ai1    = Vehicle("AI1",    self.scene, self.track, Point3(-100, 4,   0), forwardMat, 'Racer2.x')
+    # self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
+    # game().logic.Add(self.ai1)
 
-    # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), forwardMat, 'Racer5.x')
+    # self.ai2    = Vehicle("AI2",    self.scene, self.track, Point3(-100, 4,  30), forwardMat, 'Racer5.x')
     # self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
-
+    # game().logic.Add(self.ai2)
+    
     def CarTrackCollisionEvent(car, track, force):
       pass
       # print 'CAR-TRACK:', car, track, force
@@ -129,12 +125,6 @@ class GameState(State):
       #   game().simspeed = 0.0
       
     game().event.Register(CarTrackCollisionEvent)
-    
-    
-    game().logic.Add(self.player)
-
-    game().logic.Add(self.ai1)
-    # game().logic.Add(self.ai2)
 
     self.views = []
     self.viewIndex = 0
@@ -173,7 +163,7 @@ class GameState(State):
     
     self.lastMeteorTime = 0
     
-      
+    
     # self.sound = eRacer.SoundFx();
     # self.sound.looping  = True
     # self.sound.is3D     = False
@@ -197,7 +187,7 @@ class GameState(State):
     # TODO camera velocity
     game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
     
-    # _time.sleep(1/100.)
+    _time.sleep(CONSTS.SLEEP_TIME)
     
     State.Tick(self, time)
     game().graphics.views.append(self.view)

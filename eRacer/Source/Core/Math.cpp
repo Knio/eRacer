@@ -64,6 +64,11 @@ Vector3 project(const Vector3 &a, const Vector3 &b)
 {
 	return b * (dot(a,b) / dot(b,b));
 }
+Vector3 projectOnto(const Vector3 &v, const Vector3 &normal)
+{
+	return v - normal*dot(v, normal);
+}
+
 
 Vector3 normalized(const Vector3& A){
 	Vector3 result;

@@ -37,13 +37,13 @@ class Graphics(Module):
     if not game().ticks % 20: 
       self.window.SetTitle("eRacerX - %.2f FPS" % fps) # somehow this is really slow! go windows
         
-    if 1.0/fps > CONSTS.PHYS_MAX_TIMESTEP and False:
-      # we are lagging
-      # alternately skip this frame so that physx gets more sim time
-      if game().ticks % 2: 
-        print 'skipping rendering'
-        self.views = []
-        return
+    # if 1.0/fps > CONSTS.MAX_TIMESTEP and False:
+    #   # we are lagging
+    #   # alternately skip this frame so that physx gets more sim time
+    #   if game().ticks % 2: 
+    #     print 'skipping rendering'
+    #     self.views = []
+    #     return
     
     self.graphics.PreRender();
         
