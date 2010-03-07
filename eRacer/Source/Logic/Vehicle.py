@@ -36,7 +36,7 @@ class Vehicle(Entity):
     self.INIT_ORIENT = orient
     self.INITIAL_POS = position
     self.behavior = None
-    self.trackpos = None
+    self.trackpos = -1.0
     self.track  = track
     self.name   = name
     
@@ -111,10 +111,18 @@ class Vehicle(Entity):
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
     worldpos   = mul1(tx, ORIGIN)
+    
     self.trackpos = self.track.FindPosition(worldpos, self.trackpos)
     frame = self.track.GetFrame(self.trackpos)
-    up    = Vector3(frame.up.x, frame.up.y, frame.up.z)
-    fw    = Vector3(frame.fw.x, frame.fw.y, frame.fw.z)
+    # print worldpos
+    # print frame.position, frame.up, frame.dist, length(frame.position-worldpos)
+    # self.frame = self.track.GetFrame(worldpos, self.trackpos)
+    # print self.frame.position, self.frame.up, self.frame.dist, length(self.frame.position-worldpos)
+    # # self.trackpos = self.frame.dist
+    # frame = self.frame
+    
+    up    = frame.up #Vector3(frame.up.x, frame.up.y, frame.up.z)
+    fw    = frame.fw #Vector3(frame.fw.x, frame.fw.y, frame.fw.z)
   
     lapcount = int(self.trackpos / self.track.dist)
     if (lapcount > self.lapcount):

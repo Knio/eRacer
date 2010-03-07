@@ -18,7 +18,7 @@ def VECTOR3__iadd__(self, arg):
   raise Exception("The (+=) operator seems to be unstable. Please do not use.")
 
 def VECTOR3__repr__(self):
-  return "(%6.2g %6.2g %6.2g)" % (self.x, self.y, self.z)
+  return "(%8.2g %8.2g %8.2g)" % (self.x, self.y, self.z)
 
 eRacer.D3DXVECTOR3.__iadd__ = VECTOR3__iadd__
 eRacer.D3DXVECTOR3.__repr__ = VECTOR3__repr__

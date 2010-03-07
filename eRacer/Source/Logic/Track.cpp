@@ -10,9 +10,7 @@ Frame Track::GetFrame(float d)
   while (d >= dist) d -= dist;
   while (d < 0)     d += dist;
   std::map<float, int>::iterator l = arclen.lower_bound(d);
-  
-  assert(l!=arclen.end());
-  
+    
   int n = track.size();
   
   int i2 = l->second;
@@ -24,12 +22,55 @@ Frame Track::GetFrame(float d)
   Point3  pos = track[i1].position * (1-alpha)   + track[i2].position * alpha;
   Vector3 up  = track[i1].up       * (1-alpha)   + track[i2].up       * alpha;
   Vector3 fw  = track[i1].fw       * (1-alpha)   + track[i2].fw       * alpha;
+  float dist  = track[i1].dist     * (1-alpha)   + track[i2].dist     * alpha;
   
   normalize(up);
   normalize(fw);
 
-  return Frame(pos,up,fw);
+  return Frame(pos,up,fw,dist);
 }
+
+
+Frame Track::GetFrame(Point3 pos, float hint)
+{
+  int lap = (int)(hint/dist);
+  std::map<float, int>::iterator l = arclen.lower_bound(hint);
+  int i2 = l->second;
+  int n = track.size();
+  if (hint == -1 || length(pos - track[i2].position) > 30)
+  {
+    float mint = 1e99;
+    for (int i=0;i<n;i+=50)
+    {
+      float t = length(pos - track[i].position);
+      if (t < mint)
+      {
+        mint = t;
+        i2 = i;
+      }
+    }
+  }
+  int r = 64;
+  while (r)
+  {
+    float d1 = length(pos - track[(i2 - r + n)%n].position);
+    float d2 = length(pos - track[(i2 + 0 + n)%n].position);
+    float d3 = length(pos - track[(i2 + r + n)%n].position);
+    
+    if (d2 <= d3 && d2 <= d1)
+      r /= 2;
+    else if (d1 < d3)
+      i2 -= r;
+    else
+      i2 += r;
+    // r *= 2;
+  }
+  Frame f = track[(i2+n)%n];
+  f.dist += lap*dist;
+  return f;
+}
+
+
 
 Point3 Track::GetPositionAt(float d){
 	return GetFrame(d).position;

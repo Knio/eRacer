@@ -199,6 +199,16 @@ class GameState(State):
       game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
       game().graphics.graphics.WriteString("%d" % (self.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
     
+      l = list(self.stats.get(self.player,[0.]))
+      l.append(game().time.get_seconds())
+      
+      y = 100
+      for i,t in enumerate(l):
+        if not i or i>self.laps: continue
+        game().graphics.graphics.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
+        game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
+        y += 15    
+    
     # self.lastMeteorTime += time.game_delta
     # if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
     #   self.lastMeteorTime = 0
