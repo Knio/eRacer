@@ -119,7 +119,6 @@ class Vehicle(Entity):
     frame = self.track.GetFrame(worldpos, self.trackpos)
     # print self.frame.position, self.frame.up, self.frame.dist, length(self.frame.position-worldpos)
     self.trackpos = frame.dist
-    print self.trackpos
     # frame = self.frame
     
     up    = frame.up #Vector3(frame.up.x, frame.up.y, frame.up.z)

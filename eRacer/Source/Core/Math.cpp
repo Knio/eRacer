@@ -128,6 +128,20 @@ Matrix CreateMatrix(const Point3& position, float angle, const Vector3& axis, fl
 	return *D3DXMatrixMultiply(&result, &m1, &m2);
 }
 
+Matrix CreateMatrix(const Point3& position, const Vector3& up, const Vector3& fw)
+{
+	Vector3 ap = position;
+	Vector3 az = normalized(fw);      
+	Vector3 ax = normalized(cross(up, az));
+	Vector3 ay = cross(az, ax);
+	return  Matrix(
+		ax.x, ax.y, ax.z,   0,
+		ay.x, ay.y, ay.z,   0,
+		az.x, az.y, az.z,   0,
+		ap.x, ap.y, ap.z,   1
+	);
+}
+
 Matrix CreateMatrix(const Point3& position, float yaw, float pitch, float roll, float scaleX, float scaleY, float scaleZ){
 	static Matrix m1;
 	static Matrix m2;

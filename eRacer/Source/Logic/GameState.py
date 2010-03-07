@@ -15,6 +15,7 @@ from Plane      import Plane
 from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
+from Prop       import Prop
 from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
 from Starfield  import Starfield
 from Meteor     import Meteor, MeteorManager
@@ -118,6 +119,11 @@ class GameState(State):
     self.ai2    = Vehicle("AI2",    self.scene, self.track, Point3(-100, 4,  30), forwardMat, 'Racer5.x')
     self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
     game().logic.Add(self.ai2)
+    
+    startFrame = self.track.GetFrame(0.0)
+    
+    # TODO: this should load "StartLine.x" but it is not appearing properly
+    game().logic.Add(Prop(self.scene, 'Ship1.x', Matrix(10, 10, 10) * Matrix(startFrame.position, startFrame.up, startFrame.fw)))
     
     def CarTrackCollisionEvent(car, track, force):
       pass

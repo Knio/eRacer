@@ -112,6 +112,10 @@ bool affine(const Matrix& m);
  */
 Matrix CreateMatrix(const Point3& position=ORIGIN, const Matrix& orientation=IDENTITY);
 
+// create tx from a frame of reference (position, up, forward)
+Matrix CreateMatrix(const Point3& position, const Vector3& up, const Vector3& fw);
+
+
 /**
  * @brief Construct a matrix from position, angle, axis and scaling.
  *
