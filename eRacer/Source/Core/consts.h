@@ -20,9 +20,11 @@ struct Constants
 	int		PHYS_DEBUG_MODE;
 	float	PHYS_SKIN_WIDTH;
 	
+	int		NUM_METEORS;
+	int 	TRACK_DEBUG;
+	
 	// Vehicle
 	int		CAR_DEBUG;
-	int 	TRACK_DEBUG;
 	
 	float	CAR_MASS;
 	float CAR_GRAVITY;

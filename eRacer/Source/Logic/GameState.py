@@ -105,17 +105,18 @@ class GameState(State):
     self.arrow2 = Arrow(scene)
     game().logic.Add(self.arrow2)
     
-    self.player = Vehicle("Player", self.scene, self.track, Point3(-100, 4,  15))
+    forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
+    self.player = Vehicle("Player", self.scene, self.track, Point3(-100, 4,  15), forwardMat)
     self.player.behavior = PlayerBehavior(self.player)
     game().logic.Add(self.player)
   
-    # self.ai1    = Vehicle("AI1",    self.scene, self.track, Point3(-100, 4,   0), 'Racer2.x')
-    # self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
-    # game().logic.Add(self.ai1)
+    self.ai1    = Vehicle("AI1",    self.scene, self.track, Point3(-100, 4,   0), forwardMat, 'Racer2.x')
+    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
+    game().logic.Add(self.ai1)
 
-    # self.ai2    = Vehicle("AI2",    self.scene, self.track, Point3(-100, 4,  30), 'Racer5.x')
-    # self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
-    # game().logic.Add(self.ai2)
+    self.ai2    = Vehicle("AI2",    self.scene, self.track, Point3(-100, 4,  30), forwardMat, 'Racer5.x')
+    self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
+    game().logic.Add(self.ai2)
     
     def CarTrackCollisionEvent(car, track, force):
       pass
@@ -156,7 +157,7 @@ class GameState(State):
     self.meteorManager = MeteorManager(self.scene)
     game().logic.Add(self.meteorManager)
 
-    for i in xrange(20):
+    for i in range(CONSTS.NUM_METEORS):
       m = self.meteorManager.spawnRandom()
       game().logic.Add(m)
     
