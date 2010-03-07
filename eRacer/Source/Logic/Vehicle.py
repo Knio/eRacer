@@ -347,6 +347,7 @@ class Vehicle(Entity):
     self.boosting = max(0, self.boosting - delta)
 
     self.transform = tx
+    self.velocity = phys.GetVelocity()
     self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * tx)
 
   # def set_transform(self, transform):

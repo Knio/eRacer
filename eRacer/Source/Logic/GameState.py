@@ -204,7 +204,7 @@ class GameState(State):
       self.lastMeteorTime += time.game_delta
       if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
         self.lastMeteorTime = 0
-        m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
+        m = self.meteorManager.spawnTargeted(self.player)
         game().logic.Add(m)
   
   
