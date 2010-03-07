@@ -45,6 +45,7 @@ struct Constants
 	float	MAX_BRAKE_FORCE;
 	float	FRICTION_STATIC;
 	float	FRICTION_SLIDING;
+	float	FRICTION_ROLL;
 	float BOOST_MULT;
 	
 };
