@@ -72,6 +72,7 @@ class GameState(State):
     
     self.laps   = 2 # TODO CONST
     self.stats  = {}
+    self.gameOver = False
     
     self.load()
     
@@ -209,12 +210,13 @@ class GameState(State):
         game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
         y += 15    
     
-    # self.lastMeteorTime += time.game_delta
-    # if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
-    #   self.lastMeteorTime = 0
-    #   m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
-    #   game().logic.Add(m)
-  
+    if not self.gameOver:
+      self.lastMeteorTime += time.game_delta
+      if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
+        self.lastMeteorTime = 0
+        m = self.meteorManager.spawnTargeted(self.player)
+        game().logic.Add(m)
+
   
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
@@ -224,7 +226,9 @@ class GameState(State):
   
     if lap == self.laps+1:
       if vehicle == self.player:
+        self.gameOver = True
         game().PushState(GameEndState(self.stats))
+        
       vehicle.Brake(1)
         
       

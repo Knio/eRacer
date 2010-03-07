@@ -328,7 +328,11 @@ class Vehicle(Entity):
       # debug("P.N: %6.2f" % dot(totalforce, worldroadnormal))
       
       # continue
-      if delta: phys.AddWorldForceAtLocalPos(totalforce, localapplypoint)
+      if delta: 
+        reverseVel = normalized(bodyVel) * -1.0
+        rollFrict = reverseVel * (weight*CONSTS.FRICTION_ROLL) # slow us down a little
+        totalforce = totalforce + rollFrict
+        phys.AddWorldForceAtLocalPos(totalforce, localapplypoint)
       
     # no wheels are touching the ground.
     # reset the car
@@ -351,6 +355,7 @@ class Vehicle(Entity):
     self.boosting = max(0, self.boosting - delta)
 
     self.transform = tx
+    self.velocity = phys.GetVelocity()
     self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * tx)
 
   # def set_transform(self, transform):

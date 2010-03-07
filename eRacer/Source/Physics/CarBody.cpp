@@ -21,22 +21,22 @@ CarBody::CarBody(bool dynamic, float mass, const Point3& pos, const Matrix& orie
 	capDesc3.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
 
 	//right, long capsule
-	capDesc1.height = 9.03;
-	capDesc1.radius = 1.2;
+	capDesc1.height = (NxReal)9.03;
+	capDesc1.radius = (NxReal)1.2;
 	capDesc1.localPose.M = Matrix_NxMat33(rot);
-	capDesc1.localPose.t = NxVec3(2.2, 0, 1.11);
+	capDesc1.localPose.t = NxVec3((NxReal)2.2, (NxReal)0, (NxReal)1.11);
 
 	//left, long capsule
-	capDesc2.height = 9.03;
-	capDesc2.radius = 1.2;
+	capDesc2.height = (NxReal)9.03;
+	capDesc2.radius = (NxReal)1.2;
 	capDesc2.localPose.M = Matrix_NxMat33(rot);
-	capDesc2.localPose.t = NxVec3(-2.2, 0, 1.11);
+	capDesc2.localPose.t = NxVec3((NxReal)-2.2, (NxReal)0, (NxReal)1.11);
 
 	//middle, shorter capsule
-	capDesc3.height = 5.0;
-	capDesc3.radius = 1.0;
+	capDesc3.height = (NxReal)5.0;
+	capDesc3.radius = (NxReal)1.0;
 	capDesc3.localPose.M = Matrix_NxMat33(rot);
-	capDesc3.localPose.t = NxVec3(0, 0, 0.0);
+	capDesc3.localPose.t = NxVec3((NxReal)0, (NxReal)0, (NxReal)0.0);
 
 	actorDesc.shapes.pushBack(&capDesc1);
 	actorDesc.shapes.pushBack(&capDesc2);
