@@ -220,10 +220,7 @@ class GameState(State):
   
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
-  
-    for i,s in self.stats.items():
-      print i.name, s
-  
+    
     if lap == self.laps+1:
       if vehicle == self.player:
         self.gameOver = True
