@@ -112,13 +112,14 @@ class Vehicle(Entity):
     delta = float(time.game_delta) / time.RESOLUTION
     worldpos   = mul1(tx, ORIGIN)
     
-    self.trackpos = self.track.FindPosition(worldpos, self.trackpos)
-    frame = self.track.GetFrame(self.trackpos)
+    # self.trackpos = self.track.FindPosition(worldpos, self.trackpos)
+    # frame = self.track.GetFrame(self.trackpos)
     # print worldpos
     # print frame.position, frame.up, frame.dist, length(frame.position-worldpos)
-    # self.frame = self.track.GetFrame(worldpos, self.trackpos)
+    frame = self.track.GetFrame(worldpos, self.trackpos)
     # print self.frame.position, self.frame.up, self.frame.dist, length(self.frame.position-worldpos)
-    # # self.trackpos = self.frame.dist
+    self.trackpos = frame.dist
+    print self.trackpos
     # frame = self.frame
     
     up    = frame.up #Vector3(frame.up.x, frame.up.y, frame.up.z)

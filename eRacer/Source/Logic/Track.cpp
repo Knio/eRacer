@@ -33,14 +33,15 @@ Frame Track::GetFrame(float d)
 
 Frame Track::GetFrame(Point3 pos, float hint)
 {
-  int lap = (int)(hint/dist);
+  int lap = (int)((hint+0.5)/dist);
+  hint -= lap*dist;
   std::map<float, int>::iterator l = arclen.lower_bound(hint);
   int i2 = l->second;
   int n = track.size();
   if (hint == -1 || length(pos - track[i2].position) > 30)
   {
     float mint = 1e99;
-    for (int i=0;i<n;i+=50)
+    for (int i=0;i<n;i+=16)
     {
       float t = length(pos - track[i].position);
       if (t < mint)
@@ -50,7 +51,7 @@ Frame Track::GetFrame(Point3 pos, float hint)
       }
     }
   }
-  int r = 64;
+  int r = 32;
   while (r)
   {
     float d1 = length(pos - track[(i2 - r + n)%n].position);
@@ -63,10 +64,9 @@ Frame Track::GetFrame(Point3 pos, float hint)
       i2 -= r;
     else
       i2 += r;
-    // r *= 2;
   }
   Frame f = track[(i2+n)%n];
-  f.dist += lap*dist;
+  f.dist += dist * (lap + i2/n);
   return f;
 }
 
@@ -127,7 +127,7 @@ void Track::Subdivide(int NSUBDIV)
         track[i].dist = dist;
         dist += length(fw);
     }
-    arclen[dist] = 0;
+    arclen[dist] = d-1;
 }
 
 

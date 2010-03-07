@@ -65,40 +65,40 @@ class Track(Entity, eRacer.Track):
     self.physics.Init(mesh)
     self.physics.SetGroup(eRacer.TRACK)
     
-  def FindPositionFull(self, pos):
-    mind = 1e99
-    hint = 0
-    for i in xrange(0, self.dist, self.dist/500.0):
-      frame = self.GetFrame(i)
-      t = length(pos - frame.position)
+  # def FindPositionFull(self, pos):
+  #   mind = 1e99
+  #   hint = 0
+  #   for i in xrange(0, self.dist, self.dist/500.0):
+  #     frame = self.GetFrame(i)
+  #     t = length(pos - frame.position)
       
-      if t < mind:
-        mind = t
-        hint = i
-    return hint
+  #     if t < mind:
+  #       mind = t
+  #       hint = i
+  #   return hint
     
-  def FindPosition(self, pos, hint=None):
-    if not hint or length(pos - self.GetPositionAt(hint)) > 25:
-      lap = hint and self.dist * int(hint/self.dist) or 0.
-      hint = self.FindPositionFull(pos) + lap
+  # def FindPosition(self, pos, hint=None):
+  #   if not hint or length(pos - self.GetPositionAt(hint)) > 25:
+  #     lap = hint and self.dist * int(hint/self.dist) or 0.
+  #     hint = self.FindPositionFull(pos) + lap
     
-    r = 100.0
-    while r > 0.1:
-      d1 = length(pos - self.GetPositionAt(hint - r))
-      d2 = length(pos - self.GetPositionAt(hint    ))
-      d3 = length(pos - self.GetPositionAt(hint + r))
+  #   r = 100.0
+  #   while r > 0.1:
+  #     d1 = length(pos - self.GetPositionAt(hint - r))
+  #     d2 = length(pos - self.GetPositionAt(hint    ))
+  #     d3 = length(pos - self.GetPositionAt(hint + r))
       
-      if d2 <= d1 and d2 <= d3:
-        r /= 2.0
-        continue
+  #     if d2 <= d1 and d2 <= d3:
+  #       r /= 2.0
+  #       continue
         
-      if d1 < d2:
-        hint = hint - r
+  #     if d1 < d2:
+  #       hint = hint - r
         
-      else:
-        hint = hint + r
+  #     else:
+  #       hint = hint + r
     
-    return hint
+  #   return hint
     
   def Tick(self, time):
      Entity.Tick(self, time)
