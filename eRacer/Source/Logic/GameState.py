@@ -199,11 +199,11 @@ class GameState(State):
       game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
       game().graphics.graphics.WriteString("%d" % (self.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
     
-    # self.lastMeteorTime += time.game_delta
-    # if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
-    #   self.lastMeteorTime = 0
-    #   m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
-    #   game().logic.Add(m)
+    self.lastMeteorTime += time.game_delta
+    if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
+      self.lastMeteorTime = 0
+      m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
+      game().logic.Add(m)
   
   
   def LapEvent(self, vehicle, lap):
