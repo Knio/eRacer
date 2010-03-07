@@ -58,7 +58,7 @@ class MeteorManager(Entity):
 
 
 class Meteor(Entity):
-  DENSITY   = 100.
+  DENSITY   = 200.
   MODELS    = ["Meteor1.x", "Meteor2.x"]
 
   
@@ -71,7 +71,7 @@ class Meteor(Entity):
 
     self.transform = eRacer.CreateMatrix()
 
-    self.physics = eRacer.Box(True, self.DENSITY*self.scale*self.scale*self.scale, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
+    self.physics = eRacer.Box(True, self.DENSITY*self.scale*self.scale, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
     self.physics.SetGroup(eRacer.METEOR)
     self.physics.SetId(self.id)
     
@@ -89,11 +89,12 @@ class Meteor(Entity):
     return True
     
   def hitTrack(self,force):
-    if(self.scale<2.5):
+    if(self.scale > 1.0 and self.scale<3.5):
       self.physics.PutToSleep()
       direction = normalized(force)
       pos = self.physics.GetPosition()-direction*self.scale
-      
+      #self.physics.SetVelocity(Vector3(0,0,0))
+      #self.physics.SetAngVelocity(Vector3(0,0,0));
       self.physics.SetPosition(pos)
         
     
@@ -105,6 +106,12 @@ class Meteor(Entity):
   def randomDirection(self):
     u = random.uniform
     return normalized(Vector3(u(-1.,1.),u(-1.,1.),u(-1.,1.)))
+    
+  def scatter(self, point, scattering):
+    u = random.uniform
+    point.x *= 1.+u(-scattering, scattering)
+    point.y *= 1.+u(-scattering, scattering)
+    point.z *= 1.+u(-scattering, scattering)    
 
 class RandomMeteor(Meteor):
   SPAWNING_DISTANCE = 600.
@@ -135,9 +142,7 @@ class RandomMeteor(Meteor):
     
     velocity = direction * -(u(self.MIN_SPEED, self.MAX_SPEED)/math.sqrt(self.scale))
 
-    velocity.x *= 1.+u(-self.SCATTERING, self.SCATTERING)
-    velocity.y *= 1.+u(-self.SCATTERING, self.SCATTERING)
-    velocity.z *= 1.+u(-self.SCATTERING, self.SCATTERING)
+    self.scatter(velocity, self.SCATTERING)
     
     angular_velocity = self.randomDirection() * self.TUMBLING
    
@@ -151,7 +156,8 @@ class AimedMeteor(Meteor):
   AIR_TIME = 1.
   
   # between 0 and 1 
-  SCATTERING = 0.3
+  DIR_SCATTERING = 0.5
+  POS_SCATTERING = 0.2
   
   MIN_SPEED = 50
   MAX_SPEED = 80
@@ -165,13 +171,13 @@ class AimedMeteor(Meteor):
     u = random.uniform
     Meteor.__init__(self,scene,u(self.MIN_SIZE, self.MAX_SIZE))
     
-    direction.x *= 1.+u(-self.SCATTERING, self.SCATTERING)
-    direction.y *= 1.+u(-self.SCATTERING, self.SCATTERING)
-    direction.z *= 1.+u(-self.SCATTERING, self.SCATTERING)
-
+    self.scatter(direction,self.DIR_SCATTERING)
+    
     velocity = direction * u(self.MIN_SPEED, self.MAX_SPEED)
     
     position = aim - velocity * self.AIR_TIME
+
+    self.scatter(position, self.POS_SCATTERING)
 
     angular_velocity = self.randomDirection() * self.TUMBLING    
         
