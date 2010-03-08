@@ -198,6 +198,9 @@ class Vehicle(Entity):
       worldsuspoint   = mul1(tx, localsuspoint)
       # dist = dist = game().physics.physics.Raycast(worldsuspoint, dir, worldroadnormal) - upamount
       dist = dot(up, (worldsuspoint - frame.position)) - upamount
+      if length(worldsuspoint - frame.position) > 25:
+        dist = 1e99
+      
       disp = (self.DISPLACEMENT - dist)
 
       # use track normal and not physx
