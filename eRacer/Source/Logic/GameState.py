@@ -30,7 +30,7 @@ from AI.Raceline import Raceline
 from Graphics.View    import View
 from Graphics.SkyBox  import SkyBox
 
-from Graphics.Sprite  import Sprite
+from Graphics.Quad  import Quad
 
 
 # TODO

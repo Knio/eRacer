@@ -2,7 +2,7 @@ from Core.Globals   import *
 from Game.State     import State
   
 from Camera         import Camera, CirclingCamera, OrthographicCamera
-from Graphics.Sprite  import Sprite
+from Graphics.Quad  import Quad
 from MenuMapping    import MainMenuMapping, PauseMenuMapping
 from Graphics.View  import View
 
@@ -61,7 +61,7 @@ class MainMenuState(MenuState):
   def __init__(self):
     MenuState.__init__(self)
 
-    logo = Sprite(self.view,"eracerx_logo_negative.png")
+    logo = Quad(self.view,"eracerx_logo_negative.png")
     game().logic.Add(logo)
 
     logo.scale(600,235,1)

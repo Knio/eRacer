@@ -381,6 +381,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\Quad.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\Quad.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Renderable.h"
 					>
 				</File>
@@ -406,14 +414,6 @@
 				</File>
 				<File
 					RelativePath=".\Source\Graphics\Spatial.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Sprite.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Source\Graphics\Sprite.h"
 					>
 				</File>
 				<File
