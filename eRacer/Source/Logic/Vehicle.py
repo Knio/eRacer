@@ -38,8 +38,8 @@ class Vehicle(Entity):
     self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = -1.0
-    self.track  = track
-    self.name   = name
+    self.track    = track
+    self.name     = name
     self.resetFrame = eRacer.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
     self.shadow = Prop(scene, 'shadow.x', IDENTITY)
     game().logic.Add(self.shadow)
@@ -211,7 +211,7 @@ class Vehicle(Entity):
       worldsuspoint   = mul1(tx, localsuspoint)
       # dist = dist = game().physics.physics.Raycast(worldsuspoint, dir, worldroadnormal) - upamount
       dist = dot(up, (worldsuspoint - frame.position)) - upamount
-      if length(worldsuspoint - frame.position) > 25:
+      if length(worldsuspoint - frame.position) > 26:
         dist = 1e99
       
       disp = (self.DISPLACEMENT - dist)
@@ -444,6 +444,7 @@ class Vehicle(Entity):
     
         
   def resetCar(self):
+    print 'Reset Car'
     phys  = self.physics
     self.resetFrame.position = self.resetFrame.position + self.resetFrame.up * 3.0
     orient = Matrix(self.resetFrame.position, self.resetFrame.up, self.resetFrame.fw)

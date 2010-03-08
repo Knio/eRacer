@@ -118,8 +118,8 @@ Matrix CreateMatrix(const Point3& position, float s){
 }
 
 Matrix CreateMatrix(const Point3& position, float angle, const Vector3& axis, float scaleX, float scaleY, float scaleZ){
-	static Matrix m1;
-	static Matrix m2;
+	Matrix m1;
+	Matrix m2;
 	Matrix result;
 	D3DXMatrixScaling(&result,scaleX,scaleY,scaleZ);
 	D3DXMatrixRotationAxis(&m2, &axis,angle);
@@ -143,14 +143,14 @@ Matrix CreateMatrix(const Point3& position, const Vector3& up, const Vector3& fw
 }
 
 Matrix CreateMatrix(const Point3& position, float yaw, float pitch, float roll, float scaleX, float scaleY, float scaleZ){
-	static Matrix m1;
-	static Matrix m2;
-	Matrix result;
-	D3DXMatrixScaling(&result,scaleX,scaleY,scaleZ);
-	D3DXMatrixRotationYawPitchRoll(&m2, yaw, pitch, roll);
-	D3DXMatrixMultiply(&m1, &result, &m2);
-	D3DXMatrixTranslation(&m2, position.x,position.y,position.z); 
-	return *D3DXMatrixMultiply(&result, &m1, &m2);
+	Matrix rotationMatrix;
+	Matrix translationMatrix;
+	Matrix scalingMatrix;
+	D3DXMatrixScaling(&scalingMatrix,scaleX,scaleY,scaleZ);
+	D3DXMatrixRotationYawPitchRoll(&rotationMatrix, yaw, pitch, roll);
+	D3DXMatrixMultiply(&rotationMatrix, &scalingMatrix, &rotationMatrix);
+	D3DXMatrixTranslation(&translationMatrix, position.x,position.y,position.z); 
+	return *D3DXMatrixMultiply(&rotationMatrix, &rotationMatrix, &translationMatrix);
 }
 
 Matrix CreateMatrix(float scaleX, float scaleY, float scaleZ){
@@ -170,18 +170,18 @@ Point3 ExtractPosition(const Matrix& matrix, Point3* position){
 }
 
 void ExtractScaling(const Matrix& matrix, float& scaleX, float& scaleY, float& scaleZ){
-	static Vector3 scale;
-	static Vector3 translation;
-	static D3DXQUATERNION rotation;
+	Vector3 scale;
+	Vector3 translation;
+	D3DXQUATERNION rotation;
 	assert(SUCCEEDED(D3DXMatrixDecompose(&scale,&rotation,&translation, &matrix)));
 	scaleX = scale.x;
 	scaleY = scale.y;
 	scaleZ = scale.z;
 }
 void ExtractRotation(const Matrix& matrix, Matrix& rotationMatrix){
-	static Vector3 scaleOrAxis;
-	static Vector3 translation;
-	static D3DXQUATERNION rotation;
+	Vector3 scaleOrAxis;
+	Vector3 translation;
+	D3DXQUATERNION rotation;
 	float angle;
 	assert(SUCCEEDED(D3DXMatrixDecompose(&scaleOrAxis,&rotation,&translation, &matrix)));
 	D3DXQuaternionToAxisAngle(&rotation,&scaleOrAxis, &angle);
@@ -190,9 +190,9 @@ void ExtractRotation(const Matrix& matrix, Matrix& rotationMatrix){
 
 
 void ExtractAngleAxis(const Matrix& matrix, float& angle, Vector3& axis){
-	static Vector3 scale;
-	static Vector3 translation;
-	static D3DXQUATERNION rotation;
+	Vector3 scale;
+	Vector3 translation;
+	D3DXQUATERNION rotation;
 	assert(SUCCEEDED(D3DXMatrixDecompose(&scale,&rotation,&translation, &matrix)));
 	D3DXQuaternionToAxisAngle(&rotation,&axis, &angle);
 }
@@ -200,8 +200,8 @@ void ExtractAngleAxis(const Matrix& matrix, float& angle, Vector3& axis){
 
 
 void Decompose(const Matrix& matrix, Point3& position, Matrix& rotation, float& scaleX, float& scaleY, float& scaleZ){
-	static Vector3 scaleOrAxis;
-	static D3DXQUATERNION quat;
+	Vector3 scaleOrAxis;
+	D3DXQUATERNION quat;
 	
 	float angle;
 	assert(SUCCEEDED(D3DXMatrixDecompose(&scaleOrAxis,&quat,&position, &matrix)));
