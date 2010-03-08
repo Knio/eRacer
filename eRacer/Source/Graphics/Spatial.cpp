@@ -7,6 +7,9 @@
  */
 
 #include "Spatial.h"
+#include <iostream>
+
+using namespace std;
 
 namespace Graphics {
 
@@ -27,8 +30,10 @@ void Spatial::cull(const Camera& camera, vector<const Renderable*>& visibleRende
 		return;
 
 	for(int i=0; i<PI_NUM; i++){
-		if(worldBounds_.cull(camera.GetPlane(i)))
-	 		return;
+		if(worldBounds_.cull(camera.GetPlane(i))){
+			//cout << name_ << " culled by plane " << i << "!"<<endl;	 	
+			return;
+		}
 	}
 
 	cullRecursive(camera, visibleRenderables);

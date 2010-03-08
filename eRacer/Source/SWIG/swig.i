@@ -49,6 +49,7 @@
 #include "..\Physics\PhysicsLayer.h"
 #include "..\Physics\PhysicsObject.h"
 #include "..\Physics\Box.h"
+#include "..\Physics\CarBody.h"
 #include "..\Physics\Plane.h"
 #include "..\Physics\TriMesh.h"
 
@@ -129,7 +130,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 
 
 // Logic
-%template(VectorTrackVertex) std::vector<TrackVertex>;
+%template(VectorTrackVertex) std::vector<Logic::TrackVertex>;
 %include "..\Logic\Track.h"
 
 // Graphics ***************************
@@ -162,6 +163,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Physics\PhysicsLayer.h"
 %include "..\Physics\PhysicsObject.h"
 %include "..\Physics\Box.h"
+%include "..\Physics\CarBody.h"
 %include "..\Physics\Plane.h"
 %include "..\Physics\TriMesh.h"
 

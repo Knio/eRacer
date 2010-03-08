@@ -14,17 +14,18 @@ class MeteorManager(Entity):
     game().event.Register(self.MeteorCarCollisionEvent)
     game().event.Register(self.MeteorTrackCollisionEvent)
     
-
-
-  
-  def spawn(self, pos, scale, forceDir, forceMag, tumbling):
-    pass
     
   def spawnRandom(self):
     m = RandomMeteor(self.scene)
     self.meteors.append(m)
     return m
             
+  def spawnTargeted(self, target):
+    m = TargetedMeteor(self.scene,target)
+    self.meteors.append(m)
+    return m
+
+
   def spawnAimed(self, aim):
     m = AimedMeteor(self.scene,aim)
     self.meteors.append(m)
@@ -57,7 +58,7 @@ class MeteorManager(Entity):
 
 
 class Meteor(Entity):
-  DENSITY   = 100.
+  DENSITY   = 200.
   MODELS    = ["Meteor1.x", "Meteor2.x"]
 
   
@@ -70,7 +71,7 @@ class Meteor(Entity):
 
     self.transform = eRacer.CreateMatrix()
 
-    self.physics = eRacer.Box(True, self.DENSITY*self.scale*self.scale*self.scale, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
+    self.physics = eRacer.Box(True, self.DENSITY*self.scale*self.scale, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
     self.physics.SetGroup(eRacer.METEOR)
     self.physics.SetId(self.id)
     
@@ -88,11 +89,12 @@ class Meteor(Entity):
     return True
     
   def hitTrack(self,force):
-    if(self.scale<2.5):
+    if(self.scale > 1.0 and self.scale<3.5):
       self.physics.PutToSleep()
       direction = normalized(force)
       pos = self.physics.GetPosition()-direction*self.scale
-      
+      #self.physics.SetVelocity(Vector3(0,0,0))
+      #self.physics.SetAngVelocity(Vector3(0,0,0));
       self.physics.SetPosition(pos)
         
     
@@ -104,6 +106,12 @@ class Meteor(Entity):
   def randomDirection(self):
     u = random.uniform
     return normalized(Vector3(u(-1.,1.),u(-1.,1.),u(-1.,1.)))
+    
+  def scatter(self, point, scattering):
+    u = random.uniform
+    point.x *= 1.+u(-scattering, scattering)
+    point.y *= 1.+u(-scattering, scattering)
+    point.z *= 1.+u(-scattering, scattering)    
 
 class RandomMeteor(Meteor):
   SPAWNING_DISTANCE = 600.
@@ -134,9 +142,7 @@ class RandomMeteor(Meteor):
     
     velocity = direction * -(u(self.MIN_SPEED, self.MAX_SPEED)/math.sqrt(self.scale))
 
-    velocity.x *= 1.+u(-self.SCATTERING, self.SCATTERING)
-    velocity.y *= 1.+u(-self.SCATTERING, self.SCATTERING)
-    velocity.z *= 1.+u(-self.SCATTERING, self.SCATTERING)
+    self.scatter(velocity, self.SCATTERING)
     
     angular_velocity = self.randomDirection() * self.TUMBLING
    
@@ -147,10 +153,11 @@ class RandomMeteor(Meteor):
   
 class AimedMeteor(Meteor):
   #in seconds
-  AIR_TIME = 3.
+  AIR_TIME = 1.
   
   # between 0 and 1 
-  SCATTERING = 0.0
+  DIR_SCATTERING = 0.5
+  POS_SCATTERING = 0.2
   
   MIN_SPEED = 50
   MAX_SPEED = 80
@@ -160,24 +167,34 @@ class AimedMeteor(Meteor):
   # between 0 and the radius of the meteor
   TUMBLING = 0.3
   
-  def __init__(self,scene,aim):
+  def __init__(self,scene,aim,direction):
     u = random.uniform
     Meteor.__init__(self,scene,u(self.MIN_SIZE, self.MAX_SIZE))
     
-    direction = Vector3(0,-1,0)
-    direction.x *= 1.+u(-self.SCATTERING, self.SCATTERING)
-    direction.y *= 1.+u(-self.SCATTERING, self.SCATTERING)
-    direction.z *= 1.+u(-self.SCATTERING, self.SCATTERING)
-
+    self.scatter(direction,self.DIR_SCATTERING)
+    
     velocity = direction * u(self.MIN_SPEED, self.MAX_SPEED)
     
     position = aim - velocity * self.AIR_TIME
+
+    self.scatter(position, self.POS_SCATTERING)
 
     angular_velocity = self.randomDirection() * self.TUMBLING    
         
     self.physics.SetTransform(Matrix(position))
     self.physics.SetVelocity(velocity)
     self.physics.SetAngVelocity(angular_velocity)    
+  
+  
+  def reset(self):
+    return False
+
+
+class TargetedMeteor(AimedMeteor):  
+  def __init__(self,scene,target):
+    aim = eRacer.ExtractPosition(target.transform)+target.velocity*1.2
+    down = mul0(target.transform, Vector3(0,-1,0))
+    AimedMeteor.__init__(self,scene,aim,down)
   
   
   def reset(self):

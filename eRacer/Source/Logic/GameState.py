@@ -6,6 +6,7 @@ from Game.State     import State
 
 from GameMapping    import GameMapping
 from MenuState      import PauseMenuState
+from GameEndState   import GameEndState
 
 # Entities
 from Box        import Box
@@ -14,6 +15,7 @@ from Plane      import Plane
 from Track      import Track
 from Ship       import Ship
 from Vehicle    import Vehicle
+from Prop       import Prop
 from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
 from Starfield  import Starfield
 from Meteor     import Meteor, MeteorManager
@@ -38,7 +40,6 @@ from Graphics.Sprite  import Sprite
 class LoadingState(State):
   def __init__(self, func):
     State.__init__(self)    
-        
     def load():
       # do loading function
       func()
@@ -69,6 +70,11 @@ class GameState(State):
   def __init__(self):
     State.__init__(self)
     self.loaded = False
+    
+    self.laps   = 2 # TODO CONST
+    self.stats  = {}
+    self.gameOver = False
+    
     self.load()
     
   def Activate(self):
@@ -101,34 +107,32 @@ class GameState(State):
     self.arrow2 = Arrow(scene)
     game().logic.Add(self.arrow2)
     
-    # for i in xrange(200):
-    #   f = self.track.GetFrame(i*50.0)
-    #   p = Point3(f.position.x, f.position.y, f.position.z)
-    #   print p
-    #   game().logic.Add(Arrow(scene, p))
+    forwardMat = Matrix(ORIGIN,  PI/2.0, 0, 0)
     
-    
-    self.player = Vehicle(self.scene, self.track, Point3(0, 10, 0))
+    self.player = Vehicle("Player", self.scene, self.track, Point3(   0, 15,  0), forwardMat)
     self.player.behavior = PlayerBehavior(self.player)
+    game().logic.Add(self.player)
   
-    self.ai1    = Vehicle(self.scene, self.track, Vector3( 2, 3, 10), 'Racer2.x')
+    self.ai1    = Vehicle("AI1",    self.scene, self.track, Point3(  15, 15,  0), forwardMat, 'Racer2.x')
     self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
+    game().logic.Add(self.ai1) 
 
-    # self.ai2    = Vehicle(self.scene, self.track, Vector3(-2, 3, 10), 'Racer5.x')
-    # self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
-
+    self.ai2    = Vehicle("AI2",    self.scene, self.track, Point3(  30, 15,  0), forwardMat, 'Racer5.x')
+    self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
+    game().logic.Add(self.ai2)
+    
+    startFrame = self.track.GetFrame(0.0)
+    
+    # TODO: this should load "StartLine.x" but it is not appearing properly
+    game().logic.Add(Prop(self.scene, 'Ship1.x', Matrix(10, 10, 10) * Matrix(startFrame.position, startFrame.up, startFrame.fw)))
+    
     def CarTrackCollisionEvent(car, track, force):
-      print 'CAR-TRACK:', car, track, force
+      pass
+      # print 'CAR-TRACK:', car, track, force
       # if length(force):
       #   game().simspeed = 0.0
       
     game().event.Register(CarTrackCollisionEvent)
-    
-    
-    game().logic.Add(self.player)
-
-    game().logic.Add(self.ai1)
-    # game().logic.Add(self.ai2)
 
     self.views = []
     self.viewIndex = 0
@@ -161,13 +165,13 @@ class GameState(State):
     self.meteorManager = MeteorManager(self.scene)
     game().logic.Add(self.meteorManager)
 
-    for i in range(0):
+    for i in range(CONSTS.NUM_METEORS):
       m = self.meteorManager.spawnRandom()
       game().logic.Add(m)
     
     self.lastMeteorTime = 0
     
-      
+    
     # self.sound = eRacer.SoundFx();
     # self.sound.looping  = True
     # self.sound.is3D     = False
@@ -191,17 +195,46 @@ class GameState(State):
     # TODO camera velocity
     game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
     
-    # _time.sleep(1/100.)
+    _time.sleep(CONSTS.SLEEP_TIME)
     
     State.Tick(self, time)
     game().graphics.views.append(self.view)
     
-    # self.lastMeteorTime += time.game_delta
-    # if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
-    #   self.lastMeteorTime = 0
-    #   m = self.meteorManager.spawnAimed(eRacer.ExtractPosition(self.player.transform))
-    #   game().logic.Add(m)
+    if self.player.lapcount:
+      playerLaps = min(self.player.lapcount, self.laps)
+      
+      game().graphics.graphics.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
+      game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
+      game().graphics.graphics.WriteString("%d" % (self.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
+    
+      l = list(self.stats.get(self.player,[0.]))
+      l.append(game().time.get_seconds())
+      
+      y = 100
+      for i,t in enumerate(l):
+        if not i or i>self.laps: continue
+        game().graphics.graphics.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
+        game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
+        y += 15    
+    
+    if not self.gameOver:
+      self.lastMeteorTime += time.game_delta
+      if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
+        self.lastMeteorTime = 0
+        m = self.meteorManager.spawnTargeted(self.player)
+        game().logic.Add(m)
+
   
+  def LapEvent(self, vehicle, lap):
+    self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+    
+    if lap == self.laps+1:
+      if vehicle == self.player:
+        self.gameOver = True
+        game().PushState(GameEndState(self.stats))
+        
+      vehicle.Brake(1)
+        
       
   def CameraChangedEvent(self):
     self.viewIndex = (self.viewIndex+1) % len(self.views)

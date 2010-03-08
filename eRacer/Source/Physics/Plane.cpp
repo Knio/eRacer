@@ -1,4 +1,14 @@
-#include "Plane.h"
+/**
+ * @file Plane.cpp
+ * @brief Implementation of the Plane class
+ *
+ * @date 22.01.2010
+ * @author: Michael Blackadar
+ */
+ 
+ #include "Plane.h"
+
+
 namespace Physics{
 
 Plane::Plane(float distOrigin, const Vector3& normal){
@@ -22,8 +32,5 @@ Plane::Plane(float distOrigin, const Vector3& normal){
 
 }
 
-Plane::~Plane(){
-
-}
 
 }

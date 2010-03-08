@@ -58,8 +58,8 @@ protected:
 	 *
 	 * @param camera
 	 *			The camera to cull against
-	 * @param visibleNodes
-	 * 			A vector to push all visible nodes to
+	 * @param visibleRenderables
+	 * 			A vector to push all visible renderables to
 	 */
 	virtual void cullRecursive(const Camera& camera, vector<const Renderable*>& visibleRenderables) const = 0;
 	string name_;	

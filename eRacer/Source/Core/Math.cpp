@@ -64,6 +64,11 @@ Vector3 project(const Vector3 &a, const Vector3 &b)
 {
 	return b * (dot(a,b) / dot(b,b));
 }
+Vector3 projectOnto(const Vector3 &v, const Vector3 &normal)
+{
+	return v - normal*dot(v, normal);
+}
+
 
 Vector3 normalized(const Vector3& A){
 	Vector3 result;
@@ -121,6 +126,20 @@ Matrix CreateMatrix(const Point3& position, float angle, const Vector3& axis, fl
 	D3DXMatrixMultiply(&m1, &result, &m2);
 	D3DXMatrixTranslation(&m2, position.x,position.y,position.z); 
 	return *D3DXMatrixMultiply(&result, &m1, &m2);
+}
+
+Matrix CreateMatrix(const Point3& position, const Vector3& up, const Vector3& fw)
+{
+	Vector3 ap = position;
+	Vector3 az = normalized(fw);      
+	Vector3 ax = normalized(cross(up, az));
+	Vector3 ay = cross(az, ax);
+	return  Matrix(
+		ax.x, ax.y, ax.z,   0,
+		ay.x, ay.y, ay.z,   0,
+		az.x, az.y, az.z,   0,
+		ap.x, ap.y, ap.z,   1
+	);
 }
 
 Matrix CreateMatrix(const Point3& position, float yaw, float pitch, float roll, float scaleX, float scaleY, float scaleZ){

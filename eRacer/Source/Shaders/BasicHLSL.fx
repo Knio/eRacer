@@ -11,10 +11,12 @@
 const float4 g_MaterialAmbientColor;      // Material's ambient color
 const float4 g_MaterialDiffuseColor;      // Material's diffuse color
 const texture g_MeshTexture;              // Color texture for mesh
+const float g_FadeValue;
 
 const float4x4 g_ProjectionMatrix;
 const float4x4 g_ViewMatrix;
 const float4x4 g_WorldMatrix;
+
 
 //--------------------------------------------------------------------------------------
 // Texture samplers
@@ -23,11 +25,10 @@ sampler MeshTextureSampler =
 sampler_state
 {
     Texture = <g_MeshTexture>;
-    MipFilter = LINEAR;
-    MinFilter = LINEAR;
+    MipFilter = ANISOTROPIC;
+    MinFilter = ANISOTROPIC;
     MagFilter = LINEAR;
 };
-
 
 //--------------------------------------------------------------------------------------
 // Vertex shader output structure
@@ -71,7 +72,7 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
     float3 calcAmbient = g_MaterialAmbientColor * lightAmbientColor; 
     
     Output.Diffuse.rgb = calcDiffuse + calcAmbient;
-    Output.Diffuse.a = 1.0f; 
+    Output.Diffuse.a = g_FadeValue; 
     
     // Just copy the texture coordinate through
     if( bTexture ) 
@@ -134,6 +135,7 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In,
     // Lookup mesh texture and modulate it with diffuse
     if( bTexture )
         Output.RGBColor = tex2D(MeshTextureSampler, In.TextureUV) * In.Diffuse;
+
     else
         Output.RGBColor = In.Diffuse;
     
@@ -148,7 +150,10 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In,
 technique RenderSceneWithTextureDefault
 {
     pass P0
-    {          
+    {      
+	  AlphaBlendEnable = true;
+	  SrcBlend = srcalpha;
+	  DestBlend = invsrcalpha;    
         VertexShader = compile vs_2_0 RenderSceneVS( true );
         PixelShader  = compile ps_2_0 RenderScenePS( true ); // trivial pixel shader (could use FF instead if desired)
     }

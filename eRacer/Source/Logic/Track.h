@@ -4,18 +4,25 @@
 #include "Graphics/GraphicsLayer.h"
 using namespace std;
 
-// TODO namespace
-
+/**
+ * @brief a namespace to hold code related to game logic
+ */
+namespace Logic {
+  
+/**
+ * @brief one coordinate frame 
+ */
 struct Frame
 {
   Point3  position;
   Vector3 up;
   Vector3 fw;
   float dist;
-  Frame(const Point3& p = ORIGIN, const Vector3& u=Y, const Vector3& f=X) : 
+  Frame(const Point3& p = ORIGIN, const Vector3& u=Y, const Vector3& f=X, float d=0.0) : 
     position(p), 
     up(u), 
-    fw(f) 
+    fw(f),
+    dist(d)
     { }
 };
 
@@ -52,6 +59,7 @@ public:
   void Add(const Frame &f);
   
   Frame GetFrame(float d);
+  Frame GetFrame(Point3 pos, float hint=-1);
   
   Point3 GetPositionAt(float d);
   Vector3 GetNormalAt(float d);
@@ -66,3 +74,4 @@ inline void Track::Add(const Frame &f)
    track.push_back(f);
 }
 
+}

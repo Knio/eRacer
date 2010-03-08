@@ -62,6 +62,7 @@ LRESULT Window::MsgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
     switch( msg )
     {
         case WM_DESTROY:
+			EVENT(QuitEvent());
             PostQuitMessage( 0 );
             return 0;
 
