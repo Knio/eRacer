@@ -64,10 +64,9 @@ class MainMenuState(MenuState):
     MenuState.__init__(self)
 
     logo = Quad(self.view,"eracerx_logo_negative.png")
-    game().logic.Add(logo)
-
     logo.scale(600,235,1)
     logo.set_translation(Point3(400,450,0))
+    game().logic.Add(logo)
     
     self.sound = eRacer.SoundFx();
     self.sound.looping = True
@@ -75,13 +74,14 @@ class MainMenuState(MenuState):
     self.sound.isPaused = False
     game().sound.sound.LoadSoundFx("Resources/Sounds/Terran5.ogg", self.sound)
         
-  def Menu_New_Game(self):
+  def Pause(self):
     self.sound.isPaused = True
     game().sound.sound.UpdateSoundFx(self.sound)
-    # game().PushState(GameState())
-    game().PushState(GameSelectState())
     
-        
+  def Menu_New_Game(self):
+    # game().PushState(GameState())
+    game().PushState(GameSelectState(self.view))
+    
   def Tick(self, time):
     p = Point3(500,350,0)
     for i in ['Don Ha', 'John Stuart', 'Michael Blackadar', 'Tom Flanagan', 'Ole Rehmsen']:
@@ -90,7 +90,7 @@ class MainMenuState(MenuState):
       )
       p = p + Point3(0, 30, 0)
     
-    MenuState.Tick(self, time)    
+    MenuState.Tick(self, time)
     
 class GameSelectState(MainMenuState):
   MENU = [
@@ -98,20 +98,35 @@ class GameSelectState(MainMenuState):
     ('Track 2',),
     ('Back',),
   ]
-
-  def __init__(self):
+  
+  def __init__(self, view):
     MenuState.__init__(self)
+    
+    self._view = self.view
+    
+    # image1 = Quad(self._view,"track1.png")
+    # image1.scale(600,235,1)
+    # image1.set_translation(Point3(400,450,0))
+    # game().logic.Add(image1)
+    
+    # image2 = Quad(self._view,"track2.png")
+    # image2.scale(600,235,1)
+    # image2.set_translation(Point3(400,450,0))
+    # game().logic.Add(image1)
+    
+    
+    self.view = view
   
   def Menu_Track_1(self):
+    self.parent.Pause()
     game().PushState(GameState('Track1'))
 
   def Menu_Track_2(self):
+    self.parent.Pause()
     game().PushState(GameState('Track2'))
     
   def Menu_Back(self):
     game().PopState()
-
-  
 
 class PauseMenuState(MenuState):
   MAPPING = PauseMenuMapping
@@ -125,9 +140,11 @@ class PauseMenuState(MenuState):
     
   def Activate(self):
     game().simspeed = 0.
-  
+    MenuState.Activate(self)
+    
   def Deactivate(self):
     game().simspeed = 1.
+    MenuState.Deactivate(self)
     
   def UnPauseEvent(self):
     game().PopState()
