@@ -39,6 +39,7 @@ class Vehicle(Entity):
     self.trackpos = -1.0
     self.track  = track
     self.name   = name
+    self.resetFrame = eRacer.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
     
     self.ReloadedConstsEvent()
     
@@ -343,6 +344,7 @@ class Vehicle(Entity):
     # reset the car
     if not crashed:
       self.crashtime = 0
+      self.resetFrame = frame
     else:
       self.crashtime += delta
     
@@ -426,8 +428,10 @@ class Vehicle(Entity):
         
   def resetCar(self):
     phys  = self.physics
-    phys.SetOrientation(self.INIT_ORIENT)
+    self.resetFrame.position = self.resetFrame.position + self.resetFrame.up * 3.0
+    orient = Matrix(self.resetFrame.position, self.resetFrame.up, self.resetFrame.fw)
+    phys.SetOrientation(orient)
     phys.SetAngVelocity(ORIGIN)
-    phys.SetVelocity(ORIGIN)
-    phys.SetPosition(self.INITIAL_POS)
+    phys.SetPosition(self.resetFrame.position)
+    phys.SetVelocity(self.resetFrame.fw * 10.0)
     
