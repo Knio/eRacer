@@ -147,6 +147,20 @@ The second category of meteors is targeted meteors. Those are relatively small m
 
 We have reworked the 3D sound code and finally actually put in some sound. The engine noise is pitching with the motor speed and adds to the realism of the game. 
 
+\section{Known issues}
+
+\subsection{Alpha blending order}
+
+The alpha blending for the blob shadow is not working properly if one flies off the track because the rendering is not happening in the correct order. This will be fixed by the next milestone.
+
+\subsection{Object Culling}
+
+Culling is currently disabled because there is a bug in the computation of the camera planes.
+
+\subsection{Fallback font}
+
+On some computers, loading our custom font causes a out of memory error (for unknown reasons). In this case we fall back to a system font.
+
 
 \section{Future work}
 \label{future-work}
