@@ -16,7 +16,9 @@ class GameMapping(Mapping):
     elif key == KEY.ESCAPE: return E.PauseEvent             (    )
     elif key == KEY.SPACE:  return E.PlayerBoostEvent		(	 )
     elif key == KEY.R:	    return E.ReloadConstsEvent		(    )
-
+    elif key == KEY.T:      return E.RespawnCarEvent        (    )
+    
+    
   def KeyReleasedEvent(self, key):
     if   key == KEY.W:     return E.PlayerAccelerateEvent ( 0)
     elif key == KEY.S:     return E.PlayerAccelerateEvent ( 0)

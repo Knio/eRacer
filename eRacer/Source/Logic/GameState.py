@@ -247,6 +247,8 @@ class GameState(State):
         
       vehicle.Brake(1)
         
+  def RespawnCarEvent(self):
+    self.player.resetCar()
       
   def CameraChangedEvent(self):
     self.viewIndex = (self.viewIndex+1) % len(self.views)
