@@ -1,8 +1,13 @@
 from Core.Globals import *
 
 TRACK = [	
-  eRacer.Frame(Point3(-1375,   0,   0), +X+Y+Z),
-  eRacer.Frame(Point3(-1375,-125, 500), +X-Z),
+  eRacer.Frame(Point3( -125,   0,   0), +Y),
+  eRacer.Frame(Point3( -375,   0,   0), -Z),
+  eRacer.Frame(Point3( -625,   0,   0), -Y),
+  eRacer.Frame(Point3( -875,   0,   0), +Z),
+  eRacer.Frame(Point3(-1125,   -75,   0), +Y),
+  eRacer.Frame(Point3(-1375,   -75,   0), +X+Y+Z),
+  eRacer.Frame(Point3(-1375,-125, 500), +X+Y-Z),
   eRacer.Frame(Point3( -750,-250, 500), -X+Y-Z),
   
   eRacer.Frame(Point3(-1000,-500,   0), +Y),
@@ -49,11 +54,6 @@ TRACK = [
   eRacer.Frame(Point3(  625,   0,   0), -Y),
   eRacer.Frame(Point3(  375,   0,   0), +Z),
   eRacer.Frame(Point3(  125,   0,   0), +Y),
-  eRacer.Frame(Point3( -125,   0,   0), +Y),
-  eRacer.Frame(Point3( -375,   0,   0), -Z),
-  eRacer.Frame(Point3( -625,   0,   0), -Y),
-  eRacer.Frame(Point3( -875,   0,   0), +Z),
-  eRacer.Frame(Point3(-1125,   0,   0), +Y),
 ]
 
 PROFILE = [
