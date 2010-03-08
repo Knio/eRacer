@@ -102,23 +102,23 @@ class GameState(State):
     self.track = Track(scene)
     game().logic.Add(self.track)
     
-    self.arrow1 = Arrow(scene)
-    game().logic.Add(self.arrow1)
-    self.arrow2 = Arrow(scene)
-    game().logic.Add(self.arrow2)
+    # self.arrow1 = Arrow(scene)
+    # game().logic.Add(self.arrow1)
+    # self.arrow2 = Arrow(scene)
+    # game().logic.Add(self.arrow2)
     
-    forwardMat = Matrix(ORIGIN,  PI/2.0, 0, 0)
+    forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
     
     self.player = Vehicle("Player", self.scene, self.track, Point3(   0, 15,  0), forwardMat)
     self.player.behavior = PlayerBehavior(self.player)
     game().logic.Add(self.player)
   
     self.ai1    = Vehicle("AI1",    self.scene, self.track, Point3(  15, 15,  0), forwardMat, 'Racer2.x')
-    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
+    self.ai1.behavior = AIBehavior(self.ai1, self.track)
     game().logic.Add(self.ai1) 
 
     self.ai2    = Vehicle("AI2",    self.scene, self.track, Point3(  30, 15,  0), forwardMat, 'Racer5.x')
-    self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
+    self.ai2.behavior = AIBehavior(self.ai2, self.track)
     game().logic.Add(self.ai2)
     
     startFrame = self.track.GetFrame(0.0)

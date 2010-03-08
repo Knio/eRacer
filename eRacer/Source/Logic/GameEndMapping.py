@@ -6,10 +6,17 @@ class GameEndMapping(Mapping):
     if   key == KEY.ESCAPE: return E.PauseEvent             (    )
     elif key == KEY.R:      return E.ReloadConstsEvent      (    )
     elif key == KEY.SPACE:  return E.PlayJaguarSoundEvent   (    )
+    elif key == KEY.UP:     return E.CameraAccelerateEvent  (+1.0)
+    elif key == KEY.DOWN:   return E.CameraAccelerateEvent  (-1.0)
+    elif key == KEY.LEFT:   return E.CameraStrafeEvent      (-1.0)
+    elif key == KEY.RIGHT:  return E.CameraStrafeEvent      (+1.0)
     elif key == KEY.C:      return E.CameraChangedEvent     (    )
 
   def KeyReleasedEvent(self, key):
-    pass    
+    if   key == KEY.UP:     return E.CameraAccelerateEvent (-1.0)
+    elif key == KEY.DOWN:   return E.CameraAccelerateEvent (+1.0)
+    elif key == KEY.LEFT:   return E.CameraStrafeEvent     (+1.0)
+    elif key == KEY.RIGHT:  return E.CameraStrafeEvent     (-1.0)
     
   def MouseMovedEvent(self, relX, relY):
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
