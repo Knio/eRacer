@@ -67,7 +67,7 @@ class LoadingState(State):
 
 class GameState(State):
   MAPPING = GameMapping
-  def __init__(self):
+  def __init__(self, track='Track1'):
     State.__init__(self)
     self.loaded = False
     
@@ -75,7 +75,7 @@ class GameState(State):
     self.stats  = {}
     self.gameOver = False
     
-    self.load()
+    self.load(track)
     
   def Activate(self):
     State.Activate(self)
@@ -89,7 +89,7 @@ class GameState(State):
     # game().sound.sound.UpdateSoundFx(self.sound)
     
     
-  def load(self):
+  def load(self, track):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
@@ -99,32 +99,44 @@ class GameState(State):
     # TODO
     # can we render a fake loading screen here until the real one works?
     
-    self.track = Track(scene)
+    self.track = Track(scene, track)
     game().logic.Add(self.track)
     
-    self.arrow1 = Arrow(scene)
-    game().logic.Add(self.arrow1)
-    self.arrow2 = Arrow(scene)
-    game().logic.Add(self.arrow2)
+    # self.arrow1 = Arrow(scene)
+    # game().logic.Add(self.arrow1)
+    # self.arrow2 = Arrow(scene)
+    # game().logic.Add(self.arrow2)
     
-    forwardMat = Matrix(ORIGIN,  PI/2.0, 0, 0)
+    frame = self.track.GetFrame(-30.0)
+    frametx = Matrix(frame.position, frame.up, frame.fw)
     
-    self.player = Vehicle("Player", self.scene, self.track, Point3(   0, 15,  0), forwardMat)
+    forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
+    
+    self.player = Vehicle("Player", self.scene, self.track, 
+      mul1(frametx, Point3(0, 4, 0)),
+      forwardMat
+    )
     self.player.behavior = PlayerBehavior(self.player)
     game().logic.Add(self.player)
   
-    self.ai1    = Vehicle("AI1",    self.scene, self.track, Point3(  15, 15,  0), forwardMat, 'Racer2.x')
-    self.ai1.behavior = AIBehavior(self.ai1, self.track, self.arrow1)
-    game().logic.Add(self.ai1) 
+    self.ai1    = Vehicle("AI1",    self.scene, self.track, 
+      mul1(frametx, Point3(-15, 4, 0)),
+      forwardMat, 'Racer2.x'
+    )
+    self.ai1.behavior = AIBehavior(self.ai1, self.track)
+    game().logic.Add(self.ai1)
 
-    self.ai2    = Vehicle("AI2",    self.scene, self.track, Point3(  30, 15,  0), forwardMat, 'Racer5.x')
-    self.ai2.behavior = AIBehavior(self.ai2, self.track, self.arrow2)
+    self.ai2    = Vehicle("AI2",    self.scene, self.track, 
+      mul1(frametx, Point3(+15, 4, 0)),
+      forwardMat, 'Racer5.x'
+    )
+    self.ai2.behavior = AIBehavior(self.ai2, self.track)
     game().logic.Add(self.ai2)
     
     startFrame = self.track.GetFrame(0.0)
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
-    game().logic.Add(Prop(self.scene, 'Ship1.x', Matrix(10, 10, 10) * Matrix(startFrame.position, startFrame.up, startFrame.fw)))
+    game().logic.Add(Prop(self.scene, 'finish_line.x', Matrix(Point3(0,.2,-3),0,0,0,30, 1, 3) * Matrix(startFrame.position, startFrame.up, startFrame.fw)))
     
     def CarTrackCollisionEvent(car, track, force):
       pass
@@ -172,11 +184,11 @@ class GameState(State):
     self.lastMeteorTime = 0
     
     
-    # self.sound = eRacer.SoundFx();
-    # self.sound.looping  = True
-    # self.sound.is3D     = False
-    # self.sound.isPaused = False
-    # game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
+    self.sound = eRacer.SoundFx();
+    self.sound.looping  = True
+    self.sound.is3D     = False
+    self.sound.isPaused = False
+    game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
     
     game().time.Zero()
     self.loaded = True
@@ -235,6 +247,8 @@ class GameState(State):
         
       vehicle.Brake(1)
         
+  def RespawnCarEvent(self):
+    self.player.resetCar()
       
   def CameraChangedEvent(self):
     self.viewIndex = (self.viewIndex+1) % len(self.views)

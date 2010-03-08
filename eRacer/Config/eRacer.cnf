@@ -13,7 +13,7 @@ PHYS_SKIN_WIDTH = 0.05
 NUM_METEORS     = 20
 TRACK_DEBUG     = 0
 
-CAR_DEBUG       = 0
+CAR_DEBUG       = 2
 CAR_MASS        = 5000.0
 CAR_GRAVITY     = 100.0
 

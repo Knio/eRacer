@@ -1,4 +1,5 @@
 from Core.Globals import *
+from Prop import Prop
 class Vehicle(Entity):
   SIZE    = Vector3(2.5, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
@@ -37,8 +38,11 @@ class Vehicle(Entity):
     self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = -1.0
-    self.track  = track
-    self.name   = name
+    self.track    = track
+    self.name     = name
+    self.resetFrame = eRacer.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
+    self.shadow = Prop(scene, 'shadow.x', IDENTITY)
+    game().logic.Add(self.shadow)
     
     self.ReloadedConstsEvent()
     
@@ -175,6 +179,13 @@ class Vehicle(Entity):
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
     
+    #Shadow
+    shadowPos = projectOnto(worldpos - frame.position, up) + frame.position + up*0.3
+    shadowUp = up
+    shadowFrame = fw 
+    shadowTrans = Matrix(1, 1, 1) * Matrix(shadowPos, shadowUp, shadowFrame)
+    self.shadow.tx = shadowTrans
+
     
     self.sound.pitch = max(50000, int(50000 * length(vel) / 60.0))
     if self.crashtime > 0:
@@ -200,6 +211,9 @@ class Vehicle(Entity):
       worldsuspoint   = mul1(tx, localsuspoint)
       # dist = dist = game().physics.physics.Raycast(worldsuspoint, dir, worldroadnormal) - upamount
       dist = dot(up, (worldsuspoint - frame.position)) - upamount
+      if length(worldsuspoint - frame.position) > 26:
+        dist = 1e99
+      
       disp = (self.DISPLACEMENT - dist)
 
       # use track normal and not physx
@@ -340,6 +354,7 @@ class Vehicle(Entity):
     # reset the car
     if not crashed:
       self.crashtime = 0
+      self.resetFrame = frame
     else:
       self.crashtime += delta
     
@@ -355,6 +370,13 @@ class Vehicle(Entity):
 
 
     self.boosting = max(0, self.boosting - delta)
+
+    if self.boosting > 0:
+      game().graphics.graphics.WriteString(
+      "BOOST %2.2f" % (self.boosting),
+      "Verdana", 50, Point3(255,500,0)
+      )
+
 
     self.transform = tx
     self.velocity = phys.GetVelocity()
@@ -422,9 +444,12 @@ class Vehicle(Entity):
     
         
   def resetCar(self):
+    print 'Reset Car'
     phys  = self.physics
-    phys.SetOrientation(self.INIT_ORIENT)
+    self.resetFrame.position = self.resetFrame.position + self.resetFrame.up * 3.0
+    orient = Matrix(self.resetFrame.position, self.resetFrame.up, self.resetFrame.fw)
+    phys.SetOrientation(orient)
     phys.SetAngVelocity(ORIGIN)
-    phys.SetVelocity(ORIGIN)
-    phys.SetPosition(self.INITIAL_POS)
+    phys.SetPosition(self.resetFrame.position)
+    phys.SetVelocity(self.resetFrame.fw * 10.0)
     
