@@ -99,7 +99,7 @@ class GameState(State):
     # TODO
     # can we render a fake loading screen here until the real one works?
     
-    self.track = Track(scene)
+    self.track = Track(scene, 'Track1')
     game().logic.Add(self.track)
     
     # self.arrow1 = Arrow(scene)
