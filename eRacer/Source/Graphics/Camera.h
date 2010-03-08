@@ -37,13 +37,15 @@ public:
 	 * 45 degrees (PI/4 radiants).
 	 *
 	 * @param position
-	 * 			the eye point of the camera - default: (0,0,0)
+	 * 			the eye point of the camera - default: (0,0,-1)
 	 * @param lookAt
-	 * 			the point the camera should point at - default: (0,0,1)
+	 * 			the point the camera should point at - default: (0,0,0)
 	 * @param approxUp
 	 * 			a vector that approximates the up direction. The actual up vector
 	 * 			will be the closest vector that is perpedicular to the view direction
 	 * 			- default: (0,1,0)
+	 * @param perspective
+	 *			true for perspective projection, false for orthographic
 	 */
 	Camera(const Point3& position = -Z, const Point3& lookAt = ORIGIN, const Vector3& approxUp=Y, bool perspective = true);
 
@@ -59,14 +61,17 @@ public:
 	 * computed only once.
 	 *
 	 * @param position
-	 * 			the eye point of the camera
+	 * 			the eye point of the camera - default: (0,0,-1)
 	 * @param lookAt
-	 * 			the point the camera should point at
+	 * 			the point the camera should point at - default: (0,0,0)
 	 * @param approxUp
 	 * 			a vector that approximates the up direction. The actual up vector
 	 * 			will be the closest vector that is perpedicular to the view direction
+	 *			- default: (0,1,0)
+	 * @param perspective
+	 *			true for perspective projection, false for orthographic
 	 */
-	void SetFrame(const Point3& position=ORIGIN, const Point3& lookAt=Z, const Vector3& approxUp=Y, bool perspective = TRUE);
+	void SetFrame(const Point3& position=-Z, const Point3& lookAt=ORIGIN, const Vector3& approxUp=Y, bool perspective = TRUE);
 
 	/**
 	 * @brief set position
