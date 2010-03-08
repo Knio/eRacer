@@ -130,7 +130,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 
 
 // Logic
-%template(VectorTrackVertex) std::vector<TrackVertex>;
+%template(VectorTrackVertex) std::vector<Logic::TrackVertex>;
 %include "..\Logic\Track.h"
 
 // Graphics ***************************

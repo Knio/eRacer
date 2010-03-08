@@ -14,6 +14,9 @@
 
 namespace Graphics {
 
+/**
+ * @brief An enumeration to refer to the frustum planes in the planes array
+ */
 enum PlaneIndex {
 	PI_LEFT,
 	PI_RIGHT,
@@ -74,6 +77,12 @@ public:
 	void SetFrame(const Point3& position=-Z, const Point3& lookAt=ORIGIN, const Vector3& approxUp=Y, bool perspective = TRUE);
 
 	/**
+	 * @brief get the position of the camera's eye point
+	 * @return the camera's  eye point
+	 */
+	const Point3& GetPosition() const;
+
+	/**
 	 * @brief set position
 	 *
 	 * This method will trigger recomputation of the up vector to make sure it is still
@@ -85,6 +94,16 @@ public:
 	void SetPosition(const Point3& position);
 
 	/**
+	 * @brief get a point that the camera is looking at 
+	 *
+	 * This point is not unique! This method returns a point on the line starting
+	 * at the eye point and pointing in direction of the cameras direction.
+	 * @return a point the camera is looking straight at
+	 */
+	const Point3& GetLookAt() const;
+
+
+	/**
 	 * @brief set point where the camera should look at
 	 *
 	 * This method will trigger recomputation of the up vector to make sure it is still
@@ -94,6 +113,13 @@ public:
 	 * 			the point the camera should point at
 	 */
 	void SetLookAt(const Point3& lookAt);
+
+	/**
+	 * @brief getter for the up vector
+	 *
+	 * @return the camera's up vector
+	 */
+	const Vector3& GetUp() const;
 
 	/**
 	 * @brief set the up vector
@@ -117,6 +143,10 @@ public:
 	 */
 	void SetNear(float near);
 
+	/**
+	 * @brief Getter for the distance of the far plane
+	 * @return the distance from the camera position to the far plane
+	 */
 	float GetFar() const;
 
 	/**
@@ -176,6 +206,15 @@ public:
 	const Matrix& GetViewMatrix() const;
 
 	/**
+	 * @brief Setter for the view matrix
+	 *
+	 * Position, look at point and up vector are computed accordingly
+	 *
+	 * @brief viewMatrix the new view matrix to use
+	 */
+	void SetViewMatrix(const Matrix& viewMatrix);
+	
+	/**
 	 * @brief get the projection matrix
 	 *
 	 * It is guaranteed that the projection matrix is always current.
@@ -202,19 +241,10 @@ public:
 	 */
 	const Plane& GetPlane(int planeIndex) const;
 	
-	const Point3& GetPosition() const 	{ return position_; }
-	const Point3& GetLookAt() 	const 	{ return lookAt_; }
-	const Point3& GetUp() 			const 	{ return up_; }
+
 	
-	void SetViewMatrix(const Matrix& viewMatrix);
 
 protected:
-	Point3 position_;
-	Point3 lookAt_;
-	Vector3 approxUp_;
-	Vector3 up_;
-
-private:
 	void UpdateView();
 	void UpdateProjection();
 	void UpdatePlanes();
@@ -224,7 +254,11 @@ private:
 	Matrix projectionMatrix_;
 
 
-
+	Point3 position_;
+	Point3 lookAt_;
+	Vector3 approxUp_;
+	Vector3 up_;
+	
 	float near_;
 	float far_;
 	float aspectRatio_;
@@ -270,6 +304,19 @@ inline const Matrix& Camera::GetViewMatrix() const{
 inline const Matrix& Camera::GetProjectionMatrix() const{
 	return projectionMatrix_;
 }
+
+inline const Point3& Camera::GetPosition() const { 
+	return position_; 
+}
+
+inline const Point3& Camera::GetLookAt() const { 
+	return lookAt_; 
+}
+
+inline const Vector3& Camera::GetUp() const { 
+	return up_; 
+}
+
 
 };
 

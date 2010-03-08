@@ -4,8 +4,14 @@
 #include "Graphics/GraphicsLayer.h"
 using namespace std;
 
-// TODO namespace
-
+/**
+ * @brief a namespace to hold code related to game logic
+ */
+namespace Logic {
+  
+/**
+ * @brief one coordinate frame 
+ */
 struct Frame
 {
   Point3  position;
@@ -68,3 +74,4 @@ inline void Track::Add(const Frame &f)
    track.push_back(f);
 }
 
+}

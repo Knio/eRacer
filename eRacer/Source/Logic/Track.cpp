@@ -1,6 +1,9 @@
 #include "Track.h"
 #include "Core/Consts.h"
+#include <float.h>
 extern Constants CONSTS;
+
+namespace Logic {
 
 Frame Track::GetFrame(float d)
 {
@@ -40,7 +43,7 @@ Frame Track::GetFrame(Point3 pos, float hint)
   int n = track.size();
   if (hint == -1 || length(pos - track[i2].position) > 30)
   {
-    float mint = 1e99;
+    float mint = FLT_MAX;
     for (int i=0;i<n;i+=16)
     {
       float t = length(pos - track[i].position);
@@ -262,4 +265,7 @@ ID3DXMesh* Track::CreateMesh(const vector<TrackVertex>& profile)
   mesh->SetAttributeTable(&att, 1);
   
   return mesh;
+}
+
+
 }
