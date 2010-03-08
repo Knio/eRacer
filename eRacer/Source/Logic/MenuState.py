@@ -61,7 +61,7 @@ class MainMenuState(MenuState):
   def __init__(self):
     MenuState.__init__(self)
 
-    logo = Sprite(self.view)
+    logo = Sprite(self.view,"eracerx_logo_negative.png")
     game().logic.Add(logo)
 
     logo.scale(600,235,1)

@@ -1,13 +1,13 @@
 from Core.Globals import *
 
 class Sprite(eRacer.Sprite,Entity):
-  def __init__(self, view):
+  def __init__(self, view, texture):
     Entity.__init__(self)
     eRacer.Sprite.__init__(self)
     self.transform = Matrix()
   
         
-    t = game().io.LoadTexture("eracerx_logo_negative.png")   
+    t = game().io.LoadTexture(texture)   
     self.Init(t)
     view.AddRenderable(self)
             
