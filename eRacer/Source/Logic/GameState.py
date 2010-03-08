@@ -114,17 +114,17 @@ class GameState(State):
     
     self.player = Vehicle("Player", self.scene, self.track, 
       mul1(frametx, Point3(0, 4, 0)),
-      frametx
+      forwardMat
     )
     self.player.behavior = PlayerBehavior(self.player)
     game().logic.Add(self.player)
   
     self.ai1    = Vehicle("AI1",    self.scene, self.track, 
       mul1(frametx, Point3(-15, 4, 0)),
-      frametx, 'Racer2.x'
+      forwardMat, 'Racer2.x'
     )
     self.ai1.behavior = AIBehavior(self.ai1, self.track)
-    game().logic.Add(self.ai1) 
+    game().logic.Add(self.ai1)
 
     self.ai2    = Vehicle("AI2",    self.scene, self.track, 
       mul1(frametx, Point3(+15, 4, 0)),
