@@ -371,6 +371,13 @@ class Vehicle(Entity):
 
     self.boosting = max(0, self.boosting - delta)
 
+    if self.boosting > 0:
+      game().graphics.graphics.WriteString(
+      "BOOST %2.2f" % (self.boosting),
+      "Verdana", 50, Point3(255,500,0)
+      )
+
+
     self.transform = tx
     self.velocity = phys.GetVelocity()
     self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * tx)
