@@ -1,6 +1,6 @@
 /**
- * @file Sprite.h
- * @brief Definition of the Sprite class
+ * @file Quad.h
+ * @brief Definition of the Quad class
  *
  * @date 21.02.2010
  * @author: Ole Rehmsen
@@ -16,7 +16,7 @@ namespace Graphics{
 /**
  * @brief a textured quad with a location, rotation and scaling in space
  */
-class Sprite : public Renderable {
+class Quad : public Renderable {
 	struct Vertex {
 		Point3 position;
 		//DWORD color;
@@ -30,15 +30,15 @@ public:
 	/**
 	 * @brief Constructor
 	 */
-	Sprite();
+	Quad();
 
 	/**
 	 * @brief destructor stub
 	 */
-	virtual ~Sprite() {};
+	virtual ~Quad() {};
 
 	/**
-	 * @brief initialize this sprite. Can be overidden by subclasses
+	 * @brief initialize this quad. Can be overidden by subclasses
 	 *
 	 * @param texture
 	 *			a pointer to the texture to put on the sprite
@@ -72,7 +72,7 @@ protected:
 	IDirect3DVertexBuffer9* vertexBuffer_;
 };
 
-inline void Sprite::SetTransform(const Matrix& transform){
+inline void Quad::SetTransform(const Matrix& transform){
 	transform_ = transform;
 }
 

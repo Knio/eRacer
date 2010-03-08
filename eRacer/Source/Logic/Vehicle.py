@@ -169,7 +169,9 @@ class Vehicle(Entity):
       if delta: phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
     
     vel = phys.GetLocalPointWorldVelocity(ORIGIN)
-    self.sound.isPaused = False
+    
+    self.sound.isPaused = delta==0
+    
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
     

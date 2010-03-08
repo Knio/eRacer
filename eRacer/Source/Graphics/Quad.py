@@ -1,9 +1,9 @@
 from Core.Globals import *
 
-class Sprite(eRacer.Sprite,Entity):
+class Quad(eRacer.Quad,Entity):
   def __init__(self, view, texture):
     Entity.__init__(self)
-    eRacer.Sprite.__init__(self)
+    eRacer.Quad.__init__(self)
     self.transform = Matrix()
   
         

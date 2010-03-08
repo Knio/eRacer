@@ -1,18 +1,18 @@
 /**
- * @file Sprite.cpp
- * @brief Implementation of the Sprite class
+ * @file Quad.cpp
+ * @brief Implementation of the Quad class
  *
  * @date 21.02.2010
  * @author: Ole Rehmsen
  */
 
-#include "Sprite.h"
+#include "Quad.h"
 
 #include "GraphicsLayer.h"
 
 namespace Graphics {
 
-Sprite::Sprite()
+Quad::Quad()
 : initialized(false)
 {
 	assert(SUCCEEDED(
@@ -55,13 +55,13 @@ Sprite::Sprite()
 	vertexBuffer_->Unlock();
 }
 
-void Sprite::Init(IDirect3DTexture9* texture){
+void Quad::Init(IDirect3DTexture9* texture){
 	assert(NULL != texture);
 	texture_ = texture;
 	initialized = true;
 }
 
-void Sprite::Draw(IDirect3DDevice9* device) const{
+void Quad::Draw(IDirect3DDevice9* device) const{
 	if(!initialized)
 		return;
 

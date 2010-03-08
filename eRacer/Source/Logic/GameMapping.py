@@ -15,7 +15,6 @@ class GameMapping(Mapping):
     elif key == KEY.RIGHT:  return E.CameraStrafeEvent      (+1.0)
     elif key == KEY.C:      return E.CameraChangedEvent     (    )
     elif key == KEY.ESCAPE: return E.PauseEvent             (    )
-    elif key == KEY.R:      return E.ReloadConstsEvent      (    )
     elif key == KEY.SPACE:  return E.PlayJaguarSoundEvent   (    )
 
   def KeyReleasedEvent(self, key):
@@ -29,7 +28,13 @@ class GameMapping(Mapping):
     elif key == KEY.LEFT:  return E.CameraStrafeEvent     (+1.0)
     elif key == KEY.RIGHT: return E.CameraStrafeEvent     (-1.0)
     
-    elif key == KEY.TAB:  CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
+    elif key == KEY.TAB:  
+		if CONSTS.CAR_DEBUG: 
+			print "DebugMode is On"
+			CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
+		else: 
+			print "DebugMode is OFf"
+			return E.ReloadConstsEvent()
     
     
   def MouseMovedEvent(self, relX, relY):
@@ -47,10 +52,16 @@ class GameMapping(Mapping):
     
   def GamepadButtonPressedEvent(self, button):
     if   button == eRacer.BUTTON_START:   return E.PauseEvent()
-    elif button == eRacer.BUTTON_A:       return E.ReloadConstsEvent()
+    elif button == eRacer.BUTTON_A:       return E.PlayerBoostEvent()
     elif button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(True)
     elif button == eRacer.BUTTON_Y:       return E.CameraChangedEvent()
-    elif button == eRacer.BUTTON_X:       CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
+    elif button == eRacer.BUTTON_X: 
+		if CONSTS.CAR_DEBUG: 
+			print "DebugMode is Off"
+			CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
+		else: 
+			print "DebugMode is On"
+			return E.ReloadConstsEvent()  
     
   def GamepadButtonReleasedEvent(self, button):
     if button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(False)
