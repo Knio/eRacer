@@ -64,9 +64,8 @@ class MainMenuState(MenuState):
     MenuState.__init__(self)
 
     logo = Quad(self.view,"eracerx_logo_negative.png")
-    logo.scale(600,235,1)
-    logo.set_translation(Point3(400,450,0))
     game().logic.Add(logo)
+    logo.transform = Matrix(Point3(400,450,0), 0,0,0, 600,235,1)
     
     self.sound = eRacer.SoundFx();
     self.sound.looping = True
