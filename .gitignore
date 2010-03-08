@@ -9,10 +9,10 @@ Thumbs.db
 .tmp/*
 *.pdf
 *.plist
-tex/*.aux
-tex/*.log
-tex/*.out
-tex/*.png
+eRacer/Latex/*.aux
+eRacer/Latex/*.log
+eRacer/Latex/*.out
+eRacer/Latex/*.synctex.gz
 .DS_Store
 .cproject
 .project
