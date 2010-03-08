@@ -1,4 +1,5 @@
 from Core.Globals import *
+from Prop import Prop
 class Vehicle(Entity):
   SIZE    = Vector3(2.5, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
@@ -40,6 +41,8 @@ class Vehicle(Entity):
     self.track    = track
     self.name     = name
     self.resetFrame = eRacer.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
+    self.shadow = Prop(scene, 'shadow.x', IDENTITY)
+    game().logic.Add(self.shadow)
     
     self.ReloadedConstsEvent()
     
@@ -176,6 +179,13 @@ class Vehicle(Entity):
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
     
+    #Shadow
+    shadowPos = projectOnto(worldpos - frame.position, up) + frame.position + up*0.3
+    shadowUp = up
+    shadowFrame = fw 
+    shadowTrans = Matrix(1, 1, 1) * Matrix(shadowPos, shadowUp, shadowFrame)
+    self.shadow.tx = shadowTrans
+
     
     self.sound.pitch = max(50000, int(50000 * length(vel) / 60.0))
     if self.crashtime > 0:
