@@ -136,7 +136,7 @@ class GameState(State):
     startFrame = self.track.GetFrame(0.0)
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
-    game().logic.Add(Prop(self.scene, 'Ship1.x', Matrix(10, 10, 10) * Matrix(startFrame.position, startFrame.up, startFrame.fw)))
+    game().logic.Add(Prop(self.scene, 'finish_line.x', Matrix(Point3(0,.2,-3),0,0,0,30, 1, 3) * Matrix(startFrame.position, startFrame.up, startFrame.fw)))
     
     def CarTrackCollisionEvent(car, track, force):
       pass
