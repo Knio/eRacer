@@ -67,7 +67,7 @@ class LoadingState(State):
 
 class GameState(State):
   MAPPING = GameMapping
-  def __init__(self):
+  def __init__(self, track='Track1'):
     State.__init__(self)
     self.loaded = False
     
@@ -75,7 +75,7 @@ class GameState(State):
     self.stats  = {}
     self.gameOver = False
     
-    self.load()
+    self.load(track)
     
   def Activate(self):
     State.Activate(self)
@@ -89,7 +89,7 @@ class GameState(State):
     # game().sound.sound.UpdateSoundFx(self.sound)
     
     
-  def load(self):
+  def load(self, track):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
@@ -99,7 +99,7 @@ class GameState(State):
     # TODO
     # can we render a fake loading screen here until the real one works?
     
-    self.track = Track(scene, 'Track1')
+    self.track = Track(scene, track)
     game().logic.Add(self.track)
     
     # self.arrow1 = Arrow(scene)

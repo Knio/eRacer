@@ -28,7 +28,9 @@ class MenuState(State):
     State.Tick(self, time)
     game().graphics.views.append(self.view)
     
-    
+    if not self.active:
+      return
+      
     y = 240
     for i,m in enumerate(self.MENU):
       name = m[0]
@@ -72,15 +74,13 @@ class MainMenuState(MenuState):
     self.sound.is3D = False
     self.sound.isPaused = False
     game().sound.sound.LoadSoundFx("Resources/Sounds/Terran5.ogg", self.sound)
-    
-  def Deactivate(self):
-    MenuState.Deactivate(self)
+        
+  def Menu_New_Game(self):
     self.sound.isPaused = True
     game().sound.sound.UpdateSoundFx(self.sound)
+    # game().PushState(GameState())
+    game().PushState(GameSelectState())
     
-    
-  def Menu_New_Game(self):
-    game().PushState(GameState())
         
   def Tick(self, time):
     p = Point3(500,350,0)
@@ -92,6 +92,26 @@ class MainMenuState(MenuState):
     
     MenuState.Tick(self, time)    
     
+class GameSelectState(MainMenuState):
+  MENU = [
+    ('Track 1',),
+    ('Track 2',),
+    ('Back',),
+  ]
+
+  def __init__(self):
+    MenuState.__init__(self)
+  
+  def Menu_Track_1(self):
+    game().PushState(GameState('Track1'))
+
+  def Menu_Track_2(self):
+    game().PushState(GameState('Track2'))
+    
+  def Menu_Back(self):
+    game().PopState()
+
+  
 
 class PauseMenuState(MenuState):
   MAPPING = PauseMenuMapping
@@ -122,5 +142,6 @@ class PauseMenuState(MenuState):
     )
     MenuState.Tick(self, time)
     self.parent.Tick(time)
-
+      
 from GameState  import GameState
+

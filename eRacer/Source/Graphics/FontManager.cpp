@@ -1,5 +1,8 @@
 #include "FontManager.h"
 #include <cassert>
+#include <stdexcept>
+
+using namespace std;
 
 
 namespace Graphics {
@@ -21,7 +24,10 @@ namespace Graphics {
 	}
 
 	void StringRenderable::Draw(IDirect3DDevice9*) const{
-		assert(NULL != m_pFont);
+		if(NULL == m_pFont){
+			cout << "oh noes" << endl;
+		}
+		//assert(NULL != m_pFont);
 		RECT area = {m_uiScreenX,m_uiScreenY,0,0};
 		m_pFont->DrawText( m_pTextSprite, m_strTextBuffer.c_str(), -1, &area, DT_NOCLIP, m_color);
 
@@ -71,9 +77,19 @@ namespace Graphics {
 		if ((font = m_fontCacheSimple.find(fontDesc)) == m_fontCacheSimple.end()) { //Cache Miss
 
 			ID3DXFont* newFont = NULL;
-			D3DXCreateFont( m_pd3dDevice, fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
+			HRESULT hr = D3DXCreateFont( m_pd3dDevice, fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
 									 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
                                      fontFamily, &newFont );
+			assert(D3DERR_INVALIDCALL != hr);
+			assert(D3DXERR_INVALIDDATA != hr);
+			
+			if(E_OUTOFMEMORY == hr){
+				cout << "Ran out of memory for custom font" << endl;
+				HRESULT hr = D3DXCreateFont( m_pd3dDevice, fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
+							 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+                             "Verdana", &newFont );
+				//throw runtime_error("Could not load font because we ran out of memory");
+			}
 
 			font = m_fontCacheSimple.insert(make_pair(fontDesc,newFont)).first;
 		}

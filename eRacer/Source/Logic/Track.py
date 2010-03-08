@@ -36,4 +36,3 @@ class Track(Entity, eRacer.Track):
      Entity.Tick(self, time)
 
      
-
