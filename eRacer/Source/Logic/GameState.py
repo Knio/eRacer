@@ -107,7 +107,7 @@ class GameState(State):
     self.arrow2 = Arrow(scene)
     game().logic.Add(self.arrow2)
     
-    forwardMat = Matrix(ORIGIN,  PI/2.0, 0, 0)
+    forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
     
     self.player = Vehicle("Player", self.scene, self.track, Point3(   0, 15,  0), forwardMat)
     self.player.behavior = PlayerBehavior(self.player)
