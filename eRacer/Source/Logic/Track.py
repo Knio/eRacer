@@ -1,5 +1,9 @@
 from Core.Globals import *
 
+import Track1
+import Track2
+
+
 class Track(Entity, eRacer.Track):
   def __init__(self, scene, name):
     Entity.__init__(self)
@@ -8,7 +12,13 @@ class Track(Entity, eRacer.Track):
     self.physics  = eRacer.TriMesh()
     self.graphics = scene.CreateStaticMeshNode("track")
     
-    track = __import__(name)
+    track = None
+    # track = __import__(name)
+    if name == 'Track1':
+      track = Track1
+    if name == 'Track2':
+      track = Track2
+    
     
     for i in track.TRACK:
       self.Add(i)
