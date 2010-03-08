@@ -5,7 +5,7 @@ import time
 sys.path.append(os.path.join(sys.path[0], 'Source'))
 sys.path.append(os.path.join(sys.path[0], 'Release'))
 sys.path.append(os.path.join(sys.path[0], 'Source\\Swig'))
-sys.path.append('.')
+sys.path.append(os.path.join(sys.path[0], 'Config'))
 
 # set path to load fmod.dll
 os.environ['PATH'] += ';Lib'

@@ -47,18 +47,19 @@ class AIBehavior(Behavior):
     cur = curFrame.position
     if self.arrow: self.arrow.position = Point3(cur.x, cur.y, cur.z)
     
-    game().graphics.graphics.WriteString(
-      "cur waypoint: " + str(cur),
-      "Verdana", 12, Point3(0,0,0)
-    )
-    game().graphics.graphics.WriteString(
-      "ai speed: " + str(self.parent.physics.GetSpeed()),
-      "Verdana", 12, Point3(0,10,0)
-    )
-    game().graphics.graphics.WriteString(
-      "state: " + str(self.curState),
-      "Verdana", 12, Point3(0,20,0)
-    )
+    # game().graphics.graphics.WriteString(
+    #   "cur waypoint: " + str(cur),
+    #   "Verdana", 12, Point3(0,0,0)
+    # )
+    # game().graphics.graphics.WriteString(
+    #   "ai speed: " + str(self.parent.physics.GetSpeed()),
+    #   "Verdana", 12, Point3(0,10,0)
+    # )
+    # game().graphics.graphics.WriteString(
+    #   "state: " + str(self.curState),
+    #   "Verdana", 12, Point3(0,20,0)
+    # )
+    
     tx    = self.parent.physics.GetTransform()
     bodyForward = mul0(tx, Z) # forward direction of body
     bodyRight = mul0(tx, X) #vector pointing right of body
