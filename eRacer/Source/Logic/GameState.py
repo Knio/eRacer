@@ -172,11 +172,11 @@ class GameState(State):
     self.lastMeteorTime = 0
     
     
-    # self.sound = eRacer.SoundFx();
-    # self.sound.looping  = True
-    # self.sound.is3D     = False
-    # self.sound.isPaused = False
-    # game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
+    self.sound = eRacer.SoundFx();
+    self.sound.looping  = True
+    self.sound.is3D     = False
+    self.sound.isPaused = False
+    game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
     
     game().time.Zero()
     self.loaded = True
