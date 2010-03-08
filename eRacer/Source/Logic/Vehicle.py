@@ -37,8 +37,8 @@ class Vehicle(Entity):
     self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = -1.0
-    self.track  = track
-    self.name   = name
+    self.track    = track
+    self.name     = name
     self.resetFrame = eRacer.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
     
     self.ReloadedConstsEvent()
