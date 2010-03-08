@@ -1,0 +1,310 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[pdftex]{hyperref} 
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{palatino}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{underscore}
+\restylefloat{figure}
+
+\setlength\oddsidemargin{4mm}
+\setlength\evensidemargin{4mm}
+\setlength\textwidth{16cm}
+
+\usepackage{fancyhdr}
+
+\usepackage{setspace}
+
+
+\onehalfspacing
+
+\pagestyle{fancy}
+% with this we ensure that the chapter and section
+% headings are in lowercase
+\renewcommand{\sectionmark}[1]{\markboth{\thesection.\ #1}{}}
+
+
+
+\hypersetup 
+{% 
+pdftitle = {eRacerX Milestone 3 Readme}, 
+pdfauthor = {Michael Blackadar, Tom Flanagan, Don Ha, Ole Rehmsen, John Stuart}, 
+pdfkeywords = {eRacerX, racing, boost},
+colorlinks={false},
+linkbordercolor={1 1 1}, % set to white
+citebordercolor={1 1 1}, % set to white 
+urlcolor=white % set to white 
+} 
+
+\setcounter{tocdepth}{2}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+% textsc is small caps
+\textsc{
+%
+University of Calgary\\
+Faculty of Science\\
+Department of Computer Science\\ 
+}
+\vspace{3cm}
+%
+% the title
+%
+{
+\includegraphics[width=12cm]{img/eRacerX-Logo.png}\\
+\textsc{
+\Huge
+Milestone 3 Readme
+}
+}
+\vspace{5mm}
+
+
+% \today is the compilation date
+\vspace{5mm}
+{
+ \today \\
+ \ \\
+ }
+%
+\vfill % fill vertical space
+%
+% Bottom of the page
+%
+\begin{flushright} 
+Michael Blackadar \\
+\vspace{3mm}
+Tom Flanagan\\
+\vspace{3mm}
+Don Ha\\
+\vspace{3mm}
+Ole Rehmsen\\
+\vspace{3mm}
+John Stuart
+\end{flushright}
+
+
+
+\end{center}
+\end{titlepage}
+
+\label{introduction}
+\section{Introduction}
+
+This document is meant to provide some information related to the release of milestone 3 of the space racing simulation \emph{eRacerX} by \emph{Wallsocket Studios}. Section \ref{design-decisions} points out major changes in the design as compared to the design document shipped with milestone 1 and the readme for milestone 2. Section \ref{new-features} discusses as selection of new features in milestone 3. Section \ref{future-work} outlines our plans for the milestone 4.
+
+General information that has been revised since the readme for milestone 2 such as the controls (Section \ref{controls}), building from source and running  the game (Section \ref{building-from-source}) has been moved to the appendix at the end of the document. 
+
+\section{Design decisions}
+\label{design-decisions}
+
+In this section we will highlight some deviations from the design document and the schedule distributed with milestone 1 and the readme distribueted with milestone 2 of \emph{eRacerX}.
+
+\subsection{Spline Track}
+
+After experiencing many problems with creating a smooth track that negatively affected both driving stability and rendering,
+we decided to model the track as a B-Spline curve with a track profile cruve. We currently use a subdivision algorithm to compute a
+closed curve and interpolate the normals at each point. We are, however, planning to extend the concept to open b-spline curves 
+to allow for discontinuities and jumps in the track. 
+
+\subsection{Car physics using multiple capsules instead of a simple box}
+
+To achieve a better fit and to make collisions with the wall less punishing we have replaced the simple box representing the shape of the car in milestone 2 by a composition of multiple capsules.   
+
+
+\section{New features}
+\label{new-features}
+
+Here is a list of some of the new features since milestone 2 that in our opinion deserve explicit mentioning.
+
+\subsection{Variable gravity direction}
+
+As planned, we have removed the global gravitational force and replaced it by an attractive force applied normal to the closest track segment.
+This allows for a very flexibel track design with up-side-down sections. The magnetism currently only acts on cars - meteors for example are not affected by it.
+
+\subsection{Improved camera}
+
+To achieve a better sense of speed and handle the up-side-down segments of the track better, we have changed the following camera to be mounted lower and focus on the road before the car instead of the car. We further changed it to use the road normal instead of a global normal as up vector but have it lagging behind enough to give a good feeling of the banking of the track.
+
+\subsection{AI}
+
+Milestone 3 features a basic AI that is able to race along the track. It uses waypoints extracted from the b-spline underlying the track and is able to back up in case it gets stuck.
+
+\subsection{Meteors}
+
+Also new are meteors that roam the skies around the track and potentially collide with each other, the track or the cars. The meteors can be devided into two categories: Random meteors that are relatively large, slow and cross an imaginary sphere around the whole track, getting respawned at a random location on the surface of the sphere as they leave the sphere in any direction. These meteors are purposely not spawned only around the player camera, as they may change the course of a race and for multiplayer should depend on where the camera is looking. 
+
+The second category of meteors is targeted meteors. Those are relatively small meteors that are aimed in front of the player car(s) and spawned every couple of seconds to force the player to react and change his route to avoid them.
+
+\subsection{3D sound}
+
+We have reworked the 3D sound code and finally actually put in some sound. The engine noise is pitching with the motor speed and adds to the realism of the game. 
+
+
+\section{Future work}
+\label{future-work}
+
+In this section we want to touch on a few topics that we want to work on until the next milestone.
+
+\subsection{Smarter AI}
+
+We want to improve the AI to be able to avoid obstacles and each other. We also want it to behave less predictable and more dynamic. LAstly it should use boost to its advantage.
+
+\subsection{Improved boost}
+
+The boost as it is implemented currently is very simple and unlimited. For the next milestone we want to have a limited amount of boost that can be restored using the mechanism described in the design document shipped with milestone 1. The amount of boost available should be displayed as part of the HUD. 
+
+\subsection{More complex track}
+
+The track in its current form already contains some of the features that we want to have in the game, namely loops, barrel rolls and up-side-down sections. The final track should contain even more features, such as jumps and cork screws, and additionally be a lot longer.
+
+\subsection{Props}
+
+The game still does not feel as fast as we would like it to be. One cause of this is that we have virtually no static objects that the player can relate to to estimate size and speed. For the next milestone, we want to have props along the roadside that will give you a better feeling for the speed the car is moving with.
+
+\subsection{Transparent track texture}
+
+We want to use alpha blending to make the track partially transparent. With the solid texture used currently, a large part of the screen is taken up by the track, hiding the space with meteors, planets and nebulas. Being able to see through the track will make the space scenario much more fun and rewarding.
+
+\appendix
+
+\section{Controls}
+\label{controls}
+
+In this section we list the controls for our game. There are different controls
+depending on whether you are in the actual game or in a menu. 
+
+\subsection{In-game controls}
+
+\begin{center}
+\begin{longtable}{lcc}
+\caption{In-game controls} \label{ingame-controls-table} \\
+
+%This is the header for the first page of the table...
+\hline \hline \\[-2ex]
+   \multicolumn{1}{c}{\textbf{Command}} &
+   \multicolumn{1}{c}{\textbf{Keyboard}} &
+   \multicolumn{1}{c}{\textbf{Gamepad}} \\[0.5ex] \hline
+   \\[-1.8ex]
+\endfirsthead
+
+%This is the header for the remaining page(s) of the table...
+\multicolumn{3}{c}{{\tablename} \thetable{} -- Continued} \\[0.5ex]
+  \hline \hline \\[-2ex]
+  \multicolumn{1}{c}{\textbf{Command}} &
+  \multicolumn{1}{c}{\textbf{Keyboard}} &
+  \multicolumn{1}{c}{\textbf{Gamepad}} \\[0.5ex] \hline
+  \\[-1.8ex]
+\endhead
+
+%This is the footer for all pages except the last page of the table...
+  \multicolumn{3}{l}{{Continued on Next Page\ldots}} \\
+\endfoot
+
+%This is the footer for the last page of the table...
+  \\[-1.8ex] \hline \hline
+\endlastfoot
+
+%Now the data...
+Accelerate & W & Right Trigger \\ 
+Reverse & S & Left Trigger \\
+Break & Left Shift & B \\ 
+Steer left & A & \multirow{2}{*}{Left Analog Stick} \\ 
+Steer right & D \\
+Boost & Caps Lock & \\
+Cycle cameras & C & Y \\
+Move flying camera & Arrow keys &  \\
+Reload tuning parameters & R & A \\
+Toggle debug info & Tab & X \\
+Play jaguar sound & Spacebar &  \\
+Pause menu & Esc & Start \\
+\end{longtable}
+\end{center}
+
+\subsection{Menu controls}
+
+\begin{center}
+\begin{longtable}{lcc}
+\caption{In-game controls} \label{ingame-controls-table} \\
+
+%This is the header for the first page of the table...
+\hline \hline \\[-2ex]
+   \multicolumn{1}{c}{\textbf{Command}} &
+   \multicolumn{1}{c}{\textbf{Keyboard}} &
+   \multicolumn{1}{c}{\textbf{Gamepad}} \\[0.5ex] \hline
+   \\[-1.8ex]
+\endfirsthead
+
+%This is the header for the remaining page(s) of the table...
+\multicolumn{3}{c}{{\tablename} \thetable{} -- Continued} \\[0.5ex]
+  \hline \hline \\[-2ex]
+  \multicolumn{1}{c}{\textbf{Command}} &
+  \multicolumn{1}{c}{\textbf{Keyboard}} &
+  \multicolumn{1}{c}{\textbf{Gamepad}} \\[0.5ex] \hline
+  \\[-1.8ex]
+\endhead
+
+%This is the footer for all pages except the last page of the table...
+  \multicolumn{3}{l}{{Continued on Next Page\ldots}} \\
+\endfoot
+
+%This is the footer for the last page of the table...
+  \\[-1.8ex] \hline \hline
+\endlastfoot
+
+%Now the data...
+Menu up & Up & \multirow{2}{*}{Left Analog Stick}\\ 
+Menu down & Down \\ 
+Select menu item & Enter & A \\ 
+Go back & Esc & B \\
+\end{longtable}
+\end{center}
+
+
+\section{Building from source}
+\label{building-from-source}
+
+\subsection{Prerequisites}
+
+The following must be installed:
+  
+\begin{itemize}
+  \item Microsoft Visual Studio 2008
+  \item Microsoft DirectX SDK (August 2009)
+  \item NVIDIA PhysX SDK v2.8.1
+  \item Python 2.6
+  \item SWIG-1.3.40
+\end{itemize}  
+  
+\subsection{Environment variables}
+
+The following environment variables
+must be set (your paths may vary):
+
+\begin{itemize}
+  \item DXSDK_DIR = F:\textbackslash Program Files (x86)\textbackslash
+  Microsoft DirectX SDK (August 2009)
+  \item PHYSX_DIR = F:\textbackslash Program Files (x86)\textbackslash NVIDIA
+  Corporation\textbackslash NVIDIA PhysX SDK\textbackslash v2.8.1
+  \item PYTHON_DIR= F:\textbackslash Python26\textbackslash
+  \item SWIG_DIR  = P:\textbackslash swigwin\item 
+\end{itemize}  
+ 
+\subsection{Building}
+
+Build the project eRacer/eRacer.sln.
+
+\subsection{Running}  
+  
+To run the program, run \texttt{eRacer/run-release.py} or
+\texttt{eRacer/run-debug.py} with python.
+
+
+\end{document}

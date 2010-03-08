@@ -1,0 +1,24 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}
+\BOOKMARK [1][-]{section.2}{Design decisions}{}
+\BOOKMARK [2][-]{subsection.2.1}{Spline Track}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{Car physics using multiple capsules instead of a simple box}{section.2}
+\BOOKMARK [1][-]{section.3}{New features}{}
+\BOOKMARK [2][-]{subsection.3.1}{Variable gravity direction}{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{Improved camera}{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{AI}{section.3}
+\BOOKMARK [2][-]{subsection.3.4}{Meteors}{section.3}
+\BOOKMARK [2][-]{subsection.3.5}{3D sound}{section.3}
+\BOOKMARK [1][-]{section.4}{Future work}{}
+\BOOKMARK [2][-]{subsection.4.1}{Smarter AI}{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{Improved boost}{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{More complex track}{section.4}
+\BOOKMARK [2][-]{subsection.4.4}{Props}{section.4}
+\BOOKMARK [2][-]{subsection.4.5}{Transparent track texture}{section.4}
+\BOOKMARK [1][-]{appendix.A}{Controls}{}
+\BOOKMARK [2][-]{subsection.A.1}{In-game controls}{appendix.A}
+\BOOKMARK [2][-]{subsection.A.2}{Menu controls}{appendix.A}
+\BOOKMARK [1][-]{appendix.B}{Building from source}{}
+\BOOKMARK [2][-]{subsection.B.1}{Prerequisites}{appendix.B}
+\BOOKMARK [2][-]{subsection.B.2}{Environment variables}{appendix.B}
+\BOOKMARK [2][-]{subsection.B.3}{Building}{appendix.B}
+\BOOKMARK [2][-]{subsection.B.4}{Running}{appendix.B}
