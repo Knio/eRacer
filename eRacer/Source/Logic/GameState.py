@@ -119,7 +119,7 @@ class GameState(State):
       forwardMat, 'Racer2.x'
     ))
     AIBehavior(self.ai1, self.track)
-    self.Add(Shadow(self.ai1)
+    self.Add(Shadow(self.ai1))
     
     self.ai2    = self.Add(Vehicle("AI2",    self.track, 
       mul1(frametx, Point3(+15, 4, 0)),

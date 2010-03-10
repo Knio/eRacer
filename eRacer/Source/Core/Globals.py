@@ -2,8 +2,7 @@ import os
 import sys
 import math
 
-import eRacer
-cpp = eRacer
+import eRacer as cpp
 
 # global game object
 __game = None
@@ -64,7 +63,7 @@ CONSTS    = cpp.Constants().g_Constants
 
 from Game.Module  	import Module
 from Game.Entity    import Entity
-from Game.Prop      import Prop
+from Logic.Prop      import Prop
 
 from Core.Event 	  import Event
 from Input          import KEY

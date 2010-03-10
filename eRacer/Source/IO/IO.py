@@ -1,5 +1,5 @@
 from Game.Module import Module
-import eRacer
+from Core.Globals import cpp
 
 import os
 import threading

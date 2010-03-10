@@ -67,7 +67,7 @@ class MainMenuState(MenuState):
     game().logic.Add(logo)
     logo.transform = Matrix(Point3(400,450,0), 0,0,0, 600,235,1)
     
-    self.sound = eRacer.SoundFx();
+    self.sound = cpp.SoundFx();
     self.sound.looping = True
     self.sound.is3D = False
     self.sound.isPaused = False
