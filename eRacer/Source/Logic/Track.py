@@ -4,7 +4,7 @@ import Track1
 import Track2
 
 class Track(Entity, cpp.Track):
-  def __init__(self, scene, name):
+  def __init__(self, name):
     Entity.__init__(self)
     cpp.Track.__init__(self)
     

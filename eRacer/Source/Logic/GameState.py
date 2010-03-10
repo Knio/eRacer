@@ -89,7 +89,7 @@ class GameState(State):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
-    scene = eRacer.Scene()
+    scene = cpp.Scene()
     self.scene = scene
     
     # TODO
@@ -131,7 +131,8 @@ class GameState(State):
     startFrame = self.track.GetFrame(0.0)
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
-    self.Add(Prop('finish_line.x', Matrix(30, 1, 3) * Matrix(startFrame.position+starFrame.up, startFrame.up, startFrame.fw)))
+    finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
+    self.Add(Prop(StaticMeshNode('Finish Line',finishLineTransform),'finish_line.x',None,finishLineTransform))
     
     def CarTrackCollisionEvent(car, track, force):
       pass

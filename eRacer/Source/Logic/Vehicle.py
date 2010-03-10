@@ -33,7 +33,11 @@ class Vehicle(Prop):
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
     
   def __init__(self, name, track, position = Vector3(47.67, 602.66, -60.16), orient = IDENTITY, model='Racer1.x'):
-    Entity.__init__(
+    self.INIT_ORIENT = orient
+    self.INITIAL_POS = position
+    self.ReloadedConstsEvent()
+
+    Prop.__init__(
       self,
       MovingMeshNode(name),
       model,
@@ -45,15 +49,12 @@ class Vehicle(Prop):
       ),
       
     )
-    self.INIT_ORIENT = orient
-    self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = -1.0
     self.track    = track
     self.name     = name
     self.resetFrame = cpp.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
     
-    self.ReloadedConstsEvent()
     
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
     self.physics.SetGroup(cpp.CAR)
