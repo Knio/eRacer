@@ -15,16 +15,18 @@ namespace Graphics {
 
 Scene::Scene()
 {
-
 }
 
 
-Scene::~Scene(){
-	printf("Scene::~Scene()\n");
-	for(vector<MeshNode*>::iterator i = meshNodes_.begin();
-		i != meshNodes_.end(); i++)
-		delete *i;
+Scene::~Scene()
+{
 }
+
+void Scene::Add(const MeshNode& node)
+{
+	meshNodes_.push_back(node);
+}
+
 
 void Scene::GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const {
 	for (vector<MeshNode*>::const_iterator meshNode = meshNodes_.begin(); 
@@ -32,18 +34,6 @@ void Scene::GetVisibleRenderables(const Camera& camera, vector<const Renderable*
 	{
 		(*meshNode)->cull(camera,visibleRenderables);
 	}
-}
-
-MovingMeshNode* Scene::CreateMovingMeshNode(const string& name, const Matrix& transform) {
-	MovingMeshNode* result = new MovingMeshNode(name);
-	result->SetTransform(transform);
-	meshNodes_.push_back(result);
-	return result;
-}
-StaticMeshNode* Scene::CreateStaticMeshNode(const string& name, const Matrix& transform) {
-	StaticMeshNode* result = new StaticMeshNode(name, transform);
-	meshNodes_.push_back(result);
-	return result;
 }
 
 void Scene::Draw(IDirect3DDevice9* m_pd3dDevice) const

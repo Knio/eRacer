@@ -48,36 +48,7 @@ public:
 	 *
 	 */
 	void GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const;
-
-	/**
-	 * @brief Factory method to create new non-moving mesh nodes in the scene
-	 *
-	 * Static mesh nodes do not change their transform or meshes over time.
-	 * This is useful for optimization of the culling process.
-	 * 
-	 * @param name
-	 *			a name for the mesh node - for debugging
-	 * @param transform
-	 *			a transformation matrix for the node
-	 * @return a pointer to the newly created node
-	 *
-	 * @see CreateMovingMeshNode
-	 */ 
-	StaticMeshNode* CreateStaticMeshNode(const string& name, const Matrix& transform=IDENTITY);
-
-	/**
-	 * @brief Factory method to create new moving mesh nodes in the scene
-	 *
-	 * @param name
-	 *			a name for the mesh node - for debugging
-	 * @param transform
-	 *			a transformation matrix for the node
-	 * @return a pointer to the newly created node
-	 *
-	 * @see CreateStaticMeshNode
-	 */ 
-	MovingMeshNode* CreateMovingMeshNode(const string& name, const Matrix& transform=IDENTITY);
-	
+	void Add(const MeshNode& node);
 	void Draw(IDirect3DDevice9* m_pd3dDevice) const;
 	
 

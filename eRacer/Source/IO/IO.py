@@ -23,10 +23,10 @@ def debug(func):
     return r
   return f
 
-class IO(Module, eRacer.IO):
+class IO(Module, cpp.IO):
   def __init__(self, game):
     Module.__init__(self, game)
-    eRacer.IO.__init__(self, game.graphics.d3d)
+    cpp.IO.__init__(self, game.graphics.d3d)
     
     # work queue
     self.queue = Queue.Queue()
@@ -51,7 +51,7 @@ class IO(Module, eRacer.IO):
     name = j(MODELPATH,name)
     # print "Loading mesh %s" % name
     if not name in self.meshes:
-      mesh = eRacer.Mesh()
+      mesh = cpp.Mesh()
       r = self._LoadMesh(name,mesh)
       if not r:
         print 'Failed to load mesh "%s"' % name

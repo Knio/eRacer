@@ -9,13 +9,9 @@ from MenuState      import PauseMenuState
 from GameEndState   import GameEndState
 
 # Entities
-from Box        import Box
-from Arrow      import Arrow
-from Plane      import Plane
 from Track      import Track
-from Ship       import Ship
 from Vehicle    import Vehicle
-from Prop       import Prop
+from Shadow     import Shadow
 from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
 from Starfield  import Starfield
 from Meteor     import Meteor, MeteorManager
@@ -99,8 +95,7 @@ class GameState(State):
     # TODO
     # can we render a fake loading screen here until the real one works?
     
-    self.track = Track(scene, track)
-    game().logic.Add(self.track)
+    self.track = self.Add(Track(track))
     
     # self.arrow1 = Arrow(scene)
     # game().logic.Add(self.arrow1)
@@ -112,31 +107,31 @@ class GameState(State):
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
     
-    self.player = Vehicle("Player", self.scene, self.track, 
+    self.player = self.Add(Vehicle("Player", self.track, 
       mul1(frametx, Point3(0, 4, 0)),
       forwardMat
-    )
-    self.player.behavior = PlayerBehavior(self.player)
-    game().logic.Add(self.player)
+    ))
+    PlayerBehavior(self.player)
+    self.Add(Shadow(self.player))
   
-    self.ai1    = Vehicle("AI1",    self.scene, self.track, 
+    self.ai1    = self.Add(Vehicle("AI1",  self.track, 
       mul1(frametx, Point3(-15, 4, 0)),
       forwardMat, 'Racer2.x'
-    )
-    self.ai1.behavior = AIBehavior(self.ai1, self.track)
-    game().logic.Add(self.ai1)
-
-    self.ai2    = Vehicle("AI2",    self.scene, self.track, 
+    ))
+    AIBehavior(self.ai1, self.track)
+    self.Add(Shadow(self.ai1)
+    
+    self.ai2    = self.Add(Vehicle("AI2",    self.track, 
       mul1(frametx, Point3(+15, 4, 0)),
       forwardMat, 'Racer5.x'
-    )
-    self.ai2.behavior = AIBehavior(self.ai2, self.track)
-    game().logic.Add(self.ai2)
-    
+    ))
+    AIBehavior(self.ai2, self.track)
+    self.Add(Shadow(self.ai2))
+        
     startFrame = self.track.GetFrame(0.0)
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
-    game().logic.Add(Prop(self.scene, 'finish_line.x', Matrix(Point3(0,.2,-3),0,0,0,30, 1, 3) * Matrix(startFrame.position, startFrame.up, startFrame.fw)))
+    self.Add(Prop('finish_line.x', Matrix(30, 1, 3) * Matrix(startFrame.position+starFrame.up, startFrame.up, startFrame.fw)))
     
     def CarTrackCollisionEvent(car, track, force):
       pass
@@ -174,7 +169,7 @@ class GameState(State):
         view.AddRenderable(s)      
       view.AddRenderable(self.skybox)
    
-    self.meteorManager = MeteorManager(self.scene)
+    self.meteorManager = MeteorManager(self)
     game().logic.Add(self.meteorManager)
 
     for i in range(CONSTS.NUM_METEORS):
@@ -183,12 +178,11 @@ class GameState(State):
     
     self.lastMeteorTime = 0
     
-    
-    self.sound = eRacer.SoundFx();
-    self.sound.looping  = True
-    self.sound.is3D     = False
-    self.sound.isPaused = False
-    game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
+    # self.sound = eRacer.SoundFx();
+    # self.sound.looping  = True
+    # self.sound.is3D     = False
+    # self.sound.isPaused = False
+    # game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
     
     game().time.Zero()
     self.loaded = True
@@ -235,6 +229,8 @@ class GameState(State):
         self.lastMeteorTime = 0
         m = self.meteorManager.spawnTargeted(self.player)
         game().logic.Add(m)
+    
+    self.meteorManager.Tick(time)
 
   
   def LapEvent(self, vehicle, lap):

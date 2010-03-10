@@ -1,4 +1,5 @@
 import eRacer
+
 BUFFERLEN = 20
 class Time(eRacer.Time):
   def __init__(self):

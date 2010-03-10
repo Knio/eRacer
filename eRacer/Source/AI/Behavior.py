@@ -4,6 +4,7 @@ from Core.Globals import *
 class Behavior(object):
   def __init__(self, parent):
     self.parent = parent
+    self.parent.behaviour = self
       
   def Tick(self,time):
     pass

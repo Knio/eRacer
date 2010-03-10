@@ -1,6 +1,6 @@
 from Core.Globals import *
-from Prop import Prop
-class Vehicle(Entity):
+
+class Vehicle(Prop):
   SIZE    = Vector3(2.5, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2.5, -2.0,  4.5), # front left
@@ -32,39 +32,31 @@ class Vehicle(Entity):
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
     
-  def __init__(self, name, scene, track, position = Vector3(47.67, 602.66, -60.16), orient = IDENTITY, model='Racer1.x'):
-    Entity.__init__(self)
+  def __init__(self, name, track, position = Vector3(47.67, 602.66, -60.16), orient = IDENTITY, model='Racer1.x'):
+    Entity.__init__(
+      self,
+      MovingMeshNode(name),
+      model,
+      cpp.CarBody(
+        True, 
+        self.MASS, 
+        self.INITIAL_POS,
+        self.INIT_ORIENT
+      ),
+      
+    )
     self.INIT_ORIENT = orient
     self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = -1.0
     self.track    = track
     self.name     = name
-    self.resetFrame = eRacer.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
-    self.shadow = Prop(scene, 'shadow.x', IDENTITY)
-    game().logic.Add(self.shadow)
+    self.resetFrame = cpp.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
     
     self.ReloadedConstsEvent()
     
-    self.physics = eRacer.CarBody(
-      True, 
-      self.MASS, 
-      self.INITIAL_POS,
-      self.INIT_ORIENT
-    )
-    self.transform = Matrix()
-    
-    self.graphics = scene.CreateMovingMeshNode("vehicle")
-    self.graphics.thisown = 0
-
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
-    self.physics.SetGroup(eRacer.CAR)
-
-    def load(mesh):
-      if mesh:
-        self.graphics.Init(mesh)    
-    
-    game().io.LoadMeshAsync(load, model)   
+    self.physics.SetGroup(cpp.CAR)
   
     self.throttle = 0.      # position of the throttle on game controller from 0 to 1
     self.brake    = False   # brake button
@@ -80,7 +72,7 @@ class Vehicle(Entity):
     self.boosting = 0.
     self.lapcount = 0
     
-    self.sound = eRacer.SoundFx();
+    self.sound = cpp.SoundFx();
     self.sound.looping  = True
     self.sound.is3D     = True
     self.sound.isPaused = True
@@ -179,12 +171,6 @@ class Vehicle(Entity):
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
     
-    #Shadow
-    shadowPos = projectOnto(worldpos - frame.position, up) + frame.position + up*0.3
-    shadowUp = up
-    shadowFrame = fw 
-    shadowTrans = Matrix(1, 1, 1) * Matrix(shadowPos, shadowUp, shadowFrame)
-    self.shadow.tx = shadowTrans
 
     
     self.sound.pitch = max(50000, int(50000 * length(vel) / 60.0))

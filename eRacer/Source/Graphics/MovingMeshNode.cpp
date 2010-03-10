@@ -9,8 +9,8 @@
 #include "MovingMeshNode.h"
 namespace Graphics {
 
-MovingMeshNode::MovingMeshNode(const string& name)
-	: MeshNode(name)
+MovingMeshNode::MovingMeshNode(const string& name, const Matrix& tx)
+	: MeshNode(name, tx)
 {
 }
 MovingMeshNode::~MovingMeshNode(){

@@ -1,9 +1,8 @@
 from Core.Globals import game
-import eRacer
 
-class Event(eRacer.Event):
+class Event(cpp.Event):
   def __init__(self, game):
-    eRacer.Event.__init__(self)
+    cpp.Event.__init__(self)
     self.listeners = {}
     print 'Initialized Event manager'
 

@@ -3,14 +3,13 @@ from Core.Globals import *
 import Track1
 import Track2
 
-
 class Track(Entity, eRacer.Track):
   def __init__(self, scene, name):
     Entity.__init__(self)
     eRacer.Track.__init__(self)
     
     self.physics  = eRacer.TriMesh()
-    self.graphics = scene.CreateStaticMeshNode("track")
+    self.graphics = StaticMeshNode("track", IDENTITY)
     
     track = None
     # track = __import__(name)

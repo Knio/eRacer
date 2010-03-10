@@ -1,9 +1,9 @@
 from Core.Globals import *
 
-class Camera(Entity, eRacer.Camera):
+class Camera(Entity, cpp.Camera):
   def __init__(self):
     Entity.__init__(self)
-    eRacer.Camera.__init__(self)
+    cpp.Camera.__init__(self)
     
     self.SetNear(2)
     #very high for now, can be reduced once we have some fogging
@@ -17,7 +17,7 @@ class Camera(Entity, eRacer.Camera):
 class OrthographicCamera(Camera):
   def __init__(self, width, height):
     Entity.__init__(self)
-    eRacer.Camera.__init__(self)
+    cpp.Camera.__init__(self)
     position = Point3(width/2., height/2., -2.)
     lookAt   = Point3(width/2., height/2.,  0.)
     self.SetFrame(position, lookAt, Y, False)
@@ -38,7 +38,7 @@ class CirclingCamera(Camera):
     
     # spin around a circle, looking at the origin
     t = time.seconds / 10
-    pos = eRacer.D3DXVECTOR3(
+    pos = Vector3(
       math.cos(t), 
       math.sin(t)*0.5+1, 
       math.sin(t)
@@ -60,9 +60,7 @@ class ChasingCamera(Camera):
     Camera.Tick(self, time)
     
     vel = length(self.target.physics.GetLocalPointWorldVelocity(ORIGIN))
-    #self.target.physics.GetOrientation()
-    #eRacer.mul0(self.target.physics.GetTransform(), Z)
-    
+  
 
     capBack = math.pow(vel, 0.4)
     originlocal = ORIGIN
@@ -91,7 +89,7 @@ class ChasingCamera(Camera):
     #self.SetPosition(pos)    
     self.SetFovY(self.fov)
     
-    targetPosition  = eRacer.ExtractPosition(self.target.transform)
+    targetPosition  = cpp.ExtractPosition(self.target.transform)
     #targetPosition.y += 5
     
     #self.SetLookAt(targetPosition)

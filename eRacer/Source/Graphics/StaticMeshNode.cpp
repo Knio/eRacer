@@ -17,9 +17,8 @@ using namespace std;
 namespace Graphics {
 
 StaticMeshNode::StaticMeshNode(const string& name, const Matrix& transform)
-	: MeshNode(name)
+	: MeshNode(name, transform)
 {
-	transform_ = transform;
 }
 
 StaticMeshNode::~StaticMeshNode(){

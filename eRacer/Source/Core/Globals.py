@@ -3,6 +3,7 @@ import sys
 import math
 
 import eRacer
+cpp = eRacer
 
 # global game object
 __game = None
@@ -20,39 +21,38 @@ def VECTOR3__iadd__(self, arg):
 def VECTOR3__repr__(self):
   return "(%8.2g %8.2g %8.2g)" % (self.x, self.y, self.z)
 
-eRacer.D3DXVECTOR3.__iadd__ = VECTOR3__iadd__
-eRacer.D3DXVECTOR3.__repr__ = VECTOR3__repr__
+cpp.D3DXVECTOR3.__iadd__ = VECTOR3__iadd__
+cpp.D3DXVECTOR3.__repr__ = VECTOR3__repr__
 
 
-Vector3   = eRacer.D3DXVECTOR3
-Vector4   = eRacer.D3DXVECTOR4
-Point3    = eRacer.D3DXVECTOR3
-Point4    = eRacer.D3DXVECTOR4
+Vector3   = cpp.D3DXVECTOR3
+Vector4   = cpp.D3DXVECTOR4
+Point3    = cpp.D3DXVECTOR3
+Point4    = cpp.D3DXVECTOR4
 
-Matrix    = eRacer.CreateMatrix
+Matrix    = cpp.CreateMatrix
 
-ORIGIN 		= eRacer.cvar.ORIGIN
-IDENTITY 	= eRacer.cvar.IDENTITY
-X         = eRacer.cvar.X
-Y         = eRacer.cvar.Y
-Z         = eRacer.cvar.Z
-RED       = eRacer.cvar.RED
-BLUE      = eRacer.cvar.BLUE
-GREEN     = eRacer.cvar.GREEN
-WHITE     = eRacer.cvar.WHITE
+ORIGIN    = cpp.cvar.ORIGIN
+IDENTITY  = cpp.cvar.IDENTITY
+X         = cpp.cvar.X
+Y         = cpp.cvar.Y
+Z         = cpp.cvar.Z
+RED       = cpp.cvar.RED
+BLUE      = cpp.cvar.BLUE
+GREEN     = cpp.cvar.GREEN
+WHITE     = cpp.cvar.WHITE
 
-length    = eRacer.abs
-dot       = eRacer.dot
-cross     = eRacer.cross
-normalize = eRacer.normalize
-normalized= eRacer.normalized
-normal    = eRacer.normalized
-project   = eRacer.project
-projectOnto=eRacer.projectOnto
-mul1      = eRacer.mul1
-mul0      = eRacer.mul0
+length    = cpp.abs
+dot       = cpp.dot
+cross     = cpp.cross
+normalize = cpp.normalize
+normalized= cpp.normalized
+normal    = cpp.normalized
+project   = cpp.project
+projectOnto=cpp.projectOnto
+mul1      = cpp.mul1
+mul0      = cpp.mul0
 
-CreateMatrix = eRacer.CreateMatrix
 
 PI    = math.pi
 ZERO  = 1e-5
@@ -60,10 +60,11 @@ ZERO  = 1e-5
 def clamp(x, _min, _max):
   return min(max(x, _min), _max)
 
-CONSTS    = eRacer.Constants().g_Constants
+CONSTS    = cpp.Constants().g_Constants
 
 from Game.Module  	import Module
 from Game.Entity    import Entity
+from Game.Prop      import Prop
 
 from Core.Event 	  import Event
 from Input          import KEY

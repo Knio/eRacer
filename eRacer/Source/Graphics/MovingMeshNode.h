@@ -27,7 +27,7 @@ public:
 	/**
 	 * @brief Constructor.
 	 */
-	MovingMeshNode(const string& name);
+	MovingMeshNode(const string& name, const Matrix& tx=IDENTITY);
 	
 	/**
 	 * @brief Destructor stub.

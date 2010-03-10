@@ -1,5 +1,5 @@
 from Game.Module import Module
-import eRacer
+import eRacer as cpp
 import os
 
 PATH = 'Resources/Sounds'
@@ -7,7 +7,7 @@ PATH = 'Resources/Sounds'
 class Sound(Module):
   def __init__(self, game):
     Module.__init__(self, game)
-    self.sound = eRacer.Sound()
+    self.sound = cpp.Sound()
     self.sound.Init()
 
   def PlaySound2D(self, file):

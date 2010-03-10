@@ -7,7 +7,7 @@ class Graphics(Module):
     Module.__init__(self, game)
     
     self.window   = Window("Test")
-    self.graphics = eRacer.GraphicsLayer.GetInstance()
+    self.graphics = cpp.GraphicsLayer.GetInstance()
     
     # get pointers
     

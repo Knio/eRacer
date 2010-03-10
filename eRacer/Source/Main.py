@@ -40,8 +40,8 @@ class Main(Game):
     self.AddModule(self.sound)
     self.AddModule(self.physics)
     self.AddModule(self.graphics)
-    if hasattr(eRacer, 'TestModule'):
-        self.test = eRacer.TestModule();
+    if hasattr(cpp, 'TestModule'):
+        self.test = cpp.TestModule();
     
     self.event.Register(self.QuitEvent)
     self.PushState(MainMenuState())    

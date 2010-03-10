@@ -3,12 +3,10 @@ import math
 
 from Core.Globals import *
 
-class MeteorManager(Entity):
+class MeteorManager(object):
   VANISHING_DISTANCE = 600.
 
-  def __init__(self, scene):
-    Entity.__init__(self)
-    self.scene = scene 
+  def __init__(self, state):
     self.meteors = []
     game().event.Register(self.MeteorMeteorCollisionEvent)
     game().event.Register(self.MeteorCarCollisionEvent)
@@ -16,34 +14,32 @@ class MeteorManager(Entity):
     
     
   def spawnRandom(self):
-    m = RandomMeteor(self.scene)
+    m = self.state.Add(RandomMeteor())
     self.meteors.append(m)
     return m
             
   def spawnTargeted(self, target):
-    m = TargetedMeteor(self.scene,target)
+    m = self.state.Add(TargetedMeteor(target))
     self.meteors.append(m)
     return m
 
 
   def spawnAimed(self, aim):
-    m = AimedMeteor(self.scene,aim)
+    m = self.state.Add(AimedMeteor(aim))
     self.meteors.append(m)
     return m
 
     
   def Tick(self, time):
     Entity.Tick(self, time)
-    
     for meteor in self.meteors:
-      pos = eRacer.ExtractPosition(meteor.transform)
+      pos = cpp.ExtractPosition(meteor.transform)
       if(length(pos)>self.VANISHING_DISTANCE):
         #print "respawning at position ",pos," with distance ",length(pos)," from origin." 
-        if(not meteor.reset()):
+        if not meteor.reset():
           self.meteors.remove(meteor)
-    
-      
-        
+          self.state.entities.remove(meteor)
+  
         
   def MeteorMeteorCollisionEvent(self, meteorId1, meteorId2, force):
     pass
@@ -57,34 +53,25 @@ class MeteorManager(Entity):
     #print "MC Collision reported to MeteorManager"
 
 
-class Meteor(Entity):
+class Meteor(Prop):
   DENSITY   = 200.
   MODELS    = ["Meteor1.x", "Meteor2.x"]
 
-  
-    
-  def __init__(self, scene, scale=1):
-    Entity.__init__(self)
+  def __init__(self, scale=1):    
+    Prop.__init__(
+      self,
+      MovingMeshNode('Meteor'),
+      random.choice(self.MODELS),
+      eRacer.Box(True, self.DENSITY*scale*scale, ORIGIN, IDENTITY, Vector3(scale,scale,scale)),      
+    )
 
     #hack: scale has to be stored separately because physiscs will keep overriding it 
     self.scale = scale
 
-    self.transform = eRacer.CreateMatrix()
-
-    self.physics = eRacer.Box(True, self.DENSITY*self.scale*self.scale, eRacer.ORIGIN, eRacer.IDENTITY, Vector3(scale,scale,scale))
-    self.physics.SetGroup(eRacer.METEOR)
+    self.physics.SetGroup(cpp.METEOR)
     self.physics.SetId(self.id)
-    
-    self.graphics = scene.CreateMovingMeshNode("Meteor")
-    self.graphics.thisown = 0
+
         
-        
-    def load(mesh):
-      if mesh:
-        self.graphics.Init(mesh)    
-      
-    game().io.LoadMeshAsync(load, self.MODELS[random.randrange(len(self.MODELS))])   
-    
   def reset(self):
     return True
     
@@ -127,8 +114,8 @@ class RandomMeteor(Meteor):
   # between 0 and the radius of the meteor
   TUMBLING = 0.9
   
-  def __init__(self, scene):
-    Meteor.__init__(self,scene, random.uniform(self.MIN_SIZE,self.MAX_SIZE))
+  def __init__(self):
+    Meteor.__init__(self, random.uniform(self.MIN_SIZE,self.MAX_SIZE))
     
     self.reset()
     
@@ -167,9 +154,9 @@ class AimedMeteor(Meteor):
   # between 0 and the radius of the meteor
   TUMBLING = 0.3
   
-  def __init__(self,scene,aim,direction):
+  def __init__(self, aim, direction):
     u = random.uniform
-    Meteor.__init__(self,scene,u(self.MIN_SIZE, self.MAX_SIZE))
+    Meteor.__init__(self, u(self.MIN_SIZE, self.MAX_SIZE))
     
     self.scatter(direction,self.DIR_SCATTERING)
     
@@ -184,17 +171,16 @@ class AimedMeteor(Meteor):
     self.physics.SetTransform(Matrix(position))
     self.physics.SetVelocity(velocity)
     self.physics.SetAngVelocity(angular_velocity)    
-  
-  
+    
   def reset(self):
     return False
 
 
 class TargetedMeteor(AimedMeteor):  
-  def __init__(self,scene,target):
+  def __init__(self, target):
     aim = eRacer.ExtractPosition(target.transform)+target.velocity*1.2
     down = mul0(target.transform, Vector3(0,-1,0))
-    AimedMeteor.__init__(self,scene,aim,down)
+    AimedMeteor.__init__(self, aim, down)
   
   
   def reset(self):

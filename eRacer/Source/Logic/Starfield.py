@@ -11,4 +11,3 @@ class Starfield(Entity, eRacer.Starfield):
   def Tick(self, time):
     Entity.Tick(self, time)
     self.Update()
-    

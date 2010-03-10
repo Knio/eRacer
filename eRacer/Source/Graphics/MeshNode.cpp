@@ -16,9 +16,9 @@ using namespace std;
 
 namespace Graphics {
 
-MeshNode::MeshNode(const string& name)
+MeshNode::MeshNode(const string& name, const Matrix& tx)
 	: Spatial(name),
-	  transform_(IDENTITY),
+	  transform_(tx),
 	  initialized(false),
 	  mesh_(NULL)
 {

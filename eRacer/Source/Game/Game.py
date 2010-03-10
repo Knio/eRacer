@@ -10,7 +10,7 @@ from State        import State
 
 import Core.Globals
 
-class Game(eRacer.Game):
+class Game(cpp.Game):
   def __init__(self):
     Core.Globals._set_game(self)
     print Core.Globals.game()
@@ -20,7 +20,7 @@ class Game(eRacer.Game):
     self.state = 0
     self.simspeed = 1.0
     self.states = [State()]
-    eRacer.Game.__init__(self)
+    cpp.Game.__init__(self)
     
   def PushState(self, state):
     print 'Game::PushState(%r)' % state
