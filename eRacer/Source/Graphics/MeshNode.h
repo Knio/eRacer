@@ -69,7 +69,7 @@ protected:
 	 * @param name
 	 *			a name for this node to fascilitate debugging
 	 */
-	MeshNode(const string& name, const Matrix& tx=IDENTITY)
+	MeshNode(const string& name, const Matrix& tx=IDENTITY);
 
 	/**
 	 * @brief update the world bounding volume by transforming the local bounding volume

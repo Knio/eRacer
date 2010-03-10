@@ -53,7 +53,7 @@ public:
 	
 
 private:
-	vector<MeshNode*> 	meshNodes_;
+	vector<const MeshNode*> 	meshNodes_;
 };
 
 
