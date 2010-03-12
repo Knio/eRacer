@@ -14,11 +14,12 @@ CarBody::CarBody(bool dynamic, float mass, const Point3& pos, const Matrix& orie
 	// Add a single-shape actor to the scene
 	NxActorDesc actorDesc;
 
-	NxCapsuleShapeDesc capDesc1, capDesc2, capDesc3;
+	NxCapsuleShapeDesc capDesc1, capDesc2;
+	NxBoxShapeDesc boxDesc;
 
 	capDesc1.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
 	capDesc2.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
-	capDesc3.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
+	boxDesc.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
 
 	//right, long capsule
 	capDesc1.height = (NxReal)9.03;
@@ -32,18 +33,17 @@ CarBody::CarBody(bool dynamic, float mass, const Point3& pos, const Matrix& orie
 	capDesc2.localPose.M = Matrix_NxMat33(rot);
 	capDesc2.localPose.t = NxVec3((NxReal)-2.2, (NxReal)0, (NxReal)1.11);
 
-	//middle, shorter capsule
-	capDesc3.height = (NxReal)5.0;
-	capDesc3.radius = (NxReal)1.0;
-	capDesc3.localPose.M = Matrix_NxMat33(rot);
-	capDesc3.localPose.t = NxVec3((NxReal)0, (NxReal)0, (NxReal)0.0);
+	//middle, shorter box
+	boxDesc.dimensions.set((NxReal)0.8, (NxReal)3.5, (NxReal)2.5);
+	boxDesc.localPose.M = Matrix_NxMat33(rot);
+	boxDesc.localPose.t = NxVec3((NxReal)0, (NxReal)0, (NxReal)0.0);
 
 	actorDesc.shapes.pushBack(&capDesc1);
 	actorDesc.shapes.pushBack(&capDesc2);
-	actorDesc.shapes.pushBack(&capDesc3);
+	actorDesc.shapes.pushBack(&boxDesc);
 	assert(capDesc1.isValid());
 	assert(capDesc2.isValid());
-	assert(capDesc2.isValid());
+	assert(boxDesc.isValid());
 	
 	NxBodyDesc bodyDesc;
 	if(dynamic){
