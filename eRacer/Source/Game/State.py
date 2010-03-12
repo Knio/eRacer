@@ -16,7 +16,8 @@ class State(cpp.State):
     return obj
     
   def Tick(self, time):
-    pass
+    for i in self.entities:
+      i.Tick(time)
     
   def Activate(self):
     self.active = True

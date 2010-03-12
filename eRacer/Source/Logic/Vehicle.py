@@ -32,28 +32,24 @@ class Vehicle(Prop):
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
     
-  def __init__(self, name, track, position = Vector3(47.67, 602.66, -60.16), orient = IDENTITY, model='Racer1.x'):
-    Entity.__init__(
+  def __init__(self, name, track, tx, modelnum=1):
+    self.ReloadedConstsEvent()
+
+    Prop.__init__(
       self,
       MovingMeshNode(name),
-      model,
-      cpp.CarBody(
-        True, 
-        self.MASS, 
-        self.INITIAL_POS,
-        self.INIT_ORIENT
-      ),
-      
+      'Racer1.x',
+      cpp.CarBody(True, self.MASS),
+      tx,
+      modelnum,
     )
-    self.INIT_ORIENT = orient
-    self.INITIAL_POS = position
     self.behavior = None
     self.trackpos = -1.0
     self.track    = track
     self.name     = name
-    self.resetFrame = cpp.Frame(position, mul0(orient, Y), mul0(orient, Z), 0.0)
-    
-    self.ReloadedConstsEvent()
+    self.frame = cpp.Frame(mul1(tx, ORIGIN), mul0(tx, Y), mul0(tx, Z), 0.0)
+    self.resetFrame = self.frame
+    self.velocity = ORIGIN
     
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
     self.physics.SetGroup(cpp.CAR)
@@ -98,7 +94,6 @@ class Vehicle(Prop):
     self.boosting = 2.0
   
   def Tick(self, time):
-    Entity.Tick(self, time)
     
     # if not time.game_delta:
     #   return
@@ -107,12 +102,15 @@ class Vehicle(Prop):
     tx    = phys.GetTransform()
     delta = float(time.game_delta) / time.RESOLUTION
     worldpos   = mul1(tx, ORIGIN)
+    self.velocity = phys.GetVelocity()
+    
     
     # self.trackpos = self.track.FindPosition(worldpos, self.trackpos)
     # frame = self.track.GetFrame(self.trackpos)
     # print worldpos
     # print frame.position, frame.up, frame.dist, length(frame.position-worldpos)
     frame = self.track.GetFrame(worldpos, self.trackpos)
+    self.frame = frame
     # print self.frame.position, self.frame.up, self.frame.dist, length(self.frame.position-worldpos)
     self.trackpos = frame.dist
     # frame = self.frame
@@ -364,9 +362,9 @@ class Vehicle(Prop):
       )
 
 
-    self.transform = tx
-    self.velocity = phys.GetVelocity()
-    self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * tx)
+    
+    Prop.Tick(self, time)
+    
 
   # def set_transform(self, transform):
   #   Entity.set_transform(self, transform)

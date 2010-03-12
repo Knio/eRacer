@@ -1,5 +1,5 @@
 from Game.Module import Module
-import eRacer
+from Core.Globals import cpp
 
 import os
 import threading
@@ -40,6 +40,7 @@ class IO(Module, cpp.IO):
     self.defaulttex = self._LoadTexture(j(TEXPATH, "Default.png"))
     self.textures   = {}
     self.meshes     = {}
+    self.args = ()
     
   def work(self):
     while 1:
@@ -47,7 +48,8 @@ class IO(Module, cpp.IO):
       r = func(self, *args, **kwargs)
       callback(r)
 
-  def LoadMesh(self, name):
+  def LoadMesh(self, name, *args):
+    self.args = args
     name = j(MODELPATH,name)
     # print "Loading mesh %s" % name
     if not name in self.meshes:
@@ -67,12 +69,16 @@ class IO(Module, cpp.IO):
   def LoadTexture(self, name):
     if name:
       name = j(TEXPATH, name)
+      # if self.args:
+      name = name % self.args
+      self.args = ()
     if not name in self.textures:
       r = self._LoadTexture(name)
       r.disown()
       if not self.valid(r):
         print 'Failed to load texture "%s", using default' % name
         return self.defaulttex
+      print 'Loaded texture %s' % name
       self.textures[name] = r
     return self.textures[name]
 

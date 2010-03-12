@@ -7,6 +7,7 @@ class MeteorManager(object):
   VANISHING_DISTANCE = 600.
 
   def __init__(self, state):
+    self.state = state
     self.meteors = []
     game().event.Register(self.MeteorMeteorCollisionEvent)
     game().event.Register(self.MeteorCarCollisionEvent)
@@ -31,7 +32,6 @@ class MeteorManager(object):
 
     
   def Tick(self, time):
-    Entity.Tick(self, time)
     for meteor in self.meteors:
       pos = cpp.ExtractPosition(meteor.transform)
       if(length(pos)>self.VANISHING_DISTANCE):
@@ -62,7 +62,7 @@ class Meteor(Prop):
       self,
       MovingMeshNode('Meteor'),
       random.choice(self.MODELS),
-      eRacer.Box(True, self.DENSITY*scale*scale, ORIGIN, IDENTITY, Vector3(scale,scale,scale)),      
+      cpp.Box(True, self.DENSITY*scale*scale, ORIGIN, IDENTITY, Vector3(scale,scale,scale)),      
     )
 
     #hack: scale has to be stored separately because physiscs will keep overriding it 
@@ -88,7 +88,7 @@ class Meteor(Prop):
   def Tick(self, time):
     Entity.Tick(self, time)
     self.transform = self.physics.GetTransform()    
-    self.graphics.SetTransform(eRacer.Scaled(self.transform, self.scale,self.scale,self.scale))  
+    self.graphics.SetTransform(cpp.Scaled(self.transform, self.scale,self.scale,self.scale))  
 
   def randomDirection(self):
     u = random.uniform
@@ -178,7 +178,7 @@ class AimedMeteor(Meteor):
 
 class TargetedMeteor(AimedMeteor):  
   def __init__(self, target):
-    aim = eRacer.ExtractPosition(target.transform)+target.velocity*1.2
+    aim = cpp.ExtractPosition(target.transform)+target.velocity*1.2
     down = mul0(target.transform, Vector3(0,-1,0))
     AimedMeteor.__init__(self, aim, down)
   

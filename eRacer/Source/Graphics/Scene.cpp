@@ -24,12 +24,12 @@ Scene::~Scene()
 
 void Scene::Add(const MeshNode& node)
 {
-	meshNodes_.push_back(node);
+	meshNodes_.push_back(&node);
 }
 
 
 void Scene::GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const {
-	for (vector<MeshNode*>::const_iterator meshNode = meshNodes_.begin(); 
+	for (vector<const MeshNode*>::const_iterator meshNode = meshNodes_.begin(); 
 		meshNode != meshNodes_.end(); meshNode++)
 	{
 		(*meshNode)->cull(camera,visibleRenderables);

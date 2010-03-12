@@ -10,5 +10,5 @@ class Shadow(Prop):
     p = mul1(self.target.transform, ORIGIN)
     pos = projectOnto(p - f.position, f.up) + f.position + f.up*0.3
     self.transform = Matrix(pos, f.up, f.fw)
-    Prop.tick(self, time)
+    Prop.Tick(self, time)
     

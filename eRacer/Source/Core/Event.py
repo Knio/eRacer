@@ -1,4 +1,4 @@
-from Core.Globals import game
+from Core.Globals import game, cpp
 
 class Event(cpp.Event):
   def __init__(self, game):

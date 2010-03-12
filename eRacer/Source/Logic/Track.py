@@ -3,13 +3,14 @@ from Core.Globals import *
 import Track1
 import Track2
 
-class Track(Entity, eRacer.Track):
-  def __init__(self, scene, name):
+class Track(Entity, cpp.Track):
+  def __init__(self, name):
     Entity.__init__(self)
-    eRacer.Track.__init__(self)
+    cpp.Track.__init__(self)
     
-    self.physics  = eRacer.TriMesh()
-    self.graphics = MovingMeshNode("track", IDENTITY)
+    self.graphics = MovingMeshNode("track")
+    self.physics  = cpp.TriMesh()
+
     
     # HACK
     track = None
@@ -27,7 +28,7 @@ class Track(Entity, eRacer.Track):
     
     self.dist = self.GetTotalDist()
     
-    profile = eRacer.VectorTrackVertex()
+    profile = cpp.VectorTrackVertex()
     for i in track.PROFILE:
       profile.push_back(i)
     
@@ -36,9 +37,9 @@ class Track(Entity, eRacer.Track):
     mat  = game().graphics.graphics.DefaultMaterial()
     mesh.disown()
     mat.disown()
-    self.mesh = eRacer.Mesh(mesh, mat, tex)
+    self.mesh = cpp.Mesh(mesh, mat, tex)
     
     self.graphics.Init(self.mesh)
     self.physics.Init(mesh)
-    self.physics.SetGroup(eRacer.TRACK)
+    self.physics.SetGroup(cpp.TRACK)
     

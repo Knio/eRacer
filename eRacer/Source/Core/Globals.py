@@ -2,8 +2,7 @@ import os
 import sys
 import math
 
-import eRacer
-cpp = eRacer
+import eRacer as cpp
 
 # global game object
 __game = None
@@ -53,6 +52,10 @@ projectOnto=cpp.projectOnto
 mul1      = cpp.mul1
 mul0      = cpp.mul0
 
+MovingMeshNode = cpp.MovingMeshNode
+StaticMeshNode = cpp.StaticMeshNode
+
+
 
 PI    = math.pi
 ZERO  = 1e-5
@@ -64,7 +67,7 @@ CONSTS    = cpp.Constants().g_Constants
 
 from Game.Module  	import Module
 from Game.Entity    import Entity
-from Game.Prop      import Prop
+from Logic.Prop      import Prop
 
 from Core.Event 	  import Event
 from Input          import KEY

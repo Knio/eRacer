@@ -89,7 +89,7 @@ class GameState(State):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
-    scene = eRacer.Scene()
+    scene = cpp.Scene()
     self.scene = scene
     
     # TODO
@@ -108,22 +108,21 @@ class GameState(State):
     forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
     
     self.player = self.Add(Vehicle("Player", self.track, 
-      mul1(frametx, Point3(0, 4, 0)),
-      forwardMat
+      Matrix(Point3(0, 4, 0)) * frametx,
     ))
     PlayerBehavior(self.player)
     self.Add(Shadow(self.player))
   
     self.ai1    = self.Add(Vehicle("AI1",  self.track, 
-      mul1(frametx, Point3(-15, 4, 0)),
-      forwardMat, 'Racer2.x'
+      Matrix(Point3(-15, 4, 0)) * frametx,
+      2,
     ))
     AIBehavior(self.ai1, self.track)
-    self.Add(Shadow(self.ai1)
+    self.Add(Shadow(self.ai1))
     
     self.ai2    = self.Add(Vehicle("AI2",    self.track, 
-      mul1(frametx, Point3(+15, 4, 0)),
-      forwardMat, 'Racer5.x'
+      Matrix(Point3(+15, 4, 0)) * frametx,
+      5,
     ))
     AIBehavior(self.ai2, self.track)
     self.Add(Shadow(self.ai2))
@@ -131,7 +130,8 @@ class GameState(State):
     startFrame = self.track.GetFrame(0.0)
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
-    self.Add(Prop('finish_line.x', Matrix(30, 1, 3) * Matrix(startFrame.position+starFrame.up, startFrame.up, startFrame.fw)))
+    finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
+    self.Add(Prop(MovingMeshNode('Finish Line',finishLineTransform),'finish_line.x',None,finishLineTransform))
     
     def CarTrackCollisionEvent(car, track, force):
       pass
@@ -231,6 +231,8 @@ class GameState(State):
         game().logic.Add(m)
     
     self.meteorManager.Tick(time)
+    
+    State.Tick(self, time)
 
   
   def LapEvent(self, vehicle, lap):
