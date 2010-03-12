@@ -9,15 +9,16 @@ class Track(Entity, eRacer.Track):
     eRacer.Track.__init__(self)
     
     self.physics  = eRacer.TriMesh()
-    self.graphics = StaticMeshNode("track", IDENTITY)
+    self.graphics = MovingMeshNode("track", IDENTITY)
     
+    # HACK
     track = None
     # track = __import__(name)
     if name == 'Track1':
       track = Track1
     if name == 'Track2':
       track = Track2
-    
+    # END HACK
     
     for i in track.TRACK:
       self.Add(i)
@@ -41,7 +42,3 @@ class Track(Entity, eRacer.Track):
     self.physics.Init(mesh)
     self.physics.SetGroup(eRacer.TRACK)
     
-  def Tick(self, time):
-     Entity.Tick(self, time)
-
-     

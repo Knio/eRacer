@@ -20,3 +20,4 @@ class Prop(Entity):
     if self.physics:
       self.transform = self.physics.GetTransform()
     self.graphics.SetTransform(self.transform)
+
