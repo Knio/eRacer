@@ -15,6 +15,8 @@
 
 using namespace std;
 
+#include "Game/Module.h"
+#include "Time.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Gamepad.h"
@@ -28,7 +30,7 @@ namespace Input {
 /**
  * @brief main class of the input module. Manages devices.
  */
-class Input{
+class Input : public Module {
 public:
 	/**
 	 * @brief Constructor stub.
@@ -43,17 +45,17 @@ public:
 	 * @param hInstance
 	 *			a handle to the instances - needed to create DirectInput object
 	 */
-	void Init(HWND hWnd,HINSTANCE hInstance);
+	void Init();
 
 	/**
 	 * @brief update all devices - this triggers polling
 	 */
-	void Update();
+	void Tick(const Time &t);
 	
 	/**
 	 * @brief clean up devices and DirectInput object
 	 */
-	void Shutdown();
+	void Quit();
 
 private:
 	IDirectInput8* directInput_;

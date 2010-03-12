@@ -12,10 +12,8 @@ class Entity(object):
   def __init__(self):
     Entity.idCounter+=1
     self.id = Entity.idCounter
-    self.entities[self.id] = self	
+    self.entities[self.id] = self 
     
   def Tick(self, time):
     pass
   
-    
-    

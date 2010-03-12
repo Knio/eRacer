@@ -5,8 +5,8 @@ import os
 PATH = 'Resources/Sounds'
 
 class Sound(Module):
-  def __init__(self, game):
-    Module.__init__(self, game)
+  def __init__(self):
+    Module.__init__(self)
     self.sound = cpp.Sound()
     self.sound.Init()
 

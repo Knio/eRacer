@@ -7,6 +7,7 @@
  */
 
 #include "Input.h"
+#include "Game/Game.h"
 
 #include <cassert>
 #include <stdexcept>
@@ -19,7 +20,10 @@ Input::Input()
 {
 }
 
-void Input::Init(HWND hWnd,HINSTANCE hInstance){
+void Input::Init(){
+	HWND hWnd = 					Game::GetInstance()->hwnd;
+	HINSTANCE hInstance = Game::GetInstance()->hinst;
+	
 	HRESULT hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, NULL);
 	
 	assert(DIERR_BETADIRECTINPUTVERSION != hr);
@@ -54,13 +58,13 @@ void Input::Init(HWND hWnd,HINSTANCE hInstance){
 
 }
 
-void Input::Update(){
+void Input::Tick(const Time &t){
 	for(vector<Device*>::iterator i = devices_.begin();
 		i!= devices_.end(); i++)
 		(*i)->Update();
 }
 
-void Input::Shutdown(){
+void Input::Quit(){
 	for(vector<Device*>::iterator i = devices_.begin();
 		i!= devices_.end(); i++)
 		delete (*i);

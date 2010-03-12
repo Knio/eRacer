@@ -1,5 +1,5 @@
-from Game.Module import Module
-from Core.Globals import cpp
+from Game.Module  import Module
+from Core.Globals import *
 
 import os
 import threading
@@ -24,9 +24,9 @@ def debug(func):
   return f
 
 class IO(Module, cpp.IO):
-  def __init__(self, game):
-    Module.__init__(self, game)
-    cpp.IO.__init__(self, game.graphics.d3d)
+  def __init__(self):
+    Module.__init__(self)
+    cpp.IO.__init__(self, game().graphics.d3d)
     
     # work queue
     self.queue = Queue.Queue()

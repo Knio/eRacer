@@ -144,13 +144,13 @@ class GameState(State):
     self.views = []
     self.viewIndex = 0
     
-    cam = game().logic.Add(ChasingCamera(self.player))
+    cam = self.Add(ChasingCamera(self.player))
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
     
-    cam = game().logic.Add(FirstPersonCamera())
+    cam = self.Add(FirstPersonCamera())
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
     
-    cam = game().logic.Add(CarCamera(self.player))
+    cam = self.Add(CarCamera(self.player))
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
     
     # without this, the skyboxes are garbage collected because the 
@@ -158,9 +158,9 @@ class GameState(State):
     self.skybox = SkyBox()
 
     self.starfields = [
-      game().logic.Add(Starfield(1024, 1000.0)),
-      game().logic.Add(Starfield(1024, 100.0)),
-      game().logic.Add(Starfield(1024, 20.0)),    
+      self.Add(Starfield(1024, 1000.0)),
+      self.Add(Starfield(1024, 100.0)),
+      self.Add(Starfield(1024, 20.0)),    
     ]
     
     for view in self.views:
@@ -170,11 +170,11 @@ class GameState(State):
       view.AddRenderable(self.skybox)
    
     self.meteorManager = MeteorManager(self)
-    game().logic.Add(self.meteorManager)
+    self.Add(self.meteorManager)
 
     for i in range(CONSTS.NUM_METEORS):
       m = self.meteorManager.spawnRandom()
-      game().logic.Add(m)
+      self.Add(m)
     
     self.lastMeteorTime = 0
     
@@ -228,7 +228,7 @@ class GameState(State):
       if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
         self.lastMeteorTime = 0
         m = self.meteorManager.spawnTargeted(self.player)
-        game().logic.Add(m)
+        self.Add(m)
     
     self.meteorManager.Tick(time)
     

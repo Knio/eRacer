@@ -5,18 +5,10 @@ Main subsystem interface
 import eRacer
 
 class Module(eRacer.Module):
-  def __init__(self, game):
+  def __init__(self):
     eRacer.Module.__init__(self)
-    self.game = game
     self.objects = []
-    
-  def Add(self, obj):
-    '''
-    add an object to this module
-    '''
-    self.objects.append(obj)
-    return obj
-    
+        
   def Init(self):
     '''
     Initialize this module.
@@ -40,9 +32,8 @@ class Module(eRacer.Module):
     calls .tick
     '''
     #print 'Ticking module %s' % self.__class__.__name__
-    for i in self.objects:
-      i.Tick(time)
-    
+    pass
+            
   def Quit(self):
     '''
     destroy this module

@@ -1,9 +1,8 @@
 from Core.Globals import *
 
-class Input(Module):
+class Input(cpp.Input):
   def __init__(self, game):
-    Module.__init__(self, game)
-    self.input = cpp.Input()
+    cpp.Input.__init__(self)
     self.input.Init(game.graphics.hwnd, game.graphics.hinst) 
     
   def Tick(self, time):

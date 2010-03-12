@@ -3,20 +3,20 @@ from Window         import Window
 from View           import View
 
 class Graphics(Module):
-  def __init__(self, game):
-    Module.__init__(self, game)
+  def __init__(self):
+    Module.__init__(self)
     
     self.window   = Window("Test")
     self.graphics = cpp.GraphicsLayer.GetInstance()
     
     # get pointers
     
-    self.hwnd = self.window.hwnd
-    self.hwnd.disown()
-    self.hinst = self.window.hinst
-    self.hinst.disown()
+    game().hwnd = self.window.hwnd
+    game().hwnd.disown()
+    game().hinst = self.window.hinst
+    game().hinst.disown()
     
-    self.graphics.Init(self.hwnd)
+    self.graphics.Init(game().hwnd)
     
     self.d3d = self.graphics.GetDevice()
     self.d3d.disown()

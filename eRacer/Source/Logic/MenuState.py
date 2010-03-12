@@ -19,7 +19,7 @@ class MenuState(State):
     #width and height should not be hardcoded!
     
     camera = OrthographicCamera(800,600)
-    game().logic.Add(camera)
+    self.Add(camera)
 
     self.view = View(camera)
         
@@ -64,7 +64,7 @@ class MainMenuState(MenuState):
     MenuState.__init__(self)
 
     logo = Quad(self.view,"eracerx_logo_negative.png")
-    game().logic.Add(logo)
+    self.Add(logo)
     logo.transform = Matrix(Point3(400,450,0), 0,0,0, 600,235,1)
     
     self.sound = cpp.SoundFx();

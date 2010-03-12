@@ -26,17 +26,15 @@ class Main(Game):
     
     # graphics must be created first because
     # some other modules need the HWND or D3DDEVICE
-    self.graphics  = Graphics(self)
-    self.io        = IO(self)
-    self.input     = Input(self)
-    self.logic     = Logic(self)
-    self.sound     = Sound(self)
-    self.physics   = Physics(self)
+    self.graphics  = Graphics()
+    self.io        = IO()
+    self.input     = cpp.Input()
+    self.sound     = Sound()
+    self.physics   = Physics()
     
     # order that modules will be ticked in the main loop
     self.AddModule(self.io)
     self.AddModule(self.input)
-    self.AddModule(self.logic)
     self.AddModule(self.sound)
     self.AddModule(self.physics)
     self.AddModule(self.graphics)

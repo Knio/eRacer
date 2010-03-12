@@ -27,12 +27,13 @@ public:
 		assert(g_Game);
 		return g_Game; 
 	}
-
+	HWND 			hwnd;
+	HINSTANCE hinst;
 private:
 	static Game* g_Game;
 protected:
 	Game() { g_Game = this; }
-
+	
 public:
 	virtual ~Game() {}
 	
@@ -53,7 +54,7 @@ protected:
 	virtual void Start()									{ assert(false); }
 
 	/* Do one frame. Calls Module::Tick on each module. See Module.h */	
-	virtual void Start(Time& t)								{ assert(false); }
+	virtual void Start(Time& t)						{ assert(false); }
 
 	/* Quit the main loop. Calls Module::Quit on each module. See Module.h */	
 	virtual void Quit()										{ assert(false); }
