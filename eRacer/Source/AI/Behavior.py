@@ -4,7 +4,7 @@ from Core.Globals import *
 class Behavior(object):
   def __init__(self, parent):
     self.parent = parent
-    self.parent.behaviour = self
+    self.parent.behavior = self
       
   def Tick(self,time):
     pass
@@ -42,6 +42,7 @@ class AIBehavior(Behavior):
     self.curState = AIState.DRIVE
   
   def Tick(self,time):    
+    print 'hi'
     pos = self.parent.physics.GetPosition()
     nowFrame  = self.line.GetFrame(self.parent.trackpos)
     curFrame  = self.line.GetFrame(self.parent.trackpos + 100.0)

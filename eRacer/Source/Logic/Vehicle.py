@@ -105,18 +105,12 @@ class Vehicle(Prop):
     self.velocity = phys.GetVelocity()
     
     
-    # self.trackpos = self.track.FindPosition(worldpos, self.trackpos)
-    # frame = self.track.GetFrame(self.trackpos)
-    # print worldpos
-    # print frame.position, frame.up, frame.dist, length(frame.position-worldpos)
     frame = self.track.GetFrame(worldpos, self.trackpos)
     self.frame = frame
-    # print self.frame.position, self.frame.up, self.frame.dist, length(self.frame.position-worldpos)
     self.trackpos = frame.dist
-    # frame = self.frame
     
-    up    = frame.up #Vector3(frame.up.x, frame.up.y, frame.up.z)
-    fw    = frame.fw #Vector3(frame.fw.x, frame.fw.y, frame.fw.z)
+    up    = frame.up
+    fw    = frame.fw
   
     lapcount = int(self.trackpos / self.track.dist)
     if (lapcount > self.lapcount):
