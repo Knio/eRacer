@@ -7,7 +7,6 @@ eRacer/build
 Thumbs.db
 .moc/*
 .tmp/*
-*.pdf
 *.plist
 *.aux
 *.log
