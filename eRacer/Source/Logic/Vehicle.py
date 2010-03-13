@@ -357,15 +357,11 @@ class Vehicle(Prop):
 
 
     
+    cpp.debug(self.transform)
     Prop.Tick(self, time)
+    cpp.debug(self.transform)
     
 
-  # def set_transform(self, transform):
-  #   Entity.set_transform(self, transform)
-  #   self.graphics.SetTransform(Matrix(ORIGIN, math.pi, Y) * transform)
-
-  # transform = property(Entity.get_transform, set_transform)   
-  
   def PrintDebug(self):
     if not CONSTS.CAR_DEBUG == self.id: return
     # print debug info

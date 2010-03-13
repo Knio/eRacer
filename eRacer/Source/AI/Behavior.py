@@ -42,7 +42,6 @@ class AIBehavior(Behavior):
     self.curState = AIState.DRIVE
   
   def Tick(self,time):    
-    print 'hi'
     pos = self.parent.physics.GetPosition()
     nowFrame  = self.line.GetFrame(self.parent.trackpos)
     curFrame  = self.line.GetFrame(self.parent.trackpos + 100.0)
