@@ -127,11 +127,11 @@ Here is a list of some of the new features since milestone 2 that in our opinion
 \subsection{Variable gravity direction}
 
 As planned, we have removed the global gravitational force and replaced it by an attractive force applied normal to the closest track segment.
-This allows for a very flexibel track design with up-side-down sections. The magnetism currently only acts on cars - meteors for example are not affected by it.
+This allows for a very flexible track design with upside-down sections. The magnetism currently only acts on cars - meteors for example are not affected by it.
 
 \subsection{Improved camera}
 
-To achieve a better sense of speed and handle the up-side-down segments of the track better, we have changed the following camera to be mounted lower and focus on the road before the car instead of the car. We further changed it to use the road normal instead of a global normal as up vector but have it lagging behind enough to give a good feeling of the banking of the track.
+To achieve a better sense of speed and handle the upside-down segments of the track better, we have changed the following camera to be mounted lower and focus on the road before the car instead of the car. We further changed it to use the road normal instead of a global normal as up vector but have it lagging behind enough to give a good feeling of the banking of the track.
 
 \subsection{AI}
 
@@ -161,7 +161,6 @@ Culling is currently disabled because there is a bug in the computation of the c
 
 On some computers, loading our custom font causes a out of memory error (for unknown reasons). In this case we fall back to a system font.
 
-
 \section{Future work}
 \label{future-work}
 
@@ -169,15 +168,15 @@ In this section we want to touch on a few topics that we want to work on until t
 
 \subsection{Smarter AI}
 
-We want to improve the AI to be able to avoid obstacles and each other. We also want it to behave less predictable and more dynamic. LAstly it should use boost to its advantage.
+We want to improve the AI to be able to avoid obstacles and each other. We also want it to behave less predictable and more dynamic. Lastly it should use boost to its advantage.
 
 \subsection{Improved boost}
 
 The boost as it is implemented currently is very simple and unlimited. For the next milestone we want to have a limited amount of boost that can be restored using the mechanism described in the design document shipped with milestone 1. The amount of boost available should be displayed as part of the HUD. 
 
-\subsection{More complex track}
+\subsection{Refined track}
 
-The track in its current form already contains some of the features that we want to have in the game, namely loops, barrel rolls and up-side-down sections. The final track should contain even more features, such as jumps and cork screws, and additionally be a lot longer.
+We currently have two tracks, one relatively small, the other long but a bit unrefined. The latter needs to be imrpoved to make it less likely to fall off and maybe tighten the turns a bit to make it more exciting.
 
 \subsection{Props}
 
@@ -232,12 +231,10 @@ Reverse & S & Left Trigger \\
 Break & Left Shift & B \\ 
 Steer left & A & \multirow{2}{*}{Left Analog Stick} \\ 
 Steer right & D \\
-Boost & Caps Lock & A \\
+Boost & Space & A \\
 Cycle cameras & C & Y \\
 Move flying camera & Arrow keys &  \\
-Reload tuning parameters & R & A \\
-Toggle debug info & Tab & X \\
-Play jaguar sound & Spacebar &  \\
+Reload tuning parameters & R & \\
 Pause menu & Esc & Start \\
 \end{longtable}
 \end{center}
