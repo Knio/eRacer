@@ -33,7 +33,7 @@ class Track(Entity, cpp.Track):
       profile.push_back(i)
     
     mesh = self.CreateMesh(profile)
-    tex  = game().io.LoadTexture('concrete_plates.jpg')
+    tex  = game().io.LoadTexture('ConcretePlates.jpg')
     mat  = game().graphics.graphics.DefaultMaterial()
     mesh.disown()
     mat.disown()

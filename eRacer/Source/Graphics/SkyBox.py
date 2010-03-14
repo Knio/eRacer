@@ -9,5 +9,5 @@ class SkyBox(cpp.SkyBox):
       if mesh:
         self.Init(mesh)
 
-    game().io.LoadMeshAsync(load, "skybox2.x")   
+    game().io.LoadMeshAsync(load, "Skybox.x",4)   
     

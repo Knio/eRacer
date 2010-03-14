@@ -5066,7 +5066,7 @@ Material {
 0;0;0;;
 0;0;0;;
 TextureFilename {
-"Meteor3LPNTexturePSD.psd";
+"Meteor3LPNTexture.jpg";
 }
 }
 }

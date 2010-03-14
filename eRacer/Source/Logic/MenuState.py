@@ -63,7 +63,7 @@ class MainMenuState(MenuState):
   def __init__(self):
     MenuState.__init__(self)
 
-    logo = Quad(self.view,"eracerx_logo_negative.png")
+    logo = Quad(self.view,"eRacerXLogoNegative.png")
     self.Add(logo)
     logo.transform = Matrix(Point3(400,450,0), 0,0,0, 600,235,1)
     

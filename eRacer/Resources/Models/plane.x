@@ -53,7 +53,7 @@ MeshMaterialList { //just one 1024x1024 folding-carton-texture
 	0.0;
 	0.0; 0.0; 0.0;;
 	0.0; 0.0; 0.0;;
-	TextureFilename { "eracer_logo.png"; }
+	TextureFilename { "eRacerXLogo.png"; }
 } //end of Material
 } //end of MaterialList
 MeshTextureCoords {

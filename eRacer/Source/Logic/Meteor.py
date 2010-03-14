@@ -55,7 +55,7 @@ class MeteorManager(object):
 
 class Meteor(Model):
   DENSITY   = 200.
-  MODELS    = ["Meteor1.x", "Meteor2.x"]
+  MODELS    = ["Meteor1.x", "Meteor2.x", "Meteor3.x"]
 
   def __init__(self, scale=1):    
     Model.__init__(

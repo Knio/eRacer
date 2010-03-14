@@ -53,7 +53,7 @@ MeshMaterialList { //just one 1024x1024 folding-carton-texture
 	0.0;
 	0.0; 0.0; 0.0;;
 	0.0; 0.0; 0.0;;
-	TextureFilename { "shadow.png"; }
+	TextureFilename { "Shadow.png"; }
 } //end of Material
 } //end of MaterialList
 MeshTextureCoords {

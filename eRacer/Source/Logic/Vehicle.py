@@ -38,7 +38,7 @@ class Vehicle(Model):
     Model.__init__(
       self,
       name,
-      'Racer1.x',
+      'Racer.x',
       cpp.CarBody(True, self.MASS),
       tx,
       modelnum,

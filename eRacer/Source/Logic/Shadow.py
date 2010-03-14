@@ -2,7 +2,7 @@ from Core.Globals import *
 
 class Shadow(Model):
   def __init__(self, target):
-    Model.__init__(self, 'Shadow', 'shadow.x')
+    Model.__init__(self, 'Shadow', 'Shadow.x')
     self.target = target
     
   def Tick(self, time):

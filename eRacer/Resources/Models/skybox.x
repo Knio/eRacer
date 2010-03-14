@@ -46,7 +46,7 @@ Material {
 0.0;
 0.0; 0.0; 0.0;;
 0.0; 0.0; 0.0;;
-TextureFilename { "skybox_texture.jpg"; }
+TextureFilename { "SkyBox%dk.jpg"; }
 } //end of Material
 } //end of MaterialList
 

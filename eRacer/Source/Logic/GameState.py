@@ -131,7 +131,7 @@ class GameState(State):
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
     finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
-    self.Add(Model('Finish Line','finish_line.x',None,finishLineTransform))
+    self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
     
     def CarTrackCollisionEvent(car, track, force):
       pass
