@@ -123,6 +123,8 @@ If a class doesn't need to be exported to Python, it can be left out.
 
 // IO *********************************
 %feature("director") IO;
+%template(VectorString) std::vector<std::string>; 
+%template(VectorTexture) std::vector<IDirect3DTexture9*>; 
 %include "..\IO\IO.h"
 
 %exception;

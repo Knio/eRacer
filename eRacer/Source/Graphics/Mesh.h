@@ -75,7 +75,7 @@ public:
 	 * @param textures
 	 *			a pointer to the memory location where the pointers to the textures are stored
 	 */
-	virtual void Init(const CachedMesh& cached, IDirect3DTexture9** textures);
+	virtual void Init(const CachedMesh& cached, const vector<IDirect3DTexture9*>& textures);
 	
 	/**
 	 * @brief flag to indicate whether the mesh is already initialized. 

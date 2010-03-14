@@ -38,22 +38,26 @@ Mesh::Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture) :
 }
 
 Mesh::~Mesh(){
-	if(initialized && !cached){
-		delete [] materials_;
+	if(initialized){
+		if(!cached){
+			delete [] materials_;
+			d3dMesh_->Release();
+		}
 		delete [] textures_;
-		d3dMesh_->Release();
 	}
 }
 
-void Mesh::Init(const CachedMesh& cachedMesh, IDirect3DTexture9** textures){
+void Mesh::Init(const CachedMesh& cachedMesh, const vector<IDirect3DTexture9*>& textures){
 	assert(!initialized);
 	assert(cachedMesh.IsValid());
-	assert(NULL != textures);
+	assert(cachedMesh.nMaterials == textures.size());
 
 	d3dMesh_ = cachedMesh.d3dMesh;
 	nMaterials_ = cachedMesh.nMaterials;
 	materials_ = cachedMesh.materials;
-	textures_ = textures;
+	textures_ = new IDirect3DTexture9*[cachedMesh.nMaterials];
+	for(unsigned int i = 0; i<textures.size(); i++)
+		textures_[i] = textures[i];
 	localBounds = cachedMesh.localBounds;
 	initialized = true;
 	cached = true;

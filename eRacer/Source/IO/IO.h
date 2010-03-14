@@ -18,7 +18,7 @@ using namespace std;
 
 struct CachedMesh{
 	ID3DXMesh* d3dMesh;
-	DWORD nMaterials;
+	unsigned int nMaterials;
 	D3DMATERIAL9* materials;
 	vector<string> texturePatterns;
 	Graphics::BoundingSphere localBounds;	

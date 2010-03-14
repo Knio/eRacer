@@ -32,7 +32,7 @@ bool IO::_LoadMesh(const char* file, CachedMesh& mesh)
 		NULL,
 		&materialsbuffer, 
 		NULL, 
-		&mesh.nMaterials,
+		(DWORD*)&mesh.nMaterials,
 		&mesh.d3dMesh
 	);
 	//use exceptions!

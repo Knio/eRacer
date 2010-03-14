@@ -60,13 +60,14 @@ class IO(Module, cpp.IO):
       print "Loaded mesh %s" % name
       self.meshes[name] = mesh
     
-    textures = []
+    textures = cpp.VectorTexture()
     cached = self.meshes[name]
     for i in range(0,cached.nMaterials):
-      textures.append(self.LoadTexture(cached.texturePatterns.at(i) % args))
+      textures.push_back(self.LoadTexture(cached.texturePatterns[i] % args))
 
     result = cpp.Mesh()
-    result.Init(cached.d3dMesh, cached.nMaterials, cached.materials, textures)
+    result.thisown = 0
+    result.Init(cached, textures)
 
     return result
   
