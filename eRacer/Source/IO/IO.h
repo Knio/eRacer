@@ -14,6 +14,13 @@ using namespace std;
 #include "Graphics\Mesh.h"
 
 
+struct CachedMesh{
+	ID3DXMesh* d3dMesh;
+	DWORD nMaterials;
+	D3DMATERIAL9* materials;
+	string* texturePatterns;	
+};
+
 class IO 
 {
 
@@ -41,7 +48,7 @@ public:
 	static bool valid(IDirect3DTexture9* t) { return t != (IDirect3DTexture9*)-1; }
 
 	// private
-	bool _LoadMesh(const char* file, Graphics::Mesh& mesh);
+	bool _LoadMesh(const char* file, CachedMesh& mesh);
 	IDirect3DTexture9* _LoadTexture(const char* file);	
 	void _FreeTexture(IDirect3DTexture9* t);
 };

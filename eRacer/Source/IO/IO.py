@@ -49,19 +49,26 @@ class IO(Module, cpp.IO):
       callback(r)
 
   def LoadMesh(self, name, *args):
-    self.args = args
     name = j(MODELPATH,name)
     # print "Loading mesh %s" % name
     if not name in self.meshes:
-      mesh = cpp.Mesh()
+      mesh = cpp.CachedMesh()
       r = self._LoadMesh(name,mesh)
       if not r:
         print 'Failed to load mesh "%s"' % name
         return None # should throw exception
       print "Loaded mesh %s" % name
       self.meshes[name] = mesh
+    
+    textures = []
+    cached = self.meshes[name]
+    for i in range(0,cached.nMaterials):
+      textures.append(self.LoadTexture(cached.texturePatterns[i] % args))
 
-    return self.meshes[name]
+    result = cpp.Mesh()
+    result.Init(cached.d3dMesh, cached.nMaterials, cached.materials, textures)
+
+    return result
   
   LoadMeshAsync = asynchronous(LoadMesh)
     
@@ -70,8 +77,8 @@ class IO(Module, cpp.IO):
     if name:
       name = j(TEXPATH, name)
       # if self.args:
-      name = name % self.args
-      self.args = ()
+      # name = name % self.args
+      # self.args = ()
     if not name in self.textures:
       r = self._LoadTexture(name)
       r.disown()

@@ -18,14 +18,9 @@ IDirect3DTexture9* IO::_LoadTexture(const char* file)
 
 
 
-bool IO::_LoadMesh(const char* file, Graphics::Mesh& mesh)
+bool IO::_LoadMesh(const char* file, CachedMesh& mesh)
 {
 	LPD3DXBUFFER materialsbuffer;
-	//MeshStruct mesh;
-	ID3DXMesh* d3dMesh;
-	DWORD nMaterials;
-	D3DMATERIAL9* materials;
-	IDirect3DTexture9** textures;
 	
 	HRESULT r = D3DXLoadMeshFromX(
 		file, 
@@ -34,8 +29,8 @@ bool IO::_LoadMesh(const char* file, Graphics::Mesh& mesh)
 		NULL,
 		&materialsbuffer, 
 		NULL, 
-		&nMaterials,
-		&d3dMesh
+		&mesh.nMaterials,
+		&mesh.d3dMesh
 	);
 	//use exceptions!
 	if (!SUCCEEDED(r))
@@ -43,18 +38,18 @@ bool IO::_LoadMesh(const char* file, Graphics::Mesh& mesh)
 
 	D3DXMATERIAL* materialBufferPointer = ( D3DXMATERIAL* )materialsbuffer->GetBufferPointer();
 	
-	materials = new D3DMATERIAL9[nMaterials];
-	textures  = new IDirect3DTexture9*[nMaterials];
-	for(DWORD i=0; i<nMaterials; i++)
+	mesh.materials = new D3DMATERIAL9[mesh.nMaterials];
+	mesh.texturePatterns  = new string[mesh.nMaterials];
+	for(DWORD i=0; i<mesh.nMaterials; i++)
     {
 		// Copy the material
-		materials[i]	= materialBufferPointer[i].MatD3D;
-		textures[i]	= LoadTexture(materialBufferPointer[i].pTextureFilename);
+		mesh.materials[i]		= materialBufferPointer[i].MatD3D;
+		mesh.texturePatterns[i]	= materialBufferPointer[i].pTextureFilename;
         
 		// Set the ambient color for the material (D3DX does not do this)
-		materials[i].Ambient = materials[i].Diffuse;
+		mesh.materials[i].Ambient = mesh.materials[i].Diffuse;
     }
-	mesh.Init(d3dMesh,nMaterials,materials,textures);
+	//mesh.Init(d3dMesh,nMaterials,materials,textures);
     // Done with the material buffer
     materialsbuffer->Release();
 	return true;
