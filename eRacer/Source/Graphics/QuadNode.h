@@ -1,13 +1,13 @@
 /**
- * @file Quad.h
- * @brief Definition of the Quad class
+ * @file QuadNode.h
+ * @brief Definition of the QuadNode class
  *
  * @date 21.02.2010
  * @author: Ole Rehmsen
  */
 #pragma once
 
-#include "Renderable.h"
+#include "RenderableNode.h"
 
 #include "Core/Math.h"
 
@@ -16,7 +16,7 @@ namespace Graphics{
 /**
  * @brief a textured quad with a location, rotation and scaling in space
  */
-class Quad : public Renderable {
+class QuadNode : public RenderableNode {
 	struct Vertex {
 		Point3 position;
 		//DWORD color;
@@ -28,14 +28,14 @@ class Quad : public Renderable {
 public:
 
 	/**
-	 * @brief Constructor
+	 * @brief constructor
 	 */
-	Quad();
+	QuadNode(const string& name, const Matrix& transform = IDENTITY);
 
 	/**
 	 * @brief destructor stub
 	 */
-	virtual ~Quad() {};
+	virtual ~QuadNode() {};
 
 	/**
 	 * @brief initialize this quad. Can be overidden by subclasses
@@ -53,13 +53,6 @@ public:
 	 */
 	virtual void Draw(IDirect3DDevice9* device) const;
 
-	/**
-	 * @brief setter for the world transform of this sprite
-	 *
-	 * @param transform
-	 *			the new transform from model space to world space for this sprite
-	 */
-	void SetTransform(const Matrix& transform);
 
 	/**
 	 * @brief flag initially set to false indicating whether the texture has been loaded already
@@ -67,13 +60,16 @@ public:
 	bool initialized;
 
 protected:
-	Matrix transform_;
+	/**
+	 * @brief update the world bounding volume by transforming the local bounding volume
+	 *
+	 * This method should be called whenever the transform of the mesh node changes.
+	 */
+	virtual void UpdateWorldBounds();
+
 	IDirect3DTexture9* texture_;
 	IDirect3DVertexBuffer9* vertexBuffer_;
 };
 
-inline void Quad::SetTransform(const Matrix& transform){
-	transform_ = transform;
-}
 
 }

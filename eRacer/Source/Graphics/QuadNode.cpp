@@ -1,19 +1,20 @@
 /**
- * @file Quad.cpp
- * @brief Implementation of the Quad class
+ * @file QuadNode.cpp
+ * @brief Implementation of the QuadNode class
  *
  * @date 21.02.2010
  * @author: Ole Rehmsen
  */
 
-#include "Quad.h"
+#include "QuadNode.h"
 
 #include "GraphicsLayer.h"
 
 namespace Graphics {
 
-Quad::Quad()
-: initialized(false)
+QuadNode::QuadNode(const string& name, const Matrix& transform)
+: RenderableNode(name,transform),
+  initialized(false)
 {
 	assert(SUCCEEDED(
 		GraphicsLayer::GetInstance()->GetDevice()->CreateVertexBuffer(
@@ -55,13 +56,14 @@ Quad::Quad()
 	vertexBuffer_->Unlock();
 }
 
-void Quad::Init(IDirect3DTexture9* texture){
+void QuadNode::Init(IDirect3DTexture9* texture){
 	assert(NULL != texture);
 	texture_ = texture;
 	initialized = true;
+	UpdateWorldBounds();
 }
 
-void Quad::Draw(IDirect3DDevice9* device) const{
+void QuadNode::Draw(IDirect3DDevice9* device) const{
 	if(!initialized)
 		return;
 
@@ -73,5 +75,29 @@ void Quad::Draw(IDirect3DDevice9* device) const{
 
 	device->DrawPrimitive(D3DPT_TRIANGLEFAN, 0, 2);
 }
+
+void QuadNode::UpdateWorldBounds(){
+	if(!initialized)	
+		return;
+	
+	Point3 p[4];
+	p[0] = mul1(transform_,Point3(-.5f,.5f,0));
+	p[1] = mul1(transform_,Point3(.5f,.5f,0));
+	p[2] = mul1(transform_,Point3(.5f,-.5f,0));
+	p[3] = mul1(transform_,Point3(-.5f,-.5f,0));
+	
+	float max = 0.0f;
+	
+	for(unsigned int i=0; i<4; i++)
+		for(unsigned int j=i+1; j<4; j++){
+			float distance = length(p[i]-p[j]);
+			if(distance > max){
+				max = distance;
+				worldBounds_.center = (p[i]+p[j])/2;
+			}
+		}
+	worldBounds_.radius = max /2;
+}
+
 
 }

@@ -1,9 +1,9 @@
 from Core.Globals import *
 
-class Quad(cpp.Quad,Entity):
+class Quad(cpp.QuadNode,Entity):
   def __init__(self, view, texture):
     Entity.__init__(self)
-    cpp.Quad.__init__(self)
+    cpp.QuadNode.__init__(self, "Quad")
     self.transform = Matrix()
        
     t = game().io.LoadTexture(texture)   

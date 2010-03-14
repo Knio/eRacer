@@ -62,9 +62,18 @@ void MeshNode::Init(Mesh* mesh){
 	
 	mesh_ = mesh;
 	
-	UpdateWorldBounds();
 	initialized = true;
+	UpdateWorldBounds();
 }
 
+void MeshNode::UpdateWorldBounds(){
+	if(!initialized)	
+		return;
+		
+	worldBounds_.center = mul0(transform_, mesh_->localBounds.center);
+	float x, y, z;
+	ExtractScaling(transform_,x,y,z);
+	worldBounds_.radius = mesh_->localBounds.radius * max(max(x,y),z);
+}
 
 }
