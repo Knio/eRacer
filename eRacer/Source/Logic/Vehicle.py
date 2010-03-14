@@ -357,9 +357,7 @@ class Vehicle(Prop):
 
 
     
-    cpp.debug(self.transform)
     Prop.Tick(self, time)
-    cpp.debug(self.transform)
     
 
   def PrintDebug(self):

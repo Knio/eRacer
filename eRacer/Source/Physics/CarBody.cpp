@@ -34,7 +34,7 @@ CarBody::CarBody(bool dynamic, float mass, const Point3& pos, const Matrix& orie
 	capDesc2.localPose.t = NxVec3((NxReal)-2.2, (NxReal)0, (NxReal)1.11);
 
 	//middle, shorter box
-	boxDesc.dimensions.set((NxReal)0.8, (NxReal)3.5, (NxReal)2.5);
+	boxDesc.dimensions.set((NxReal)0.8, (NxReal)3.5, (NxReal)1.0);
 	boxDesc.localPose.M = Matrix_NxMat33(rot);
 	boxDesc.localPose.t = NxVec3((NxReal)0, (NxReal)0, (NxReal)0.0);
 
