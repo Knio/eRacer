@@ -1,6 +1,6 @@
 from Core.Globals import *
 
-class Vehicle(Prop):
+class Vehicle(Model):
   SIZE    = Vector3(2.5, 1, 4.5) # "radius" (double for length)
   WHEELS  = [ # location of wheels in object space
     Point3(-2.5, -2.0,  4.5), # front left
@@ -35,9 +35,9 @@ class Vehicle(Prop):
   def __init__(self, name, track, tx, modelnum=1):
     self.ReloadedConstsEvent()
 
-    Prop.__init__(
+    Model.__init__(
       self,
-      MeshNode(name),
+      name,
       'Racer1.x',
       cpp.CarBody(True, self.MASS),
       tx,
@@ -357,7 +357,7 @@ class Vehicle(Prop):
 
 
     
-    Prop.Tick(self, time)
+    Model.Tick(self, time)
     
 
   def PrintDebug(self):

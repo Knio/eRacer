@@ -1,8 +1,8 @@
 from Core.Globals import *
 
-class Shadow(Prop):
+class Shadow(Model):
   def __init__(self, target):
-    Prop.__init__(self, MeshNode('Shadow'), 'shadow.x')
+    Model.__init__(self, 'Shadow', 'shadow.x')
     self.target = target
     
   def Tick(self, time):
@@ -10,5 +10,5 @@ class Shadow(Prop):
     p = mul1(self.target.transform, ORIGIN)
     pos = projectOnto(p - f.position, f.up) + f.position + f.up*0.3
     self.transform = Matrix(pos, f.up, f.fw)
-    Prop.Tick(self, time)
+    Model.Tick(self, time)
     

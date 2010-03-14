@@ -53,14 +53,14 @@ class MeteorManager(object):
     #print "MC Collision reported to MeteorManager"
 
 
-class Meteor(Prop):
+class Meteor(Model):
   DENSITY   = 200.
   MODELS    = ["Meteor1.x", "Meteor2.x"]
 
   def __init__(self, scale=1):    
-    Prop.__init__(
+    Model.__init__(
       self,
-      MeshNode('Meteor'),
+      'Meteor',
       random.choice(self.MODELS),
       cpp.Box(True, self.DENSITY*scale*scale, ORIGIN, IDENTITY, Vector3(scale,scale,scale)),      
     )

@@ -66,7 +66,7 @@ CONSTS    = cpp.Constants().g_Constants
 
 from Game.Module  	import Module
 from Game.Entity    import Entity
-from Logic.Prop      import Prop
+from Logic.Model      import Model
 
 from Core.Event 	  import Event
 from Input          import KEY

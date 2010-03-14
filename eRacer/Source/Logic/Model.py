@@ -1,11 +1,11 @@
 from Core.Globals import *
 
-class Prop(Entity):
-  def __init__(self, gfx, model, phys=None, tx=IDENTITY, *args):
+class Model(Entity):
+  def __init__(self, name, filename, phys=None, tx=IDENTITY, *args):
     Entity.__init__(self)
     self.transform = tx
     
-    self.graphics = gfx
+    self.graphics = MeshNode(name,tx)
     self.physics  = phys
     
     if self.physics:
@@ -14,7 +14,7 @@ class Prop(Entity):
     def load(mesh):
       if mesh:
         self.graphics.Init(mesh)
-    game().io.LoadMeshAsync(load, model, *args)
+    game().io.LoadMeshAsync(load, filename, *args)
     
   def Tick(self, time):
     Entity.Tick(self, time)
