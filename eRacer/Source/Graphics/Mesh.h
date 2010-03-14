@@ -22,6 +22,9 @@
 
 using namespace std;
 
+
+struct CachedMesh;
+
 namespace Graphics{
 
 /**
@@ -34,20 +37,7 @@ public:
 	 */
 	Mesh();
 
-	Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture) :
-		d3dMesh_(mesh), 
-		nMaterials_(1)
-	{
-		materials_ = new D3DMATERIAL9[1];
-		materials_[0] = material;
-		textures_ = new IDirect3DTexture9*[1];
-		textures_[0] = texture;
-		
-		initialized = true;
-
-		UpdateLocalBounds();
-		
-	}
+	Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture);
 
 	virtual ~Mesh();
 
@@ -80,16 +70,12 @@ public:
 	/**
 	 * @brief initialize this mesh. Can be overidden by subclasses
 	 *
-	 * @param mesh
-	 *			a pointer to the Direct3D mesh
-	 * @param nMaterials
-	 *			the number of materials and textures
-	 * @param materials
-	 *			a pointer to the memory location where the materials are stored
+	 * @param cached
+	 *			a cached mesh that should be used for instantiation
 	 * @param textures
 	 *			a pointer to the memory location where the pointers to the textures are stored
 	 */
-	virtual void Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures);
+	virtual void Init(const CachedMesh& cached, IDirect3DTexture9** textures);
 	
 	/**
 	 * @brief flag to indicate whether the mesh is already initialized. 
@@ -97,26 +83,21 @@ public:
 	 * This prevents the mesh from drawing itself before it is properly loaded.
 	 */
 	bool initialized;
+	
+	/**
+	 * @brief fot cleanup: If this flag is set, do not free memory when destructed
+	 */
+	bool cached;
 
 	BoundingSphere localBounds;
 
 	//friend class IO;
 protected:
-	/**
-	 * @brief update the local bounding volume from the mesh data
-	 *
-	 * This method should be called whenever vertex data changes (i.e. after loading)
-	 * to bring the bounding volume up to date.
-	 */
-	void UpdateLocalBounds();
-
-
+	
 	ID3DXMesh* d3dMesh_;
 	unsigned int nMaterials_;
 	D3DMATERIAL9* materials_;
 	IDirect3DTexture9** textures_;
-
-
 };
 
 

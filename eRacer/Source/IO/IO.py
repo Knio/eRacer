@@ -63,7 +63,7 @@ class IO(Module, cpp.IO):
     textures = []
     cached = self.meshes[name]
     for i in range(0,cached.nMaterials):
-      textures.append(self.LoadTexture(cached.texturePatterns[i] % args))
+      textures.append(self.LoadTexture(cached.texturePatterns.at(i) % args))
 
     result = cpp.Mesh()
     result.Init(cached.d3dMesh, cached.nMaterials, cached.materials, textures)

@@ -1,5 +1,8 @@
 #include "IO.h"
 
+bool CachedMesh::IsValid() const{
+	return NULL != d3dMesh && NULL != materials;
+}
 
 IO* IO::g_IO = NULL;
 
@@ -39,7 +42,7 @@ bool IO::_LoadMesh(const char* file, CachedMesh& mesh)
 	D3DXMATERIAL* materialBufferPointer = ( D3DXMATERIAL* )materialsbuffer->GetBufferPointer();
 	
 	mesh.materials = new D3DMATERIAL9[mesh.nMaterials];
-	mesh.texturePatterns  = new string[mesh.nMaterials];
+	mesh.texturePatterns.resize(mesh.nMaterials);
 	for(DWORD i=0; i<mesh.nMaterials; i++)
     {
 		// Copy the material
@@ -49,6 +52,7 @@ bool IO::_LoadMesh(const char* file, CachedMesh& mesh)
 		// Set the ambient color for the material (D3DX does not do this)
 		mesh.materials[i].Ambient = mesh.materials[i].Diffuse;
     }
+    mesh.localBounds.recompute(*mesh.d3dMesh);
 	//mesh.Init(d3dMesh,nMaterials,materials,textures);
     // Done with the material buffer
     materialsbuffer->Release();

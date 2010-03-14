@@ -1,25 +1,31 @@
 #ifndef IO_H_
 #define IO_H_
 
+#include <cassert>
+#include <iostream>
+#include <vector>
+
 #define NOMINMAX
 #include <windows.h>
-#include <cassert>
 #include <d3d9types.h>
 #include <d3dx9mesh.h>
 
-
-#include <iostream>
-using namespace std;
-
 #include "Graphics\Mesh.h"
+#include "Graphics\BoundingSphere.h"
+
+using namespace std;
 
 
 struct CachedMesh{
 	ID3DXMesh* d3dMesh;
 	DWORD nMaterials;
 	D3DMATERIAL9* materials;
-	string* texturePatterns;	
+	vector<string> texturePatterns;
+	Graphics::BoundingSphere localBounds;	
+	
+	bool IsValid() const;
 };
+
 
 class IO 
 {

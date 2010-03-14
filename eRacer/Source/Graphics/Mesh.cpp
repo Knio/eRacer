@@ -8,6 +8,7 @@
 
 #include "Mesh.h"
 #include "GraphicsLayer.h"
+#include "IO/IO.h"
 
 
 namespace Graphics {
@@ -16,47 +17,48 @@ Mesh::Mesh()
 :   d3dMesh_(NULL), 
 	materials_(NULL),
 	textures_(NULL),
-  initialized(false)
+	initialized(false),
+	cached(false)
 {
 }
 
+Mesh::Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture) :
+	d3dMesh_(mesh), 
+	nMaterials_(1)
+{
+	materials_ = new D3DMATERIAL9[1];
+	materials_[0] = material;
+	textures_ = new IDirect3DTexture9*[1];
+	textures_[0] = texture;
+	
+	initialized = true;
+	cached = false;
+	
+	localBounds.recompute(*d3dMesh_);
+}
+
 Mesh::~Mesh(){
-	if(initialized){
+	if(initialized && !cached){
 		delete [] materials_;
 		delete [] textures_;
 		d3dMesh_->Release();
 	}
 }
 
-void Mesh::Init(ID3DXMesh* mesh, unsigned int nMaterials, D3DMATERIAL9* materials, IDirect3DTexture9** textures){
+void Mesh::Init(const CachedMesh& cachedMesh, IDirect3DTexture9** textures){
 	assert(!initialized);
-	assert(NULL != mesh);
-	assert(NULL != materials);
+	assert(cachedMesh.IsValid());
 	assert(NULL != textures);
 
-	d3dMesh_ = mesh;
-	nMaterials_ = nMaterials;
-	materials_ = materials;
+	d3dMesh_ = cachedMesh.d3dMesh;
+	nMaterials_ = cachedMesh.nMaterials;
+	materials_ = cachedMesh.materials;
 	textures_ = textures;
+	localBounds = cachedMesh.localBounds;
 	initialized = true;
-
-	UpdateLocalBounds();
+	cached = true;
 }
 
-
-/*
-void Mesh::Init(ID3DXMesh* mesh, IDirect3DTexture9* textures){
-  assert(NULL != mesh);
-  assert(NULL != materials);
-  assert(NULL != textures);
-
-  mesh_ = mesh;
-  nMaterials_ = nMaterials;
-  materials_ = materials;
-  textures_ = textures;
-  initialized = true;
-}
-*/
 
 
 void Mesh::Draw(IDirect3DDevice9* device) const{
@@ -77,32 +79,7 @@ void Mesh::Draw(IDirect3DDevice9* device) const{
     }
 }
 
-void Mesh::UpdateLocalBounds(){
-	assert(NULL != d3dMesh_);
-	
-	unsigned int positionOffset = -1;
 
-	D3DVERTEXELEMENT9 vertexElement[MAX_FVF_DECL_SIZE];
-	d3dMesh_->GetDeclaration(vertexElement);
-
-	unsigned int i=0;
-	while(i<MAX_FVF_DECL_SIZE && vertexElement[i].Stream != 0xFF){
-		if(D3DDECLUSAGE_POSITION==vertexElement[i].Usage){
-			positionOffset = vertexElement[i].Offset;
-		}
-		i++;
-	}
-	assert(positionOffset>=0);
-
-	unsigned char* vertices;
-		
-	assert(SUCCEEDED(d3dMesh_->LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
-
-	localBounds.recompute(vertices, d3dMesh_->GetNumVertices(), d3dMesh_->GetNumBytesPerVertex());	
-
-	d3dMesh_->UnlockVertexBuffer();
-
-}
 
 
 

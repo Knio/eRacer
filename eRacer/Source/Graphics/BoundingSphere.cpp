@@ -1,6 +1,33 @@
 #include "BoundingSphere.h"
 
+#include <cassert>
+
 namespace Graphics{
+
+void BoundingSphere::recompute(ID3DXMesh& mesh){
+	unsigned int positionOffset = -1;
+
+	D3DVERTEXELEMENT9 vertexElement[MAX_FVF_DECL_SIZE];
+	mesh.GetDeclaration(vertexElement);
+
+	unsigned int i=0;
+	while(i<MAX_FVF_DECL_SIZE && vertexElement[i].Stream != 0xFF){
+		if(D3DDECLUSAGE_POSITION==vertexElement[i].Usage){
+			positionOffset = vertexElement[i].Offset;
+		}
+		i++;
+	}
+	assert(positionOffset>=0);
+
+	unsigned char* vertices;
+		
+	assert(SUCCEEDED(mesh.LockVertexBuffer(D3DLOCK_READONLY,(LPVOID*) &vertices)));
+
+	recompute(vertices, mesh.GetNumVertices(), mesh.GetNumBytesPerVertex());	
+
+	mesh.UnlockVertexBuffer();
+}
+
 
 void BoundingSphere::recompute(const unsigned char* vertices, unsigned int nVertices, unsigned int bytesPerVertex){
 	unsigned int index = bytesPerVertex;

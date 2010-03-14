@@ -18,6 +18,8 @@ namespace Graphics {
  */
 class BoundingSphere : public Sphere {
 public:
+	void recompute(ID3DXMesh& mesh);
+	
 	/**
 	 * @brief recompute the sphere from a set of points.
 	 *
