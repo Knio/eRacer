@@ -30,6 +30,7 @@
 #include "..\Graphics\Scene.h"
 #include "..\Graphics\BoundingSphere.h"
 #include "..\Graphics\Mesh.h"
+#include "..\Graphics\RenderableNode.h"
 #include "..\Graphics\MeshNode.h"
 #include "..\Graphics\GraphicsLayer.h"
 #include "..\Graphics\Window.h"
@@ -138,6 +139,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 
 %include "..\Graphics\BoundingSphere.h"
 %include "..\Graphics\Mesh.h"
+%include "..\Graphics\RenderableNode.h"
 %include "..\Graphics\MeshNode.h"
 
 %include "..\Graphics\Scene.h"

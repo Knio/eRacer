@@ -17,8 +17,7 @@ using namespace std;
 namespace Graphics {
 
 MeshNode::MeshNode(const string& name, const Matrix& tx)
-	: Spatial(name),
-	  transform_(tx),
+	: RenderableNode(name,tx),
 	  initialized(false),
 	  mesh_(NULL)
 {
@@ -29,9 +28,6 @@ MeshNode::MeshNode(const string& name, const Matrix& tx)
 MeshNode::~MeshNode(){
 }
 
-void MeshNode::cullRecursive(const Camera&, vector<const Renderable*>& visibleRenderables) const{
-	visibleRenderables.push_back(this);
-}
 
 void MeshNode::Draw(IDirect3DDevice9* device) const{
 	if(!initialized)
@@ -59,8 +55,6 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 
 }
 
-
-
 void MeshNode::Init(Mesh* mesh){
 	//this method can only be called once
 	assert(!initialized);
@@ -70,12 +64,6 @@ void MeshNode::Init(Mesh* mesh){
 	
 	UpdateWorldBounds();
 	initialized = true;
-}
-
-void MeshNode::SetTransform(const  Matrix& transform){
-	transform_ = transform;
-	if(initialized)	
-		UpdateWorldBounds();
 }
 
 

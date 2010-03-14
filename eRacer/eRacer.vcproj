@@ -385,6 +385,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Source\Graphics\RenderableNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Source\Graphics\RenderableNode.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Source\Graphics\Scene.cpp"
 					>
 				</File>
