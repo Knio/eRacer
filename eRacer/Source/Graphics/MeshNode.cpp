@@ -26,6 +26,8 @@ MeshNode::MeshNode(const string& name, const Matrix& tx)
 
 
 MeshNode::~MeshNode(){
+	if(initialized)
+		delete mesh_;
 }
 
 

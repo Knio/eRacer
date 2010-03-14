@@ -37,10 +37,10 @@ public:
 	MeshNode(const string& name, const Matrix& tx=IDENTITY);
 
 	/**
-	 * @brief Destructor stub. Virtual so that sub class' destructors will be called
+	 * @brief Destructor stub. 
 	 *
 	 */
-	virtual ~MeshNode();
+	~MeshNode();
 
 	/**
 	 * @brief Draw the mesh associated with this mesh node.
@@ -54,12 +54,15 @@ public:
 	virtual void Draw(IDirect3DDevice9* device) const;
 
 	/**
-	 * @brief initialize this mesh. Can be overidden by subclasses
+	 * @brief initialize this mesh
+	 *
+	 * The mesh nodes own the passed mesh, i.e. will free the memory when it is 
+	 * destructed!
 	 *
 	 * @param mesh
 	 *			a pointer to a mesh wrapper
 	 */
-	virtual void Init(Mesh* mesh);
+	void Init(Mesh* mesh);
 
 	bool initialized;
 protected:
