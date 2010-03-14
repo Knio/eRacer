@@ -52,8 +52,7 @@ projectOnto=cpp.projectOnto
 mul1      = cpp.mul1
 mul0      = cpp.mul0
 
-MovingMeshNode = cpp.MovingMeshNode
-StaticMeshNode = cpp.StaticMeshNode
+MeshNode = cpp.MeshNode
 
 
 

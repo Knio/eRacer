@@ -21,15 +21,21 @@ using namespace std;
 namespace Graphics {
 
 /**
- * @brief Abstract base class for meshes that are part of the scene graph
+ * @brief Node that contains a Mesh and is part of the scene graph
  * 
  * @see Mesh
- * @see MovingMeshNode
- * @see StaticMeshNode
  */
 class MeshNode : public Spatial, public Renderable
 {
 public:
+	/**
+	 * @brief Constructor. Only for inheriting classes because this class is abstract.
+	 *
+	 * @param name
+	 *			a name for this node to fascilitate debugging
+	 */
+	MeshNode(const string& name, const Matrix& tx=IDENTITY);
+
 	/**
 	 * @brief Destructor stub. Virtual so that sub class' destructors will be called
 	 *
@@ -54,6 +60,16 @@ public:
 	const Matrix& GetTransform() const;
 
 	/**
+	 * @brief setter for the world transform of this node
+	 *
+	 * This method will also update world bounding box
+	 *
+	 * @param transform
+	 *			the new transform from model space to world space for this node
+	 */
+	void SetTransform(const Matrix& transform);
+
+	/**
 	 * @brief initialize this mesh. Can be overidden by subclasses
 	 *
 	 * @param mesh
@@ -63,13 +79,6 @@ public:
 
 	bool initialized;
 protected:
-	/**
-	 * @brief Constructor. Only for inheriting classes because this class is abstract.
-	 *
-	 * @param name
-	 *			a name for this node to fascilitate debugging
-	 */
-	MeshNode(const string& name, const Matrix& tx=IDENTITY);
 
 	/**
 	 * @brief update the world bounding volume by transforming the local bounding volume

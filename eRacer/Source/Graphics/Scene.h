@@ -11,8 +11,7 @@
 #include <vector>
 #include "Camera.h"
 #include "Renderable.h"
-#include "StaticMeshNode.h"
-#include "MovingMeshNode.h"
+#include "MeshNode.h"
 
 
 using namespace std;

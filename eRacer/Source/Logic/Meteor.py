@@ -60,7 +60,7 @@ class Meteor(Prop):
   def __init__(self, scale=1):    
     Prop.__init__(
       self,
-      MovingMeshNode('Meteor'),
+      MeshNode('Meteor'),
       random.choice(self.MODELS),
       cpp.Box(True, self.DENSITY*scale*scale, ORIGIN, IDENTITY, Vector3(scale,scale,scale)),      
     )

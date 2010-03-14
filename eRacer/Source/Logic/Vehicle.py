@@ -37,7 +37,7 @@ class Vehicle(Prop):
 
     Prop.__init__(
       self,
-      MovingMeshNode(name),
+      MeshNode(name),
       'Racer1.x',
       cpp.CarBody(True, self.MASS),
       tx,

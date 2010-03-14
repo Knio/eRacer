@@ -72,5 +72,11 @@ void MeshNode::Init(Mesh* mesh){
 	initialized = true;
 }
 
+void MeshNode::SetTransform(const  Matrix& transform){
+	transform_ = transform;
+	if(initialized)	
+		UpdateWorldBounds();
+}
+
 
 }

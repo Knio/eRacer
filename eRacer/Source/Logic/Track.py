@@ -8,7 +8,7 @@ class Track(Entity, cpp.Track):
     Entity.__init__(self)
     cpp.Track.__init__(self)
     
-    self.graphics = MovingMeshNode("track")
+    self.graphics = MeshNode("track")
     self.physics  = cpp.TriMesh()
 
     

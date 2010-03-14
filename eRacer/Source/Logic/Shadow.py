@@ -2,7 +2,7 @@ from Core.Globals import *
 
 class Shadow(Prop):
   def __init__(self, target):
-    Prop.__init__(self, MovingMeshNode('Shadow'), 'shadow.x')
+    Prop.__init__(self, MeshNode('Shadow'), 'shadow.x')
     self.target = target
     
   def Tick(self, time):

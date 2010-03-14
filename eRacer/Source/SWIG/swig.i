@@ -31,8 +31,6 @@
 #include "..\Graphics\BoundingSphere.h"
 #include "..\Graphics\Mesh.h"
 #include "..\Graphics\MeshNode.h"
-#include "..\Graphics\StaticMeshNode.h"
-#include "..\Graphics\MovingMeshNode.h"
 #include "..\Graphics\GraphicsLayer.h"
 #include "..\Graphics\Window.h"
 #include "..\Graphics\Starfield.h"
@@ -142,8 +140,6 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Graphics\Mesh.h"
 %include "..\Graphics\MeshNode.h"
 
-%include "..\Graphics\StaticMeshNode.h"
-%include "..\Graphics\MovingMeshNode.h"
 %include "..\Graphics\Scene.h"
 
 %ignore debugRenderable;
