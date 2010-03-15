@@ -14,7 +14,7 @@ class GameMapping(Mapping):
     elif key == KEY.RIGHT:  return E.CameraStrafeEvent      (+1.0)
     elif key == KEY.C:      return E.CameraChangedEvent     (    )
     elif key == KEY.ESCAPE: return E.PauseEvent             (    )
-    elif key == KEY.SPACE:  return E.PlayerBoostEvent		(	 )
+    elif key == KEY.SPACE:  return E.PlayerBoostEvent	    (True)
     elif key == KEY.R:	    return E.ReloadConstsEvent		(    )
     elif key == KEY.T:      return E.RespawnCarEvent        (    )
     
@@ -29,6 +29,7 @@ class GameMapping(Mapping):
     elif key == KEY.DOWN:  return E.CameraAccelerateEvent (+1.0)
     elif key == KEY.LEFT:  return E.CameraStrafeEvent     (+1.0)
     elif key == KEY.RIGHT: return E.CameraStrafeEvent     (-1.0)
+    elif key == KEY.SPACE:  return E.PlayerBoostEvent	  (False)
     
     elif key == KEY.TAB:  
 		if CONSTS.CAR_DEBUG: 
@@ -53,11 +54,11 @@ class GameMapping(Mapping):
     return E.PlayerAccelerateEvent(z/-1000.0)
     
   def GamepadButtonPressedEvent(self, button):
-    if   button == eRacer.BUTTON_START:   return E.PauseEvent()
-    elif button == eRacer.BUTTON_A:       return E.PlayerBoostEvent()
-    elif button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(True)
-    elif button == eRacer.BUTTON_Y:       return E.CameraChangedEvent()
-    elif button == eRacer.BUTTON_X: 
+    if   button == cpp.BUTTON_START:   return E.PauseEvent()
+    elif button == cpp.BUTTON_A:       return E.PlayerBoostEvent(True)
+    elif button == cpp.BUTTON_B:       return E.PlayerBrakeEvent(True)
+    elif button == cpp.BUTTON_Y:       return E.CameraChangedEvent()
+    elif button == cpp.BUTTON_X: 
 		if CONSTS.CAR_DEBUG: 
 			print "DebugMode is Off"
 			CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
@@ -66,4 +67,5 @@ class GameMapping(Mapping):
 			return E.ReloadConstsEvent()  
     
   def GamepadButtonReleasedEvent(self, button):
-    if button == eRacer.BUTTON_B:       return E.PlayerBrakeEvent(False)
+    if button == cpp.BUTTON_B:       return E.PlayerBrakeEvent(False)
+    elif button == cpp.BUTTON_A:       return E.PlayerBoostEvent(False)

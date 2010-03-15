@@ -12,7 +12,7 @@ class MenuMapping(Mapping):
     if y < -900.0:        return E.MenuDownEvent()
     
   def GamepadButtonPressedEvent(self, button):
-    if button == eRacer.BUTTON_A: return E.MenuSelectEvent()
+    if button == cpp.BUTTON_A: return E.MenuSelectEvent()
     
 class MainMenuMapping(MenuMapping):
   def KeyPressedEvent(self, key):

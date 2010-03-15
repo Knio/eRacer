@@ -28,8 +28,8 @@ class PlayerBehavior(Behavior):
   def PlayerTurnEvent(self, turn):
     self.parent.Turn(turn)
   
-  def PlayerBoostEvent(self):
-    self.parent.Boost()
+  def PlayerBoostEvent(self, boostState):
+    self.parent.Boost(boostState)
 
 
 
