@@ -1,15 +1,13 @@
 from Core.Globals import *
 
-class Quad(cpp.QuadNode,Entity):
-  def __init__(self, view, texture):
+class Quad(Entity):
+  def __init__(self, name, texture, transform = IDENTITY):
     Entity.__init__(self)
-    cpp.QuadNode.__init__(self, "Quad")
-    self.transform = Matrix()
-       
-    t = game().io.LoadTexture(texture)   
-    self.Init(t)
-    view.AddRenderable(self)
-            
+    self.graphics = cpp.QuadNode(name, transform)
+    self.transform = transform
+
+    self.graphics.Init(game().io.LoadTexture(texture))
     
   def Tick(self, time):
-    self.SetTransform(self.transform)
+    Entity.Tick(self, time)
+    self.graphics.SetTransform(self.transform)

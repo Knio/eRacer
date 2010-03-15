@@ -22,17 +22,17 @@ Scene::~Scene()
 {
 }
 
-void Scene::Add(const MeshNode& node)
+void Scene::Add(const RenderableNode& node)
 {
-	meshNodes_.push_back(&node);
+	renderableNodes_.push_back(&node);
 }
 
 
 void Scene::GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const {
-	for (vector<const MeshNode*>::const_iterator meshNode = meshNodes_.begin(); 
-		meshNode != meshNodes_.end(); meshNode++)
+	for (vector<const RenderableNode*>::const_iterator renderableNode = renderableNodes_.begin(); 
+		renderableNode != renderableNodes_.end(); renderableNode++)
 	{
-		(*meshNode)->cull(camera,visibleRenderables);
+		(*renderableNode)->cull(camera,visibleRenderables);
 	}
 }
 

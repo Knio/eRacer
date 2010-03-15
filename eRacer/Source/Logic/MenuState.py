@@ -21,7 +21,7 @@ class MenuState(State):
     camera = OrthographicCamera(800,600)
     self.Add(camera)
 
-    self.view = View(camera)
+    self.view = View(camera,[self.scene])
         
     
   def Tick(self, time):
@@ -63,9 +63,7 @@ class MainMenuState(MenuState):
   def __init__(self):
     MenuState.__init__(self)
 
-    logo = Quad(self.view,"eRacerXLogoNegative.png")
-    self.Add(logo)
-    logo.transform = Matrix(Point3(400,450,0), 0,0,0, 600,235,1)
+    self.Add(Quad("Logo","eRacerXLogoNegative.png",Matrix(Point3(400,450,0), 0,0,0, 600,235,1)))
     
     self.sound = cpp.SoundFx();
     self.sound.looping = True

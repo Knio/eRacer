@@ -47,12 +47,12 @@ public:
 	 *
 	 */
 	void GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const;
-	void Add(const MeshNode& node);
+	void Add(const RenderableNode& node);
 	void Draw(IDirect3DDevice9* m_pd3dDevice) const;
 	
 
 private:
-	vector<const MeshNode*> 	meshNodes_;
+	vector<const RenderableNode*> renderableNodes_;
 };
 
 
