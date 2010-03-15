@@ -68,6 +68,8 @@ class Vehicle(Model):
     
     self.boosting = 0.
     self.lapcount = 0
+    self.boostFuel = 0.
+    self.sumHeight = 0.
     
     self.sound = cpp.SoundFx();
     self.sound.looping  = True
@@ -91,8 +93,16 @@ class Vehicle(Model):
   def Turn(self, turn):
     self.steerPos = turn
   
-  def Boost(self):
-    self.boosting = 2.0
+  def Boost(self, boostState):
+    if boostState == True and self.boostFuel > 1.0:
+      self.boosting = 1
+
+      if self.sumHeight/4 < 1:
+        self.boostFuel = self.boostFuel - 1.0
+        pushForce = normalize(Vector3(0,1.25,1)) * 35000000 #Jump Forward
+        self.physics.AddLocalForceAtLocalPos(pushForce, self.MASS_CENTRE)
+    else:
+      self.boosting = 0
   
   def Tick(self, time):
     
@@ -172,6 +182,7 @@ class Vehicle(Model):
     game().sound.sound.UpdateSoundFx(self.sound)
     
     crashed = True
+    self.sumHeight = 0.
     for i,localpos in enumerate(self.WHEELS):
       localapplypoint = Point3(localpos.x, -1, localpos.z)
       # wheel vectors in world space
@@ -192,6 +203,8 @@ class Vehicle(Model):
       dist = dot(up, (worldsuspoint - frame.position)) - upamount
       if length(worldsuspoint - frame.position) > 26:
         dist = 1e99
+
+      self.sumHeight += dist
       
       disp = (self.DISPLACEMENT - dist)
 
@@ -348,13 +361,22 @@ class Vehicle(Model):
       # phys.SetAngVelocity(ORIGIN)
 
 
-    self.boosting = max(0, self.boosting - delta)
+    #self.boosting = max(0, self.boosting - delta)
+    #if self.boosting > 0:
+    #  game().graphics.graphics.WriteString(
+    #  "BOOST %2.2f" % (self.boosting),
+    #  "Verdana", 50, Point3(255,500,0)
+    #  )
 
     if self.boosting > 0:
-      game().graphics.graphics.WriteString(
-      "BOOST %2.2f" % (self.boosting),
-      "Verdana", 50, Point3(255,500,0)
-      )
+      self.boostFuel = max( 0, self.boostFuel - delta )
+      if self.boostFuel == 0:
+        self.boosting = 0
+      pushForce = normalize(Vector3(0,0,1)) * 500000
+      self.physics.AddLocalForceAtLocalPos(pushForce, self.MASS_CENTRE)
+    else:    
+      self.boostFuel = min( 5, self.boostFuel + delta/3 )
+      
 
 
     
@@ -397,8 +419,8 @@ class Vehicle(Model):
   def GetWheelSpeed(self, timeStep, weight):
     gravityMag = 9.81 #should change based on track segment
     forceMag = self.MAX_ENG_FORCE * self.acceleration
-    if self.boosting:
-      forceMag = self.MAX_ENG_FORCE * CONSTS.BOOST_MULT
+    #if self.boosting:
+    #  forceMag = self.MAX_ENG_FORCE * CONSTS.BOOST_MULT
     
     if self.brake: return 0.
     
