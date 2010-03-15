@@ -69,7 +69,7 @@ class MainMenuState(MenuState):
     self.sound.looping = True
     self.sound.is3D = False
     self.sound.isPaused = False
-    game().sound.sound.LoadSoundFx("Resources/Sounds/Terran5.ogg", self.sound)
+    game().sound.sound.LoadSoundFx("Terran5.ogg", self.sound)
         
   def Pause(self):
     self.sound.isPaused = True

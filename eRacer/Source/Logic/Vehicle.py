@@ -78,7 +78,7 @@ class Vehicle(Model):
     self.sound.volume   = 250
     self.sound.minDist  = 50
 
-    game().sound.sound.LoadSoundFx("Resources/Sounds/EngineSound.wav", self.sound)
+    game().sound.sound.LoadSoundFx("EngineSound.wav", self.sound)
 
     game().event.Register(self.ReloadedConstsEvent)
 

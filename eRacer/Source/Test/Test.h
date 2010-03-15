@@ -47,7 +47,7 @@ public:
 		Sound::SoundFx sound;
 		sound.isPaused 	= FALSE;
 		sound.is3D 			= FALSE;
-		Sound::Sound()->LoadSoundFx("Resources/Sounds/EngineSound.wav", &sound);
+		Sound::Sound()->LoadSoundFx("EngineSound.wav", &sound);
 		
 	}
 	void Tick(Time& t)

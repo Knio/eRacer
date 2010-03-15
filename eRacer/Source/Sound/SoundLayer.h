@@ -91,6 +91,8 @@ protected:
 	SoundLayer& operator= (const SoundLayer); 
 
 public:
+	static const string SOUND_FOLDER;
+
 	~SoundLayer();	//Destructor
 
 	int Init();

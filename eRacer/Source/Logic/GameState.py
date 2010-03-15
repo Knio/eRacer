@@ -182,7 +182,7 @@ class GameState(State):
     # self.sound.looping  = True
     # self.sound.is3D     = False
     # self.sound.isPaused = False
-    # game().sound.sound.LoadSoundFx("Resources/Sounds/Adventure.mp3", self.sound)
+    # game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
     
     game().time.Zero()
     self.loaded = True

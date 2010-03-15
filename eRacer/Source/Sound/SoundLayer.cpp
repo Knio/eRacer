@@ -4,6 +4,9 @@ namespace Sound {
 
 SoundLayer* SoundLayer::m_pGlobalSoundLayer = NULL;
 
+const string SoundLayer::SOUND_FOLDER("Resources/Sounds/");
+
+
 SoundLayer::SoundLayer()
 {
 }
@@ -36,7 +39,7 @@ void SoundLayer::LoadSoundFx(const string& filename, SoundFx* samp)
 	else
 		mode |= FSOUND_HW3D;
 
-	samp->soundsample = FSOUND_Sample_Load(FSOUND_FREE, filename.c_str(), mode, 0, 0);
+	samp->soundsample = FSOUND_Sample_Load(FSOUND_FREE, (SOUND_FOLDER+filename).c_str(), mode, 0, 0);
 	/*if ((!samp->soundsample)&&(samp->is3D)) {//If hardware loading failed, force software
 		mode ^= FSOUND_HW3D; 
 		samp->soundsample = FSOUND_Sample_Load(FSOUND_FREE, filename.c_str(), mode, 0, 0);
