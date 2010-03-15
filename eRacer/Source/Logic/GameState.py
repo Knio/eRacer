@@ -205,6 +205,8 @@ class GameState(State):
     
     State.Tick(self, time)
     game().graphics.views.append(self.view)
+
+    game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
     
     if self.player.lapcount:
       playerLaps = min(self.player.lapcount, self.laps)
