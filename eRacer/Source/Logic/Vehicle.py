@@ -39,7 +39,7 @@ class Vehicle(Model):
       self,
       name,
       'Racer.x',
-      cpp.CarBody(True, self.MASS),
+      cpp.CarBody(self.MASS),
       tx,
       modelnum,
     )
@@ -52,7 +52,8 @@ class Vehicle(Model):
     self.velocity = ORIGIN
     
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
-    self.physics.SetGroup(cpp.CAR)
+    self.physics.SetId(self.id)
+
   
     self.throttle = 0.      # position of the throttle on game controller from 0 to 1
     self.brake    = False   # brake button

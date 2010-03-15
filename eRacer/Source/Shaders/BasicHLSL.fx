@@ -72,7 +72,10 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
     float3 calcAmbient = g_MaterialAmbientColor * lightAmbientColor; 
     
     Output.Diffuse.rgb = calcDiffuse + calcAmbient;
-    Output.Diffuse.a = g_FadeValue; 
+    Output.Diffuse.a = g_FadeValue;
+    
+    Output.Diffuse.rgb = float3(1,1,1);
+
     
     // Just copy the texture coordinate through
     if( bTexture ) 

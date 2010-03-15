@@ -6,7 +6,7 @@ namespace Physics{
 class CarBody : public PhysicsObject
 {
 public:
-	CarBody(bool dynamic = true, float mass = 0, const Point3& pos = ORIGIN, const Matrix& orient = IDENTITY);
+	CarBody(float mass = 0, const Point3& pos = ORIGIN, const Matrix& orient = IDENTITY);
 	~CarBody();
 
 };

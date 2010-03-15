@@ -35,7 +35,7 @@ enum CollisionGroup{
 /**
 * @brief The physics SDK object that the main game loop will use to store actors and return the results of their collisions
 */
-class PhysicsLayer   : public Listener, public NxUserContactReport
+class PhysicsLayer   : public Listener, public NxUserContactReport, public NxUserTriggerReport
 {
 public:
 	static PhysicsLayer *g_PhysicsLayer;
@@ -140,6 +140,9 @@ public:
 	NxScene* ReturnScene();
 
 	virtual void onContactNotify(NxContactPair& pair, NxU32 events);
+
+	virtual void onTrigger(NxShape& triggerShape, NxShape& otherShape, NxTriggerFlag status);
+
 	/**
 	* @brief casts a ray from pos and returns the distance to the closest object, 
 	* and its normal.

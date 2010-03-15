@@ -2,7 +2,7 @@
 #include <iostream>
 
 namespace Physics{
-CarBody::CarBody(bool dynamic, float mass, const Point3& pos, const Matrix& orient){
+CarBody::CarBody(float mass, const Point3& pos, const Matrix& orient){
 
 	Matrix rot = Rotated(orient, 0.0, PI/2.0, 0.0);
 
@@ -14,53 +14,56 @@ CarBody::CarBody(bool dynamic, float mass, const Point3& pos, const Matrix& orie
 	// Add a single-shape actor to the scene
 	NxActorDesc actorDesc;
 
-	NxCapsuleShapeDesc capDesc1, capDesc2;
-	NxBoxShapeDesc boxDesc;
-
-	capDesc1.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
-	capDesc2.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
-	boxDesc.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
-
 	//right, long capsule
-	capDesc1.height = (NxReal)9.03;
+	NxCapsuleShapeDesc capDesc1;
+	capDesc1.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
+		capDesc1.height = (NxReal)9.03;
 	capDesc1.radius = (NxReal)1.2;
 	capDesc1.localPose.M = Matrix_NxMat33(rot);
 	capDesc1.localPose.t = NxVec3((NxReal)2.2, (NxReal)0, (NxReal)1.11);
+	assert(capDesc1.isValid());
+	actorDesc.shapes.pushBack(&capDesc1);
 
 	//left, long capsule
+	NxCapsuleShapeDesc capDesc2;
+	capDesc2.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
 	capDesc2.height = (NxReal)9.03;
 	capDesc2.radius = (NxReal)1.2;
 	capDesc2.localPose.M = Matrix_NxMat33(rot);
 	capDesc2.localPose.t = NxVec3((NxReal)-2.2, (NxReal)0, (NxReal)1.11);
+	assert(capDesc2.isValid());
+	actorDesc.shapes.pushBack(&capDesc2);
 
 	//middle, shorter box
+	NxBoxShapeDesc boxDesc;
+	boxDesc.materialIndex = PhysicsLayer::g_PhysicsLayer->AddMaterialReturnIndex(material);
 	boxDesc.dimensions.set((NxReal)0.8, (NxReal)3.5, (NxReal)1.0);
 	boxDesc.localPose.M = Matrix_NxMat33(rot);
 	boxDesc.localPose.t = NxVec3((NxReal)0, (NxReal)0, (NxReal)0.0);
-
-	actorDesc.shapes.pushBack(&capDesc1);
-	actorDesc.shapes.pushBack(&capDesc2);
-	actorDesc.shapes.pushBack(&boxDesc);
-	assert(capDesc1.isValid());
-	assert(capDesc2.isValid());
 	assert(boxDesc.isValid());
+	actorDesc.shapes.pushBack(&boxDesc);
+	
+	
+	NxBoxShapeDesc triggerBoxDesc;
+	triggerBoxDesc.dimensions = NxVec3((NxReal)10.0, (NxReal)30.0, (NxReal)2.0);
+	triggerBoxDesc.shapeFlags |= NX_TRIGGER_ON_STAY;
+	triggerBoxDesc.localPose.M = Matrix_NxMat33(rot);
+	triggerBoxDesc.localPose.t = NxVec3((NxReal)5.0, (NxReal)0, (NxReal)0.0);
+	actorDesc.shapes.pushBack(&triggerBoxDesc);
+	
 	
 	NxBodyDesc bodyDesc;
-	if(dynamic){
-		bodyDesc.mass = mass;
-		assert(bodyDesc.isValid());
-		actorDesc.body			= &bodyDesc;
-	}
-	else{
-		actorDesc.body			= NULL;
-	}
+	bodyDesc.mass = mass;
+	assert(bodyDesc.isValid());
+	actorDesc.body	= &bodyDesc;
 	actorDesc.globalPose.t	= NxVec3(pos.x, pos.y, pos.z);
 	actorDesc.globalPose.M = Matrix_NxMat33(orient);
 
 	assert(actorDesc.isValid());
 	
 	CreateActor(actorDesc); 
-
+	
+	SetGroup(CAR);
 }
 
 CarBody::~CarBody(){

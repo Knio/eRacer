@@ -97,6 +97,7 @@ void PhysicsLayer::InitScene()
 	gScene->setActorGroupPairFlags(METEOR,TRACK, NX_NOTIFY_ON_START_TOUCH | NX_NOTIFY_FORCES );
 	gScene->setActorGroupPairFlags(TRACK,   CAR, NX_NOTIFY_ON_TOUCH | NX_NOTIFY_FORCES );
 	gScene->setUserContactReport(this);
+	gScene->setUserTriggerReport(this);
 	gPhysicsSDK->getFoundationSDK().getRemoteDebugger()->connect ("localhost", 5425);
 }
 
@@ -166,9 +167,21 @@ void PhysicsLayer::onContactNotify(NxContactPair& pair, NxU32 events){
 	else if (g1==METEOR && g2==TRACK)
 		EVENT(MeteorTrackCollisionEvent	(id1,id2,force));
 	else if (g1==CAR && g2==TRACK)
-		EVENT(CarTrackCollisionEvent		(id1,id2,force));
-		
+		EVENT(CarTrackCollisionEvent		(id1,id2,force));		
 }
+
+void PhysicsLayer::onTrigger(NxShape& triggerShape, NxShape& otherShape, NxTriggerFlag status) {
+	switch(otherShape.getActor().getGroup()){
+		case METEOR:
+			EVENT(MeteorAheadEvent((int)triggerShape.getActor().userData, (int)otherShape.getActor().userData));
+		break;
+		case CAR:
+			EVENT(CarAheadEvent((int)triggerShape.getActor().userData, (int)otherShape.getActor().userData));
+		break;
+	}
+}
+
+
 float PhysicsLayer::Raycast(const Point3& pos, const Vector3& dir, Vector3& normHit){
 	Vector3 vec = normalized(dir);
 

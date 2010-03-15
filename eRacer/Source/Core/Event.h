@@ -124,9 +124,11 @@ public:
 	DEFINE_EVENT(GameStateChangeEvent, State* state)
 	
 	DEFINE_EVENT(MeteorMeteorCollisionEvent, 	int meteorId1, 	int meteorId2, 	Vector3 force)
-	DEFINE_EVENT(MeteorTrackCollisionEvent, 	int meteorId, 	int trackId, 		Vector3 force)
-	DEFINE_EVENT(MeteorCarCollisionEvent, 		int meteorId, 	int carId, 			Vector3 force)
-	DEFINE_EVENT(CarTrackCollisionEvent,			int carId, 			int trackId, 		Vector3 force)
+	DEFINE_EVENT(MeteorTrackCollisionEvent, 	int meteorId, 	int trackId, 	Vector3 force)
+	DEFINE_EVENT(MeteorCarCollisionEvent, 		int meteorId, 	int carId, 		Vector3 force)
+	DEFINE_EVENT(CarTrackCollisionEvent,		int carId, 		int trackId, 	Vector3 force)
+	DEFINE_EVENT(MeteorAheadEvent,				int carId, 		int meteorId)
+	DEFINE_EVENT(CarAheadEvent,					int carId1, 	int carId2)
 	
 };
 

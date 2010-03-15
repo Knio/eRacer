@@ -67,13 +67,28 @@ void QuadNode::Draw(IDirect3DDevice9* device) const{
 	if(!initialized)
 		return;
 
+	assert(NULL != device);
+
+  // set the transform
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &transform_);
 	device->SetStreamSource(0, vertexBuffer_, 0, sizeof(Vertex));
 	device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
 
-	device->SetTexture (0, texture_);
+    GraphicsLayer::GetInstance()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
+	//m_pEffect->SetTexture( "g_MeshTexture", geometry->Textures()[i] );
 
-	device->DrawPrimitive(D3DPT_TRIANGLEFAN, 0, 2);
+	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" )));
+	UINT cPasses = 1;
+	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->Begin( &cPasses, 0 )));
+	for(UINT iPass = 0; iPass < cPasses; iPass++ ){
+		GraphicsLayer::GetInstance()->m_pEffect->BeginPass( iPass ) ;
+		device->SetTexture (0, texture_);
+
+		device->DrawPrimitive(D3DPT_TRIANGLEFAN, 0, 2);
+		assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->EndPass()));
+	}
+	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->End()));
+
 }
 
 void QuadNode::UpdateWorldBounds(){
