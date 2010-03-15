@@ -48,7 +48,7 @@ class Game(cpp.Game):
     for i in self.modules:
       i.Init()
 
-  def Run(self):  
+  def Run(self, stop=0):  
     print 'Game::Run'
     self.Start()  
     self.time.Zero()
@@ -56,6 +56,8 @@ class Game(cpp.Game):
     while self.state:
       t = self.time.Tick(self.simspeed)
       self.Tick(self.time)
+      if stop and self.ticks >= stop:
+        self.state = 0
     self.Quit()
 
   def Start(self):
