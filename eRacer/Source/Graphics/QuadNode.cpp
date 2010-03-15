@@ -77,7 +77,7 @@ void QuadNode::Draw(IDirect3DDevice9* device) const{
     GraphicsLayer::GetInstance()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
 	//m_pEffect->SetTexture( "g_MeshTexture", geometry->Textures()[i] );
 
-	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" )));
+	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->SetTechnique( "RenderSceneWithTextureFixedLight" )));
 	UINT cPasses = 1;
 	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->Begin( &cPasses, 0 )));
 	for(UINT iPass = 0; iPass < cPasses; iPass++ ){

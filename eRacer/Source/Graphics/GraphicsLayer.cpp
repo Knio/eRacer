@@ -129,8 +129,9 @@ int GraphicsLayer::Init( HWND hWnd )
     D3DXCOLOR colorMtrlAmbient( 1.0f, 1.0f, 1.0f, 0 );
     m_pEffect->SetValue( "g_MaterialAmbientColor", &colorMtrlAmbient, sizeof( D3DXCOLOR ) );
     m_pEffect->SetValue( "g_MaterialDiffuseColor", &colorMtrlDiffuse, sizeof( D3DXCOLOR ) );
-	float colorAlpha = 1.0f;
-	m_pEffect->SetValue( "g_FadeValue", &colorAlpha, sizeof( float ) );
+
+	D3DXCOLOR colorMtrlTint( 1.0f, 1.0f, 1.0f, 1.0f );
+	m_pEffect->SetValue( "g_ColorTint", &colorMtrlTint, sizeof( D3DXCOLOR ) );
 
     // save the screen surface
     m_pd3dDevice->GetRenderTarget(0, &screen);

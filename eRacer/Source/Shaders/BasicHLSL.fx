@@ -11,7 +11,7 @@
 const float4 g_MaterialAmbientColor;      // Material's ambient color
 const float4 g_MaterialDiffuseColor;      // Material's diffuse color
 const texture g_MeshTexture;              // Color texture for mesh
-const float g_FadeValue;
+const float4 g_ColorTint;
 
 const float4x4 g_ProjectionMatrix;
 const float4x4 g_ViewMatrix;
@@ -71,11 +71,8 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
     float3 calcDiffuse = g_MaterialDiffuseColor * (lightDiffuseColor * max(0,dot(vNormalWorldSpace, lightDir)));
     float3 calcAmbient = g_MaterialAmbientColor * lightAmbientColor; 
     
-    Output.Diffuse.rgb = calcDiffuse + calcAmbient;
-    Output.Diffuse.a = g_FadeValue;
-    
-    Output.Diffuse.rgb = float3(1,1,1);
-
+    Output.Diffuse = g_ColorTint;
+    Output.Diffuse.rgb = Output.Diffuse.rgb * (calcDiffuse + calcAmbient);
     
     // Just copy the texture coordinate through
     if( bTexture ) 
@@ -105,8 +102,7 @@ VS_OUTPUT RenderSceneFixedVS( float4 vPos : POSITION,
     float3 vTmpNorm = vNormal;
 	vNormalWorldSpace = normalize(mul( vTmpNorm, (float3x3) g_WorldMatrix));
     
-    Output.Diffuse.rgb = float3(1,1,1);
-    Output.Diffuse.a = 1.0f; 
+    Output.Diffuse = g_ColorTint;
     
     // Just copy the texture coordinate through
     if( bTexture ) 
@@ -153,7 +149,7 @@ PS_OUTPUT RenderScenePS( VS_OUTPUT In,
 technique RenderSceneWithTextureDefault
 {
     pass P0
-    {      
+    {    
 	  AlphaBlendEnable = true;
 	  SrcBlend = srcalpha;
 	  DestBlend = invsrcalpha;    
@@ -164,11 +160,14 @@ technique RenderSceneWithTextureDefault
 
 technique RenderSceneWithTextureFixedLight
 {
-	pass P0
-	{
-		VertexShader = compile vs_2_0 RenderSceneFixedVS( true );
-		PixelShader  = compile ps_2_0 RenderScenePS( true );
-	}
+    pass P0
+    {
+	  AlphaBlendEnable = true;
+	  SrcBlend = srcalpha;
+	  DestBlend = invsrcalpha; 
+	  VertexShader = compile vs_2_0 RenderSceneFixedVS( true );
+	  PixelShader  = compile ps_2_0 RenderScenePS( true );
+    }
 }
 
 
