@@ -3,6 +3,11 @@
 bool CachedMesh::IsValid() const{
 	return NULL != d3dMesh && NULL != materials;
 }
+CachedMesh::~CachedMesh()
+{
+	delete [] materials;
+	d3dMesh->Release();
+}
 
 IO* IO::g_IO = NULL;
 
@@ -27,7 +32,7 @@ bool IO::_LoadMesh(const char* file, CachedMesh& mesh)
 	
 	HRESULT r = D3DXLoadMeshFromX(
 		file, 
-		D3DXMESH_SYSTEMMEM,
+		0,
 		d3dd,
 		NULL,
 		&materialsbuffer, 
