@@ -129,6 +129,7 @@ class PauseMenuState(MenuState):
   MAPPING = PauseMenuMapping
   MENU = [
     ('Continue',),
+    ('Main menu',),
     ('Exit',) 
   ]
   
@@ -148,6 +149,13 @@ class PauseMenuState(MenuState):
     
   def Menu_Continue(self):
     game().PopState()
+
+  def Menu_Main_menu(self):
+    # hack: there may even be four states if the stats menu is on...
+    game().PopState()
+    game().PopState()
+    game().PopState()
+
     
   def Tick(self, time):
     game().graphics.graphics.WriteString(
