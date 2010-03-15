@@ -225,12 +225,12 @@ class GameState(State):
         game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
         y += 15    
     
-    if not self.gameOver:
-      self.lastMeteorTime += time.game_delta
-      if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
-        self.lastMeteorTime = 0
-        m = self.meteorManager.spawnTargeted(self.player)
-        self.Add(m)
+    # if not self.gameOver:
+    #   self.lastMeteorTime += time.game_delta
+    #   if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
+    #     self.lastMeteorTime = 0
+    #     m = self.meteorManager.spawnTargeted(self.player)
+    #     self.Add(m)
     
     self.meteorManager.Tick(time)
     

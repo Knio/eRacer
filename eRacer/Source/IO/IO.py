@@ -53,16 +53,19 @@ class IO(Module, cpp.IO):
     # print "Loading mesh %s" % name
     if not name in self.meshes:
       mesh = cpp.CachedMesh()
-      r = self._LoadMesh(name,mesh)
+      r = self._LoadMesh(name, mesh)
       if not r:
         print 'Failed to load mesh "%s"' % name
         return None # should throw exception
       print "Loaded mesh %s" % name
       self.meshes[name] = mesh
+          
+    else:
+      print 'Using cached mesh for "%s"' % name
     
     textures = cpp.VectorTexture()
     cached = self.meshes[name]
-    for i in range(0,cached.nMaterials):
+    for i in range(cached.nMaterials):
       textures.push_back(self.LoadTexture(cached.texturePatterns[i] % args))
 
     result = cpp.Mesh()
@@ -100,6 +103,6 @@ class IO(Module, cpp.IO):
       self._FreeTexture(t)
     self.textures = {}
     for k,m in self.meshes.items():
-      #how do i call destructor?
+      # mesh destroctors will be called below when python's refcounts go to 0
       pass
     self.meshes = {}

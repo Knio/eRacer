@@ -24,6 +24,7 @@ struct CachedMesh{
 	Graphics::BoundingSphere localBounds;	
 	
 	bool IsValid() const;
+	~CachedMesh();
 };
 
 
