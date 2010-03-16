@@ -55,6 +55,15 @@ public:
 
 
 	/**
+	 * @brief set the texture coordinates to custom values
+	 */
+	void SetTextureCoordinates(	float tl_u=0.0f, float tl_v=0.0f, 
+								float tr_u=1.0f, float tr_v=0.0f, 
+								float br_u=1.0f, float br_v=1.0f, 
+								float bl_u=0.0f, float bl_v=1.0f);
+
+
+	/**
 	 * @brief flag initially set to false indicating whether the texture has been loaded already
 	 */
 	bool initialized;

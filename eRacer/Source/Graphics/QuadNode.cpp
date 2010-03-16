@@ -56,6 +56,43 @@ QuadNode::QuadNode(const string& name, const Matrix& transform)
 	vertexBuffer_->Unlock();
 }
 
+void QuadNode::SetTextureCoordinates(float tl_u, float tl_v, 
+									 float tr_u, float tr_v, 
+									 float br_u, float br_v, 
+									 float bl_u, float bl_v){
+	assert(SUCCEEDED(
+		GraphicsLayer::GetInstance()->GetDevice()->CreateVertexBuffer(
+			4 * sizeof(Vertex),   
+			D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+			D3DFVF_XYZ | D3DFVF_TEX1,
+			D3DPOOL_DEFAULT,
+			&vertexBuffer_,
+			NULL)
+		));
+	
+	Vertex* vertices;
+	vertexBuffer_->Lock(0, 0, (void**)&vertices, 0);
+
+	//top left
+	vertices[0].u = tl_u;
+	vertices[0].v = tl_v;
+
+	//top right
+	vertices[1].u = tr_u;
+	vertices[1].v = tr_v;
+
+	//bottom right
+	vertices[2].u = br_u;
+	vertices[2].v = br_v;
+
+	//bottom left
+	vertices[3].u = bl_u;
+	vertices[3].v = bl_v;
+
+	vertexBuffer_->Unlock();
+}
+
+
 void QuadNode::Init(IDirect3DTexture9* texture){
 	assert(NULL != texture);
 	texture_ = texture;
