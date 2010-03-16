@@ -13,6 +13,15 @@ class MeteorManager(object):
     game().event.Register(self.MeteorCarCollisionEvent)
     game().event.Register(self.MeteorTrackCollisionEvent)
     
+    self.collisionSound = cpp.SoundFx();
+    self.collisionSound.looping  = False
+    self.collisionSound.is3D     = True
+    self.collisionSound.isPaused = True
+    self.collisionSound.volume   = 255
+    self.collisionSound.minDist  = 10
+
+    game().sound.sound.LoadSoundFx("MeteorCollision.wav", self.collisionSound)
+    
     
   def spawnRandom(self):
     m = self.state.Add(RandomMeteor())
@@ -46,8 +55,14 @@ class MeteorManager(object):
     #print "MM Collision reported to MeteorManager"
 
   def MeteorTrackCollisionEvent(self, meteorId, trackId, force):
-    Entity.entities[meteorId].hitTrack(force)
+    meteor = Entity.entities[meteorId]
+    meteor.hitTrack(force)
 
+    self.collisionSound.position = mul1(meteor.transform, ORIGIN)
+    self.collisionSound.velocity = ORIGIN #vel
+    self.collisionSound.isPaused = False
+    game().sound.sound.UpdateSoundFx(self.collisionSound)
+    
   def MeteorCarCollisionEvent(self, meteorId, carId, force):
     pass
     #print "MC Collision reported to MeteorManager"
@@ -67,7 +82,6 @@ class Meteor(Model):
 
     #hack: scale has to be stored separately because physiscs will keep overriding it 
     self.scale = scale
-
     self.physics.SetGroup(cpp.METEOR)
     self.physics.SetId(self.id)
 

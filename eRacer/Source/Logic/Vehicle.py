@@ -75,7 +75,7 @@ class Vehicle(Model):
     self.sound.looping  = True
     self.sound.is3D     = True
     self.sound.isPaused = True
-    self.sound.volume   = 250
+    self.sound.volume   = 128
     self.sound.minDist  = 50
 
     game().sound.sound.LoadSoundFx("EngineSound.wav", self.sound)
