@@ -3,8 +3,7 @@
 
 namespace Physics{
 CarBody::CarBody(float mass, const Point3& pos, const Matrix& orient){
-
-	Matrix rot = orient*CreateMatrix(ORIGIN, PI/2.0f, Y);
+	Matrix rot = orient*CreateMatrix(ORIGIN, PI/2.0f, X);
 
 	NxMaterialDesc material;
 	material.restitution =		(NxReal)0.9;
