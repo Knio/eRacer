@@ -13,6 +13,12 @@
 struct Plane {
 	Vector3 normal;
 	float distance;
+	
+	void recompute(const Point3& A, const Point3& B, const Point3& C){
+		normal = -cross(B-A,C-A);
+		distance = dot(A,normal);
+		normalize();
+	}
 
 	void normalize() {
 		float l = length(normal);

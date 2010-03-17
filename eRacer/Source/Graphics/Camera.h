@@ -28,6 +28,21 @@ enum PlaneIndex {
 };
 
 /**
+ * @brief An enumeration to refer to the frustum planes in the planes array
+ */
+enum CornerIndex {
+	CI_LEFT_BOTTOM_NEAR,
+	CI_RIGHT_BOTTOM_NEAR,
+	CI_LEFT_TOP_NEAR,
+	CI_RIGHT_TOP_NEAR,
+	CI_LEFT_BOTTOM_FAR,
+	CI_RIGHT_BOTTOM_FAR,
+	CI_LEFT_TOP_FAR,
+	CI_RIGHT_TOP_FAR,
+	CI_NUM
+};
+
+/**
  * @brief A camera, defining position, direction, up vector and the view frustum.
  */
 class Camera {
@@ -252,6 +267,7 @@ protected:
 
 	Matrix viewMatrix_;
 	Matrix projectionMatrix_;
+	Matrix inverseViewMatrix_;
 
 
 	Point3 position_;
@@ -267,6 +283,7 @@ protected:
 
 	bool perspective_;
 
+	Point3 frustumCorners_[8];
 	Plane planes_[6];
 };
 
@@ -276,7 +293,7 @@ inline void Camera::UpdateView(){
 	                      &position_,
 	                      &lookAt_,
 	                      &up_);
-
+	D3DXMatrixInverse(&inverseViewMatrix_, NULL, &viewMatrix_);
 }
 
 

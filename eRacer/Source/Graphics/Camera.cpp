@@ -101,8 +101,48 @@ void Camera::SetHeight(float height){
 
 
 void Camera::UpdatePlanes(){
-	UpdateProjection();
-	UpdateView();
+	Point3 a, b, c;
+
+	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_NEAR]);
+	b = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_NEAR]);
+	c = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_FAR]);
+	planes_[PI_LEFT].recompute(a,b,c);
+
+	a = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_NEAR]);
+	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_FAR]);
+	c = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_NEAR]);
+	planes_[PI_RIGHT].recompute(a,b,c);
+
+	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_NEAR]);
+	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_NEAR]);
+	c = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_FAR]);
+	planes_[PI_BOTTOM].recompute(a,b,c);
+
+	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_NEAR]);
+	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_FAR]);
+	c = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_NEAR]);
+	planes_[PI_TOP].recompute(a,b,c);
+
+	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_NEAR]);
+	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_NEAR]);
+	c = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_NEAR]);
+	planes_[PI_NEAR].recompute(a,b,c);
+
+	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_FAR]);
+	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_FAR]);
+	c = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_FAR]);
+	planes_[PI_FAR].recompute(a,b,c);
+
+
+
+	//TODO - should have happende already
+	//UpdateProjection();
+	//UpdateView();
+
+
+
+
+	/*
 	Matrix m = viewMatrix_*projectionMatrix_;
    
 	// Left clipping plane
@@ -133,23 +173,24 @@ void Camera::UpdatePlanes(){
 	planes_[PI_NEAR].normal.x = m._13;
 	planes_[PI_NEAR].normal.y = m._23;
 	planes_[PI_NEAR].normal.z = m._33;
-	planes_[PI_NEAR].distance = m._43;
+	planes_[PI_NEAR].distance = -m._43;
 
 	// Far clipping plane
 	// planes_[PI_FAR].normal.x = m._14 - m._13;
 	// planes_[PI_FAR].normal.y = m._24 - m._23;
 	// planes_[PI_FAR].normal.z = m._34 - m._33;
-	// planes_[PI_FAR].distance = m._44 - m._43;
+	// planes_[PI_FAR].distance = -(m._44 - m._43);
 	planes_[PI_FAR].normal.x = -planes_[PI_NEAR].normal.x;
 	planes_[PI_FAR].normal.y = -planes_[PI_NEAR].normal.y;
 	planes_[PI_FAR].normal.z = -planes_[PI_NEAR].normal.z;
-	planes_[PI_FAR].distance = -planes_[PI_NEAR].distance-far_;
-
+	// planes_[PI_FAR].distance = -planes_[PI_NEAR].distance-far_;
+	
 
 	for(unsigned int i=0; i<PI_NUM; i++)
 		planes_[i].normalize();
 	//static long long counter = 0;
 	//cout << "recomputed"<< counter++ << endl;
+	*/
 }
 
 const Plane& Camera::GetPlane(int planeIndex) const {
@@ -173,18 +214,69 @@ void Camera::SetViewMatrix(const Matrix& viewMatrix){
 }
 
 void Camera::UpdateProjection(){
-	if(perspective_)
-	   D3DXMatrixPerspectiveFovLH(&projectionMatrix_,
+	float dxNear, dyNear, dxFar, dyFar;
+	if(perspective_){
+		D3DXMatrixPerspectiveFovLH(&projectionMatrix_,
 	                              fovY_,
 	                              aspectRatio_,
 	                              near_,
 	                              far_ );
-	else
-	   D3DXMatrixOrthoLH(&projectionMatrix_,
+
+		float sinFovX = sin(fovY_*aspectRatio_);
+		float sinFovY = sin(fovY_);
+
+		dxNear = near_/ sinFovX;
+		dyNear = near_/ sinFovY;
+
+
+		dxFar = far_ / sinFovX;
+		dyFar = far_ / sinFovY;
+	} else{
+		D3DXMatrixOrthoLH(&projectionMatrix_,
 	                              height_*aspectRatio_,
 		                            height_,
 	                              near_,
 	                              far_ );
+
+		dxNear = height_*aspectRatio_/2.0f;
+		dyNear = height_/2.0f;
+
+		dxFar = dxNear;
+		dyFar = dyNear;
+
+	}
+
+	frustumCorners_[CI_LEFT_BOTTOM_NEAR].x = -dxNear; 
+	frustumCorners_[CI_LEFT_BOTTOM_NEAR].y = -dyNear;
+	frustumCorners_[CI_LEFT_BOTTOM_NEAR].z = near_;
+
+	frustumCorners_[CI_RIGHT_BOTTOM_NEAR].x = dxNear; 
+	frustumCorners_[CI_RIGHT_BOTTOM_NEAR].y = -dyNear;
+	frustumCorners_[CI_RIGHT_BOTTOM_NEAR].z = near_;
+
+	frustumCorners_[CI_LEFT_TOP_NEAR].x = -dxNear; 
+	frustumCorners_[CI_LEFT_TOP_NEAR].y = dyNear;
+	frustumCorners_[CI_LEFT_TOP_NEAR].z = near_;
+
+	frustumCorners_[CI_RIGHT_TOP_NEAR].x = dxNear; 
+	frustumCorners_[CI_RIGHT_TOP_NEAR].y = dyNear;
+	frustumCorners_[CI_RIGHT_TOP_NEAR].z = near_;
+
+	frustumCorners_[CI_LEFT_BOTTOM_FAR].x = -dxFar; 
+	frustumCorners_[CI_LEFT_BOTTOM_FAR].y = -dyFar;
+	frustumCorners_[CI_LEFT_BOTTOM_FAR].z = far_;
+
+	frustumCorners_[CI_RIGHT_BOTTOM_FAR].x = dxFar; 
+	frustumCorners_[CI_RIGHT_BOTTOM_FAR].y = -dyFar;
+	frustumCorners_[CI_RIGHT_BOTTOM_FAR].z = far_;
+
+	frustumCorners_[CI_LEFT_TOP_FAR].x = -dxFar; 
+	frustumCorners_[CI_LEFT_TOP_FAR].y = dyFar;
+	frustumCorners_[CI_LEFT_TOP_FAR].z = far_;
+
+	frustumCorners_[CI_RIGHT_TOP_FAR].x = dxFar; 
+	frustumCorners_[CI_RIGHT_TOP_FAR].y = dyFar;
+	frustumCorners_[CI_RIGHT_TOP_FAR].z = far_;
 }
 
 
