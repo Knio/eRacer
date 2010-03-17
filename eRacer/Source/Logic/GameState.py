@@ -27,6 +27,8 @@ from Graphics.View    import View
 from Graphics.SkyBox  import SkyBox
 
 from Graphics.Quad  import Quad
+from Graphics.HudQuad  import HudQuad
+
 
 
 # TODO
@@ -154,14 +156,13 @@ class GameState(State):
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
     
     # need refactoring
-    # self.orthoCam = OrthographicCamera(800,600)
-    # self.hudView = View(self.orthoCam)
-    # self.boostBar = Quad("BoostBar","eRacerXLogo.png",Matrix(Point3(400,450,0), 0,0,0, 600,235,1))
+    self.orthoCam = OrthographicCamera(800,600)
+    self.hudView = View(self.orthoCam)
+    self.boostBar = HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235)
 
-    # self.hudView.AddRenderable(self.boostBar.graphics)
+    self.hudView.AddRenderable(self.boostBar.graphics)
     
-    # without this, the skyboxes are garbage collected because the 
-    # reference in view does not count because view is a c++ object (not python)
+
     self.skybox = SkyBox()
 
     self.starfields = [
@@ -212,8 +213,8 @@ class GameState(State):
     
     
     game().graphics.views.append(self.view)
-    # game().graphics.views.append(self.hudView)
-    # self.boostBar.Tick(time)
+    game().graphics.views.append(self.hudView)
+    self.boostBar.Tick(time)
     
 
     game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
