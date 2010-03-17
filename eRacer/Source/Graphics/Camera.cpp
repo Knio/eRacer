@@ -101,46 +101,55 @@ void Camera::SetHeight(float height){
 
 
 void Camera::UpdatePlanes(){
-	Matrix combinedMatrix = projectionMatrix_*viewMatrix_;
+	UpdateProjection();
+	UpdateView();
+	Matrix m = viewMatrix_*projectionMatrix_;
    
 	// Left clipping plane
-	planes_[PI_LEFT].normal.x = combinedMatrix._14 + combinedMatrix._11;
-	planes_[PI_LEFT].normal.y = combinedMatrix._24 + combinedMatrix._21;
-	planes_[PI_LEFT].normal.z = combinedMatrix._34 + combinedMatrix._31;
-	planes_[PI_LEFT].distance = combinedMatrix._44 + combinedMatrix._41;
+	planes_[PI_LEFT].normal.x = m._14 + m._11;
+	planes_[PI_LEFT].normal.y = m._24 + m._21;
+	planes_[PI_LEFT].normal.z = m._34 + m._31;
+	planes_[PI_LEFT].distance = m._44 + m._14;
 
 	// Right clipping plane
-	planes_[PI_RIGHT].normal.x = combinedMatrix._14 - combinedMatrix._11;
-	planes_[PI_RIGHT].normal.y = combinedMatrix._24 - combinedMatrix._21;
-	planes_[PI_RIGHT].normal.z = combinedMatrix._34 - combinedMatrix._31;
-	planes_[PI_RIGHT].distance = combinedMatrix._44 - combinedMatrix._41;
+	planes_[PI_RIGHT].normal.x = m._14 - m._11;
+	planes_[PI_RIGHT].normal.y = m._24 - m._21;
+	planes_[PI_RIGHT].normal.z = m._34 - m._31;
+	planes_[PI_RIGHT].distance = m._44 - m._41;
 
 	// Bottom clipping plane
-	planes_[PI_BOTTOM].normal.x = combinedMatrix._14 + combinedMatrix._12;
-	planes_[PI_BOTTOM].normal.y = combinedMatrix._24 + combinedMatrix._22;
-	planes_[PI_BOTTOM].normal.z = combinedMatrix._34 + combinedMatrix._32;
-	planes_[PI_BOTTOM].distance = combinedMatrix._44 + combinedMatrix._42;
+	planes_[PI_BOTTOM].normal.x = m._14 + m._12;
+	planes_[PI_BOTTOM].normal.y = m._24 + m._22;
+	planes_[PI_BOTTOM].normal.z = m._34 + m._32;
+	planes_[PI_BOTTOM].distance = m._44 + m._42;
 
 	// Top clipping plane
-	planes_[PI_TOP].normal.x = combinedMatrix._14 - combinedMatrix._12;
-	planes_[PI_TOP].normal.y = combinedMatrix._24 - combinedMatrix._22;
-	planes_[PI_TOP].normal.z = combinedMatrix._34 - combinedMatrix._32;
-	planes_[PI_TOP].distance = combinedMatrix._44 - combinedMatrix._42;
+	planes_[PI_TOP].normal.x = m._14 - m._12;
+	planes_[PI_TOP].normal.y = m._24 - m._22;
+	planes_[PI_TOP].normal.z = m._34 - m._32;
+	planes_[PI_TOP].distance = m._44 - m._42;
 
 	// Near clipping plane
-	planes_[PI_NEAR].normal.x = combinedMatrix._14 + combinedMatrix._13;
-	planes_[PI_NEAR].normal.y = combinedMatrix._24 + combinedMatrix._23;
-	planes_[PI_NEAR].normal.z = combinedMatrix._34 + combinedMatrix._33;
-	planes_[PI_NEAR].distance = combinedMatrix._44 + combinedMatrix._43;
+	planes_[PI_NEAR].normal.x = m._13;
+	planes_[PI_NEAR].normal.y = m._23;
+	planes_[PI_NEAR].normal.z = m._33;
+	planes_[PI_NEAR].distance = m._43;
 
 	// Far clipping plane
-	planes_[PI_FAR].normal.x = combinedMatrix._14 - combinedMatrix._13;
-	planes_[PI_FAR].normal.y = combinedMatrix._24 - combinedMatrix._23;
-	planes_[PI_FAR].normal.z = combinedMatrix._34 - combinedMatrix._33;
-	planes_[PI_FAR].distance = combinedMatrix._44 - combinedMatrix._43;
+	// planes_[PI_FAR].normal.x = m._14 - m._13;
+	// planes_[PI_FAR].normal.y = m._24 - m._23;
+	// planes_[PI_FAR].normal.z = m._34 - m._33;
+	// planes_[PI_FAR].distance = m._44 - m._43;
+	planes_[PI_FAR].normal.x = -planes_[PI_NEAR].normal.x;
+	planes_[PI_FAR].normal.y = -planes_[PI_NEAR].normal.y;
+	planes_[PI_FAR].normal.z = -planes_[PI_NEAR].normal.z;
+	planes_[PI_FAR].distance = -planes_[PI_NEAR].distance-far_;
+
 
 	for(unsigned int i=0; i<PI_NUM; i++)
 		planes_[i].normalize();
+
+	//cout << "bla" << endl;
 }
 
 const Plane& Camera::GetPlane(int planeIndex) const {

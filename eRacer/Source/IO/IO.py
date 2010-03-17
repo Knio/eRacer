@@ -59,10 +59,7 @@ class IO(Module, cpp.IO):
         return None # should throw exception
       print "Loaded mesh %s" % name
       self.meshes[name] = mesh
-          
-    else:
-      print 'Using cached mesh for "%s"' % name
-    
+              
     textures = cpp.VectorTexture()
     cached = self.meshes[name]
     for i in range(cached.nMaterials):

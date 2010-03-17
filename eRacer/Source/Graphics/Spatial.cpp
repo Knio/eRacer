@@ -28,15 +28,15 @@ void Spatial::cull(const Camera& camera, vector<const Renderable*>& visibleRende
 	
 	if(!visible)
 		return;
-	/*
+	
 	for(int i=0; i<PI_NUM; i++){
 		if(worldBounds_.cull(camera.GetPlane(i))){
-			if(name_=="vehicle")
+			if(name_=="AI1" || name_=="AI2")
 				cout << name_ << " culled by plane " << i << "!"<<endl;	 	
 			return;
 		}
 	}
-	*/
+	
 
 	cullRecursive(camera, visibleRenderables);
 }
