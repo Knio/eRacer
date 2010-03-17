@@ -15,6 +15,7 @@ class Graphics(Module):
     game().hwnd.disown()
     game().hinst = self.window.hinst
     game().hinst.disown()
+    game().window = self.window
     
     self.graphics.Init(game().hwnd)
     

@@ -12,7 +12,7 @@ from GameEndState   import GameEndState
 from Track      import Track
 from Vehicle    import Vehicle
 from Shadow     import Shadow
-from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
+from Camera     import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera
 from Starfield  import Starfield
 from Meteor     import Meteor, MeteorManager
 # from CoordinateCross  import CoordinateCross
@@ -105,7 +105,7 @@ class GameState(State):
     frame = self.track.GetFrame(-30.0)
     frametx = Matrix(frame.position, frame.up, frame.fw)
     
-    forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
+    forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
     self.player = self.Add(Vehicle("Player", self.track, 
       Matrix(Point3(0, 4, 0)) * frametx,
@@ -152,6 +152,13 @@ class GameState(State):
     
     cam = self.Add(CarCamera(self.player))
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
+    
+    # need refactoring
+    # self.orthoCam = OrthographicCamera(800,600)
+    # self.hudView = View(self.orthoCam)
+    # self.boostBar = Quad("BoostBar","eRacerXLogo.png",Matrix(Point3(400,450,0), 0,0,0, 600,235,1))
+
+    # self.hudView.AddRenderable(self.boostBar.graphics)
     
     # without this, the skyboxes are garbage collected because the 
     # reference in view does not count because view is a c++ object (not python)
@@ -205,6 +212,9 @@ class GameState(State):
     
     
     game().graphics.views.append(self.view)
+    # game().graphics.views.append(self.hudView)
+    # self.boostBar.Tick(time)
+    
 
     game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
     
