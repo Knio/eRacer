@@ -44,10 +44,17 @@ class AIBehavior(Behavior):
   def Tick(self,time):    
     pos = self.parent.physics.GetPosition()
     nowFrame  = self.line.GetFrame(self.parent.trackpos)
-    curFrame  = self.line.GetFrame(self.parent.trackpos + 100.0)
-    cur = curFrame.position
-    if self.arrow: self.arrow.position = Point3(cur.x, cur.y, cur.z)
-    
+    frame1  = self.line.GetFrame(self.parent.trackpos + 10.0)
+    frame2 = self.line.GetFrame(self.parent.trackpos + 50.0)
+    frame3 = self.line.GetFrame(self.parent.trackpos + 100.0)
+    tx    = self.parent.physics.GetTransform()
+    bodyForward = mul0(tx, Z) # forward direction of body
+    bodyRight = mul0(tx, X) #vector pointing right of body
+    #wantedVec = normalized(frame1.fw * 2.0 + frame2.fw * 0.3 + frame3.fw * 0.2) # vector created by track
+    cur = nowFrame.position
+    wantedVec = normalized((frame1.position-pos) * 1.0 +  (frame2.position-pos) * 1.0 + (frame3.position-pos) * 2.0)
+    if self.arrow: 
+      self.arrow.transform = Matrix(frame3.position)
     # game().graphics.graphics.WriteString(
     #   "cur waypoint: " + str(cur),
     #   "Verdana", 12, Point3(0,0,0)
@@ -61,13 +68,10 @@ class AIBehavior(Behavior):
     #   "Verdana", 12, Point3(0,20,0)
     # )
     
-    tx    = self.parent.physics.GetTransform()
-    bodyForward = mul0(tx, Z) # forward direction of body
-    bodyRight = mul0(tx, X) #vector pointing right of body
-    toWaypoint = normalized(cur-pos) # vector towards waypoint
+
     if self.curState == AIState.DRIVE:
       #print toWaypoint.x, toWaypoint.y, toWaypoint.z
-      turnProj = project(toWaypoint, bodyRight)
+      turnProj = project(wantedVec, bodyRight)
       
       if length(turnProj) < 0.001:
         self.parent.Turn(0)
@@ -85,7 +89,7 @@ class AIBehavior(Behavior):
       else:
         self.parent.Accelerate(1.0)
       #now change state if needed
-      if self.parent.physics.GetSpeed() < 10.0 and self.objectInFront(1.5, tx):
+      if self.parent.physics.GetSpeed() < 10.0 and self.objectInFront(1.0, tx):
         #object close in front has almost stopped us
         self.curState = AIState.STUCK
     

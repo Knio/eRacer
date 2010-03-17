@@ -97,10 +97,10 @@ class GameState(State):
     
     self.track = self.Add(Track(track))
     
-    # self.arrow1 = Arrow(scene)
-    # game().logic.Add(self.arrow1)
-    # self.arrow2 = Arrow(scene)
-    # game().logic.Add(self.arrow2)
+    self.arrow1 = Model("arrow1", "LeatherBox.x")
+    self.Add(self.arrow1)
+    self.arrow2 = Model("arrow2", "LeatherBox.x")
+    self.Add(self.arrow2)
     
     frame = self.track.GetFrame(-30.0)
     frametx = Matrix(frame.position, frame.up, frame.fw)
@@ -117,14 +117,14 @@ class GameState(State):
       Matrix(Point3(-15, 4, 0)) * frametx,
       2,
     ))
-    AIBehavior(self.ai1, self.track)
+    AIBehavior(self.ai1, self.track, self.arrow1)
     self.Add(Shadow(self.ai1))
     
     self.ai2    = self.Add(Vehicle("AI2",    self.track, 
       Matrix(Point3(+15, 4, 0)) * frametx,
       5,
     ))
-    AIBehavior(self.ai2, self.track)
+    AIBehavior(self.ai2, self.track, self.arrow2)
     self.Add(Shadow(self.ai2))
         
     startFrame = self.track.GetFrame(0.0)
