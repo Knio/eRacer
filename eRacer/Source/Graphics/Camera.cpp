@@ -109,7 +109,7 @@ void Camera::UpdatePlanes(){
 	planes_[PI_LEFT].normal.x = m._14 + m._11;
 	planes_[PI_LEFT].normal.y = m._24 + m._21;
 	planes_[PI_LEFT].normal.z = m._34 + m._31;
-	planes_[PI_LEFT].distance = m._44 + m._14;
+	planes_[PI_LEFT].distance = m._44 + m._41;
 
 	// Right clipping plane
 	planes_[PI_RIGHT].normal.x = m._14 - m._11;

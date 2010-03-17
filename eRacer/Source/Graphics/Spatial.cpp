@@ -31,7 +31,7 @@ void Spatial::cull(const Camera& camera, vector<const Renderable*>& visibleRende
 	
 	for(int i=0; i<PI_NUM; i++){
 		if(worldBounds_.cull(camera.GetPlane(i))){
-			if(name_=="AI1" || name_=="AI2")
+			if(name_=="Player")
 				cout << name_ << " culled by plane " << i << "!"<<endl;	 	
 			return;
 		}
