@@ -15,6 +15,8 @@ from Shadow     import Shadow
 from Camera     import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera
 from Starfield  import Starfield
 from Meteor     import Meteor, MeteorManager
+from Quad  import Quad
+from HudQuad  import HudQuad
 # from CoordinateCross  import CoordinateCross
 
 
@@ -26,8 +28,6 @@ from AI.Raceline import Raceline
 from Graphics.View    import View
 from Graphics.SkyBox  import SkyBox
 
-from Graphics.Quad  import Quad
-from Graphics.HudQuad  import HudQuad
 
 
 

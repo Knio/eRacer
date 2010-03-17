@@ -2,8 +2,8 @@ from Core.Globals     import *
 from Game.State       import State
   
 from Camera           import Camera, CirclingCamera, OrthographicCamera
-from Graphics.Quad    import Quad
-from Graphics.HudQuad import HudQuad
+from Quad             import Quad
+from HudQuad          import HudQuad
 from MenuMapping      import MainMenuMapping, PauseMenuMapping
 from Graphics.View    import View
 
