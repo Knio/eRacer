@@ -158,7 +158,10 @@ class GameState(State):
     # need refactoring
     self.hudView = View(OrthographicCamera(game().window.width,game().window.height))
 
-    self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235))
+    # 0,0 is top left, make sure you add all HudQuads using AddHud
+    # texture coordinates can be set via self.boostBar.graphics.SetTextureCoordinates
+    # wrappers for that should be created as needed. 
+    # self.boostBar = self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235))
 
     self.skybox = SkyBox()
 
