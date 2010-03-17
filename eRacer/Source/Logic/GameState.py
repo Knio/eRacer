@@ -156,17 +156,15 @@ class GameState(State):
     # without this, the skyboxes are garbage collected because the 
     # reference in view does not count because view is a c++ object (not python)
     self.skybox = SkyBox()
-
-    self.starfields = [
-      self.Add(Starfield(1024, 1000.0)),
-      self.Add(Starfield(1024, 100.0)),
-      self.Add(Starfield(1024, 20.0)),    
-    ]
+    
     
     for view in self.views:
       view.AddRenderable(self.scene)
-      for s in self.starfields:
-        view.AddRenderable(s)      
+      
+      view.AddRenderable(Starfield(1024, 1000.0, view.camera))
+      view.AddRenderable(Starfield(1024, 100.0,  view.camera))
+      view.AddRenderable(Starfield(1024, 20.0,   view.camera))
+      
       view.AddRenderable(self.skybox)
    
     self.meteorManager = MeteorManager(self)

@@ -4,10 +4,11 @@ from Core.Globals import *
 # except that Draw() is const and I don't want to change everything to non-const
 
 class Starfield(Entity, cpp.Starfield):
-  def __init__(self, n, size):
+  def __init__(self, n, size, camera):
+    self.camera = camera
     Entity.__init__(self)
     cpp.Starfield.__init__(self, n, size)
     
   def Tick(self, time):
     Entity.Tick(self, time)
-    self.Update()
+    self.Update(self.camera.GetViewMatrix(), self.camera.GetPosition())

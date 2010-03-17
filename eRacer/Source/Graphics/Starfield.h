@@ -19,10 +19,8 @@ class Starfield : public Renderable
 	float SIZE;
 	int 	N;
 	
-	Camera* camera;
 	Matrix* view;
 	Point3 	pos;
-	
 	
 	
 	Star* stars;
@@ -32,7 +30,7 @@ class Starfield : public Renderable
 	
 public:
 	Starfield(int n, float s);
-	void Update();
+	void Update(const Matrix& newview, const Point3 &newpos);
 	virtual void Draw(IDirect3DDevice9*) const;
 };
 

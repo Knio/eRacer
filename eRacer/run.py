@@ -46,7 +46,6 @@ def run():
   
 if __name__ == '__main__':
   params = list(sys.argv[1:])
-  print params
   while params:
     p = params.pop(0)
     if p == '--debug':

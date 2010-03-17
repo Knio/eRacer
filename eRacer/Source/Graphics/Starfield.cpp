@@ -68,19 +68,17 @@ Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
   */
   
 
-void Starfield::Update()
+void Starfield::Update(const Matrix& newview, const Point3 &newpos)
 {
   
-  GraphicsLayer* g = GraphicsLayer::GetInstance();
-  camera = g->GetCamera();
+  // GraphicsLayer* g = GraphicsLayer::GetInstance();
+  // camera = g->GetCamera();
   
   // TODO rotate with bigger circular buffer
   view[1] = view[0];
-  view[0] = camera->GetViewMatrix();
+  view[0] = newview;
   
-  
-  pos = camera->GetPosition();
-  
+  pos = newpos;
   // _Update();
 }
   
