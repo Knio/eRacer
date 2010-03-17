@@ -14,7 +14,7 @@
 namespace Graphics {
 
 Mesh::Mesh()
-:   d3dMesh_(NULL), 
+:   d3dMesh_(NULL),
 	materials_(NULL),
 	textures_(NULL),
 	initialized(false),

@@ -19,7 +19,8 @@ namespace Graphics {
 MeshNode::MeshNode(const string& name, const Matrix& tx)
 	: RenderableNode(name,tx),
 	  initialized(false),
-	  mesh_(NULL)
+	  mesh_(NULL),
+	  boundsMesh_(NULL)
 {
 	
 }
@@ -28,6 +29,8 @@ MeshNode::MeshNode(const string& name, const Matrix& tx)
 MeshNode::~MeshNode(){
 	if(initialized)
 		delete mesh_;
+	if(NULL != boundsMesh_)
+		delete boundsMesh_;
 }
 
 
@@ -54,6 +57,12 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 	}
 	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->End()));
 
+	if(NULL != boundsMesh_){
+		Matrix t = CreateMatrix(worldBounds_.center);
+		device->SetTransform(D3DTS_WORLDMATRIX(0), &t);
+		boundsMesh_->DrawSubset(0);
+	}
+
 }
 
 void MeshNode::Init(Mesh* mesh){
@@ -62,6 +71,8 @@ void MeshNode::Init(Mesh* mesh){
 	assert(NULL != mesh);
 	
 	mesh_ = mesh;
+
+	D3DXCreateSphere(GraphicsLayer::GetInstance()->GetDevice(), mesh_->localBounds.radius, 10,10, &boundsMesh_,NULL);
 	
 	initialized = true;
 	UpdateWorldBounds();
@@ -71,7 +82,7 @@ void MeshNode::UpdateWorldBounds(){
 	if(!initialized)	
 		return;
 		
-	worldBounds_.center = mul0(transform_, mesh_->localBounds.center);
+	worldBounds_.center = mul1(transform_, mesh_->localBounds.center);
 	float x, y, z;
 	ExtractScaling(transform_,x,y,z);
 	worldBounds_.radius = mesh_->localBounds.radius * max(max(x,y),z);

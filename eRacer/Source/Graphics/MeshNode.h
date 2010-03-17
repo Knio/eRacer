@@ -76,6 +76,7 @@ protected:
 
 
 	Mesh* mesh_;
+	ID3DXMesh* boundsMesh_;
 };
 
 

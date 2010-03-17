@@ -95,6 +95,7 @@ public:
 protected:
 	
 	ID3DXMesh* d3dMesh_;
+
 	unsigned int nMaterials_;
 	D3DMATERIAL9* materials_;
 	IDirect3DTexture9** textures_;

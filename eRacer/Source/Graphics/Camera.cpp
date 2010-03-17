@@ -148,8 +148,8 @@ void Camera::UpdatePlanes(){
 
 	for(unsigned int i=0; i<PI_NUM; i++)
 		planes_[i].normalize();
-
-	//cout << "bla" << endl;
+	//static long long counter = 0;
+	//cout << "recomputed"<< counter++ << endl;
 }
 
 const Plane& Camera::GetPlane(int planeIndex) const {
