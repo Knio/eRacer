@@ -156,12 +156,9 @@ class GameState(State):
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
     
     # need refactoring
-    self.orthoCam = OrthographicCamera(800,600)
-    self.hudView = View(self.orthoCam)
-    self.boostBar = HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235)
+    self.hudView = View(OrthographicCamera(game().window.width,game().window.height))
 
-    self.hudView.AddRenderable(self.boostBar.graphics)
-    
+    self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235))
 
     self.skybox = SkyBox()
 
@@ -214,7 +211,6 @@ class GameState(State):
     
     game().graphics.views.append(self.view)
     game().graphics.views.append(self.hudView)
-    self.boostBar.Tick(time)
     
 
     game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
@@ -247,6 +243,12 @@ class GameState(State):
     
     State.Tick(self, time)
 
+  
+  def AddHud(self, entity):
+    self.entities.append(entity)
+    g = getattr(entity, 'graphics', None)
+    if g: self.hudView.AddRenderable(g)
+    return entity    
   
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
