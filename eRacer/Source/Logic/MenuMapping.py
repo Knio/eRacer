@@ -1,14 +1,9 @@
-import time
-
 from Core.Globals import *
 from Mapping      import Mapping, E
 
 class MenuMapping(Mapping):
-  MIN_INTERVAL = .5
-  
   def __init__(self):
-    self.lastMenuTime = time.time()
-
+    self.gamepadReleased = True
   
   def KeyPressedEvent(self, key):
     if key == KEY.UP:     return E.MenuUpEvent()
@@ -16,12 +11,15 @@ class MenuMapping(Mapping):
     if key == KEY.RETURN: return E.MenuSelectEvent()
     
   def GamepadStick1AbsoluteEvent(self, x, y):
-    if y >  900.0 and (time.time()-self.lastMenuTime) > self.MIN_INTERVAL:
-      self.lastMenuTime = time.time()
-      return E.MenuUpEvent()
-    if y < -900.0 and (time.time()-self.lastMenuTime) > self.MIN_INTERVAL:
-      self.lastMenuTime = time.time()
-      return E.MenuDownEvent()
+    if self.gamepadReleased:
+      if y < -700.0:
+        self.gamepadReleased = False
+        return E.MenuUpEvent()
+      elif y >  700.0:
+        self.gamepadReleased = False
+        return E.MenuDownEvent()
+    elif abs(y) < 500:
+      self.gamepadReleased = True
     
   def GamepadButtonPressedEvent(self, button):
     if button == cpp.BUTTON_A: return E.MenuSelectEvent()

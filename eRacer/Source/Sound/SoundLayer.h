@@ -44,6 +44,10 @@ public:
 	Point3 position;
 	Vector3 velocity;
 	float maxDist;
+
+	/**
+	 * @brief minimal distance before the sound is attenuated
+	 */
 	float minDist;
 	
 	bool isPaused;
