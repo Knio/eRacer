@@ -18,7 +18,9 @@ and in Main.py
 Do not subclass Game.
 
 */
-
+namespace Graphics {
+class Window;
+}
 
 class Game
 {
@@ -27,8 +29,10 @@ public:
 		assert(g_Game);
 		return g_Game; 
 	}
-	HWND 			hwnd;
-	HINSTANCE hinst;
+	HWND 				hwnd;
+	HINSTANCE			hinst;
+	
+	Graphics::Window* 	window; 
 private:
 	static Game* g_Game;
 protected:

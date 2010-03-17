@@ -1,10 +1,11 @@
-from Core.Globals   import *
-from Game.State     import State
+from Core.Globals     import *
+from Game.State       import State
   
-from Camera         import Camera, CirclingCamera, OrthographicCamera
-from Graphics.Quad  import Quad
-from MenuMapping    import MainMenuMapping, PauseMenuMapping
-from Graphics.View  import View
+from Camera           import Camera, CirclingCamera, OrthographicCamera
+from Quad             import Quad
+from HudQuad          import HudQuad
+from MenuMapping      import MainMenuMapping, PauseMenuMapping
+from Graphics.View    import View
 
 
 from Box import Box
@@ -63,7 +64,10 @@ class MainMenuState(MenuState):
   def __init__(self):
     MenuState.__init__(self)
 
-    self.Add(Quad("Logo","eRacerXLogoNegative.png",Matrix(Point3(400,450,0), 0,0,0, 600,235,1)))
+    logo = HudQuad("Logo","eRacerXLogoNegative.png", 0, 0, 600, 235)
+    logo.SetCenter(400, 150)
+    self.Add(logo)
+    
     
     self.sound = cpp.SoundFx();
     self.sound.looping = True

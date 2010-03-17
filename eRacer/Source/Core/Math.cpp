@@ -109,6 +109,17 @@ Matrix CreateMatrix(const Point3& position, const Matrix& orientation)
 	return r;
 }
 
+
+Matrix CreateMatrix(const Point3& position, float scaleX, float scaleY, float scaleZ){
+	Matrix result(	scaleX, 0, 0, 0,
+									0, scaleY, 0, 0,
+									0, 0, scaleZ, 0,
+									position.x, position.y, position.z, 1);
+	return result;
+}
+
+
+
 Matrix CreateMatrix(const Point3& position, float s){
 	Matrix result(	s, 0, 0, 0,
 					0, s, 0, 0,
@@ -146,16 +157,6 @@ Matrix CreateMatrix(const Point3& position, const Vector3& up, const Vector3& fw
 	);
 }
 
-Matrix CreateMatrix(const Point3& position, float yaw, float pitch, float roll, float scaleX, float scaleY, float scaleZ){
-	Matrix rotationMatrix;
-	Matrix translationMatrix;
-	Matrix scalingMatrix;
-	D3DXMatrixScaling(&scalingMatrix,scaleX,scaleY,scaleZ);
-	D3DXMatrixRotationYawPitchRoll(&rotationMatrix, yaw, pitch, roll);
-	D3DXMatrixMultiply(&rotationMatrix, &scalingMatrix, &rotationMatrix);
-	D3DXMatrixTranslation(&translationMatrix, position.x,position.y,position.z); 
-	return *D3DXMatrixMultiply(&rotationMatrix, &rotationMatrix, &translationMatrix);
-}
 
 Matrix CreateMatrix(float scaleX, float scaleY, float scaleZ){
 	Matrix result;
@@ -240,19 +241,7 @@ Vector3 GetTranslation(const Matrix& matrix){
 	return Vector3(matrix._41, matrix._42, matrix._43);
 }
 
-
-Matrix& SetRotation(Matrix& matrix, float yaw, float pitch, float roll){
-	Point3 position;
-	float scaleX;
-	float scaleY;
-	float scaleZ;
-	Matrix rotation;
-	Decompose(matrix, position, rotation, scaleX, scaleY, scaleZ);
-
-	matrix = CreateMatrix(position, yaw, pitch, roll,scaleX,scaleY,scaleZ);
-	return matrix;
-}
-
+/*
 Matrix& Rotate(Matrix& matrix, float yaw, float pitch, float roll){
 	Matrix m2;
 	D3DXMatrixRotationYawPitchRoll(&m2, yaw, pitch, roll);
@@ -264,6 +253,7 @@ Matrix Rotated(const Matrix& matrix, float yaw, float pitch, float roll){
 	Rotate(result,yaw,pitch,roll);
 	return result;
 }
+*/
 
 Matrix Inverse(const Matrix& m)
 {

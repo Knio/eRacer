@@ -136,28 +136,7 @@ Matrix CreateMatrix(const Point3& position, const Vector3& up, const Vector3& fw
  */
 Matrix CreateMatrix(const Point3& position, float angle, const Vector3& axis, float scaleX=1, float scaleY=1, float scaleZ=1);
 
-
-/**
- * @brief Construct a matrix from position, yaw, pitch, roll and scaling.
- *
- * @param position
- *			the translational component of the matrix
- * @param yaw
- *			the angle by which to rotate around the y-axis
- * @param pitch
- *			the angle by which to rotate around the x-axis
- * @param roll
- *			the angle by which to rotate around the z-axis
- * @param scaleX
- *			scaling factor in x direction - default: 1
- * @param scaleY
- *			scaling factor in y direction - default: 1
- * @param scaleZ
- *			scaling factor in z direction - default: 1
- * @return the matrix representing the transformation of first applying the scaling, 
- *			then the rotation and finally the translation
- */
-Matrix CreateMatrix(const Point3& position, float yaw, float pitch, float roll, float scaleX=1, float scaleY=1, float scaleZ=1);
+Matrix CreateMatrix(const Point3& position, float scaleX, float scaleY, float scaleZ);
 
 
 Matrix CreateMatrix(const Point3& position, float uniformScale);
@@ -234,9 +213,11 @@ Matrix& Translate(Matrix& matrix, const Vector3& translation);
 Matrix  Translated(const Matrix& matrix, const Vector3& translation);
 Vector3 GetTranslation(const Matrix& matrix);
 
+/*
 Matrix& SetRotation(Matrix& matrix, float yaw, float pitch, float roll);
 Matrix& Rotate(Matrix& matrix, float yaw, float pitch, float roll);
 Matrix  Rotated(const Matrix& matrix, float yaw, float pitch, float roll);
+*/
 Matrix  Inverse(const Matrix& m);
 Matrix  Scaled(const Matrix& matrix, float x, float y, float z);
 

@@ -12,9 +12,11 @@ from GameEndState   import GameEndState
 from Track      import Track
 from Vehicle    import Vehicle
 from Shadow     import Shadow
-from Camera     import ChasingCamera, FirstPersonCamera, CarCamera
+from Camera     import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera
 from Starfield  import Starfield
 from Meteor     import Meteor, MeteorManager
+from Quad  import Quad
+from HudQuad  import HudQuad
 # from CoordinateCross  import CoordinateCross
 
 
@@ -26,7 +28,7 @@ from AI.Raceline import Raceline
 from Graphics.View    import View
 from Graphics.SkyBox  import SkyBox
 
-from Graphics.Quad  import Quad
+
 
 
 # TODO
@@ -105,7 +107,7 @@ class GameState(State):
     frame = self.track.GetFrame(-30.0)
     frametx = Matrix(frame.position, frame.up, frame.fw)
     
-    forwardMat = Matrix(ORIGIN, -PI/2.0, 0, 0)
+    forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
     self.player = self.Add(Vehicle("Player", self.track, 
       Matrix(Point3(0, 4, 0)) * frametx,
@@ -153,8 +155,14 @@ class GameState(State):
     cam = self.Add(CarCamera(self.player))
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
     
-    # without this, the skyboxes are garbage collected because the 
-    # reference in view does not count because view is a c++ object (not python)
+    # need refactoring
+    self.hudView = View(OrthographicCamera(game().window.width,game().window.height))
+
+    # 0,0 is top left, make sure you add all HudQuads using AddHud
+    # texture coordinates can be set via self.boostBar.graphics.SetTextureCoordinates
+    # wrappers for that should be created as needed. 
+    # self.boostBar = self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235))
+
     self.skybox = SkyBox()
     
     
@@ -203,6 +211,8 @@ class GameState(State):
     
     
     game().graphics.views.append(self.view)
+    game().graphics.views.append(self.hudView)
+    
 
     game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
     
@@ -234,6 +244,12 @@ class GameState(State):
     
     State.Tick(self, time)
 
+  
+  def AddHud(self, entity):
+    self.entities.append(entity)
+    g = getattr(entity, 'graphics', None)
+    if g: self.hudView.AddRenderable(g)
+    return entity    
   
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
