@@ -5,6 +5,7 @@ from Core.Globals import *
 
 class MeteorManager(object):
   VANISHING_DISTANCE = 600.
+  N_CHANNELS= 5 
 
   def __init__(self, state):
     self.state = state
@@ -13,14 +14,17 @@ class MeteorManager(object):
     game().event.Register(self.MeteorCarCollisionEvent)
     game().event.Register(self.MeteorTrackCollisionEvent)
     
-    self.collisionSound = cpp.SoundFx();
-    self.collisionSound.looping  = False
-    self.collisionSound.is3D     = True
-    self.collisionSound.isPaused = True
-    self.collisionSound.volume   = 255
-    self.collisionSound.minDist  = 50
-
-    game().sound.sound.LoadSoundFx("MeteorCollision.wav", self.collisionSound)
+    self.collisionSounds = []
+    self.soundIndex = 0
+    for i in range(self.N_CHANNELS):
+      sound = cpp.SoundFx();
+      sound.looping  = False
+      sound.is3D     = True
+      sound.isPaused = True
+      sound.volume   = 255
+      sound.minDist  = 50
+      game().sound.sound.LoadSoundFx("MeteorCollision.wav", sound)
+      self.collisionSounds.append(sound)
     
     
   def spawnRandom(self):
@@ -58,10 +62,12 @@ class MeteorManager(object):
     meteor = Entity.entities[meteorId]
     meteor.hitTrack(force)
 
-    self.collisionSound.position = mul1(meteor.transform, ORIGIN)
-    self.collisionSound.velocity = ORIGIN #vel
-    self.collisionSound.isPaused = False
-    game().sound.sound.UpdateSoundFx(self.collisionSound)
+    sound = self.collisionSounds[self.soundIndex]
+    sound.position = mul1(meteor.transform, ORIGIN)
+    sound.velocity = ORIGIN #vel
+    sound.isPaused = False
+    game().sound.sound.UpdateSoundFx(sound)
+    self.soundIndex = (self.soundIndex+1)%self.N_CHANNELS
     
   def MeteorCarCollisionEvent(self, meteorId, carId, force):
     pass
