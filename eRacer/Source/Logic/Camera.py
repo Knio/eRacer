@@ -7,7 +7,7 @@ class Camera(Entity, cpp.Camera):
     
     self.SetNear(2)
     #very high for now, can be reduced once we have some fogging
-    self.SetFar(4000) 
+    self.SetFar(4000)
     self.SetFovY(math.pi/4.0)
     self.SetAspectRatio(8./6.)
 
@@ -47,7 +47,6 @@ class CirclingCamera(Camera):
     
     self.SetPosition(pos)
 
-
 class ChasingCamera(Camera):
   def __init__(self, target): 
     Camera.__init__(self)
@@ -55,6 +54,9 @@ class ChasingCamera(Camera):
     self.position = Point3(0, 50, -1)
     self.fov      = math.pi/2.1
     self.upworld  = Y
+    # self.SetFar(40)
+    
+    
   
   def Tick(self, time):
     Camera.Tick(self, time)

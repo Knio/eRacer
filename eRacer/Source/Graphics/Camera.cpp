@@ -7,6 +7,8 @@
  */
 
 #include "Camera.h"
+#include "GraphicsLayer.h"
+#include "DebugRenderable.h"
 
 namespace Graphics {
 
@@ -101,39 +103,64 @@ void Camera::SetHeight(float height){
 
 
 void Camera::UpdatePlanes(){
-	Point3 a, b, c;
+	Point3 
+		ltn,
+		lbn,
+		rtn,
+		rbn,
+		ltf,
+		lbf,
+		rtf,
+		rbf;
+		
+		
+	
+	
+	
+	
+	ltn = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_NEAR]);
+	ltf = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_FAR]);
+	lbn = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_NEAR]);
+	lbf = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_FAR]);
+	
+	rtn = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_NEAR]);
+  rtf = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_FAR]);
+	rbf = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_FAR]);
+	rbn = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_NEAR]);
+	
+	planes_[PI_LEFT  ].recompute(ltn,lbn,lbf);
+	planes_[PI_RIGHT ].recompute(rtn,rbf,rbn);
+	planes_[PI_BOTTOM].recompute(lbn,rbn,rbf);
+	planes_[PI_TOP   ].recompute(ltn,rtf,rtn);
+	planes_[PI_NEAR  ].recompute(ltn,rtn,rbn);
+	planes_[PI_FAR   ].recompute(lbf,rbf,ltf);
+	
+	
+	// render view frustum
+	/*
+	DebugRenderable *d = GraphicsLayer::GetInstance()->debugRenderable;
+	d->AddLine(lbn, rbn, 0x0000ff00);
+	d->AddLine(lbn, ltn, 0x0000ff00);
+	d->AddLine(rbn, rtn, 0x0000ff00);
+	d->AddLine(rtn, ltn, 0x0000ff00);
+	
+	d->AddLine(lbf, rbf, 0x00ff0000);
+	d->AddLine(lbf, ltf, 0x00ff0000);
+	d->AddLine(rbf, rtf, 0x00ff0000);
+	d->AddLine(rtf, ltf, 0x00ff0000);
+	
+	d->AddLine(lbn, lbf);
+	d->AddLine(ltn, ltf);
+	d->AddLine(rbn, rbf);
+	d->AddLine(rtn, rtf);
 
-	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_NEAR]);
-	b = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_NEAR]);
-	c = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_FAR]);
-	planes_[PI_LEFT].recompute(a,b,c);
-
-	a = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_NEAR]);
-	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_FAR]);
-	c = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_NEAR]);
-	planes_[PI_RIGHT].recompute(a,b,c);
-
-	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_NEAR]);
-	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_NEAR]);
-	c = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_FAR]);
-	planes_[PI_BOTTOM].recompute(a,b,c);
-
-	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_NEAR]);
-	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_FAR]);
-	c = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_NEAR]);
-	planes_[PI_TOP].recompute(a,b,c);
-
-	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_NEAR]);
-	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_TOP_NEAR]);
-	c = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_NEAR]);
-	planes_[PI_NEAR].recompute(a,b,c);
-
-	a = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_FAR]);
-	b = mul1(inverseViewMatrix_, frustumCorners_[CI_RIGHT_BOTTOM_FAR]);
-	c = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_FAR]);
-	planes_[PI_FAR].recompute(a,b,c);
-
-
+	d->AddLine(mul1(inverseViewMatrix_, ORIGIN), lbn, 0x000000ff);
+	d->AddLine(mul1(inverseViewMatrix_, ORIGIN), ltn, 0x000000ff);
+	d->AddLine(mul1(inverseViewMatrix_, ORIGIN), rbn, 0x000000ff);
+	d->AddLine(mul1(inverseViewMatrix_, ORIGIN), rtn, 0x000000ff);
+	//*/
+	
+	
 
 	//TODO - should have happende already
 	//UpdateProjection();
@@ -222,15 +249,15 @@ void Camera::UpdateProjection(){
 	                              near_,
 	                              far_ );
 
-		float sinFovX = sin(fovY_*aspectRatio_);
-		float sinFovY = sin(fovY_);
+		float tanFovY = tan(fovY_ / 2.f);
+		float tanFovX = tan(fovY_ / 2.f * aspectRatio_);
 
-		dxNear = near_/ sinFovX;
-		dyNear = near_/ sinFovY;
+		dxNear = near_ * tanFovX;
+		dyNear = near_ * tanFovY;
 
 
-		dxFar = far_ / sinFovX;
-		dyFar = far_ / sinFovY;
+		dxFar = far_ * tanFovX;
+		dyFar = far_ * tanFovY;
 	} else{
 		D3DXMatrixOrthoLH(&projectionMatrix_,
 	                              height_*aspectRatio_,
@@ -245,38 +272,40 @@ void Camera::UpdateProjection(){
 		dyFar = dyNear;
 
 	}
-
+	
 	frustumCorners_[CI_LEFT_BOTTOM_NEAR].x = -dxNear; 
 	frustumCorners_[CI_LEFT_BOTTOM_NEAR].y = -dyNear;
 	frustumCorners_[CI_LEFT_BOTTOM_NEAR].z = near_;
 
-	frustumCorners_[CI_RIGHT_BOTTOM_NEAR].x = dxNear; 
+	frustumCorners_[CI_RIGHT_BOTTOM_NEAR].x = +dxNear; 
 	frustumCorners_[CI_RIGHT_BOTTOM_NEAR].y = -dyNear;
 	frustumCorners_[CI_RIGHT_BOTTOM_NEAR].z = near_;
 
 	frustumCorners_[CI_LEFT_TOP_NEAR].x = -dxNear; 
-	frustumCorners_[CI_LEFT_TOP_NEAR].y = dyNear;
+	frustumCorners_[CI_LEFT_TOP_NEAR].y = +dyNear;
 	frustumCorners_[CI_LEFT_TOP_NEAR].z = near_;
 
-	frustumCorners_[CI_RIGHT_TOP_NEAR].x = dxNear; 
-	frustumCorners_[CI_RIGHT_TOP_NEAR].y = dyNear;
+	frustumCorners_[CI_RIGHT_TOP_NEAR].x = +dxNear; 
+	frustumCorners_[CI_RIGHT_TOP_NEAR].y = +dyNear;
 	frustumCorners_[CI_RIGHT_TOP_NEAR].z = near_;
 
 	frustumCorners_[CI_LEFT_BOTTOM_FAR].x = -dxFar; 
 	frustumCorners_[CI_LEFT_BOTTOM_FAR].y = -dyFar;
 	frustumCorners_[CI_LEFT_BOTTOM_FAR].z = far_;
 
-	frustumCorners_[CI_RIGHT_BOTTOM_FAR].x = dxFar; 
+	frustumCorners_[CI_RIGHT_BOTTOM_FAR].x = +dxFar; 
 	frustumCorners_[CI_RIGHT_BOTTOM_FAR].y = -dyFar;
 	frustumCorners_[CI_RIGHT_BOTTOM_FAR].z = far_;
 
 	frustumCorners_[CI_LEFT_TOP_FAR].x = -dxFar; 
-	frustumCorners_[CI_LEFT_TOP_FAR].y = dyFar;
+	frustumCorners_[CI_LEFT_TOP_FAR].y = +dyFar;
 	frustumCorners_[CI_LEFT_TOP_FAR].z = far_;
 
-	frustumCorners_[CI_RIGHT_TOP_FAR].x = dxFar; 
-	frustumCorners_[CI_RIGHT_TOP_FAR].y = dyFar;
+	frustumCorners_[CI_RIGHT_TOP_FAR].x = +dxFar; 
+	frustumCorners_[CI_RIGHT_TOP_FAR].y = +dyFar;
 	frustumCorners_[CI_RIGHT_TOP_FAR].z = far_;
+	
+	
 }
 
 

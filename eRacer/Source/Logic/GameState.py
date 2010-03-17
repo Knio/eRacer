@@ -150,8 +150,8 @@ class GameState(State):
     cam = self.Add(FirstPersonCamera())
     self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
     
-    cam = self.Add(CarCamera(self.player))
-    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
+    # cam = self.Add(CarCamera(self.player))
+    # self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
     
     # without this, the skyboxes are garbage collected because the 
     # reference in view does not count because view is a c++ object (not python)

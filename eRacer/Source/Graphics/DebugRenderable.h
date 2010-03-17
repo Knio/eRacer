@@ -39,10 +39,10 @@ class DebugRenderable : public Renderable
 public:
   DebugRenderable();
 
-  void AddNormal(Point3 start, Vector3 norm, DWORD color=_WHITE);
-  void AddLine(Point3 start, Point3 end, DWORD color=_WHITE);  
+  void AddNormal(const Point3& start, const Vector3& norm, DWORD color=_WHITE);
+  void AddLine  (const Point3& start, const Point3&   end, DWORD color=_WHITE);
   // void AddTriangle(Point3 a, Point3 b, Point3 c);
-  
+  void Clear();
   
   virtual void Draw(IDirect3DDevice9*) const;
 };

@@ -29,12 +29,12 @@ DebugRenderable::DebugRenderable() : nLines(0), nTriangles(0)
   
 }
 
-void DebugRenderable::AddNormal(Point3 start, Vector3 normal, DWORD color)
+void DebugRenderable::AddNormal(const Point3& start, const Vector3& normal, DWORD color)
 {
   AddLine(start, start+normal, color);
 }
 
-void DebugRenderable::AddLine(Point3 start, Point3 end, DWORD color)
+void DebugRenderable::AddLine(const Point3& start, const Point3 &end, DWORD color)
 {
   Line *buff;
   assert(SUCCEEDED(lines->Lock(sizeof(Line)*nLines, sizeof(Line), (void**)&buff, D3DLOCK_NOOVERWRITE)));
@@ -57,6 +57,11 @@ void DebugRenderable::AddLine(Point3 start, Point3 end, DWORD color)
 //   nTriangles++;  
 
 // }
+
+void DebugRenderable::Clear()
+{
+  nLines = 0;
+}
 
 void DebugRenderable::Draw(IDirect3DDevice9* dev) const 
 {

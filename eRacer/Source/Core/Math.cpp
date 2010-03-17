@@ -79,8 +79,8 @@ Vector3 normalized(const Vector3& A){
 
 Vector3 mul0(const Matrix &m, const Vector3 &v)
 {
-	//Make sure the matrix is affine
-	assert(affine(m));
+	// Make sure the matrix is affine
+	// assert(affine(m));
 	Vector3 r;
 	D3DXVec3TransformNormal(&r, &v, &m);
 	return r;
@@ -88,8 +88,8 @@ Vector3 mul0(const Matrix &m, const Vector3 &v)
 
 Point3	mul1(const Matrix &m, const Point3  &v)
 {
-	//Make sure the matrix is affine
-	assert(affine(m));
+	// Make sure the matrix is affine
+	// assert(affine(m));
 
 	Vector4 t;
 	D3DXVec3Transform(&t, &v, &m);

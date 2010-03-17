@@ -236,7 +236,7 @@ void GraphicsLayer::PostRender(){
 
     // draw debug
     debugRenderable->Draw(m_pd3dDevice);
-    
+    debugRenderable->Clear();
     
      // draw overlay
     m_fontManager.Draw();
