@@ -18,7 +18,7 @@ class MeteorManager(object):
     self.collisionSound.is3D     = True
     self.collisionSound.isPaused = True
     self.collisionSound.volume   = 255
-    self.collisionSound.minDist  = 10
+    self.collisionSound.minDist  = 50
 
     game().sound.sound.LoadSoundFx("MeteorCollision.wav", self.collisionSound)
     
