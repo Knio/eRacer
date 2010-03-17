@@ -51,7 +51,7 @@ if __name__ == '__main__':
     p = params.pop(0)
     if p == '--debug':
       debug = True
-    if p == '--release':
+    elif p == '--release':
       debug = False  
     elif p == '--profile':
       profile = True
