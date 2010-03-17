@@ -111,21 +111,21 @@ class GameState(State):
       Matrix(Point3(0, 4, 0)) * frametx,
     ))
     PlayerBehavior(self.player)
-    #self.Add(Shadow(self.player))
+    self.Add(Shadow(self.player))
   
-    # self.ai1    = self.Add(Vehicle("AI1",  self.track, 
-    #   Matrix(Point3(-15, 4, 0)) * frametx,
-    #   2,
-    # ))
-    # AIBehavior(self.ai1, self.track)
-    #self.Add(Shadow(self.ai1))
+    self.ai1    = self.Add(Vehicle("AI1",  self.track, 
+      Matrix(Point3(-15, 4, 0)) * frametx,
+      2,
+    ))
+    AIBehavior(self.ai1, self.track)
+    self.Add(Shadow(self.ai1))
     
-    # self.ai2    = self.Add(Vehicle("AI2",    self.track, 
-    #   Matrix(Point3(+15, 4, 0)) * frametx,
-    #   5,
-    # ))
-    # AIBehavior(self.ai2, self.track)
-    #self.Add(Shadow(self.ai2))
+    self.ai2    = self.Add(Vehicle("AI2",    self.track, 
+      Matrix(Point3(+15, 4, 0)) * frametx,
+      5,
+    ))
+    AIBehavior(self.ai2, self.track)
+    self.Add(Shadow(self.ai2))
         
     startFrame = self.track.GetFrame(0.0)
     
@@ -172,9 +172,9 @@ class GameState(State):
     self.meteorManager = MeteorManager(self)
     self.Add(self.meteorManager)
 
-    # for i in range(CONSTS.NUM_METEORS):
-    #   m = self.meteorManager.spawnRandom()
-    #   self.Add(m)
+    for i in range(CONSTS.NUM_METEORS):
+      m = self.meteorManager.spawnRandom()
+      self.Add(m)
     
     self.lastMeteorTime = 0
     
@@ -225,12 +225,12 @@ class GameState(State):
         game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
         y += 15    
     
-    # if not self.gameOver:
-    #   self.lastMeteorTime += time.game_delta
-    #   if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
-    #     self.lastMeteorTime = 0
-    #     m = self.meteorManager.spawnTargeted(self.player)
-    #     self.Add(m)
+    if not self.gameOver:
+      self.lastMeteorTime += time.game_delta
+      if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
+        self.lastMeteorTime = 0
+        m = self.meteorManager.spawnTargeted(self.player)
+        self.Add(m)
     
     self.meteorManager.Tick(time)
     

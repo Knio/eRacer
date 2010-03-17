@@ -72,7 +72,7 @@ void MeshNode::Init(Mesh* mesh){
 	
 	mesh_ = mesh;
 
-	D3DXCreateSphere(GraphicsLayer::GetInstance()->GetDevice(), mesh_->localBounds.radius, 10,10, &boundsMesh_,NULL);
+	//D3DXCreateSphere(GraphicsLayer::GetInstance()->GetDevice(), mesh_->localBounds.radius, 10,10, &boundsMesh_,NULL);
 	
 	initialized = true;
 	UpdateWorldBounds();
