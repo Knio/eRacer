@@ -39,6 +39,7 @@ void SoundLayer::LoadSoundFx(const string& filename, SoundFx* samp)
 	else
 		mode |= FSOUND_HW3D;
 
+
 	samp->soundsample = FSOUND_Sample_Load(FSOUND_FREE, (SOUND_FOLDER+filename).c_str(), mode, 0, 0);
 	/*if ((!samp->soundsample)&&(samp->is3D)) {//If hardware loading failed, force software
 		mode ^= FSOUND_HW3D; 
@@ -55,7 +56,7 @@ void SoundLayer::LoadSoundFx(const string& filename, SoundFx* samp)
 		FSOUND_3D_SetAttributes( samp->channel, (float*)&samp->position, (float*)&samp->velocity);
 	}
 
-	if (!samp->isPaused)
+    if (!samp->isPaused)
 		FSOUND_SetPaused(samp->channel, FALSE);
 }
 
@@ -81,6 +82,26 @@ void SoundLayer::UpdateSoundFx(SoundFx* samp)
 	if (samp->isPaused)
 		pause = TRUE;
 	FSOUND_SetPaused(samp->channel, pause);
+}
+
+void SoundLayer::PlaySoundFx(SoundFx* samp)
+{
+	if (NULL == samp->soundsample)
+		return;
+
+	if (samp->isLooping) //Only meant for one shot sounds
+		return;
+
+	samp->channel = FSOUND_PlaySoundEx(FSOUND_FREE, samp->soundsample, NULL, TRUE);
+	FSOUND_SetFrequency(samp->channel, samp->pitch);
+	FSOUND_SetVolume(samp->channel, samp->volume);
+
+	if (samp->is3D) {
+		FSOUND_3D_SetMinMaxDistance(samp->channel, samp->minDist, samp->maxDist);
+		FSOUND_3D_SetAttributes( samp->channel, (float*)&samp->position, (float*)&samp->velocity);
+	}
+	
+	FSOUND_SetPaused(samp->channel, FALSE);
 }
 
 int SoundLayer::Init()

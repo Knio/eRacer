@@ -23,7 +23,18 @@ class MenuState(State):
     self.Add(camera)
 
     self.view = View(camera,[self.scene])
-        
+
+    self.menuNav = cpp.SoundFx();
+    self.menuNav.isLooping  = False
+    self.menuNav.is3D     = False
+    self.menuNav.isPaused = True
+    game().sound.sound.LoadSoundFx("MenuNav.wav", self.menuNav)
+
+    self.menuSel = cpp.SoundFx();
+    self.menuSel.isLooping  = False
+    self.menuSel.is3D     = False
+    self.menuSel.isPaused = True
+    game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
     
   def Tick(self, time):
     State.Tick(self, time)
@@ -41,18 +52,22 @@ class MenuState(State):
       y += 50
       
   def MenuUpEvent(self):
+    game().sound.sound.PlaySoundFx(self.menuNav)
     self.selected = (self.selected-1) % len(self.MENU)
   
   def MenuDownEvent(self):
+    game().sound.sound.PlaySoundFx(self.menuNav)
     self.selected = (self.selected+1) % len(self.MENU)
 
   def MenuSelectEvent(self):
+    game().sound.sound.PlaySoundFx(self.menuSel)
     name = self.MENU[self.selected][0]
     getattr(self, 'Menu_%s' % name.replace(' ','_'))()
+
     
   def Menu_Exit(self):
     game().event.QuitEvent()
-  
+
     
 class MainMenuState(MenuState):
   MAPPING = MainMenuMapping
@@ -68,9 +83,8 @@ class MainMenuState(MenuState):
     logo.SetCenter(400, 150)
     self.Add(logo)
     
-    
     self.sound = cpp.SoundFx();
-    self.sound.looping = True
+    self.sound.isLooping = True
     self.sound.is3D = False
     self.sound.isPaused = False
     game().sound.sound.LoadSoundFx("Terran5.ogg", self.sound)

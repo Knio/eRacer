@@ -72,7 +72,7 @@ class Vehicle(Model):
     self.sumHeight = 0.
     
     self.sound = cpp.SoundFx();
-    self.sound.looping  = True
+    self.sound.isLooping  = True
     self.sound.is3D     = True
     self.sound.isPaused = True
     self.sound.volume   = 128

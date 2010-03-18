@@ -64,17 +64,17 @@ class ChasingCamera(Camera):
     vel = length(self.target.physics.GetLocalPointWorldVelocity(ORIGIN))
   
 
-    capBack = math.pow(vel, 0.4)
+    capBack = math.pow(vel, 0.2)
     originlocal = ORIGIN
-    behindlocal = Point3(0,6,-8-capBack);
+    behindlocal = Point3(0,6,-12-0);
     originworld = mul1(self.target.transform, originlocal)
     behindworld = mul1(self.target.transform, behindlocal)
     forwardlocal = Point3(0,0,15);
     forwardworld = mul1(self.target.transform, forwardlocal)
     
-    fov = math.pi/2.0/(vel*0.01+1)
+    fov = max(math.pi/2.5/(vel*0.01+1), math.pi/3)
     
-    alpha = math.pow(0.04, float(time.game_delta) / time.RESOLUTION)
+    alpha = math.pow(0.01, float(time.game_delta) / time.RESOLUTION)
     self.position = self.position*alpha + behindworld*(1-alpha)
     self.fov      = self.fov*alpha      + fov*(1-alpha)
 

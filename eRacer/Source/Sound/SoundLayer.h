@@ -105,6 +105,7 @@ public:
 
 	void LoadSoundFx(const string& filename, SoundFx* samp);
 	void UpdateSoundFx(SoundFx* samp);
+	void PlaySoundFx(SoundFx* samp);
 
 	int PlaySound2D(const string& name);
 
