@@ -115,11 +115,11 @@ class GameState(State):
     self.AddAICar("AI1", Matrix(Point3(-15, 3, 0)) * frametx, 2)
     self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
     self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
-    self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
-    self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
-    self.AddAICar("AI6", Matrix(Point3(0, 3, -30)) * frametx, 5)
-    self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
-    self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
+    #self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
+    #self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
+    #self.AddAICar("AI6", Matrix(Point3(0, 3, -30)) * frametx, 5)
+    #self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
+    #self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
 
     startFrame = self.track.GetFrame(0.0)
     
@@ -153,7 +153,7 @@ class GameState(State):
     # 0,0 is top left, make sure you add all HudQuads using AddHud
     # texture coordinates can be set via self.boostBar.graphics.SetTextureCoordinates
     # wrappers for that should be created as needed. 
-    self.boostBar = self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235))
+    self.boostBar = self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", (800-600)/2, 550, 600, 35))
     #self.boostBar.graphics.SetTextureCoordinates(0,0,  1,0, 1,1, 0,1 );
     self.boostBar.graphics.SetTextureCoordinates(0,0,  0.5,0, 0.5,1, 0,1 );
 
@@ -225,11 +225,10 @@ class GameState(State):
        self.player.Backwards = False
 
     if self.player.Backwards == True:
-       game().graphics.graphics.WriteString( "REVERSE", "Verdana", 50, Point3(250,400,0))
+       game().graphics.graphics.WriteString( "WRONG WAY", "Verdana", 50, Point3(300,200,0))
 
 
-                                   
-    
+                                  
     if self.player.lapcount:
       playerLaps = min(self.player.lapcount, self.laps)
       
