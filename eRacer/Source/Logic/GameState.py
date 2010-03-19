@@ -171,11 +171,9 @@ class GameState(State):
       view.AddRenderable(self.skybox)
    
     self.meteorManager = MeteorManager(self)
-    self.Add(self.meteorManager)
 
     for i in range(CONSTS.NUM_METEORS):
-      m = self.meteorManager.spawnRandom()
-      self.Add(m)
+      self.meteorManager.spawnRandom()
     
     self.lastMeteorTime = 0
     
@@ -272,8 +270,7 @@ class GameState(State):
       self.lastMeteorTime += time.game_delta
       if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
         self.lastMeteorTime = 0
-        m = self.meteorManager.spawnTargeted(self.player)
-        self.Add(m)
+        self.meteorManager.spawnTargeted(self.player)
     
     self.meteorManager.Tick(time)
     
@@ -281,7 +278,7 @@ class GameState(State):
 
   
   def AddHud(self, entity):
-    self.entities.append(entity)
+    self.entities[entity.id] = entity
     g = getattr(entity, 'graphics', None)
     if g: self.hudView.AddRenderable(g)
     return entity    
@@ -317,8 +314,8 @@ class GameState(State):
       game().simspeed = 1.0
       
   def ObstacleAheadEvent(self, vehicleId, obstacleId):
-    vehicle = Entity.entities[vehicleId]
-    obstacle = Entity.entities[obstacleId]
+    vehicle = self.entities[vehicleId]
+    obstacle = self.entities[obstacleId]
     vehicle.obstacles.append(obstacle)
     
       

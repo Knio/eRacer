@@ -52,6 +52,7 @@ public:
 	const BoundingSphere& getWorldBounds() const;
 
 	bool visible;
+	string name_;	
 protected:
 	/**
 	 * @brief Pure virtual. Called if the node should not be culled.
@@ -62,7 +63,6 @@ protected:
 	 * 			A vector to push all visible renderables to
 	 */
 	virtual void cullRecursive(const Camera& camera, vector<const Renderable*>& visibleRenderables) const = 0;
-	string name_;	
 	BoundingSphere worldBounds_;
 };
 
