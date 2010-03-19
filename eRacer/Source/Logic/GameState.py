@@ -313,6 +313,12 @@ class GameState(State):
     if key == KEY.HOME:
       game().simspeed = 1.0
       
+  def ObstacleAheadEvent(self, vehicleId, obstacleId):
+    vehicle = Entity.entities[vehicleId]
+    obstacle = Entity.entities[obstacleId]
+    vehicle.obstacles.append(obstacle)
+    
+      
   def AddAICar(self, name, orient, modelNum):
       ai    = self.Add(Vehicle(name,    self.track, 
       orient, modelNum))

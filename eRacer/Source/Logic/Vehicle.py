@@ -78,6 +78,8 @@ class Vehicle(Model):
     self.sound.isPaused = True
     self.sound.volume   = 128
     self.sound.minDist  = 50
+    
+    self.obstacles = []
 
     game().sound.sound.LoadSoundFx("EngineSound.wav", self.sound)
 
@@ -131,6 +133,9 @@ class Vehicle(Model):
   
     if self.behavior: 
       self.behavior.Tick(time)
+    
+    # remove obstacles - they are not needed any more
+    self.obstacles = []
     
 
     self.PrintDebug()
