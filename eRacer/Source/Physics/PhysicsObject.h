@@ -151,7 +151,7 @@ public:
 	/**
 	 * @brief set the collision group of this physics object
 	 */
-	void SetGroup(CollisionGroup group) { Actor->setGroup(group); }
+	void SetGroup(CollisionGroup group) { assert(NULL != Actor); Actor->setGroup(group); }
 	
 	/**
 	 * @brief set the id of this object. 

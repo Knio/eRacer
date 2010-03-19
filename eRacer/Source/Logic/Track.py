@@ -10,7 +10,6 @@ class Track(Entity, cpp.Track):
     
     self.graphics = MeshNode("track")
     self.physics  = cpp.TriMesh()
-
     
     # HACK
     track = None
@@ -41,5 +40,7 @@ class Track(Entity, cpp.Track):
     
     self.graphics.Init(self.mesh)
     self.physics.Init(mesh)
+    self.physics.SetId(self.id)
+
     self.physics.SetGroup(cpp.TRACK)
     

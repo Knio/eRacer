@@ -171,14 +171,8 @@ void PhysicsLayer::onContactNotify(NxContactPair& pair, NxU32 events){
 }
 
 void PhysicsLayer::onTrigger(NxShape& triggerShape, NxShape& otherShape, NxTriggerFlag status) {
-	switch(otherShape.getActor().getGroup()){
-		case METEOR:
-			EVENT(MeteorAheadEvent((int)triggerShape.getActor().userData, (int)otherShape.getActor().userData));
-		break;
-		case CAR:
-			EVENT(CarAheadEvent((int)triggerShape.getActor().userData, (int)otherShape.getActor().userData));
-		break;
-	}
+	if(otherShape.getActor().getGroup() != TRACK)
+		EVENT(ObstacleAheadEvent((int)triggerShape.getActor().userData, (int)otherShape.getActor().userData));
 }
 
 

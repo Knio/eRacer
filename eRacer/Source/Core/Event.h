@@ -127,9 +127,7 @@ public:
 	DEFINE_EVENT(MeteorTrackCollisionEvent, 	int meteorId, 	int trackId, 	Vector3 force)
 	DEFINE_EVENT(MeteorCarCollisionEvent, 		int meteorId, 	int carId, 		Vector3 force)
 	DEFINE_EVENT(CarTrackCollisionEvent,		int carId, 		int trackId, 	Vector3 force)
-	DEFINE_EVENT(MeteorAheadEvent,				int carId, 		int meteorId)
-	DEFINE_EVENT(CarAheadEvent,					int carId1, 	int carId2)
-	
+	DEFINE_EVENT(ObstacleAheadEvent,			int carId, 		int obstacleId)
 };
 
 typedef Event Listener;
