@@ -99,36 +99,26 @@ class GameState(State):
     
     self.track = self.Add(Track(track))
     
-    self.arrow1 = Model("arrow1", "LeatherBox.x")
-    self.Add(self.arrow1)
-    self.arrow2 = Model("arrow2", "LeatherBox.x")
-    self.Add(self.arrow2)
-    
     frame = self.track.GetFrame(-30.0)
     frametx = Matrix(frame.position, frame.up, frame.fw)
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
     self.player = self.Add(Vehicle("Player", self.track, 
-      Matrix(Point3(0, 4, 0)) * frametx,
+      Matrix(Point3(0, 3, 0)) * frametx,
     ))
     PlayerBehavior(self.player)
     self.Add(Shadow(self.player))
-  
-    self.ai1    = self.Add(Vehicle("AI1",  self.track, 
-      Matrix(Point3(-15, 4, 0)) * frametx,
-      2,
-    ))
-    AIBehavior(self.ai1, self.track, self.arrow1)
-    self.Add(Shadow(self.ai1))
     
-    self.ai2    = self.Add(Vehicle("AI2",    self.track, 
-      Matrix(Point3(+15, 4, 0)) * frametx,
-      5,
-    ))
-    AIBehavior(self.ai2, self.track, self.arrow2)
-    self.Add(Shadow(self.ai2))
-        
+    self.AddAICar("AI1", Matrix(Point3(-15, 3, 0)) * frametx, 2)
+    self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
+    self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
+    self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
+    self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
+    self.AddAICar("AI6", Matrix(Point3(0, 3, -30)) * frametx, 5)
+    self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
+    self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
+
     startFrame = self.track.GetFrame(0.0)
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
@@ -280,4 +270,10 @@ class GameState(State):
   def KeyPressedEvent(self, key):
     if key == KEY.HOME:
       game().simspeed = 1.0
+      
+  def AddAICar(self, name, orient, modelNum):
+      ai    = self.Add(Vehicle(name,    self.track, 
+      orient, modelNum))
+      AIBehavior(ai, self.track)
+      self.Add(Shadow(ai))
 

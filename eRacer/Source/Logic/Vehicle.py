@@ -98,7 +98,8 @@ class Vehicle(Model):
       self.boosting = 1
       if self.sumHeight/4 < 2 :
         self.boostFuel = self.boostFuel - 1.0
-        pushForce = normalized(Vector3(0,1.25,1)) * 35000000 #Jump Forward
+        #pushForce = normalized(Vector3(0,1.25,1)) * 35000000 #Jump Forward
+        pushForce = normalized(Vector3(0,1.25,1)) * 10000000 
         self.physics.AddLocalForceAtLocalPos(pushForce, self.MASS_CENTRE)
     else:
       self.boosting = 0

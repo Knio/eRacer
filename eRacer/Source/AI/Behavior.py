@@ -44,7 +44,7 @@ class AIBehavior(Behavior):
   def Tick(self,time):    
     pos = self.parent.physics.GetPosition()
     nowFrame  = self.line.GetFrame(self.parent.trackpos)
-    frame1  = self.line.GetFrame(self.parent.trackpos + 10.0)
+    frame1  = self.line.GetFrame(self.parent.trackpos + 20.0)
     frame2 = self.line.GetFrame(self.parent.trackpos + 50.0)
     frame3 = self.line.GetFrame(self.parent.trackpos + 100.0)
     tx    = self.parent.physics.GetTransform()
@@ -52,9 +52,9 @@ class AIBehavior(Behavior):
     bodyRight = mul0(tx, X) #vector pointing right of body
     #wantedVec = normalized(frame1.fw * 2.0 + frame2.fw * 0.3 + frame3.fw * 0.2) # vector created by track
     cur = nowFrame.position
-    wantedVec = normalized((frame1.position-pos) * 1.0 +  (frame2.position-pos) * 1.0 + (frame3.position-pos) * 2.0)
+    wantedVec = normalized((frame1.position-pos) * 1.0 +  (frame2.position-pos) * 1.0 + (frame3.position-pos) * 1.0)
     if self.arrow: 
-      self.arrow.transform = Matrix(frame3.position)
+      self.arrow.transform = Matrix(frame2.position)
     # game().graphics.graphics.WriteString(
     #   "cur waypoint: " + str(cur),
     #   "Verdana", 12, Point3(0,0,0)
@@ -76,7 +76,7 @@ class AIBehavior(Behavior):
       if length(turnProj) < 0.001:
         self.parent.Turn(0)
       else:
-        turnScale = 2.0
+        turnScale = 5.0
         turnSize = min(1.0, length(turnProj) * turnScale)
         costheta = dot(turnProj, bodyRight) / length(turnProj)
    
@@ -84,12 +84,19 @@ class AIBehavior(Behavior):
           self.parent.Turn(turnSize)
         else:
           self.parent.Turn(-turnSize)
-      if length(pos-nowFrame.position) > 10:
-        self.parent.Accelerate(0.5)
-      else:
-        self.parent.Accelerate(1.0)
+        #basic boost code: if we don't need to turn off boost until the turn becomes large
+        #print turnSize
+        if turnSize < 0.5 and self.parent.boostFuel > 2.5:
+          #print "boost"
+          self.parent.Boost(True)
+        if turnSize > 0.8:
+          #print "boost off"
+          self.parent.Boost(False)
+        
+      self.parent.Accelerate(1.0)
+
       #now change state if needed
-      if self.parent.physics.GetSpeed() < 10.0 and self.objectInFront(1.0, tx):
+      if self.parent.physics.GetSpeed() < 2.0 and self.objectInFront(1.0, tx):
         #object close in front has almost stopped us
         self.curState = AIState.STUCK
     
