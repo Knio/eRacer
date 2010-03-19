@@ -114,12 +114,12 @@ class GameState(State):
     
     self.AddAICar("AI1", Matrix(Point3(-15, 3, 0)) * frametx, 2)
     self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
-    #self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
-    #self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
-    #self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
-    #self.AddAICar("AI6", Matrix(Point3(0, 3, -30)) * frametx, 5)
-    #self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
-    #self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
+    self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
+    self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
+    self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
+    self.AddAICar("AI6", Matrix(Point3(0, 3, -30)) * frametx, 5)
+    self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
+    self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
 
     startFrame = self.track.GetFrame(0.0)
     
@@ -178,11 +178,11 @@ class GameState(State):
     
     self.lastMeteorTime = 0
     
-    # self.sound = eRacer.SoundFx();
-    # self.sound.looping  = True
-    # self.sound.is3D     = False
-    # self.sound.isPaused = False
-    # game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
+    self.sound = cpp.SoundFx();
+    self.sound.looping  = True
+    self.sound.is3D     = False
+    self.sound.isPaused = False
+    game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
     
     game().time.Zero()
     self.loaded = True
