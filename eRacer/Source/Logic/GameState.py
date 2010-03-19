@@ -112,12 +112,12 @@ class GameState(State):
     
     self.AddAICar("AI1", Matrix(Point3(-15, 3, 0)) * frametx, 2)
     self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
-    self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
-    self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
-    self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
-    self.AddAICar("AI6", Matrix(Point3(0, 3, -30)) * frametx, 5)
-    self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
-    self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
+    #self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
+    #self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
+    #self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
+    #self.AddAICar("AI6", Matrix(Point3(0, 3, -30)) * frametx, 5)
+    #self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
+    #self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
 
     startFrame = self.track.GetFrame(0.0)
     

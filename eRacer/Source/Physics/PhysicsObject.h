@@ -143,6 +143,11 @@ public:
 	}
 	float GetSpeed();
 
+	void AddLocalImpulseAtLocalPos(const Vector3 &impulse, const Point3 &pos)
+	{
+		return Actor->addLocalForceAtLocalPos(Vector3_NxVec3(impulse), Vector3_NxVec3(pos), NX_IMPULSE);
+	}
+
 	/**
 	 * @brief set the collision group of this physics object
 	 */

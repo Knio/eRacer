@@ -94,13 +94,12 @@ class Vehicle(Model):
     self.steerPos = turn
   
   def Boost(self, boostState):
-    if boostState == True and self.boostFuel > 1.0:
+    if boostState == True and self.boostFuel > 0.5:
       self.boosting = 1
       if self.sumHeight/4 < 2 :
-        self.boostFuel = self.boostFuel - 1.0
-        #pushForce = normalized(Vector3(0,1.25,1)) * 35000000 #Jump Forward
-        pushForce = normalized(Vector3(0,1.25,1)) * 10000000 
-        self.physics.AddLocalForceAtLocalPos(pushForce, self.MASS_CENTRE)
+        self.boostFuel = self.boostFuel - 0.5
+        pushForce = normalized(Vector3(0,1.25,1)) * 250000 
+        self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
     else:
       self.boosting = 0
   
@@ -372,8 +371,8 @@ class Vehicle(Model):
       self.boostFuel = max( 0, self.boostFuel - delta )
       if self.boostFuel == 0:
         self.boosting = 0
-      pushForce = normalized(Vector3(0,0,1)) * 500000
-      self.physics.AddLocalForceAtLocalPos(pushForce, self.MASS_CENTRE)
+      pushForce = normalized(Vector3(0,0,1)) * 1000
+      self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
     else:    
       self.boostFuel = min( 5, self.boostFuel + delta/3 )
       
