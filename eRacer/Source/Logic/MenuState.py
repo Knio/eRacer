@@ -107,7 +107,8 @@ class MainMenuState(MenuState):
     
     MenuState.Tick(self, time)
     
-class GameSelectState(MainMenuState):
+class GameSelectState(MenuState):
+  MAPPING = MainMenuMapping
   MENU = [
     ('Track 1',),
     ('Track 2',),
@@ -169,12 +170,9 @@ class PauseMenuState(MenuState):
     game().PopState()
 
   def Menu_Main_menu(self):
-    # hack: there may even be four states if the stats menu is on...
-    game().PopState()
-    game().PopState()
-    game().PopState()
-
-    
+    while not game().states[-1].__class__ is MainMenuState:
+      game().PopState()
+          
   def Tick(self, time):
     game().graphics.graphics.WriteString(
       "PAUSED",

@@ -87,6 +87,26 @@ class GameState(State):
     # self.sound.isPaused = True
     # game().sound.sound.UpdateSoundFx(self.sound)
     
+  def Pop(self):
+    import gc
+    
+    self.meteorManager.meteors = []
+    self.meteorManager.state = None
+    del self.meteorManager
+    
+    self.vehicleList = []
+    
+    for i in self.entities.values():
+      self.Remove(i)
+    
+    gc.collect()
+    
+    print '*******'
+    print '\n\n'.join(map(repr,gc.get_referrers(self)))
+    print '*******'
+    if self in gc.garbage:
+      print 'AAAAAAAAHHHHHHH'
+    
     
   def load(self, track):
     # testing stuff
@@ -195,8 +215,6 @@ class GameState(State):
   AIMED_METEOR_INTERVAL = 2.
     
   def Tick(self, time):
-    
-    print 'GameState::Tick() <%d>' % id(self)
     
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
     cam = self.view.camera

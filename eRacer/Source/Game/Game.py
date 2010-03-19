@@ -31,9 +31,10 @@ class Game(cpp.Game):
     state.Activate()
     
   def PopState(self):
-    print 'Game::PopState()'
+    print 'Game::PopState() %r' % self.states[-1]
     s = self.states.pop()
     s.Deactivate()
+    s.Pop()
     self.states[-1].Activate()
     return s
 
