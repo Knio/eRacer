@@ -19,9 +19,11 @@ class HudQuad(Quad):
     self.SetCenter(x+self.width/2., y+self.height/2.)
     
   def SetSize(self, width, height):
+    self.width = width
+    self.height = height
     p = Point3(self.left+width/2., game().window.height-(self.top+height/2.), 0)
-    t = Matrix(p, width, height, 1) 
-    self.graphics.SetTransform(t)   
+    self.transform = Matrix(p, width, height, 1) 
+ 
     
       
     
