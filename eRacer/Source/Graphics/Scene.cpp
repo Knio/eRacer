@@ -27,6 +27,19 @@ void Scene::Add(const RenderableNode& node)
 	renderableNodes_.push_back(&node);
 }
 
+void Scene::Remove(const RenderableNode& node){
+	vector<const RenderableNode*>::iterator i = renderableNodes_.begin();
+	while(i != renderableNodes_.end())
+	{
+		if(*i == &node){
+			renderableNodes_.erase(i);
+			break;
+		}
+		i++;
+	}
+}
+
+
 
 void Scene::GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const {
 	for (vector<const RenderableNode*>::const_iterator renderableNode = renderableNodes_.begin(); 

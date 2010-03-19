@@ -58,7 +58,7 @@ class MeteorManager(object):
         #print "respawning at position ",pos," with distance ",length(pos)," from origin." 
         if not meteor.reset():
           self.meteors.remove(meteor)
-          self.state.entities.remove(meteor)
+          self.state.Remove(meteor)
   
         
   def MeteorMeteorCollisionEvent(self, meteorId1, meteorId2, force):
@@ -66,7 +66,7 @@ class MeteorManager(object):
     #print "MM Collision reported to MeteorManager"
 
   def MeteorTrackCollisionEvent(self, meteorId, trackId, force):
-    meteor = Entity.entities[meteorId]
+    meteor = self.state.entities[meteorId]
     meteor.hitTrack(force)
     self.meteorfx.position = mul1(meteor.transform, ORIGIN)
     self.meteorfx.velocity = ORIGIN #vel

@@ -48,6 +48,7 @@ public:
 	 */
 	void GetVisibleRenderables(const Camera& camera, vector<const Renderable*>& visibleRenderables) const;
 	void Add(const RenderableNode& node);
+	void Remove(const RenderableNode& node);
 	void Draw(IDirect3DDevice9* m_pd3dDevice) const;
 	
 

@@ -5,7 +5,7 @@ class Model(Entity):
     Entity.__init__(self)
     self.transform = tx
     
-    self.graphics = MeshNode(name,tx)
+    self.graphics = MeshNode(name+str(self.id),tx)
     self.physics  = phys
     
     if self.physics:
