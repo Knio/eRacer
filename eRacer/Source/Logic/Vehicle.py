@@ -45,6 +45,7 @@ class Vehicle(Model):
     )
     self.behavior = None
     self.trackpos = -1.0
+    self.lasttrackpos = -1.0
     self.track    = track
     self.name     = name
     self.frame = cpp.Frame(mul1(tx, ORIGIN), mul0(tx, Y), mul0(tx, Z), 0.0)
@@ -117,6 +118,7 @@ class Vehicle(Model):
     
     frame = self.track.GetFrame(worldpos, self.trackpos)
     self.frame = frame
+    self.lasttrackpos = self.trackpos
     self.trackpos = frame.dist
     
     up    = frame.up

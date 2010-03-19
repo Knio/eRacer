@@ -72,6 +72,7 @@ class GameState(State):
     self.laps   = 2 # TODO CONST
     self.stats  = {}
     self.gameOver = False
+
     
     self.load(track)
     
@@ -109,6 +110,7 @@ class GameState(State):
     ))
     PlayerBehavior(self.player)
     self.Add(Shadow(self.player))
+    self.player.Backwards = False;
     
     self.AddAICar("AI1", Matrix(Point3(-15, 3, 0)) * frametx, 2)
     self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
@@ -151,7 +153,9 @@ class GameState(State):
     # 0,0 is top left, make sure you add all HudQuads using AddHud
     # texture coordinates can be set via self.boostBar.graphics.SetTextureCoordinates
     # wrappers for that should be created as needed. 
-    # self.boostBar = self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235))
+    self.boostBar = self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", 0, 0, 600, 235))
+    #self.boostBar.graphics.SetTextureCoordinates(0,0,  1,0, 1,1, 0,1 );
+    self.boostBar.graphics.SetTextureCoordinates(0,0,  0.5,0, 0.5,1, 0,1 );
 
     self.skybox = SkyBox()
     
@@ -204,7 +208,27 @@ class GameState(State):
     game().graphics.views.append(self.hudView)
     
 
+    game().graphics.graphics.WriteString( "Position %3.2f/%3.2f" % (self.player.trackpos, self.player.track.dist), "Verdana", 20, Point3(50, 100,0))
     game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
+
+
+    playerfacing = mul0(self.player.transform, Z)
+    playertrackfacing = self.player.frame.fw
+    playerdirection = dot(playerfacing, playertrackfacing)
+
+    
+    if self.player.Backwards == False and self.player.trackpos < self.player.lasttrackpos and playerdirection < 0:
+       self.player.Backwards = True
+       #self.player.BackwardsPos = self.player.trackpos;
+    
+    if self.player.Backwards == True and self.player.trackpos > self.player.lasttrackpos and playerdirection > 0:
+       self.player.Backwards = False
+
+    if self.player.Backwards == True:
+       game().graphics.graphics.WriteString( "REVERSE", "Verdana", 50, Point3(250,400,0))
+
+
+                                   
     
     if self.player.lapcount:
       playerLaps = min(self.player.lapcount, self.laps)

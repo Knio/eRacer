@@ -60,15 +60,6 @@ void QuadNode::SetTextureCoordinates(float tl_u, float tl_v,
 									 float tr_u, float tr_v, 
 									 float br_u, float br_v, 
 									 float bl_u, float bl_v){
-	assert(SUCCEEDED(
-		GraphicsLayer::GetInstance()->GetDevice()->CreateVertexBuffer(
-			4 * sizeof(Vertex),   
-			D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
-			D3DFVF_XYZ | D3DFVF_TEX1,
-			D3DPOOL_DEFAULT,
-			&vertexBuffer_,
-			NULL)
-		));
 	
 	Vertex* vertices;
 	vertexBuffer_->Lock(0, 0, (void**)&vertices, 0);
