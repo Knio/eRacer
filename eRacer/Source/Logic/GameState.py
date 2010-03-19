@@ -99,7 +99,8 @@ class GameState(State):
     # can we render a fake loading screen here until the real one works?
     
     self.track = self.Add(Track(track))
-    
+    self.vehicleList = []
+
     frame = self.track.GetFrame(-30.0)
     frametx = Matrix(frame.position, frame.up, frame.fw)
     
@@ -111,6 +112,7 @@ class GameState(State):
     PlayerBehavior(self.player)
     self.Add(Shadow(self.player))
     self.player.Backwards = False;
+    self.vehicleList.append(self.player)
     
     self.AddAICar("AI1", Matrix(Point3(-15, 3, 0)) * frametx, 2)
     self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
@@ -153,10 +155,9 @@ class GameState(State):
     # 0,0 is top left, make sure you add all HudQuads using AddHud
     # texture coordinates can be set via self.boostBar.graphics.SetTextureCoordinates
     # wrappers for that should be created as needed. 
-    self.boostBar = self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", (800-600)/2, 550, 600, 35))
+    self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
     #self.boostBar.graphics.SetTextureCoordinates(0,0,  1,0, 1,1, 0,1 );
     # self.boostBar.graphics.SetTextureCoordinates(0,0,  0.5,0, 0.5,1, 0,1 );
-    self.boostBar.SetSize(200,200)
     self.skybox = SkyBox()
     
     
@@ -209,21 +210,39 @@ class GameState(State):
     
 
     game().graphics.graphics.WriteString( "Position %3.2f/%3.2f" % (self.player.trackpos, self.player.track.dist), "Verdana", 20, Point3(50, 100,0))
-    game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
+
+    #Track Place HUD
+    place = 0
+    for vehicle in self.vehicleList:
+      if vehicle.trackpos >= self.player.trackpos:
+        place = place+1
+
+    if place == 1:
+          game().graphics.graphics.WriteString( "%1.0fst" % (place), "Verdana", 60, Point3(20, 20,0))
+    elif place == 2:
+          game().graphics.graphics.WriteString( "%1.0fnd" % (place), "Verdana", 60, Point3(20, 20,0))
+    elif place == 3:
+          game().graphics.graphics.WriteString( "%1.0frd" % (place), "Verdana", 60, Point3(20, 20,0))
+    else:
+          game().graphics.graphics.WriteString( "%1.0fth" % (place), "Verdana", 60, Point3(20, 20,0))
 
 
+    #Energy Bar HUD 750, 200, 35, 350
+    boostPercent = self.player.boostFuel/5.0
+    self.boostBar.graphics.SetTextureCoordinates(0,1-boostPercent,  1,1-boostPercent, 1,1, 0,1 );
+    height = boostPercent * 350
+    self.boostBar.SetSize( 35, height)
+    self.boostBar.SetLeftTop( 750, 550-height );  
+    #game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
+
+    #Backwards HUD
     playerfacing = mul0(self.player.transform, Z)
     playertrackfacing = self.player.frame.fw
     playerdirection = dot(playerfacing, playertrackfacing)
-
-    
     if self.player.Backwards == False and self.player.trackpos < self.player.lasttrackpos and playerdirection < 0:
        self.player.Backwards = True
-       #self.player.BackwardsPos = self.player.trackpos;
-    
     if self.player.Backwards == True and self.player.trackpos > self.player.lasttrackpos and playerdirection > 0:
        self.player.Backwards = False
-
     if self.player.Backwards == True:
        game().graphics.graphics.WriteString( "WRONG WAY", "Verdana", 50, Point3(300,200,0))
 
@@ -297,6 +316,7 @@ class GameState(State):
   def AddAICar(self, name, orient, modelNum):
       ai    = self.Add(Vehicle(name,    self.track, 
       orient, modelNum))
+      self.vehicleList.append(ai)    
       AIBehavior(ai, self.track)
       self.Add(Shadow(ai))
 

@@ -16,7 +16,7 @@ class HudQuad(Quad):
     cpp.SetTranslation(self.transform,Point3(x,game().window.height-y,0))
     
   def SetLeftTop(self, left,top):
-    self.SetCenter(x+self.width/2., y+self.height/2.)
+    self.SetCenter(left+self.width/2., top+self.height/2.)
     
   def SetSize(self, width, height):
     self.width = width
