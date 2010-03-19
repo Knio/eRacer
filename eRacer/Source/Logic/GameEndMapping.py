@@ -22,9 +22,9 @@ class GameEndMapping(Mapping):
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
         
   def GamepadButtonPressedEvent(self, button):
-    if   button == eRacer.BUTTON_START:   return E.PauseEvent()
-    elif button == eRacer.BUTTON_A:       return E.ReloadConstsEvent()
-    elif button == eRacer.BUTTON_Y:       return E.CameraChangedEvent()
-    elif button == eRacer.BUTTON_X:       CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
+    if   button == cpp.BUTTON_START:   return E.PauseEvent()
+    elif button == cpp.BUTTON_A:       return E.ReloadConstsEvent()
+    elif button == cpp.BUTTON_Y:       return E.CameraChangedEvent()
+    elif button == cpp.BUTTON_X:       CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
     
     
