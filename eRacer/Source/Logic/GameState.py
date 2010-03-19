@@ -155,8 +155,8 @@ class GameState(State):
     # wrappers for that should be created as needed. 
     self.boostBar = self.AddHud(HudQuad("BoostBar", "eRacerXLogoNegative.png", (800-600)/2, 550, 600, 35))
     #self.boostBar.graphics.SetTextureCoordinates(0,0,  1,0, 1,1, 0,1 );
-    self.boostBar.graphics.SetTextureCoordinates(0,0,  0.5,0, 0.5,1, 0,1 );
-
+    # self.boostBar.graphics.SetTextureCoordinates(0,0,  0.5,0, 0.5,1, 0,1 );
+    self.boostBar.SetSize(200,200)
     self.skybox = SkyBox()
     
     
