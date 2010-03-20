@@ -5,7 +5,8 @@ class Model(Entity):
     Entity.__init__(self)
     self.transform = tx
     
-    self.graphics = MeshNode(name+str(self.id),tx)
+    self.name = name+str(self.id)
+    self.graphics = MeshNode(self.name, tx)
     self.physics  = phys
     
     if self.physics:
@@ -21,4 +22,4 @@ class Model(Entity):
     if self.physics:
       self.transform = self.physics.GetTransform()
     self.graphics.SetTransform(self.transform)
-
+    

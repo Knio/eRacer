@@ -95,6 +95,7 @@ public:
 	* @return A pointer to the created actor in the scene
 	*/
 	NxActor* AddActor(const NxActorDesc& actorDesc);
+	void RemoveActor(NxActor* a) { gScene->releaseActor(*a); }
 
 	NxTriangleMesh* CreateTriangleMesh(const NxStream& stream);
 
@@ -134,7 +135,7 @@ public:
 	*/
 	void FinalizeSDK();
 
-	/**
+	/*
 	* @brief Returns the instance of the scene
 	*/
 	NxScene* ReturnScene();

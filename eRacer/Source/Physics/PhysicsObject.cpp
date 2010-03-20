@@ -8,6 +8,8 @@ PhysicsObject::PhysicsObject()
 
 PhysicsObject::~PhysicsObject()
 {
+	std::cout << "Removing physicsobject " << (int)(Actor->userData) << endl;
+	PhysicsLayer::g_PhysicsLayer->RemoveActor(Actor);
 }
 
 void PhysicsObject::SetMass(float mass)

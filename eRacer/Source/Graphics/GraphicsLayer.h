@@ -57,6 +57,8 @@ public:
 	void 		SetCamera(Camera& camera);
 	Camera* GetCamera() { return camera; }
 
+	void 		SetViewport(int x, int y, int w, int h);
+
 	IDirect3DDevice9* GetDevice() const { return m_pd3dDevice; }
 	
 	~GraphicsLayer();	//Destructor

@@ -19,7 +19,6 @@ class State(cpp.State):
     del self.entities[obj.id]
     g = getattr(obj, 'graphics', None)
     if g: self.scene.Remove(g)
-  
     
   def Tick(self, time):
     for i in self.entities.itervalues():
@@ -30,4 +29,6 @@ class State(cpp.State):
     
   def Deactivate(self):
     self.active = False
-    
+
+  def Pop(self):
+    pass
