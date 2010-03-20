@@ -90,10 +90,7 @@ class GameState(State):
     # game().sound.sound.UpdateSoundFx(self.sound)
     
   def Pop(self):
-    import gc
-    
-    self.meteorManager.meteors = []
-    self.meteorManager.state = None
+    self.meteorManager.Release()
     del self.meteorManager
     
     for i in self.entities.values():
@@ -102,18 +99,17 @@ class GameState(State):
     self.vehicleList = []
     del self.track
     del self.player
+
+    # print '*******'
+    # import gc
+    # print gc.collect()
     
-    print '*******'
-    print gc.collect()
+    # print '\n\n'.join(map(repr,gc.get_referrers(self)))
+    # print '*******'
+    # print '\n\n'.join(gc.garbage)
     
-    print '\n\n'.join(map(repr,gc.get_referrers(self)))
-    print '*******'
-    print '\n\n'.join(gc.garbage)
-    
-    
-    
-    if self in gc.garbage:
-      print 'AAAAAAAAHHHHHHH'
+    # if self in gc.garbage:
+    #   print 'AAAAAAAAHHHHHHH'
     
 
   def AddAICar(self, name, orient, modelNum):

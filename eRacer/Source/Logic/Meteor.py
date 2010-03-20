@@ -83,9 +83,12 @@ class MeteorManager(object):
     #self.soundIndex = (self.soundIndex+1)%self.N_CHANNELS
     
   def MeteorCarCollisionEvent(self, meteorId, carId, force):
+    pass
     print "MC Collision reported to MeteorManager"
-    #pass
 
+  def Release(self):
+    self.meteors = []
+    self.state = None
 
 
 class Meteor(Model):
