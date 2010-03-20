@@ -216,6 +216,18 @@ void GraphicsLayer::resetPresentationParameters(){
     m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 }
 
+void GraphicsLayer::SetViewport(int x, int y, int w, int h)
+{
+    D3DVIEWPORT9 vp;
+    vp.X = x;
+    vp.Y = y;
+    vp.Width = w;
+    vp.Height = h;
+    vp.MinZ = 0.0;
+    vp.MaxZ = 1.0;
+    
+    m_pd3dDevice->SetViewport(&vp);
+}
 
 void GraphicsLayer::PreRender(){
     

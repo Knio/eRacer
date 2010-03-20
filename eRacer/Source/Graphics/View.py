@@ -2,7 +2,8 @@ from Core.Globals import *
 from Logic.Camera import Camera
 
 class View(object):
-  def __init__(self, camera=None, renderables=None):
+  def __init__(self, camera=None, renderables=None, viewport=None):
+    self.viewport     = viewport    or (0, 0, game().window.width, game().window.height)
     self.camera       = camera      or Camera()
     self.renderables  = renderables or []
     
@@ -16,6 +17,7 @@ class View(object):
   def Draw(self):
     gfx = dev = game().graphics.graphics
     gfx.SetCamera(self.camera)
+    gfx.SetViewport(*self.viewport)
     d3d = gfx.GetDevice()
     
     for i in self.renderables:
