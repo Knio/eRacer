@@ -21,6 +21,7 @@ class Vehicle(Model):
     # can't set mass or centre of mass on the fly due to Physx
     # self.physics.SetMass(self.MASS) #setting the mass breaks the suspension for some reason
     # maybe physx is still running
+    self.DISPLACEMENT     = CONSTS.CAR_DISPLACEMENT
     self.SPRING_MAGIC     = CONSTS.SPRING_MAGIC
     self.DAMPING_MAGIC    = CONSTS.DAMPING_MAGIC
     self.MASS_CENTRE      = Point3(CONSTS.MASS_CENTRE_X, CONSTS.MASS_CENTRE_Y, CONSTS.MASS_CENTRE_Z)
@@ -273,7 +274,7 @@ class Vehicle(Model):
       weight = length(downforce+slowforce)
       if D: debug("Weight: %6.2g" % weight)
       # do accelleration
-      
+
       forwardSpeed = self.GetWheelSpeed(delta, weight)
       #forwardSpeed = self.GetWheelSpeed(delta)
       if D: debug("FW: %6.2f" % forwardSpeed)
@@ -318,6 +319,8 @@ class Vehicle(Model):
       
       # staticfrictionmax = self.FRICTION_SLIDING * weight # weight on wheel
       
+##################################################################################
+
       # sliding
       if self.sliding[i]:
         # never used so far
@@ -343,6 +346,7 @@ class Vehicle(Model):
         
         totalforce = totalforce * CONSTS.FRICTION_STATIC  * weight
               
+    
       if D: debug('To: '+repr(totalforce))
       if D: debug("Power:  %6.2f" % length(totalforce))
       # if D: debug("Static: %6.2f" % staticfrictionmax)
@@ -352,7 +356,8 @@ class Vehicle(Model):
       if delta: 
         reverseVel = normalized(bodyVel) * -1.0
         rollFrict = reverseVel * (weight*CONSTS.FRICTION_ROLL) # slow us down a little
-        totalforce = totalforce + rollFrict
+        phys.AddWorldForceAtLocalPos(rollFrict, localapplypoint)
+        
         phys.AddWorldForceAtLocalPos(totalforce, localapplypoint)
       
     # no wheels are touching the ground.
@@ -390,9 +395,6 @@ class Vehicle(Model):
     else:    
       self.boostFuel = min( 5, self.boostFuel + delta/3 )
       
-
-
-    
     Model.Tick(self, time)
     
 

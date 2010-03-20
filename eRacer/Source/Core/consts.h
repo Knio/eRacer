@@ -29,6 +29,7 @@ struct Constants
 	// Vehicle
 	int		CAR_DEBUG;
 	
+	float CAR_DISPLACEMENT;
 	float	CAR_MASS;
 	float CAR_GRAVITY;
 	
