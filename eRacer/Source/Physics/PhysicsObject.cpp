@@ -8,8 +8,14 @@ PhysicsObject::PhysicsObject()
 
 PhysicsObject::~PhysicsObject()
 {
+	Release();
+}
+void PhysicsObject::Release()
+{
+	if (!Actor)	return;
 	std::cout << "Removing physicsobject " << (int)(Actor->userData) << endl;
 	PhysicsLayer::g_PhysicsLayer->RemoveActor(Actor);
+	Actor = NULL;
 }
 
 void PhysicsObject::SetMass(float mass)

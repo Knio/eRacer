@@ -44,3 +44,6 @@ class Track(Entity, cpp.Track):
 
     self.physics.SetGroup(cpp.TRACK)
     
+  def Release(self):
+    self.graphics.Release()
+    self.physics.Release()

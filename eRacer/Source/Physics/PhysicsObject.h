@@ -33,7 +33,7 @@ public:
 	* @brief Destructor stub
 	*/
 	~PhysicsObject();
-
+	void Release();
 	/**
 	* @brief Method that sets mass for the physics component. Object must be dynamic or nothing happens.
 	* @param mass The mass in kilograms
