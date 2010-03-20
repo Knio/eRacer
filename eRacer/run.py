@@ -23,6 +23,10 @@ def run():
     
     m = Main()
     
+    if debug:
+      import gc
+      gc.set_debug(gc.DEBUG_COLLECTABLE | gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_INSTANCES | gc.DEBUG_OBJECTS)
+    
     if profile:
       m.PushState(GameState('Track1'))
       m.Init()
