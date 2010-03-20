@@ -196,8 +196,10 @@ class GameState(State):
     # texture coordinates can be set via self.boostBar.graphics.SetTextureCoordinates
     # wrappers for that should be created as needed. 
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
-    #self.boostBar.graphics.SetTextureCoordinates(0,0,  1,0, 1,1, 0,1 );
-    # self.boostBar.graphics.SetTextureCoordinates(0,0,  0.5,0, 0.5,1, 0,1 );
+    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 50, 500, 8))
+    for vehicle in self.vehicleList:
+      vehicle.playerIcon = self.AddHud(HudQuad("PlayerIcon", "redmarker.png", 150-8, 50-12, 16, 16))
+    self.playerIcon = self.AddHud(HudQuad("PlayerIcon", "bluemarker.png", 150-8, 50-12, 16, 16))
     self.skybox = SkyBox()
     
     
@@ -217,11 +219,11 @@ class GameState(State):
     
     self.lastMeteorTime = 0
     
-    self.sound = cpp.SoundFx();
-    self.sound.looping  = True
-    self.sound.is3D     = False
-    self.sound.isPaused = False
-    game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
+    #self.sound = cpp.SoundFx();
+    #self.sound.looping  = True
+    #self.sound.is3D     = False
+    #self.sound.isPaused = False
+    #game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
     
     game().time.Zero()
     self.loaded = True
@@ -247,15 +249,23 @@ class GameState(State):
     game().graphics.views.append(self.view)
     game().graphics.views.append(self.hudView)
     
+    #distanceBar
+    playerDistPercent = max(0, (self.player.trackpos-self.player.track.dist)/self.player.track.dist - (int)((self.player.trackpos-self.player.track.dist)/self.player.track.dist) )
+    if self.player.lapcount > self.laps:
+      playerDistPercent = 1;
+    self.playerIcon.SetLeftTop( 150-8 + 500*playerDistPercent, 50-12 )
+    for vehicle in self.vehicleList:
+      aiDistPercent = max(0, (vehicle.trackpos-vehicle.track.dist)/vehicle.track.dist - (int)((vehicle.trackpos-vehicle.track.dist)/vehicle.track.dist))
+      vehicle.playerIcon.SetLeftTop(150-8 + 500 * aiDistPercent, 50-12)
 
-    game().graphics.graphics.WriteString( "Position %3.2f/%3.2f" % (self.player.trackpos, self.player.track.dist), "Verdana", 20, Point3(50, 100,0))
+    
+    game().graphics.graphics.WriteString( "Position %3.2f/%3.2f" % (self.player.trackpos-self.player.track.dist, self.player.track.dist), "Verdana", 20, Point3(50, 100,0))
 
     #Track Place HUD
     place = 0
     for vehicle in self.vehicleList:
       if vehicle.trackpos >= self.player.trackpos:
         place = place+1
-
     if place == 1:
           game().graphics.graphics.WriteString( "%1.0fst" % (place), "Verdana", 60, Point3(20, 20,0))
     elif place == 2:
@@ -287,13 +297,12 @@ class GameState(State):
 
 
                                   
+    playerLaps = max(1, min(self.player.lapcount, self.laps))
+    game().graphics.graphics.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
+    game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
+    game().graphics.graphics.WriteString("%d" % (self.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
+
     if self.player.lapcount:
-      playerLaps = min(self.player.lapcount, self.laps)
-      
-      game().graphics.graphics.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
-      game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
-      game().graphics.graphics.WriteString("%d" % (self.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
-    
       l = list(self.stats.get(self.player,[0.]))
       l.append(game().time.get_seconds())
       
