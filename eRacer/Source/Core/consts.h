@@ -21,6 +21,9 @@ struct Constants
 	float	PHYS_SKIN_WIDTH;
 	
 	int		NUM_METEORS;
+	float AIMED_METEOR_INTERVAL;
+	
+	
 	int 	TRACK_DEBUG;
 	
 	// Vehicle

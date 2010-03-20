@@ -97,6 +97,7 @@ class GameState(State):
       self.Remove(i)
         
     self.vehicleList = []
+    self.stats = {}
     del self.track
     del self.player
 
@@ -112,16 +113,6 @@ class GameState(State):
     #   print 'AAAAAAAAHHHHHHH'
     
 
-  def AddAICar(self, name, orient, modelNum):
-      ai    = self.Add(Vehicle(
-        name,    
-        self.track, 
-        orient, 
-        modelNum
-      ))
-      self.vehicleList.append(ai)
-      AIBehavior(ai, self.track)
-      self.Add(Shadow(ai))
     
 
   def load(self, track):
@@ -150,15 +141,23 @@ class GameState(State):
     self.player.Backwards = False;
     self.vehicleList.append(self.player)
     
-    self.AddAICar("AI1", Matrix(Point3(-15, 3, 0)) * frametx, 2)
-    self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
-    self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
-    #self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
-    #self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
-    #self.AddAICar("AI6", Matrix(Point3(+ 0, 3, -30)) * frametx, 5)
-    #self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
-    #self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
-
+    def AddAICar(self, name, orient, modelNum):
+      ai    = self.Add(Vehicle(
+        name, self.track, orient, modelNum
+      ))
+      self.vehicleList.append(ai)
+      AIBehavior(ai, self.track)
+      self.Add(Shadow(ai))
+    
+    # self.AddAICar("AI1", Matrix(Point3(-15, 3,   0)) * frametx, 2)
+    # self.AddAICar("AI2", Matrix(Point3(+15, 3,   0)) * frametx, 5)
+    # self.AddAICar("AI3", Matrix(Point3(+ 0, 3, -15)) * frametx, 2)
+    # self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
+    # self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
+    # self.AddAICar("AI6", Matrix(Point3(+ 0, 3, -30)) * frametx, 5)
+    # self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
+    # self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
+    
     startFrame = self.track.GetFrame(0.0)
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
@@ -187,7 +186,7 @@ class GameState(State):
     
     # need refactoring
     self.hudView = View(OrthographicCamera(game().window.width,game().window.height))
-
+    
     # 0,0 is top left, make sure you add all HudQuads using AddHud
     # texture coordinates can be set via self.boostBar.graphics.SetTextureCoordinates
     # wrappers for that should be created as needed. 
@@ -229,9 +228,6 @@ class GameState(State):
     
   view = property(get_view)
   
-  
-  AIMED_METEOR_INTERVAL = 2.
-    
   def Tick(self, time):
     
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
@@ -309,11 +305,11 @@ class GameState(State):
         game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
         y += 15    
     
-    # if not self.gameOver:
-    #   self.lastMeteorTime += time.game_delta
-    #   if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
-    #     self.lastMeteorTime = 0
-    #     self.meteorManager.spawnTargeted(self.player)
+    if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL:
+      self.lastMeteorTime += time.game_delta
+      if self.lastMeteorTime > CONSTS.AIMED_METEOR_INTERVAL*time.RESOLUTION:
+        self.lastMeteorTime = 0
+        self.meteorManager.spawnTargeted(self.player)
     
     self.meteorManager.Tick(time)
     

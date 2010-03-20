@@ -28,23 +28,23 @@ def run():
       gc.set_debug(gc.DEBUG_COLLECTABLE | gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_INSTANCES | gc.DEBUG_OBJECTS)
     
     if profile:
-      m.PushState(GameState('Track1'))
       m.Init()
+      m.PushState(GameState('Track1'))
       cProfile.runctx('m.Run(5000)', globals(), locals(), 'profile.data')
       stats = pstats.Stats('profile.data')
       stats.sort_stats('cumulative') 
       stats.print_stats(0.1)
       stats.print_callees(0.1)
     else:
-      m.PushState(MainMenuState())
       m.Init()
+      m.PushState(MainMenuState())
       m.Run()
       
   except:
-    if m: m.Quit()
     import traceback
     import msvcrt
     traceback.print_exc()
+    if m: m.Quit()
     print 'Press any key to close'
     msvcrt.getch()
   
