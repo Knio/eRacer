@@ -117,7 +117,7 @@ class GameState(State):
   def AddVehicle(self, isAI):
       n = len(self.vehicleList)    
       x = (n % 3 - 1)*15
-      z = (n / 3)* -15
+      z = (3-(n / 3))*-15
       
       vehicle    = self.Add(Vehicle(
         isAI and random.choice(self.AI_NAMES) or "Player1",    
@@ -154,19 +154,6 @@ class GameState(State):
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
-    
-    
-    self.player = self.AddVehicle(False)
-
-    for i in range(nAIs):
-      self.AddVehicle(True)
-    # self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
-    # self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
-    #self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
-    #self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
-    #self.AddAICar("AI6", Matrix(Point3(+ 0, 3, -30)) * frametx, 5)
-    #self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
-    #self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
 
     startFrame = self.track.GetFrame(0.0)
     
@@ -176,15 +163,21 @@ class GameState(State):
 
     self.skybox = SkyBox()
     
+    for i in range(nAIs):
+      self.AddVehicle(True)
+
+
     self.interfaces = []
 
     viewports = self.SetupViewports(nPlayers)
       
     for viewport in viewports:
-      pi = PlayerInterface(self, self.player, viewport)
+      player = self.AddVehicle(False)
+      pi = PlayerInterface(self, player, viewport)
       pi.AddRenderable(self.scene)
       pi.AddRenderable(self.skybox)
       self.interfaces.append(pi)
+
 
 
     self.SetupInputMapping(nPlayers)
@@ -278,12 +271,12 @@ class GameState(State):
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
     
-    if lap == self.laps+1:
-      if vehicle == self.player:
-        self.gameOver = True
-        game().PushState(GameEndState(self.stats))
+    # if lap == self.laps+1:
+    #   if vehicle == self.player:
+    #     self.gameOver = True
+    #     game().PushState(GameEndState(self.stats))
         
-      vehicle.Brake(1)
+    #   vehicle.Brake(1)
         
 
       

@@ -60,6 +60,7 @@ class PlayerInterface(object):
     #Track Place HUD
     game().graphics.graphics.WriteString(self.ordinal(self.player.place), "Verdana", 60, Point3(20, 20,0))
     
+  
     for vehicle in self.state.vehicleList:
       self.icons[vehicle.name].SetLeftTop(150-8 + 500 * vehicle.lapRatio, 50-12)
 
