@@ -16,9 +16,9 @@ class Keyboard1Mapping(VehicleMapping):
     elif key == KEY.A:      return self.target.PlayerTurnEvent        (-1.0)
     elif key == KEY.D:      return self.target.PlayerTurnEvent        (+1.0)
     elif key == KEY.SPACE:  return self.target.PlayerBoostEvent       (True)
-    elif key == KEY.C:      return E.CameraChangedEvent     (    )
-    elif key == KEY.ESCAPE: return E.PauseEvent             (    )
-    elif key == KEY.T:      return E.RespawnCarEvent        (    )
+    elif key == KEY.C:      return E.CameraChangedEvent               (    )
+    elif key == KEY.ESCAPE: return E.PauseEvent                       (    )
+    elif key == KEY.T:      return self.target.RespawnCarEvent        (    )
     
   def KeyReleasedEvent(self, key):
     if   key == KEY.W:     return self.target.PlayerAccelerateEvent ( 0)
@@ -39,9 +39,9 @@ class Keyboard2Mapping(VehicleMapping):
     elif key == KEY.LEFT:       return self.target.PlayerTurnEvent        (-1.0)
     elif key == KEY.RIGHT:      return self.target.PlayerTurnEvent        (+1.0)
     elif key == KEY.NUMPAD0:    return self.target.PlayerBoostEvent       (True)
-    elif key == KEY.DECIMAL:    return E.CameraChangedEvent     (    )
-    elif key == KEY.PAUSE:      return E.PauseEvent             (    )
-    elif key == KEY.RSHIFT:     return E.RespawnCarEvent        (    )
+    elif key == KEY.DECIMAL:    return E.CameraChangedEvent               (    )
+    elif key == KEY.PAUSE:      return E.PauseEvent                       (    )
+    elif key == KEY.RSHIFT:     return self.target.RespawnCarEvent        (    )
     
     
   def KeyReleasedEvent(self, key):
