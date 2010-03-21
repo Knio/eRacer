@@ -163,14 +163,6 @@ class GameState(State):
     # TODO: this should load "StartLine.x" but it is not appearing properly
     finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
     self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
-    
-    def CarTrackCollisionEvent(car, track, force):
-      pass
-      # print 'CAR-TRACK:', car, track, force
-      # if length(force):
-      #   game().simspeed = 0.0
-      
-    game().event.Register(CarTrackCollisionEvent)
 
     self.skybox = SkyBox()
     
@@ -237,11 +229,15 @@ class GameState(State):
     
 
     # TODO use a sort
-    self.player.place = 0
-    for vehicle in self.vehicleList:
-      if vehicle.trackpos >= self.player.trackpos:
-        self.player.place = self.player.place+1
     
+    def TrackPosition(vehicle):
+      return vehicle.trackpos
+      
+    self.vehicleList.sort(key = TrackPosition)
+    
+    for place,vehicle in enumerate(self.vehicleList):
+      vehicle.place = place
+      vehicle.lapRatio = vehicle.lapcount <= self.laps and vehicle.trackpos / self.track.dist % 1.0 or 1.0
     
     for interface in self.interfaces:
       interface.Tick(time)
