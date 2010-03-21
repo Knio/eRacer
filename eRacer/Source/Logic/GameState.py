@@ -178,7 +178,6 @@ class GameState(State):
     
     self.interfaces = []
 
-    self.SetupInputMapping(nPlayers)
     viewports = self.SetupViewports(nPlayers)
       
     for viewport in viewports:
@@ -186,6 +185,9 @@ class GameState(State):
       pi.AddRenderable(self.scene)
       pi.AddRenderable(self.skybox)
       self.interfaces.append(pi)
+
+
+    self.SetupInputMapping(nPlayers)
 
        
     self.meteorManager = MeteorManager(self)
@@ -229,9 +231,9 @@ class GameState(State):
   def SetupInputMapping(self, nPlayers):
     if nPlayers == 1:
       self.mapping = GameMapping([
-          Keyboard1Mapping(self.player.behavior),
+          Keyboard1Mapping(self.interfaces[0]),
           KeyboardDebugMapping(None),
-          Gamepad1Mapping(self.player.behavior),
+          Gamepad1Mapping(self.interfaces[0]),
           GamepadDebugMapping(None), 
                                  ])
     
@@ -285,8 +287,7 @@ class GameState(State):
         
 
       
-  def CameraChangedEvent(self):
-    self.viewIndex[0] = (self.viewIndex[0]+1) % len(self.viewSets[0])
+
     
   def ReloadConstsEvent(self):
     game().config.read()

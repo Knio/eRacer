@@ -112,7 +112,9 @@ class PlayerInterface(object):
         game().graphics.graphics.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
         game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
         y += 15    
-    
+
+  def CameraChangedEvent(self):
+    self.viewIndex = (self.viewIndex+1) % len(self.views)    
     
   
     
