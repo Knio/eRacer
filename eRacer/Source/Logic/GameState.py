@@ -66,7 +66,7 @@ class LoadingState(State):
 
 class GameState(State):
   MAPPING = GameMapping
-  def __init__(self, track='Track1'):
+  def __init__(self, track='Track1', nPlayers=1):
     State.__init__(self)
     self.loaded = False
     
@@ -75,7 +75,7 @@ class GameState(State):
     self.gameOver = False
 
     
-    self.load(track)
+    self.load(track,nPlayers)
     
   def Activate(self):
     State.Activate(self)
@@ -123,7 +123,7 @@ class GameState(State):
       self.Add(Shadow(ai))
     
 
-  def load(self, track):
+  def load(self, track, nPlayers):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
@@ -175,22 +175,15 @@ class GameState(State):
     self.skybox = SkyBox()
     
     self.interfaces = []
-    ww = game().window.width
-    wh = game().window.height
-    
-    wwh = ww/2
-    whh = wh/2
-    viewports = [
-      (0,   0,    wwh, whh),
-      (wwh, 0,    wwh, whh),
-      (0,   whh,  wwh, whh),
-      (wwh, whh,  wwh, whh),
-    ]
+
+    viewports = self.SetupViewports(nPlayers)
+      
     for viewport in viewports:
       pi = PlayerInterface(self, self.player, viewport)
       pi.AddRenderable(self.scene)
       pi.AddRenderable(self.skybox)
       self.interfaces.append(pi)
+
        
     self.meteorManager = MeteorManager(self)
 
@@ -207,6 +200,28 @@ class GameState(State):
     
     game().time.Zero()
     self.loaded = True
+  
+
+  def SetupViewports(self, nPlayers):  
+    ww = game().window.width
+    wh = game().window.height
+    
+    wwh = ww/2
+    whh = wh/2
+    if nPlayers==1:
+      return [(0,0,ww,wh)]
+    elif nPlayers==2:
+      return [
+        (0,   0,  wwh,  wh),
+        (wwh, 0,  wwh,  wh),
+      ]
+    elif nPlayers==4:
+      return [
+        (0,   0,    wwh, whh),
+        (wwh, 0,    wwh, whh),
+        (0,   whh,  wwh, whh),
+        (wwh, whh,  wwh, whh),
+      ]
     
   
   AIMED_METEOR_INTERVAL = 2.

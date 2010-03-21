@@ -84,10 +84,13 @@ class MenuState(State):
       game().sound.sound.PlaySoundFx(self.menuSel)
       name = self.MENU[self.selected][0]
       getattr(self, 'Menu_%s' % name.replace(' ','_'))()
-
     
   def Menu_Exit(self):
-    game().event.QuitEvent()
+    game().event.QuitEvent()  
+    
+  def SelectedOption(self,index):
+    return self.MENU[index][1][self.subSelected[index]]
+  
 
     
 class MainMenuState(MenuState):
@@ -128,6 +131,7 @@ class MainMenuState(MenuState):
     
     MenuState.Tick(self, time)
     
+    
 class GameSelectState(MenuState):
   MAPPING = MainMenuMapping
   MENU = [
@@ -157,7 +161,10 @@ class GameSelectState(MenuState):
   
   def Menu_Start(self):
     self.parent.Pause()
-    game().PushState(GameState(self.MENU[1][1][self.subSelected[1]]))
+    track = self.SelectedOption(1)
+    nPlayers = int(self.SelectedOption(0))
+    
+    game().PushState(GameState(track,nPlayers))
     
   def Menu_Back(self):
     game().PopState()
