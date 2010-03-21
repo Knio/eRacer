@@ -1,4 +1,5 @@
 import threading
+import random
 import time as _time
 
 from Core.Globals   import *
@@ -66,7 +67,10 @@ class LoadingState(State):
 
 class GameState(State):
   MAPPING = GameMapping
-  def __init__(self, track='Track1', nPlayers=1):
+  AI_MODEL_NUMS = [2,5]
+  AI_NAMES = ["Arthur Dent", "Ford Prefect", "Zaphod Beeblebrox", "Marvin", "Trillian","Slartibartfast"]
+  
+  def __init__(self, track='Track1', nPlayers=1, nAIs=3):
     State.__init__(self)
     self.loaded = False
     
@@ -75,7 +79,7 @@ class GameState(State):
     self.gameOver = False
 
     
-    self.load(track,nPlayers)
+    self.load(track,nPlayers,nAIs)
     
   def Activate(self):
     State.Activate(self)
@@ -110,20 +114,30 @@ class GameState(State):
     # if self in gc.garbage:
     #   print 'AAAAAAAAHHHHHHH'
     
-
-  def AddAICar(self, name, orient, modelNum):
-      ai    = self.Add(Vehicle(
-        name,    
+  
+  def AddVehicle(self, isAI):
+      n = len(self.vehicleList)    
+      x = (n % 3 - 1)*15
+      z = (n / 3)* -15
+      
+      vehicle    = self.Add(Vehicle(
+        isAI and random.choice(self.AI_NAMES) or "Player1",    
         self.track, 
-        orient, 
-        modelNum
+        Matrix(Point3(x, 3, z)) * self.startOrientation, 
+        isAI and random.choice(self.AI_MODEL_NUMS) or 1
       ))
-      self.vehicleList.append(ai)
-      AIBehavior(ai, self.track)
-      self.Add(Shadow(ai))
+      self.Add(Shadow(vehicle))
+      self.vehicleList.append(vehicle)
+      if isAI:
+        AIBehavior(vehicle, self.track)
+      else:
+        PlayerBehavior(vehicle)
+        vehicle.Backwards = False
+      
+      return vehicle                
     
 
-  def load(self, track, nPlayers):
+  def load(self, track, nPlayers, nAIs):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
@@ -137,21 +151,18 @@ class GameState(State):
     self.vehicleList = []
 
     frame = self.track.GetFrame(-30.0)
-    frametx = Matrix(frame.position, frame.up, frame.fw)
+    self.startOrientation = Matrix(frame.position, frame.up, frame.fw)
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
-    self.player = self.Add(Vehicle("Player", self.track, 
-      Matrix(Point3(0, 3, 0)) * frametx,
-    ))
-    PlayerBehavior(self.player)
-    self.Add(Shadow(self.player))
-    self.player.Backwards = False;
-    self.vehicleList.append(self.player)
     
-    self.AddAICar("AI1", Matrix(Point3(-15, 3, 0)) * frametx, 2)
-    self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
-    self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
+    
+    self.player = self.AddVehicle(False)
+
+    for i in range(nAIs):
+      self.AddVehicle(True)
+    # self.AddAICar("AI2", Matrix(Point3(+15, 3, 0)) * frametx, 5)
+    # self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
     #self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
     #self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
     #self.AddAICar("AI6", Matrix(Point3(+ 0, 3, -30)) * frametx, 5)

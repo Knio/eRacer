@@ -135,9 +135,10 @@ class MainMenuState(MenuState):
 class GameSelectState(MenuState):
   MAPPING = MainMenuMapping
   MENU = [
-    ('Players',['1','2','4']),
-    ('Track',['Track1','Track2']),
     ('Start',),
+    ('Human Players',['1','2','4']),
+    ('AI Players',map(str,range(8))),
+    ('Track',['Track1','Track2']),
     ('Back',),
   ]
   
@@ -161,10 +162,11 @@ class GameSelectState(MenuState):
   
   def Menu_Start(self):
     self.parent.Pause()
-    track = self.SelectedOption(1)
-    nPlayers = int(self.SelectedOption(0))
+    nPlayers = int(self.SelectedOption(1))
+    nAIs = int(self.SelectedOption(2))
+    track = self.SelectedOption(3)
     
-    game().PushState(GameState(track,nPlayers))
+    game().PushState(GameState(track,nPlayers,nAIs))
     
   def Menu_Back(self):
     game().PopState()
