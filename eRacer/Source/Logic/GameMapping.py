@@ -29,7 +29,7 @@ class GameMapping(Mapping):
     elif key == KEY.DOWN:  return E.CameraAccelerateEvent (+1.0)
     elif key == KEY.LEFT:  return E.CameraStrafeEvent     (+1.0)
     elif key == KEY.RIGHT: return E.CameraStrafeEvent     (-1.0)
-    elif key == KEY.SPACE:  return E.PlayerBoostEvent	  (False)
+    elif key == KEY.SPACE: return E.PlayerBoostEvent	  (False)
     
     elif key == KEY.TAB:  
 		if CONSTS.CAR_DEBUG: 

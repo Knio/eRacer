@@ -13,7 +13,8 @@ public:
   float SimWheel(Point3 localWheel);
   
 protected:
-  Point3 wheelvel[4];
+  Point3  wheelvel[4];
+  bool    sliding[4];
   
 };
 }

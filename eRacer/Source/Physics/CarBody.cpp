@@ -76,7 +76,7 @@ CarBody::CarBody(float mass, const Point3& pos, const Matrix& orient){
 CarBody::~CarBody(){
 }
 
-float CarBody::SimWheel(const Point3& localpos, const Frame& frame, const float turning, const float enginespeed, const bool braking)
+float CarBody::SimWheel(const int i, const Point3& localpos, const Frame& frame, const float turning, const float enginespeed, const bool braking)
 {
   float SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (4 * CONSTS.CAR_DISPLACEMENT);
   float DAMPING          = 2.f * sqrt(SPRING_K * CONSTS.CAR_MASS);
