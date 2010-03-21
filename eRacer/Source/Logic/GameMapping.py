@@ -2,33 +2,8 @@ from Core.Globals import *
 from Mapping      import Mapping, E
 
 class VehicleMapping(Mapping):
-  def __init__(self,target):
-    self.target = target
-
-  def KeyPressedEvent(self, key):
-    pass
-  
-  def KeyReleasedEvent(self, key):
-    pass
-  
-  def MouseMovedEvent(self, relX, relY):
-    pass
-  
-  def GamepadStick1AbsoluteEvent(self, x, y):
-    pass
-
-  def GamepadStick2AbsoluteEvent(self, relX, relY):
-    pass
-  
-  def GamepadTriggerAbsoluteEvent(self, z):
-    pass
-  
-  def GamepadButtonPressedEvent(self, button):
-    pass
-  
-  def GamepadButtonReleasedEvent(self, button):
-    pass            
-        
+    def __init__(self,target):
+        self.target = target
         
 class Keyboard1Mapping(VehicleMapping):
   def __init__(self,target):
@@ -51,9 +26,9 @@ class Keyboard1Mapping(VehicleMapping):
     elif key == KEY.LSHIFT:return self.target.PlayerBrakeEvent      (False)
     elif key == KEY.A:     return self.target.PlayerTurnEvent       ( 0)
     elif key == KEY.D:     return self.target.PlayerTurnEvent       ( 0)
-    elif key == KEY.SPACE:  return self.target.PlayerBoostEvent     (False)
+    elif key == KEY.SPACE: return self.target.PlayerBoostEvent     (False)
         
-class Keyboard2Mapping(VehicleMapping)     :   
+class Keyboard2Mapping(VehicleMapping):
   def __init__(self,target):
     VehicleMapping.__init__(self,target)
         
@@ -123,7 +98,7 @@ class Gamepad1Mapping(VehicleMapping):
     elif button == cpp.BUTTON_Y:       return E.CameraChangedEvent()
 
   def GamepadButtonReleasedEvent(self, button):
-    if button == cpp.BUTTON_B:       return self.target.PlayerBrakeEvent(False)
+    if button == cpp.BUTTON_B:         return self.target.PlayerBrakeEvent(False)
     elif button == cpp.BUTTON_A:       return self.target.PlayerBoostEvent(False)
 
 class GamepadDebugMapping(VehicleMapping):
@@ -142,38 +117,17 @@ class GamepadDebugMapping(VehicleMapping):
       else: 
         print "DebugMode is On"
         return E.ReloadConstsEvent()  
-              
+
+
 class GameMapping(Mapping):
   def __init__(self, mappings):
     self.mappings = mappings
   
-  def KeyPressedEvent(self, key):
-    for mapping in self.mappings:
-      mapping.KeyPressedEvent(key)
-    
-  def KeyReleasedEvent(self, key):
-    for mapping in self.mappings:
-      mapping.KeyReleasedEvent(key)
-    
-  def MouseMovedEvent(self, relX, relY):
-    return E.CameraLookAroundEvent(relX/300.,relY/300.)
-    
-  def GamepadStick1AbsoluteEvent(self, x, y):
-    for mapping in self.mappings:
-      mapping.GamepadStick1AbsoluteEvent(key)
+  def __getattribute__(self, attr):
+    if not attr.endswith('Event'): return object.__getattribute__(self, attr)
+    def f(*args):
+      for mapping in self.mappings:
+        m = getattr(mapping, attr, None)
+        if m: m(*args)
+    return f
 
-  def GamepadStick2AbsoluteEvent(self, relX, relY):
-    for mapping in self.mappings:
-      mapping.GamepadStick2AbsoluteEvent(key)
-        
-  def GamepadTriggerAbsoluteEvent(self, z):
-    for mapping in self.mappings:
-      mapping.GamepadTriggerAbsoluteEvent(key)
-    
-  def GamepadButtonPressedEvent(self, button):
-    for mapping in self.mappings:
-      mapping.GamepadButtonPressedEvent(key)
-    
-  def GamepadButtonReleasedEvent(self, button):
-    for mapping in self.mappings:
-      mapping.GamepadButtonReleasedEvent(key)
