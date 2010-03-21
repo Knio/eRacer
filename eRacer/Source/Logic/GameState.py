@@ -5,7 +5,7 @@ import time as _time
 from Core.Globals   import *
 from Game.State     import State
 
-from GameMapping    import GameMapping
+from GameMapping    import *
 from MenuState      import PauseMenuState
 from GameEndState   import GameEndState
 
@@ -178,6 +178,7 @@ class GameState(State):
     
     self.interfaces = []
 
+    self.SetupInputMapping(nPlayers)
     viewports = self.SetupViewports(nPlayers)
       
     for viewport in viewports:
@@ -227,10 +228,10 @@ class GameState(State):
       
   def SetupInputMapping(self, nPlayers):
     if nPlayers == 1:
-      self.MAPPING = GameMapping([
-          Keyboard1Mapping(self.player),
+      self.mapping = GameMapping([
+          Keyboard1Mapping(self.player.behavior),
           KeyboardDebugMapping(None),
-          Gamepad1Mapping(self.player),
+          Gamepad1Mapping(self.player.behavior),
           GamepadDebugMapping(None), 
                                  ])
     
