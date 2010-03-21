@@ -124,9 +124,10 @@ class GameMapping(Mapping):
     self.mappings = mappings
   
   def __getattribute__(self, attr):
-    if not method or not attr.endswith('Event'): return method
+    if not attr.endswith('Event'): return object.__getattribute__(self, attr)
     def f(*args):
       for mapping in self.mappings:
-        m = getattr(mapping, attr)(*args)
+        m = getattr(mapping, attr, None)
+        if m: m(*args)
     return f
 
