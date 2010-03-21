@@ -228,15 +228,10 @@ class GameState(State):
     _time.sleep(CONSTS.SLEEP_TIME)
     
 
-    # TODO use a sort
-    
-    def TrackPosition(vehicle):
-      return vehicle.trackpos
-      
-    self.vehicleList.sort(key = TrackPosition)
+    self.vehicleList.sort(key = lambda vehicle:vehicle.trackpos, reverse=True)
     
     for place,vehicle in enumerate(self.vehicleList):
-      vehicle.place = place
+      vehicle.place = place+1
       vehicle.lapRatio = vehicle.lapcount <= self.laps and vehicle.trackpos / self.track.dist % 1.0 or 1.0
     
     for interface in self.interfaces:
