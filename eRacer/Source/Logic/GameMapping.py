@@ -2,8 +2,8 @@ from Core.Globals import *
 from Mapping      import Mapping, E
 
 class VehicleMapping(Mapping):
-    def __init__(self,target):
-        self.target = target
+  def __init__(self,target):
+    self.target = target
 
   def KeyPressedEvent(self, key):
     pass
@@ -54,8 +54,8 @@ class Keyboard1Mapping(VehicleMapping):
     elif key == KEY.SPACE:  return self.target.PlayerBoostEvent     (False)
         
 class Keyboard2Mapping(VehicleMapping)     :   
-    def __init__(self,target):
-        VehicleMapping.__init__(self,target)
+  def __init__(self,target):
+    VehicleMapping.__init__(self,target)
         
   def KeyPressedEvent(self, key):
     if   key == KEY.UP:         return self.target.PlayerAccelerateEvent  (+1.0)
@@ -95,12 +95,12 @@ class KeyboardDebugMapping(VehicleMapping):
     elif key == KEY.RIGHT: return E.CameraStrafeEvent     (-1.0)
     
     elif key == KEY.TAB:  
-    if CONSTS.CAR_DEBUG: 
-      print "DebugMode is On"
-      CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
-    else: 
-      print "DebugMode is OFf"
-      return E.ReloadConstsEvent()
+      if CONSTS.CAR_DEBUG: 
+        print "DebugMode is On"
+        CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
+      else: 
+        print "DebugMode is OFf"
+        return E.ReloadConstsEvent()
 
   def MouseMovedEvent(self, relX, relY):
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
