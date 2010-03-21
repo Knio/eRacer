@@ -2,6 +2,8 @@
 #define CAR_BODY_H
 #include "PhysicsObject.h"
 #include "Core/Math.h"
+#include "Logic/Track.h"
+
 namespace Physics{
 class CarBody : public PhysicsObject
 {
@@ -10,8 +12,15 @@ public:
 	~CarBody();
   
   
-  float SimWheel(Point3 localWheel);
-  
+  float SimWheel(
+    int i, 
+    const Point3 &localpos, 
+    const Logic::Frame &frame, 
+    float turning, 
+    float enginespeed, 
+    bool braking
+  );
+    
 protected:
   Point3  wheelvel[4];
   bool    sliding[4];

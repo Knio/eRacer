@@ -198,6 +198,15 @@ class Vehicle(Model):
     crashed = True
     self.sumHeight = 0.
     for i,localpos in enumerate(self.WHEELS):
+      
+      # dist = phys.SimWheel(
+      #   i, localpos, frame,
+      #   self.turning, self.acceleration, self.brake
+      # )
+      
+      # if -2 < dist < 20: crashed = False
+      # continue
+      
       localapplypoint = Point3(localpos.x, -1, localpos.z)
       # wheel vectors in world space
       worldpos   = mul1(tx, localpos)
@@ -319,7 +328,6 @@ class Vehicle(Model):
       
       # staticfrictionmax = self.FRICTION_SLIDING * weight # weight on wheel
       
-##################################################################################
 
       # sliding
       if self.sliding[i]:
@@ -360,6 +368,7 @@ class Vehicle(Model):
         
         phys.AddWorldForceAtLocalPos(totalforce, localapplypoint)
       
+    ##################################################################################
     # no wheels are touching the ground.
     # reset the car
     if not crashed:
@@ -391,7 +400,7 @@ class Vehicle(Model):
       if self.boostFuel == 0:
         self.boosting = 0
       pushForce = normalized(Vector3(0,0,1)) * 2000
-      self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
+      phys.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
     else:    
       self.boostFuel = min( 5, self.boostFuel + delta/3 )
       

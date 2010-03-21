@@ -3,10 +3,12 @@
 
 #include "Core/Consts.h"
 extern Constants CONSTS;
-#include "Graphics/Track.h"
 
 
-namespace Physics{
+
+namespace Physics
+{
+  
 CarBody::CarBody(float mass, const Point3& pos, const Matrix& orient){
   Matrix rot = orient*CreateMatrix(ORIGIN, PI/2.0f, X);
 
@@ -76,18 +78,24 @@ CarBody::CarBody(float mass, const Point3& pos, const Matrix& orient){
 CarBody::~CarBody(){
 }
 
-float CarBody::SimWheel(const int i, const Point3& localpos, const Frame& frame, const float turning, const float enginespeed, const bool braking)
-{
+float CarBody::SimWheel(
+  int i, 
+  const Point3 &localpos, 
+  const Logic::Frame &frame, 
+  float turning, 
+  float enginespeed, 
+  bool braking
+){
   float SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (4 * CONSTS.CAR_DISPLACEMENT);
   float DAMPING          = 2.f * sqrt(SPRING_K * CONSTS.CAR_MASS);
   
   const Matrix tx = GetTransform();
   
   // apply forces to -1 on car body
-  const Point3 localapplypoint = Point3(localWheel.x, -1, localWheel.z);
+  const Point3 localapplypoint = Point3(localpos.x, -1, localpos.z);
   
   const Point3  worldpos  = mul1(tx, localpos);
-  const Vector3 worldvel  = GetLocalPointWorldVelocity(localpos)
+  const Vector3 worldvel  = GetLocalPointWorldVelocity(localpos);
   
   // smooth out wheel velocity
   wheelvel[i] = wheelvel[i]*(1-CONSTS.WHEELVEL_ALPHA) + worldvel*CONSTS.WHEELVEL_ALPHA;
@@ -119,7 +127,7 @@ float CarBody::SimWheel(const int i, const Point3& localpos, const Frame& frame,
   const Point3 localsuspoint = Point3(localpos.x, localpos.y + upamount, localpos.z);
   const Point3 worldsuspoint = mul1(tx, localsuspoint);
   
-  const float dist = dot(up, (worldsuspoint - frame.position)) - upamount
+  float dist = dot(frame.up, (worldsuspoint - frame.position)) - upamount;
   if (length(worldsuspoint - frame.position) > 26) dist = 1e99; // off the road
   const float disp = CONSTS.CAR_DISPLACEMENT - dist;
   
@@ -131,41 +139,50 @@ float CarBody::SimWheel(const int i, const Point3& localpos, const Frame& frame,
   AddWorldForceAtLocalPos(downforce, localapplypoint);
   
   // shocks
-  const float linearvel = dot(worldvel, worldroadnormal);
-  linearvel = linearvel>0 ? pow(linearvel, 0.95) : -pow(-leanearvel, 0.95);
-  Vector3 slowforce = worldroadnormal * linearvel * DAMPING * self.DAMPING_MAGIC;
+  float linearvel = dot(worldvel, worldroadnormal);
+  linearvel = linearvel>0 ? powf(linearvel, 0.95) : -powf(-linearvel, 0.95);
+  Vector3 slowforce = worldroadnormal * linearvel * DAMPING * CONSTS.DAMPING_MAGIC;
   AddWorldForceAtLocalPos(slowforce, localapplypoint);
   
   const float weight = length(downforce+slowforce);
   
-  const float angle  = turning * * min(1.f,(60.f / max(1.f, pow(length(avgworldvel)), 1.3));
+  const float angle  = turning * min(1.f, 60.f / max(1.f, powf(length(wheelvel[i]), 1.3f)));
   // wheel rolling direction
-  const Vector3 worldrollingdir     = mul0(tx, mul0(Matrix(ORIGIN, angle, Y), Z));
+  const Vector3 worldrollingdir     = mul0(tx, mul0(CreateMatrix(ORIGIN, angle, Y), Z));
   // motion along the wheel's rolling direction
-  const Vector3 worldrollingvel     = project(avgworldvel, worldrollingdir);
+  const Vector3 worldrollingvel     = project(wheelvel[i], worldrollingdir);
   const Vector3 worldrollingvelroad = projectOnto(worldrollingvel, worldroadnormal);
   // motion the wheel WANTS to be going
   const Vector3 worldforwardvel     = worldrollingdir * enginespeed;
   const Vector3 worldforwardvelroad = projectOnto(worldforwardvel, worldroadnormal);
   // wheel's current velocity projected on the surface of the road
-  const Vector3 worldvelroad        = projectOnto(avgworldvel,  worldroadnormal);
+  const Vector3 worldvelroad        = projectOnto(wheelvel[i],  worldroadnormal);
   
   // difference of where the wheel wants to go, and where it is really going.
   // lateral force by friction
   const Vector3 frictionforce   = (worldrollingvelroad - worldvelroad);
+  
   Vector3 powerforce;
   if (!braking) powerforce = +worldforwardvelroad;
   else          powerforce = -worldrollingvelroad;
   
-  const Vector3 totalforce = powerforce + frictionforce;
-  
-  // ####################################################
+  Vector3 totalforce = powerforce + frictionforce;
   
   
+  if (length(totalforce) < 1) sliding[i] = false;
+  if (length(totalforce) > 1) sliding[i] = true;
+  
+  normalize(totalforce);
+  
+  if (sliding[i]) totalforce *= (CONSTS.FRICTION_SLIDING * weight);
+  else            totalforce *= (CONSTS.FRICTION_STATIC  * weight);
+
+  AddWorldForceAtLocalPos(totalforce, localapplypoint);
   
   
-  
-  
+  const Vector3 reversevel  = normalized(wheelvel[i]) * -1.0;
+  const Vector3 rollfrict   = reversevel * (weight*CONSTS.FRICTION_ROLL);
+  AddWorldForceAtLocalPos(rollfrict, localapplypoint);
   
   return dist;
 }
