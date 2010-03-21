@@ -229,7 +229,11 @@ class GameState(State):
           Gamepad1Mapping(self.interfaces[0]),
           GamepadDebugMapping(None), 
                                  ])
-    
+    if nPlayers == 2:
+      self.mapping = GameMapping([
+          Keyboard1Mapping(self.interfaces[0]),
+          Keyboard2Mapping(self.interfaces[1]),
+                                 ])
   
   AIMED_METEOR_INTERVAL = 2.
     
