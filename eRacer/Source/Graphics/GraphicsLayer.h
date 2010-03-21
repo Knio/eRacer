@@ -48,6 +48,8 @@ protected:
 	std::map<std::string, ID3DXEffect*> effects;
 
 public:
+	int width, height;
+
 	DebugRenderable* debugRenderable;
 	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
 	D3DMATERIAL9 DefaultMaterial(); // also a hack

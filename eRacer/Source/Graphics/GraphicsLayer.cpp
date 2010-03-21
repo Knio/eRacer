@@ -140,6 +140,10 @@ int GraphicsLayer::Init( HWND hWnd )
     D3DSURFACE_DESC desc;
     screen->GetDesc(&desc);
     
+    width   = desc.Width;
+    height  = desc.Height;
+
+    
     // create a new surface
     // http://www.borgsoft.de/renderToSurface.html
     assert(SUCCEEDED(m_pd3dDevice->CreateRenderTarget(
