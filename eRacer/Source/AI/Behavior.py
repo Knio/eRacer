@@ -31,7 +31,8 @@ class PlayerBehavior(Behavior):
   def PlayerBoostEvent(self, boostState):
     self.parent.Boost(boostState)
 
-
+  def RespawnCarEvent(self):
+    self.parent.resetCar()
 
 class AIBehavior(Behavior):
   def __init__(self, parent, track, arrow=None):
