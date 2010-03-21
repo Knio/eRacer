@@ -66,7 +66,6 @@ class LoadingState(State):
 
 
 class GameState(State):
-  MAPPING = GameMapping
   AI_MODEL_NUMS = [2,5]
   AI_NAMES = ["Arthur Dent", "Ford Prefect", "Zaphod Beeblebrox", "Marvin", "Trillian","Slartibartfast"]
   
@@ -225,6 +224,15 @@ class GameState(State):
         (0,   whh,  wwh, whh),
         (wwh, whh,  wwh, whh),
       ]
+      
+  def SetupInputMapping(self, nPlayers):
+    if nPlayers == 1:
+      self.MAPPING = GameMapping([
+          Keyboard1Mapping(self.player),
+          KeyboardDebugMapping(None),
+          Gamepad1Mapping(self.player),
+          GamepadDebugMapping(None), 
+                                 ])
     
   
   AIMED_METEOR_INTERVAL = 2.
