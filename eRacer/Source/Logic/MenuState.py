@@ -19,7 +19,7 @@ class MenuState(State):
     self.subSelected = {}
     for i,m in enumerate(self.MENU):
       if len(m)>1:
-        self.subSelected[i] = 0
+        self.subSelected[i] = len(m)>= 3 and m[2] or 0
     
     #width and height should not be hardcoded!
     
@@ -56,7 +56,7 @@ class MenuState(State):
       if len(m)>1:
         options = m[1]
         game().graphics.graphics.WriteString(
-          options[self.subSelected[i]], "Verdana", 32, Point3(300,y,0), WHITE
+          options[self.subSelected[i]], "Verdana", 32, Point3(400,y,0), WHITE
         ) 
         
       y += 50
@@ -136,9 +136,9 @@ class GameSelectState(MenuState):
   MAPPING = MainMenuMapping
   MENU = [
     ('Start',),
-    ('Human Players',['1','2','4']),
-    ('AI Players',map(str,range(8))),
-    ('Track',['Track1','Track2']),
+    ('Human Players',['1','2','4'],0),
+    ('AI Players',map(str,range(8)),2),
+    ('Track',['Track1','Track2'],0),
     ('Back',),
   ]
   
