@@ -24,7 +24,7 @@ class PlayerInterface(object):
     cam = state.Add(CarCamera(player))
     self.views.append(View(cam, viewport=self.viewport))
     
-    self.hud      = View(OrthographicCamera(game().window.width, game().window.height), viewport=self.viewport)
+    self.hud      = View(OrthographicCamera(game().graphics.width, game().graphics.height), viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
     self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 50, 500, 8))
     for vehicle in state.vehicleList:

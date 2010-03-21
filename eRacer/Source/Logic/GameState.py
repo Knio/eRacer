@@ -201,24 +201,24 @@ class GameState(State):
   
 
   def SetupViewports(self, nPlayers):  
-    ww = game().window.width
-    wh = game().window.height
+    w = game().graphics.width
+    h = game().graphics.height
     
-    wwh = ww/2
-    whh = wh/2
+    w2 = w/2
+    h2 = h/2
     if nPlayers==1:
-      return [(0,0,ww,wh)]
+      return [(0,0,w,h)]
     elif nPlayers==2:
       return [
-        (0,   0,  wwh,  wh),
-        (wwh, 0,  wwh,  wh),
+        (0,   0,  w2,  h),
+        (w2, 0,  w2,  h),
       ]
     elif nPlayers==4:
       return [
-        (0,   0,    wwh, whh),
-        (wwh, 0,    wwh, whh),
-        (0,   whh,  wwh, whh),
-        (wwh, whh,  wwh, whh),
+        (0,   0,    w2, h2),
+        (w2, 0,    w2, h2),
+        (0,   h2,  w2, h2),
+        (w2, h2,  w2, h2),
       ]
       
   def SetupInputMapping(self, nPlayers):
