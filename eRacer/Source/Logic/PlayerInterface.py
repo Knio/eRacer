@@ -23,7 +23,11 @@ class PlayerInterface(object):
     self.views.append(View(cam, viewport=self.viewport))
     
     self.hud      = View(OrthographicCamera(game().window.width, game().window.height), viewport=self.viewport)
-    self.boostBar = state.Add(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350), False)
+    self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
+    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 50, 500, 8))
+    for vehicle in state.vehicleList:
+      vehicle.playerIcon = self.AddHud(HudQuad("AIIcon", "redmarker.png", 150-8, 50-12, 16, 16))
+    self.player.playerIcon = self.AddHud(HudQuad("PlayerIcon", "bluemarker.png", 150-8, 50-12, 16, 16))
 
     for view in self.views:
       state.Add(Starfield(1024, 1000.0, view.camera))
@@ -38,6 +42,11 @@ class PlayerInterface(object):
   def AddRenderable(self, obj):
     for i in self.views:
       i.AddRenderable(obj)
+      
+  def AddHud(self,entity):
+    self.state.Add(entity,False)
+    self.hud.AddRenderable(entity.graphics)    
+    return entity
     
   def Tick(self, time):
     

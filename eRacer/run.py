@@ -14,11 +14,6 @@ profile = False
 
 
 def run():
-  
-  
-  import gc
-  gc.set_debug(gc.DEBUG_LEAK | gc.DEBUG_UNCOLLECTABLE)
-  
   m = None
   try:
     from Core import Globals
@@ -27,6 +22,10 @@ def run():
     from Logic.GameState import GameState
     
     m = Main()
+    
+    if debug:
+      import gc
+      gc.set_debug(gc.DEBUG_COLLECTABLE | gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_INSTANCES | gc.DEBUG_OBJECTS)
     
     if profile:
       m.PushState(GameState('Track1'))

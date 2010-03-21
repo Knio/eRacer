@@ -1,5 +1,5 @@
 from Core.Globals import *
-from Graphics.Quad import Quad
+from Quad import Quad
 
 class Shadow(Quad):
   def __init__(self, target):

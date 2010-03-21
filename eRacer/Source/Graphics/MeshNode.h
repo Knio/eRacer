@@ -41,6 +41,7 @@ public:
 	 *
 	 */
 	~MeshNode();
+	void Release() {}
 
 	/**
 	 * @brief Draw the mesh associated with this mesh node.

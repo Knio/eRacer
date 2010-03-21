@@ -25,7 +25,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python -threads Source/SWIG/swig.i"
+				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python -threads -noproxydel Source/SWIG/swig.i"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -110,7 +110,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python Source/SWIG/swig.i"
+				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python -threads -noproxydel Source/SWIG/swig.i"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -194,7 +194,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python -threads Source/SWIG/swig.i"
+				CommandLine="&quot;$(SWIG_DIR)/swig.exe&quot; -c++ -python -threads -noproxydel Source/SWIG/swig.i"
 				ExcludedFromBuild="true"
 			/>
 			<Tool

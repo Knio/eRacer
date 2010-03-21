@@ -23,3 +23,7 @@ class Model(Entity):
       self.transform = self.physics.GetTransform()
     self.graphics.SetTransform(self.transform)
     
+  def Release(self):
+    self.graphics.Release()
+    if self.physics:
+      self.physics.Release()

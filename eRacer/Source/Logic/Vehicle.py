@@ -44,6 +44,7 @@ class Vehicle(Model):
       modelnum,
     )
     self.behavior = None
+    self.maxtrackpos = -1.0
     self.trackpos = -1.0
     self.lasttrackpos = -1.0
     self.track    = track
@@ -122,13 +123,19 @@ class Vehicle(Model):
     self.frame = frame
     self.lasttrackpos = self.trackpos
     self.trackpos = frame.dist
+    if (self.trackpos - self.lasttrackpos) >= (self.track.dist-100):
+      self.trackpos = self.trackpos - self.track.dist
+      frame = self.track.GetFrame(worldpos, self.trackpos)
+      self.frame = frame
+      self.lasttrackpos = self.trackpos
+      self.trackpos = frame.dist
     
     up    = frame.up
     fw    = frame.fw
   
     lapcount = int(self.trackpos / self.track.dist)
     if (lapcount > self.lapcount):
-      game().event.LapEvent(self, lapcount)
+        game().event.LapEvent(self, lapcount)
     self.lapcount = lapcount
   
     if self.behavior: 
@@ -378,7 +385,7 @@ class Vehicle(Model):
       self.boostFuel = max( 0, self.boostFuel - delta )
       if self.boostFuel == 0:
         self.boosting = 0
-      pushForce = normalized(Vector3(0,0,1)) * 1000
+      pushForce = normalized(Vector3(0,0,1)) * 2000
       self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
     else:    
       self.boostFuel = min( 5, self.boostFuel + delta/3 )

@@ -15,3 +15,8 @@ class Entity(object):
   def Tick(self, time):
     pass
   
+  def Release(self):
+    pass
+  
+  def __del__(self):
+    print 'del %d %r' % (self.id, self)

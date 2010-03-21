@@ -61,6 +61,8 @@ class LoadingState(State):
       "Loading...", 
       "Verdana", 32, Point3(300,220,0)
     )    
+##############################################
+
 
 class GameState(State):
   MAPPING = GameMapping
@@ -87,26 +89,40 @@ class GameState(State):
     # game().sound.sound.UpdateSoundFx(self.sound)
     
   def Pop(self):
-    import gc
-    
-    self.meteorManager.meteors = []
-    self.meteorManager.state = None
+    self.meteorManager.Release()
     del self.meteorManager
-    
-    self.vehicleList = []
     
     for i in self.entities.values():
       self.Remove(i)
+        
+    self.vehicleList = []
+    del self.track
+    del self.player
+
+    # print '*******'
+    # import gc
+    # print gc.collect()
     
-    gc.collect()
+    # print '\n\n'.join(map(repr,gc.get_referrers(self)))
+    # print '*******'
+    # print '\n\n'.join(gc.garbage)
     
-    print '*******'
-    print '\n\n'.join(map(repr,gc.get_referrers(self)))
-    print '*******'
-    if self in gc.garbage:
-      print 'AAAAAAAAHHHHHHH'
+    # if self in gc.garbage:
+    #   print 'AAAAAAAAHHHHHHH'
     
+
+  def AddAICar(self, name, orient, modelNum):
+      ai    = self.Add(Vehicle(
+        name,    
+        self.track, 
+        orient, 
+        modelNum
+      ))
+      self.vehicleList.append(ai)
+      AIBehavior(ai, self.track)
+      self.Add(Shadow(ai))
     
+
   def load(self, track):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
@@ -138,7 +154,7 @@ class GameState(State):
     self.AddAICar("AI3", Matrix(Point3(0, 3, -15)) * frametx, 2)
     #self.AddAICar("AI4", Matrix(Point3(-15, 3, -15)) * frametx, 5)
     #self.AddAICar("AI5", Matrix(Point3(+15, 3, -15)) * frametx, 2)
-    #self.AddAICar("AI6", Matrix(Point3(0, 3, -30)) * frametx, 5)
+    #self.AddAICar("AI6", Matrix(Point3(+ 0, 3, -30)) * frametx, 5)
     #self.AddAICar("AI7", Matrix(Point3(-15, 3, -30)) * frametx, 2)
     #self.AddAICar("AI8", Matrix(Point3(+15, 3, -30)) * frametx, 5)
 
@@ -183,11 +199,11 @@ class GameState(State):
     
     self.lastMeteorTime = 0
     
-    self.sound = cpp.SoundFx();
-    self.sound.looping  = True
-    self.sound.is3D     = False
-    self.sound.isPaused = False
-    game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
+    #self.sound = cpp.SoundFx();
+    #self.sound.looping  = True
+    #self.sound.is3D     = False
+    #self.sound.isPaused = False
+    #game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
     
     game().time.Zero()
     self.loaded = True
@@ -204,6 +220,7 @@ class GameState(State):
     
     _time.sleep(CONSTS.SLEEP_TIME)
     
+
     # TODO use a sort
     self.player.place = 0
     for vehicle in self.vehicleList:
@@ -212,34 +229,23 @@ class GameState(State):
     
     
     for interface in self.interfaces:
+      interface.Tick(time)
       game().graphics.views.append(interface.view)
       game().graphics.views.append(interface.hud)
-      interface.Tick(time)
-      
-    # ************************************************************************
-    # ************************************************************************
-    # ************************************************************************
-    # TODO: ADD ALL THIS INTO HUD ********************************************
-    # ************************************************************************                
- 
-    
 
-    # *************************************************************************
-    # *************************************************************************
-    # END TODO
-    # *************************************************************************
-    # *************************************************************************
     
-    if not self.gameOver:
-      self.lastMeteorTime += time.game_delta
-      if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
-        self.lastMeteorTime = 0
-        self.meteorManager.spawnTargeted(self.player)
+    # if not self.gameOver:
+    #   self.lastMeteorTime += time.game_delta
+    #   if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
+    #     self.lastMeteorTime = 0
+    #     self.meteorManager.spawnTargeted(self.player)
     
     self.meteorManager.Tick(time)
     
     State.Tick(self, time)
     
+  
+
       
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
@@ -277,10 +283,4 @@ class GameState(State):
     vehicle.obstacles.append(obstacle)
     
       
-  def AddAICar(self, name, orient, modelNum):
-      ai    = self.Add(Vehicle(name,    self.track, 
-      orient, modelNum))
-      self.vehicleList.append(ai)    
-      AIBehavior(ai, self.track)
-      self.Add(Shadow(ai))
 

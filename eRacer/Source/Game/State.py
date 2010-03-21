@@ -19,6 +19,7 @@ class State(cpp.State):
     del self.entities[obj.id]
     g = getattr(obj, 'graphics', None)
     if g: self.scene.Remove(g)
+    obj.Release()
     
   def Tick(self, time):
     for i in self.entities.itervalues():

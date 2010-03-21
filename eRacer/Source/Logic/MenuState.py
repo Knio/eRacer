@@ -170,6 +170,7 @@ class PauseMenuState(MenuState):
     game().PopState()
 
   def Menu_Main_menu(self):
+    self.parent = None
     while not game().states[-1].__class__ is MainMenuState:
       game().PopState()
           
