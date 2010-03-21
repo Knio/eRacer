@@ -99,11 +99,11 @@ class Vehicle(Model):
   
   def Boost(self, boostState):
     if boostState == True and self.boostFuel > 0.5:
-      self.boosting = 1
-      if self.sumHeight/4 < 2 :
+      if self.sumHeight/4 < 2 and self.boosting == 0:
         self.boostFuel = self.boostFuel - 0.5
-        pushForce = normalized(Vector3(0,1.25,1)) * 250000 
+        pushForce = normalized(Vector3(0,1.25,1)) * 270000 
         self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
+      self.boosting = 1
     else:
       self.boosting = 0
   
@@ -385,7 +385,7 @@ class Vehicle(Model):
       self.boostFuel = max( 0, self.boostFuel - delta )
       if self.boostFuel == 0:
         self.boosting = 0
-      pushForce = normalized(Vector3(0,0,1)) * 2000
+      pushForce = normalized(Vector3(0,0,1)) * 4000
       self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
     else:    
       self.boostFuel = min( 5, self.boostFuel + delta/3 )
