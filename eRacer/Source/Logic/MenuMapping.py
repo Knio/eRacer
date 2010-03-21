@@ -7,8 +7,10 @@ class MenuMapping(Mapping):
   
   def KeyPressedEvent(self, key):
     if key == KEY.UP:     return E.MenuUpEvent()
-    if key == KEY.DOWN:   return E.MenuDownEvent()
-    if key == KEY.RETURN: return E.MenuSelectEvent()
+    elif key == KEY.DOWN:   return E.MenuDownEvent()
+    elif key == KEY.LEFT:   return E.MenuLeftEvent()
+    elif key == KEY.RIGHT:   return E.MenuRightEvent()
+    elif key == KEY.RETURN: return E.MenuSelectEvent()
     
   def GamepadStick1AbsoluteEvent(self, x, y):
     if self.gamepadReleased:

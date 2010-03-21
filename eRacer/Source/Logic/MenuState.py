@@ -16,6 +16,10 @@ class MenuState(State):
   def __init__(self):
     State.__init__(self)
     self.selected = 0
+    self.subSelected = {}
+    for i,m in enumerate(self.MENU):
+      if len(m)>1:
+        self.subSelected[i] = 0
     
     #width and height should not be hardcoded!
     
@@ -49,6 +53,12 @@ class MenuState(State):
       game().graphics.graphics.WriteString(
         name, "Verdana", 32, Point3(100,y,0), i==self.selected and RED or WHITE
       ) 
+      if len(m)>1:
+        options = m[1]
+        game().graphics.graphics.WriteString(
+          options[self.subSelected[i]], "Verdana", 32, Point3(300,y,0), WHITE
+        ) 
+        
       y += 50
       
   def MenuUpEvent(self):
@@ -59,14 +69,28 @@ class MenuState(State):
     game().sound.sound.PlaySoundFx(self.menuNav)
     self.selected = (self.selected+1) % len(self.MENU)
 
-  def MenuSelectEvent(self):
-    game().sound.sound.PlaySoundFx(self.menuSel)
-    name = self.MENU[self.selected][0]
-    getattr(self, 'Menu_%s' % name.replace(' ','_'))()
+  def MenuLeftEvent(self):
+    if len(self.MENU[self.selected])>1:
+      game().sound.sound.PlaySoundFx(self.menuNav)
+      self.subSelected[self.selected] = (self.subSelected[self.selected]-1) % len(self.MENU[self.selected][1])
 
+  def MenuRightEvent(self):
+    if len(self.MENU[self.selected])>1:
+      game().sound.sound.PlaySoundFx(self.menuNav)
+      self.subSelected[self.selected] = (self.subSelected[self.selected]+1) % len(self.MENU[self.selected][1])
+
+  def MenuSelectEvent(self):
+    if len(self.MENU[self.selected]) == 1:
+      game().sound.sound.PlaySoundFx(self.menuSel)
+      name = self.MENU[self.selected][0]
+      getattr(self, 'Menu_%s' % name.replace(' ','_'))()
     
   def Menu_Exit(self):
-    game().event.QuitEvent()
+    game().event.QuitEvent()  
+    
+  def SelectedOption(self,index):
+    return self.MENU[index][1][self.subSelected[index]]
+  
 
     
 class MainMenuState(MenuState):
@@ -107,11 +131,13 @@ class MainMenuState(MenuState):
     
     MenuState.Tick(self, time)
     
+    
 class GameSelectState(MenuState):
   MAPPING = MainMenuMapping
   MENU = [
-    ('Track 1',),
-    ('Track 2',),
+    ('Players',['1','2','4']),
+    ('Track',['Track1','Track2']),
+    ('Start',),
     ('Back',),
   ]
   
@@ -133,13 +159,12 @@ class GameSelectState(MenuState):
     
     self.view = view
   
-  def Menu_Track_1(self):
+  def Menu_Start(self):
     self.parent.Pause()
-    game().PushState(GameState('Track1'))
-
-  def Menu_Track_2(self):
-    self.parent.Pause()
-    game().PushState(GameState('Track2'))
+    track = self.SelectedOption(1)
+    nPlayers = int(self.SelectedOption(0))
+    
+    game().PushState(GameState(track,nPlayers))
     
   def Menu_Back(self):
     game().PopState()

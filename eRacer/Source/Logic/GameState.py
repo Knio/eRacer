@@ -12,11 +12,10 @@ from GameEndState   import GameEndState
 from Track      import Track
 from Vehicle    import Vehicle
 from Shadow     import Shadow
-from Camera     import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera
-from Starfield  import Starfield
 from Meteor     import Meteor, MeteorManager
-from Quad  import Quad
-from HudQuad  import HudQuad
+from Quad       import Quad
+from HudQuad    import HudQuad
+from PlayerInterface  import PlayerInterface
 # from CoordinateCross  import CoordinateCross
 
 
@@ -67,7 +66,7 @@ class LoadingState(State):
 
 class GameState(State):
   MAPPING = GameMapping
-  def __init__(self, track='Track1'):
+  def __init__(self, track='Track1', nPlayers=1):
     State.__init__(self)
     self.loaded = False
     
@@ -76,7 +75,7 @@ class GameState(State):
     self.gameOver = False
 
     
-    self.load(track)
+    self.load(track,nPlayers)
     
   def Activate(self):
     State.Activate(self)
@@ -124,7 +123,7 @@ class GameState(State):
       self.Add(Shadow(ai))
     
 
-  def load(self, track):
+  def load(self, track, nPlayers):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
@@ -164,50 +163,20 @@ class GameState(State):
     # TODO: this should load "StartLine.x" but it is not appearing properly
     finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
     self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
-    
-    def CarTrackCollisionEvent(car, track, force):
-      pass
-      # print 'CAR-TRACK:', car, track, force
-      # if length(force):
-      #   game().simspeed = 0.0
-      
-    game().event.Register(CarTrackCollisionEvent)
 
-    self.views = []
-    self.viewIndex = 0
-    
-    cam = self.Add(ChasingCamera(self.player))
-    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
-    
-    cam = self.Add(FirstPersonCamera())
-    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))
-    
-    cam = self.Add(CarCamera(self.player))
-    self.views.append(View(cam)) #eRacer.View(self.scene, cam.camera))    
-    
-    # need refactoring
-    self.hudView = View(OrthographicCamera(game().window.width,game().window.height))
-
-    # 0,0 is top left, make sure you add all HudQuads using AddHud
-    # texture coordinates can be set via self.boostBar.graphics.SetTextureCoordinates
-    # wrappers for that should be created as needed. 
-    self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
-    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 50, 500, 8))
-    for vehicle in self.vehicleList:
-      vehicle.playerIcon = self.AddHud(HudQuad("PlayerIcon", "redmarker.png", 150-8, 50-12, 16, 16))
-    self.playerIcon = self.AddHud(HudQuad("PlayerIcon", "bluemarker.png", 150-8, 50-12, 16, 16))
     self.skybox = SkyBox()
     
-    
-    for view in self.views:
-      view.AddRenderable(self.scene)
+    self.interfaces = []
+
+    viewports = self.SetupViewports(nPlayers)
       
-      self.Add(Starfield(1024, 1000.0, view.camera))
-      self.Add(Starfield(1024, 100.0,  view.camera))
-      self.Add(Starfield(1024, 20.0,   view.camera))
-      
-      view.AddRenderable(self.skybox)
-   
+    for viewport in viewports:
+      pi = PlayerInterface(self, self.player, viewport)
+      pi.AddRenderable(self.scene)
+      pi.AddRenderable(self.skybox)
+      self.interfaces.append(pi)
+
+       
     self.meteorManager = MeteorManager(self)
 
     for i in range(CONSTS.NUM_METEORS):
@@ -223,91 +192,58 @@ class GameState(State):
     
     game().time.Zero()
     self.loaded = True
-    
-  def get_view(self):
-    return self.views[self.viewIndex]
-    
-  view = property(get_view)
   
+
+  def SetupViewports(self, nPlayers):  
+    ww = game().window.width
+    wh = game().window.height
+    
+    wwh = ww/2
+    whh = wh/2
+    if nPlayers==1:
+      return [(0,0,ww,wh)]
+    elif nPlayers==2:
+      return [
+        (0,   0,  wwh,  wh),
+        (wwh, 0,  wwh,  wh),
+      ]
+    elif nPlayers==4:
+      return [
+        (0,   0,    wwh, whh),
+        (wwh, 0,    wwh, whh),
+        (0,   whh,  wwh, whh),
+        (wwh, whh,  wwh, whh),
+      ]
+    
   
   AIMED_METEOR_INTERVAL = 2.
     
   def Tick(self, time):
     
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
-    cam = self.view.camera
+    cam = self.interfaces[0].view.camera
     # TODO camera velocity
     game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
     
     _time.sleep(CONSTS.SLEEP_TIME)
     
+
+    # TODO use a sort
     
-    game().graphics.views.append(self.view)
-    game().graphics.views.append(self.hudView)
-    
-    #distanceBar
-    playerDistPercent = max(0, (self.player.trackpos-self.player.track.dist)/self.player.track.dist - (int)((self.player.trackpos-self.player.track.dist)/self.player.track.dist) )
-    if self.player.lapcount > self.laps:
-      playerDistPercent = 1;
-    self.playerIcon.SetLeftTop( 150-8 + 500*playerDistPercent, 50-12 )
-    for vehicle in self.vehicleList:
-      aiDistPercent = max(0, (vehicle.trackpos-vehicle.track.dist)/vehicle.track.dist - (int)((vehicle.trackpos-vehicle.track.dist)/vehicle.track.dist))
-      vehicle.playerIcon.SetLeftTop(150-8 + 500 * aiDistPercent, 50-12)
-
-    
-    game().graphics.graphics.WriteString( "Position %3.2f/%3.2f" % (self.player.trackpos-self.player.track.dist, self.player.track.dist), "Verdana", 20, Point3(50, 100,0))
-
-    #Track Place HUD
-    place = 0
-    for vehicle in self.vehicleList:
-      if vehicle.trackpos >= self.player.trackpos:
-        place = place+1
-    if place == 1:
-          game().graphics.graphics.WriteString( "%1.0fst" % (place), "Verdana", 60, Point3(20, 20,0))
-    elif place == 2:
-          game().graphics.graphics.WriteString( "%1.0fnd" % (place), "Verdana", 60, Point3(20, 20,0))
-    elif place == 3:
-          game().graphics.graphics.WriteString( "%1.0frd" % (place), "Verdana", 60, Point3(20, 20,0))
-    else:
-          game().graphics.graphics.WriteString( "%1.0fth" % (place), "Verdana", 60, Point3(20, 20,0))
-
-
-    #Energy Bar HUD 750, 200, 35, 350
-    boostPercent = self.player.boostFuel/5.0
-    self.boostBar.graphics.SetTextureCoordinates(0,1-boostPercent,  1,1-boostPercent, 1,1, 0,1 );
-    height = boostPercent * 350
-    self.boostBar.SetSize( 35, height)
-    self.boostBar.SetLeftTop( 750, 550-height );  
-    #game().graphics.graphics.WriteString( "BOOST %2.2f" % (self.player.boostFuel), "Verdana", 50, Point3(250,500,0))
-
-    #Backwards HUD
-    playerfacing = mul0(self.player.transform, Z)
-    playertrackfacing = self.player.frame.fw
-    playerdirection = dot(playerfacing, playertrackfacing)
-    if self.player.Backwards == False and self.player.trackpos < self.player.lasttrackpos and playerdirection < 0:
-       self.player.Backwards = True
-    if self.player.Backwards == True and self.player.trackpos > self.player.lasttrackpos and playerdirection > 0:
-       self.player.Backwards = False
-    if self.player.Backwards == True:
-       game().graphics.graphics.WriteString( "WRONG WAY", "Verdana", 50, Point3(300,200,0))
-
-
-                                  
-    playerLaps = max(1, min(self.player.lapcount, self.laps))
-    game().graphics.graphics.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
-    game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
-    game().graphics.graphics.WriteString("%d" % (self.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
-
-    if self.player.lapcount:
-      l = list(self.stats.get(self.player,[0.]))
-      l.append(game().time.get_seconds())
+    def TrackPosition(vehicle):
+      return vehicle.trackpos
       
-      y = 100
-      for i,t in enumerate(l):
-        if not i or i>self.laps: continue
-        game().graphics.graphics.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
-        game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
-        y += 15    
+    self.vehicleList.sort(key = TrackPosition)
+    
+    for place,vehicle in enumerate(self.vehicleList):
+      vehicle.place = place
+      vehicle.lapRatio = vehicle.lapcount <= self.laps and vehicle.trackpos / self.track.dist % 1.0 or 1.0
+    
+    for interface in self.interfaces:
+      interface.Tick(time)
+      game().graphics.views.append(interface.view)
+      game().graphics.views.append(interface.hud)
+
     
     # if not self.gameOver:
     #   self.lastMeteorTime += time.game_delta
@@ -318,14 +254,10 @@ class GameState(State):
     self.meteorManager.Tick(time)
     
     State.Tick(self, time)
+    
+  
 
-  
-  def AddHud(self, entity):
-    self.entities[entity.id] = entity
-    g = getattr(entity, 'graphics', None)
-    if g: self.hudView.AddRenderable(g)
-    return entity    
-  
+      
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
     
@@ -340,7 +272,7 @@ class GameState(State):
     self.player.resetCar()
       
   def CameraChangedEvent(self):
-    self.viewIndex = (self.viewIndex+1) % len(self.views)
+    self.viewIndex[0] = (self.viewIndex[0]+1) % len(self.viewSets[0])
     
   def ReloadConstsEvent(self):
     game().config.read()
