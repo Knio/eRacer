@@ -26,7 +26,7 @@ class PlayerInterface(object):
     
     self.hud      = View(OrthographicCamera(game().graphics.width, game().graphics.height), viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
-    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 50, 500, 8))
+    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8))
     for vehicle in state.vehicleList:
       self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", self.player==vehicle and "bluemarker.png" or "redmarker.png", 150-8, 50-12, 16, 16))
 
@@ -58,11 +58,11 @@ class PlayerInterface(object):
     
   def Tick(self, time):
     #Track Place HUD
-    self.hud.WriteString(self.ordinal(self.player.place), "Verdana", 60, Point3(20, 20,0))
+    self.hud.WriteString(self.ordinal(self.player.place), "Sony Sketch EF", 60, Point3(20, 5,0))
     
   
     for vehicle in self.state.vehicleList:
-      self.icons[vehicle.name].SetLeftTop(150-8 + 500 * vehicle.lapRatio, 50-12)
+      self.icons[vehicle.name].SetLeftTop(150-8 + 500 * vehicle.lapRatio, 35-12)
 
     #Energy Bar HUD 750, 200, 35, 350
     boostPercent = self.player.boostFuel/5.0
@@ -80,7 +80,7 @@ class PlayerInterface(object):
     if self.player.Backwards == True and self.player.trackpos > self.player.lasttrackpos and playerdirection > 0:
        self.player.Backwards = False
     if self.player.Backwards == True:
-       self.hud.WriteString( "WRONG WAY", "Verdana", 50, Point3(300,200,0))
+       self.hud.WriteString( "WRONG WAY", "Sony Sketch EF", 50, Point3(300,200,0))
 
 
                                   

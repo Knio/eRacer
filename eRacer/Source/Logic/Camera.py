@@ -76,7 +76,7 @@ class ChasingCamera(Camera):
     
     alpha = math.pow(0.01, float(time.game_delta) / time.RESOLUTION)
     self.position = self.position*alpha + behindworld*(1-alpha)
-    self.fov      = self.fov*alpha      + fov*(1-alpha)
+    self.fov      = max(self.fov*alpha      + fov*(1-alpha), math.pi/12.)
 
     alpha = math.pow(0.65, float(time.game_delta) / time.RESOLUTION)
     upworld = mul0(self.target.transform, Y*10)

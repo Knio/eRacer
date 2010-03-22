@@ -8,7 +8,6 @@ class View(object):
     self.camera.SetAspectRatio(self.viewport[2]/float(self.viewport[3]))
     self.renderables  = renderables or []
     self.stringSprite = cpp.StringSprite(*self.viewport)
-    self.renderables.append(self.stringSprite)
       
   def AddRenderable(self, obj):
     self.renderables.append(obj)
@@ -29,4 +28,5 @@ class View(object):
     for i in self.renderables:
       i.Draw(d3d)
       
+    self.stringSprite.Draw(d3d)  
     self.stringSprite.Clear()

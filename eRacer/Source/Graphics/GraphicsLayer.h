@@ -59,7 +59,7 @@ public:
 	void 		SetCamera(Camera& camera);
 	Camera* GetCamera() { return camera; }
 
-	ID3DXSprite* CreateSprite(int x, int y, int w, int h);	
+	ID3DXSprite* CreateSprite(int x, int y, int w);	
 	
 	void 		SetViewport(int x, int y, int w, int h);
 

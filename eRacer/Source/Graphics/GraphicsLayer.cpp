@@ -12,14 +12,18 @@ GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
 
 
 
-ID3DXSprite* GraphicsLayer::CreateSprite(int x, int y, int w, int h){
+ID3DXSprite* GraphicsLayer::CreateSprite(int x, int y, int w){
+    float h = w*3/4.0f;
+
     float wr = w/(float)width;
     float hr = h/(float)height;
+    
+    cout << "Creating sprite with dimensions "<< x << ", "<< y << ", " << w << ", " << h << endl;
     
     Matrix m(  wr,          0,          0, 0,
                 0,          -hr,        0, 0,
                 0,          0,          1, 0,
-                x,          height+y,   0, 1);
+                x,          height-y,   0, 1);
     
     ID3DXSprite* result;
     D3DXCreateSprite(m_pd3dDevice, &result);

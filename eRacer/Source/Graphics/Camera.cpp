@@ -80,6 +80,7 @@ void Camera::UpdateUp(){
 void Camera::SetAspectRatio(float aspectRatio){
 	assert(aspectRatio>0);
 	aspectRatio_ = aspectRatio;
+	
 	UpdateProjection();
 	UpdatePlanes();
 }

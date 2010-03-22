@@ -3,18 +3,27 @@
 
 namespace Graphics {
 
-StringSprite::StringSprite(int left, int top, int width, int height){
+StringSprite::StringSprite(int l, int t, int w, int h)
+{
 	GraphicsLayer* graphics = GraphicsLayer::GetInstance();
-  sprite = graphics->CreateSprite(left, top, width, height);
+  sprite = graphics->CreateSprite(l, t, w);
+  ratio = h/(w*3/4.0f);
 }
 
 void StringSprite::Write(const char* text, const char* family, int size, const Vector3 &pos, const Vector3 &color){
-	strings.push_back(FontManager::instance.CreateStringRenderable(text,family,size,pos,color,sprite));
+	//float wr = width/(float)GraphicsLayer::GetInstance()->width;
+  //float hr = height/(float)GraphicsLayer::GetInstance()->height;
+	Point3 p = pos;
+	//p.x*=wr;
+	p.y*=ratio;
+	//Point3 p(790,10,0);
+	strings.push_back(FontManager::instance.CreateStringRenderable(text,family,size,p,color,sprite));
 }
 
 void StringSprite::Draw(IDirect3DDevice9* device) const{
 	//sort(strings.begin(), strings.end());
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
+	GraphicsLayer::GetInstance()->SetViewport(0,0,800,600);
 
 	sprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_OBJECTSPACE);
 	for (vector<StringRenderable>::const_iterator string = strings.begin();
