@@ -28,4 +28,4 @@ class View(object):
     for i in self.renderables:
       i.Draw(d3d)
       
-    self.stringSprite.clear()
+    self.stringSprite.Clear()

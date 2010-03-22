@@ -14,6 +14,8 @@ void StringSprite::Write(const char* text, const char* family, int size, const V
 
 void StringSprite::Draw(IDirect3DDevice9* device) const{
 	//sort(strings.begin(), strings.end());
+	//GraphicsLayer::GetInstance()->SetViewport(0,0,800,600);
+	device->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
 
 	sprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_OBJECTSPACE);
 	for (vector<StringRenderable>::const_iterator string = strings.begin();

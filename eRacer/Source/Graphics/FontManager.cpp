@@ -58,11 +58,11 @@ namespace Graphics {
 	}	
 
 	StringRenderable FontManager::CreateStringRenderable(	const char* msg, 
-																							const char* fontFamily, 
-																							int fontSize, 
-																							const Vector3 &pos, 
-																							const Vector3 &color,
-																							ID3DXSprite* sprite)
+															const char* fontFamily, 
+															int fontSize, 
+															const Vector3 &pos, 
+															const Vector3 &color,
+															ID3DXSprite* sprite)
 	{
 		FontDescription fontDesc(fontFamily, fontSize);
 		map<FontDescription,ID3DXFont*>::iterator font;
@@ -97,7 +97,7 @@ namespace Graphics {
 		s.m_uiScreenX = (unsigned int ) pos.x;
 		s.m_uiScreenY= (unsigned int) pos.y;
 		
-		return sprite;
+		return s;
 	}
 
 };

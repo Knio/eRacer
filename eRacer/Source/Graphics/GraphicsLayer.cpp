@@ -15,11 +15,16 @@ GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
 ID3DXSprite* GraphicsLayer::CreateSprite(int x, int y, int w, int h){
     float wr = w/(float)width;
     float hr = h/(float)height;
-    Matrix m(  wr, 0,          0, 0,
-                    0,  -hr,        0, 0,
-                    0,  0,          1, 0,
-                    x,  ((float)height)+y,   0, 1);
-                        ID3DXSprite* result;
+    
+    Matrix m(  wr,          0,          0, 0,
+                0,          -hr,        0, 0,
+                0,          0,          1, 0,
+                x,  height+y,   0, 1);
+    
+    //Matrix m;
+    
+    debug(m);
+    ID3DXSprite* result;
     D3DXCreateSprite(m_pd3dDevice, &result);
     result->SetTransform(&m);
     return result;
