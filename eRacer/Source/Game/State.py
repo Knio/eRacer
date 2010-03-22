@@ -9,10 +9,10 @@ class State(cpp.State):
     self.entities = {}
     self.scene    = cpp.Scene()
     
-  def Add(self, obj):
+  def Add(self, obj, scene=True):
     self.entities[obj.id] = obj
     g = getattr(obj, 'graphics', None)
-    if g: self.scene.Add(g)
+    if g and scene: self.scene.Add(g)
     return obj
     
   def Remove(self, obj):

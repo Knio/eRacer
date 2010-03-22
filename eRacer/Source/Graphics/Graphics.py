@@ -33,6 +33,7 @@ class Graphics(Module):
     Module.Init(self)
     self.width  = self.graphics.width
     self.height = self.graphics.height
+
     
   def Tick(self, time):
     Module.Tick(self, time)
