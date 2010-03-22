@@ -11,4 +11,13 @@ class Starfield(Entity, cpp.Starfield):
     
   def Tick(self, time):
     Entity.Tick(self, time)
+    
+    print self.camera.GetPosition()
+    
     self.Update(self.camera.GetViewMatrix(), self.camera.GetPosition())
+
+
+
+
+
+
