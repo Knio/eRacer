@@ -13,10 +13,10 @@ TRACK = [
   cpp.Frame(Point3( -750*xScale,   0,-500*zScale), +Z),
   cpp.Frame(Point3( -750*xScale, 400*yScale,   0), -Y),
   cpp.Frame(Point3( -600*xScale,   0, 300*zScale), -Z),
-  cpp.Frame(Point3( -550*xScale,-300*yScale,   200), Y),
+  cpp.Frame(Point3( -550*xScale,-300*yScale,   200), Y-Z),
   
-  cpp.Frame(Point3( -375*xScale,-250*yScale, -550*zScale), -X+Y+Z),
-  cpp.Frame(Point3(-1125*xScale,-125*yScale,-1125*zScale), +X+Y+Z),
+  cpp.Frame(Point3( -375*xScale,-250*yScale, -550*zScale), -X+Z),
+  cpp.Frame(Point3(-1125*xScale,-125*yScale,-1125*zScale), +X+Z),
 
   cpp.Frame(Point3(-1125*xScale,  50*yScale,  -50*zScale), +X),
   cpp.Frame(Point3( -875*xScale,  50*yScale,  -50*zScale), -Z),
@@ -33,8 +33,8 @@ TRACK = [
   cpp.Frame(Point3( 1375*xScale,-300*yScale, -250*zScale), -X+Y-Z),
   cpp.Frame(Point3(  500*xScale,-450*yScale, 0*zScale), +Y-Z),
   
-  cpp.Frame(Point3(  600*xScale, 600*yScale, 400*zScale), +X+Y-Z),
-  cpp.Frame(Point3( 1375*xScale, 620*yScale, 1050*zScale), +Y-X),
+  cpp.Frame(Point3(  600*xScale, 600*yScale, 400*zScale), +X-Z),
+  cpp.Frame(Point3( 1375*xScale, 620*yScale, 1050*zScale), -X),
   cpp.Frame(Point3( 1375*xScale, 600*yScale,   0), -X+Y+Z),
   
   cpp.Frame(Point3(  375*xScale, 525*yScale, 175*zScale), +X+Y-Z),
