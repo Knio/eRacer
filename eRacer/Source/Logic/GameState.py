@@ -66,8 +66,8 @@ class LoadingState(State):
 
 
 class GameState(State):
-  AI_MODEL_NUMS = [2,5]
-  AI_NAMES = ["Arthur Dent", "Ford Prefect", "Zaphod Beeblebrox", "Marvin", "Trillian","Slartibartfast"]
+  AI_MODEL_NUMS = [2,3,4,5,6,8,4]
+  AI_NAMES = ["Arthur Dent", "Ford Prefect", "Zaphod Beeblebrox", "Marvin", "Trillian", "Slartibartfast"]
   
   def __init__(self, track='Track1', nPlayers=1, nAIs=3):
     State.__init__(self)
@@ -123,7 +123,7 @@ class GameState(State):
         isAI and random.choice(self.AI_NAMES) or "Player1",    
         self.track, 
         Matrix(Point3(x, 3, z)) * self.startOrientation, 
-        isAI and random.choice(self.AI_MODEL_NUMS) or 1
+        (not isAI) and 1 or self.AI_MODEL_NUMS.pop()
       ))
       self.Add(Shadow(vehicle))
       self.vehicleList.append(vehicle)
@@ -145,6 +145,8 @@ class GameState(State):
     
     # TODO
     # can we render a fake loading screen here until the real one works?
+    
+    random.shuffle(self.AI_MODEL_NUMS)
     
     self.track = self.Add(Track(track))
     self.vehicleList = []

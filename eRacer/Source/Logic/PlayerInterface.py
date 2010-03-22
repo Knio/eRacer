@@ -32,8 +32,8 @@ class PlayerInterface(object):
 
     for view in self.views:
       view.AddRenderable(state.Add(Starfield(1024, 1000.0, view.camera)))
-      view.AddRenderable(state.Add(Starfield(1024, 100.0,  view.camera)))
-      view.AddRenderable(state.Add(Starfield(1024, 20.0,   view.camera)))
+      view.AddRenderable(state.Add(Starfield(4096, 100.0,  view.camera)))
+      view.AddRenderable(state.Add(Starfield( 512, 20.0,   view.camera)))
     
   def get_view(self):
     return self.views[self.viewIndex]
