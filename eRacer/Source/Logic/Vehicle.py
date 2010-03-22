@@ -32,6 +32,8 @@ class Vehicle(Model):
     self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
+    print 'SPRING_K', self.SPRING_K
+    print 'DAMPING',  self.DAMPING
     
   def __init__(self, name, track, tx, modelnum=1):
     self.ReloadedConstsEvent()
@@ -199,13 +201,16 @@ class Vehicle(Model):
     self.sumHeight = 0.
     for i,localpos in enumerate(self.WHEELS):
       
-      # dist = phys.SimWheel(
-      #   i, localpos, frame,
-      #   self.turning, self.acceleration, self.brake
-      # )
-      
-      # if -2 < dist < 20: crashed = False
-      # continue
+      ################## NEW CODE
+      if CONSTS.CAR_CPP:
+        dist = phys.SimWheel(
+          i, localpos, frame,
+          self.turning, self.acceleration, self.brake
+        )
+        
+        if -2 < dist < 20: crashed = False
+        continue
+      ################## OLD CODE
       
       localapplypoint = Point3(localpos.x, -1, localpos.z)
       # wheel vectors in world space

@@ -78,6 +78,24 @@ CarBody::CarBody(float mass, const Point3& pos, const Matrix& orient){
 CarBody::~CarBody(){
 }
 
+  /*
+  
+  -------
+         |
+  CAR    |
+         |
+  -------|- where forces are applied (applypoint)
+         |
+         |
+         -   -- Where the wheel is defined to be at rest (pos)  \           \
+         |                                                      |-disp (-)  |
+         |                                                      |           |
+  -------o----- acctual wheel on road                           /           | - dist (+)
+         |                                                                  |
+         |                                                                  |
+         -  -- where the wheel will be with no load                         /
+  */
+
 float CarBody::SimWheel(
   int i, 
   const Point3 &localpos, 
@@ -99,36 +117,15 @@ float CarBody::SimWheel(
   
   // smooth out wheel velocity
   wheelvel[i] = wheelvel[i]*(1-CONSTS.WHEELVEL_ALPHA) + worldvel*CONSTS.WHEELVEL_ALPHA;
-
+  
   // find distance to road
-  /*
-  
-  -------
-         |
-  CAR    |
-         |
-  -------|- where forces are applied (applypoint)
-         |
-         |
-         -   -- Where the wheel is defined to be at rest (pos)  \           \
-         |                                                      |-disp (-)  |
-         |                                                      |           |
-  -------o----- acctual wheel on road                           /           | - dist (+)
-         |                                                                  |
-         |                                                                  |
-         -  -- where the wheel will be with no load                         /
-  
-  
-  
-  */
-  
   const float upamount = 2.f;
   const Vector3 worldroadnormal = frame.up;
   const Point3 localsuspoint = Point3(localpos.x, localpos.y + upamount, localpos.z);
   const Point3 worldsuspoint = mul1(tx, localsuspoint);
   
   float dist = dot(frame.up, (worldsuspoint - frame.position)) - upamount;
-  if (length(worldsuspoint - frame.position) > 26) dist = 1e99; // off the road
+  if (length(worldsuspoint - frame.position) > 26f) dist = 1e99; // off the road
   const float disp = CONSTS.CAR_DISPLACEMENT - dist;
   
   if (dist < localpos.y)  return dist; // car is inside road
@@ -140,12 +137,13 @@ float CarBody::SimWheel(
   
   // shocks
   float linearvel = dot(worldvel, worldroadnormal);
-  linearvel = linearvel>0 ? powf(linearvel, 0.95) : -powf(-linearvel, 0.95);
+  linearvel = linearvel>0 ? -powf(linearvel, 0.95f) : powf(-linearvel, 0.95f);
   Vector3 slowforce = worldroadnormal * linearvel * DAMPING * CONSTS.DAMPING_MAGIC;
   AddWorldForceAtLocalPos(slowforce, localapplypoint);
   
   const float weight = length(downforce+slowforce);
   
+  if (i >= 2) turning = 0;
   const float angle  = turning * min(1.f, 60.f / max(1.f, powf(length(wheelvel[i]), 1.3f)));
   // wheel rolling direction
   const Vector3 worldrollingdir     = mul0(tx, mul0(CreateMatrix(ORIGIN, angle, Y), Z));
