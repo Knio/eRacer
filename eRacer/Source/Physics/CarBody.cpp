@@ -125,7 +125,7 @@ float CarBody::SimWheel(
   const Point3 worldsuspoint = mul1(tx, localsuspoint);
   
   float dist = dot(frame.up, (worldsuspoint - frame.position)) - upamount;
-  if (length(worldsuspoint - frame.position) > 26f) dist = 1e99; // off the road
+  if (length(worldsuspoint - frame.position) > 26.f) dist = 1e99; // off the road
   const float disp = CONSTS.CAR_DISPLACEMENT - dist;
   
   if (dist < localpos.y)  return dist; // car is inside road
