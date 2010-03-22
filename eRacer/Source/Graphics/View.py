@@ -3,7 +3,7 @@ from Logic.Camera import Camera
 
 class View(object):
   def __init__(self, camera=None, renderables=None, viewport=None):
-    self.viewport     = viewport    or (0, 0, game().window.width, game().window.height)
+    self.viewport     = viewport    or (0, 0, game().graphics.width, game().graphics.height)
     self.camera       = camera      or Camera()
     self.renderables  = renderables or []
     
