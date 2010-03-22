@@ -5,6 +5,7 @@ class View(object):
   def __init__(self, camera=None, renderables=None, viewport=None):
     self.viewport     = viewport    or (0, 0, game().graphics.width, game().graphics.height)
     self.camera       = camera      or Camera()
+    self.camera.SetAspectRatio(self.viewport[2]/float(self.viewport[3]))
     self.renderables  = renderables or []
     self.stringSprite = cpp.StringSprite(*self.viewport)
     self.renderables.append(self.stringSprite)

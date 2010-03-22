@@ -18,7 +18,7 @@ namespace Graphics {
 
 typedef pair<string, int> FontDescription;
 
-class StringRenderable : public Renderable
+class StringRenderable
 {
 public:
 	ID3DXFont* m_pFont;
@@ -35,7 +35,6 @@ public:
 	 */
 	bool operator<(const StringRenderable& s) const;
 
-	virtual void Draw(IDirect3DDevice9*) const;
 };
 
 

@@ -24,15 +24,7 @@ namespace Graphics {
 		return m_pFont < s.m_pFont;
 	}
 
-	void StringRenderable::Draw(IDirect3DDevice9*) const{
-		if(NULL == m_pFont){
-			cout << "oh noes" << endl;
-		}
-		//assert(NULL != m_pFont);
-		RECT area = {m_uiScreenX,m_uiScreenY,0,0};
-		m_pFont->DrawText( m_pTextSprite, m_strTextBuffer.c_str(), -1, &area, DT_NOCLIP, m_color);
 
-	}
 
 	const char* FontManager::CUSTOM_FONTS[1] = {"Resources\\Fonts\\Sony_Sketch_EF.ttf"};
 

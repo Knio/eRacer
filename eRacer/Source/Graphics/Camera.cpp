@@ -112,12 +112,7 @@ void Camera::UpdatePlanes(){
 		lbf,
 		rtf,
 		rbf;
-		
-		
-	
-	
-	
-	
+
 	ltn = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_NEAR]);
 	ltf = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_TOP_FAR]);
 	lbn = mul1(inverseViewMatrix_, frustumCorners_[CI_LEFT_BOTTOM_NEAR]);
@@ -134,90 +129,6 @@ void Camera::UpdatePlanes(){
 	planes_[PI_TOP   ].recompute(ltn,rtf,rtn);
 	planes_[PI_NEAR  ].recompute(ltn,rtn,rbn);
 	planes_[PI_FAR   ].recompute(lbf,rbf,ltf);
-	
-	
-	// render view frustum
-	/*
-	DebugRenderable *d = GraphicsLayer::GetInstance()->debugRenderable;
-	d->AddLine(lbn, rbn, 0x0000ff00);
-	d->AddLine(lbn, ltn, 0x0000ff00);
-	d->AddLine(rbn, rtn, 0x0000ff00);
-	d->AddLine(rtn, ltn, 0x0000ff00);
-	
-	d->AddLine(lbf, rbf, 0x00ff0000);
-	d->AddLine(lbf, ltf, 0x00ff0000);
-	d->AddLine(rbf, rtf, 0x00ff0000);
-	d->AddLine(rtf, ltf, 0x00ff0000);
-	
-	d->AddLine(lbn, lbf);
-	d->AddLine(ltn, ltf);
-	d->AddLine(rbn, rbf);
-	d->AddLine(rtn, rtf);
-
-	d->AddLine(mul1(inverseViewMatrix_, ORIGIN), lbn, 0x000000ff);
-	d->AddLine(mul1(inverseViewMatrix_, ORIGIN), ltn, 0x000000ff);
-	d->AddLine(mul1(inverseViewMatrix_, ORIGIN), rbn, 0x000000ff);
-	d->AddLine(mul1(inverseViewMatrix_, ORIGIN), rtn, 0x000000ff);
-	//*/
-	
-	
-
-	//TODO - should have happende already
-	//UpdateProjection();
-	//UpdateView();
-
-
-
-
-	/*
-	Matrix m = viewMatrix_*projectionMatrix_;
-   
-	// Left clipping plane
-	planes_[PI_LEFT].normal.x = m._14 + m._11;
-	planes_[PI_LEFT].normal.y = m._24 + m._21;
-	planes_[PI_LEFT].normal.z = m._34 + m._31;
-	planes_[PI_LEFT].distance = m._44 + m._41;
-
-	// Right clipping plane
-	planes_[PI_RIGHT].normal.x = m._14 - m._11;
-	planes_[PI_RIGHT].normal.y = m._24 - m._21;
-	planes_[PI_RIGHT].normal.z = m._34 - m._31;
-	planes_[PI_RIGHT].distance = m._44 - m._41;
-
-	// Bottom clipping plane
-	planes_[PI_BOTTOM].normal.x = m._14 + m._12;
-	planes_[PI_BOTTOM].normal.y = m._24 + m._22;
-	planes_[PI_BOTTOM].normal.z = m._34 + m._32;
-	planes_[PI_BOTTOM].distance = m._44 + m._42;
-
-	// Top clipping plane
-	planes_[PI_TOP].normal.x = m._14 - m._12;
-	planes_[PI_TOP].normal.y = m._24 - m._22;
-	planes_[PI_TOP].normal.z = m._34 - m._32;
-	planes_[PI_TOP].distance = m._44 - m._42;
-
-	// Near clipping plane
-	planes_[PI_NEAR].normal.x = m._13;
-	planes_[PI_NEAR].normal.y = m._23;
-	planes_[PI_NEAR].normal.z = m._33;
-	planes_[PI_NEAR].distance = -m._43;
-
-	// Far clipping plane
-	// planes_[PI_FAR].normal.x = m._14 - m._13;
-	// planes_[PI_FAR].normal.y = m._24 - m._23;
-	// planes_[PI_FAR].normal.z = m._34 - m._33;
-	// planes_[PI_FAR].distance = -(m._44 - m._43);
-	planes_[PI_FAR].normal.x = -planes_[PI_NEAR].normal.x;
-	planes_[PI_FAR].normal.y = -planes_[PI_NEAR].normal.y;
-	planes_[PI_FAR].normal.z = -planes_[PI_NEAR].normal.z;
-	// planes_[PI_FAR].distance = -planes_[PI_NEAR].distance-far_;
-	
-
-	for(unsigned int i=0; i<PI_NUM; i++)
-		planes_[i].normalize();
-	//static long long counter = 0;
-	//cout << "recomputed"<< counter++ << endl;
-	*/
 }
 
 const Plane& Camera::GetPlane(int planeIndex) const {

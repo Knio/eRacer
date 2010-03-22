@@ -14,13 +14,15 @@ void StringSprite::Write(const char* text, const char* family, int size, const V
 
 void StringSprite::Draw(IDirect3DDevice9* device) const{
 	//sort(strings.begin(), strings.end());
-	//GraphicsLayer::GetInstance()->SetViewport(0,0,800,600);
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
 
 	sprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE | D3DXSPRITE_OBJECTSPACE);
 	for (vector<StringRenderable>::const_iterator string = strings.begin();
 		string != strings.end(); string++) {
-			string->Draw(device);
+		assert(NULL != string->m_pFont);
+		RECT area = {string->m_uiScreenX,string->m_uiScreenY,0,0};
+		string->m_pFont->DrawText( sprite, string->m_strTextBuffer.c_str(), -1, &area, DT_NOCLIP, string->m_color);
+
 	}
 	sprite->End();
 }
