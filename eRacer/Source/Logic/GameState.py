@@ -101,7 +101,6 @@ class GameState(State):
     self.vehicleList = []
     self.stats = {}
     del self.track
-    del self.player
 
     # print '*******'
     # import gc
@@ -177,7 +176,6 @@ class GameState(State):
       self.interfaces.append(pi)
 
 
-
     self.SetupInputMapping(nPlayers)
 
        
@@ -208,15 +206,15 @@ class GameState(State):
       return [(0,0,w,h)]
     elif nPlayers==2:
       return [
-        (0,   0,  w2,  h),
-        (w2, 0,  w2,  h),
+        (0,   0,  w, h2),
+        (0,   h2, w, h2),
       ]
     elif nPlayers==4:
       return [
-        (0,   0,    w2, h2),
-        (w2, 0,    w2, h2),
-        (0,   h2,  w2, h2),
-        (w2, h2,  w2, h2),
+        (0,   0,  w2, h2),
+        (w2,  0,  w2, h2),
+        (0,   h2, w2, h2),
+        (w2,  h2, w2, h2),
       ]
       
   def SetupInputMapping(self, nPlayers):
