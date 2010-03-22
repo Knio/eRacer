@@ -1,6 +1,7 @@
 #include "FontManager.h"
 #include <cassert>
 #include <stdexcept>
+#include "GraphicsLayer.h"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ namespace Graphics {
 		m_pFont = NULL;
 	}
 
-	bool StringRenderable::operator<(const StringRenderable& s){
+	bool StringRenderable::operator<(const StringRenderable& s) const{
 		return m_pFont < s.m_pFont;
 	}
 
@@ -35,88 +36,68 @@ namespace Graphics {
 
 	const char* FontManager::CUSTOM_FONTS[1] = {"Resources\\Fonts\\Sony_Sketch_EF.ttf"};
 
+	FontManager FontManager::instance;
+
+
 	FontManager::FontManager()
 	{
-		m_pd3dDevice = NULL;
-		m_pTextSprite = NULL;
-
 		int nFontsLoaded = AddFontResource("Resources\\Fonts\\Sony_Sketch_EF.ttf");
 		cout << "Loaded "<< nFontsLoaded << " custom fonts."<< endl;
-
 	}
 
 	FontManager::~FontManager()
 	{
 	}
 
-	void FontManager::Init(LPDIRECT3DDEVICE9 device)
-	{
-		m_pd3dDevice = device;
-		D3DXCreateSprite( m_pd3dDevice, &m_pTextSprite );
-	}
-
 	void FontManager::Shutdown()
 	{
-		for(map<FontDescription, ID3DXFont*>::const_iterator it =  m_fontCacheSimple.begin(); 
-			it !=  m_fontCacheSimple.end(); ++it) {
-			it->second->Release();
-		}
-
-		m_pd3dDevice = NULL;
-		if ( NULL != m_pTextSprite )
-		{
-			m_pTextSprite->Release();
-			m_pTextSprite = NULL;
+		for(map<FontDescription, ID3DXFont*>::const_iterator mapping =  cache.begin(); 
+			mapping !=  cache.end(); mapping++) {
+			mapping->second->Release();
 		}
 	}	
 
-	void FontManager::WriteString(const char* msg, const char* fontFamily, int fontSize, const Vector3 &pos, const Vector3 &color)
+	StringRenderable FontManager::CreateStringRenderable(	const char* msg, 
+																							const char* fontFamily, 
+																							int fontSize, 
+																							const Vector3 &pos, 
+																							const Vector3 &color,
+																							ID3DXSprite* sprite)
 	{
 		FontDescription fontDesc(fontFamily, fontSize);
 		map<FontDescription,ID3DXFont*>::iterator font;
-		if ((font = m_fontCacheSimple.find(fontDesc)) == m_fontCacheSimple.end()) { //Cache Miss
+		if ((font = cache.find(fontDesc)) == cache.end()) { //Cache Miss
 
 			ID3DXFont* newFont = NULL;
-			HRESULT hr = D3DXCreateFont( m_pd3dDevice, fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
-									 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
-                                     fontFamily, &newFont );
+			HRESULT hr = D3DXCreateFont( 	GraphicsLayer::GetInstance()->GetDevice(), 
+																		fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
+									 									OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+                                    fontFamily, &newFont );
 			assert(D3DERR_INVALIDCALL != hr);
 			assert(D3DXERR_INVALIDDATA != hr);
 			
 			if(E_OUTOFMEMORY == hr){
 				cout << "Ran out of memory for custom font" << endl;
-				HRESULT hr = D3DXCreateFont( m_pd3dDevice, fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
-							 OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
-                             "Verdana", &newFont );
-				//throw runtime_error("Could not load font because we ran out of memory");
+				HRESULT hr = D3DXCreateFont( 	GraphicsLayer::GetInstance()->GetDevice(), 
+																			fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
+							 												OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+                             					"Verdana", &newFont );
 			}
 
-			font = m_fontCacheSimple.insert(make_pair(fontDesc,newFont)).first;
+			font = cache.insert(make_pair(fontDesc,newFont)).first;
 		}
 		
 
 		//Buffer sring for rendering
-		m_strList.push_back(StringRenderable(m_pTextSprite));
-		StringRenderable& s = m_strList.back();
+		StringRenderable s(sprite);
 
 		s.m_pFont 			= font->second;
 		s.m_strTextBuffer	= msg;
 		s.m_color 			= D3DXCOLOR(color.x, color.y, color.z, 1.0f);
 		s.m_uiScreenX = (unsigned int ) pos.x;
 		s.m_uiScreenY= (unsigned int) pos.y;
-	}
-
-	void FontManager::Draw()
-	{
-		sort(m_strList.begin(), m_strList.end());
-
-		m_pTextSprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE );
-		for (vector<StringRenderable>::const_iterator i = m_strList.begin();
-			i != m_strList.end(); i++) {
-				i->Draw(m_pd3dDevice);
-		}
-		m_pTextSprite->End();
 		
-		m_strList.clear();
+		return sprite;
 	}
+
 };

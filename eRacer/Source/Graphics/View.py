@@ -6,10 +6,15 @@ class View(object):
     self.viewport     = viewport    or (0, 0, game().graphics.width, game().graphics.height)
     self.camera       = camera      or Camera()
     self.renderables  = renderables or []
-    
+    self.stringSprite = cpp.StringSprite(*self.viewport)
+    self.renderables.append(self.stringSprite)
+      
   def AddRenderable(self, obj):
     self.renderables.append(obj)
     return obj
+    
+  def WriteString(self, text, family, size, pos, color=cpp.WHITE):
+    self.stringSprite.Write(text, family, size, pos, color)
 
   def Add(self, obj):
     return self.AddRenderable(obj)
@@ -22,4 +27,5 @@ class View(object):
     
     for i in self.renderables:
       i.Draw(d3d)
-    
+      
+    self.stringSprite.clear()

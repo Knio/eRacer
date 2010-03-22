@@ -14,7 +14,7 @@
 #include <d3dx9.h>
 #include <mmsystem.h>
 #include "Renderable.h"
-#include "FontManager.h"
+#include "StringSprite.h"
 #include "Camera.h"
 
 #include "DebugRenderable.h"
@@ -33,8 +33,8 @@ private:
 
 	LPDIRECT3D9						m_pD3D;				//Used to create the D3DDevice
 	IDirect3DDevice9*   	m_pd3dDevice;	//Our rendering device
-	FontManager						m_fontManager;
 	D3DPRESENT_PARAMETERS m_presentationParameters;
+	StringSprite* stringSprite;
 
 	void resetPresentationParameters();
 	void resetDevice();
@@ -59,6 +59,8 @@ public:
 	void 		SetCamera(Camera& camera);
 	Camera* GetCamera() { return camera; }
 
+	ID3DXSprite* CreateSprite(int x, int y, int w, int h);	
+	
 	void 		SetViewport(int x, int y, int w, int h);
 
 	IDirect3DDevice9* GetDevice() const { return m_pd3dDevice; }
@@ -66,10 +68,11 @@ public:
 	~GraphicsLayer();	//Destructor
 	int Init( HWND hWnd );
 
-	void WriteString(const char* msg, const char* fontName, int size, const Vector3 &pos, const RGB &color=WHITE);
 	
 	void PreRender();
 	void PostRender();
+	
+	void WriteString(const char* text, const char* family, int size, const Vector3 &pos, const Vector3 &color = WHITE);
 	
 	void Shutdown();
 	

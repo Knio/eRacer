@@ -10,7 +10,24 @@ namespace Graphics {
 
 GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
 
+
+
+ID3DXSprite* GraphicsLayer::CreateSprite(int x, int y, int w, int h){
+    float wr = w/(float)width;
+    float hr = h/(float)height;
+    Matrix m(  wr, 0,          0, 0,
+                    0,  -hr,        0, 0,
+                    0,  0,          1, 0,
+                    x,  ((float)height)+y,   0, 1);
+                        ID3DXSprite* result;
+    D3DXCreateSprite(m_pd3dDevice, &result);
+    result->SetTransform(&m);
+    return result;
+}    
+
+
 GraphicsLayer::GraphicsLayer()
+ : stringSprite(NULL)
 {
 }
 
@@ -100,8 +117,6 @@ int GraphicsLayer::Init( HWND hWnd )
         return E_FAIL;
     }
 
-    //Init the font manager
-    m_fontManager.Init(m_pd3dDevice);
 
     // Turn on the zbuffer
     assert(SUCCEEDED(m_pd3dDevice->SetRenderState( D3DRS_ZENABLE, TRUE )));
@@ -142,6 +157,8 @@ int GraphicsLayer::Init( HWND hWnd )
     
     width   = desc.Width;
     height  = desc.Height;
+    
+    stringSprite = new StringSprite(0,0,width,height);
 
     
     // create a new surface
@@ -250,14 +267,12 @@ void GraphicsLayer::PreRender(){
 
 void GraphicsLayer::PostRender(){
 
+	stringSprite->Draw(m_pd3dDevice);
+
     // draw debug
     debugRenderable->Draw(m_pd3dDevice);
     debugRenderable->Clear();
-    
-    SetViewport(0,0,width,height);
-     // draw overlay
-    m_fontManager.Draw();
-    
+        
     // do postprocessing here
     
     // copy msaasurf back to the screen
@@ -290,6 +305,12 @@ void GraphicsLayer::PostRender(){
 	}
 }
 
+void GraphicsLayer::WriteString(const char* text, const char* family, int size, const Vector3 &pos, const Vector3 &color){
+    assert(NULL != stringSprite);
+    stringSprite->Write(text, family, size, pos, color);
+}
+
+
 void GraphicsLayer::resetDevice(){
 	resetPresentationParameters();
 	HRESULT r = m_pd3dDevice->Reset(&m_presentationParameters);
@@ -310,15 +331,12 @@ void GraphicsLayer::resetDevice(){
 	}
 }
 
-
-
-void GraphicsLayer::WriteString(const char* msg, const char* fontName, int size, const Vector3 &pos, const RGB &color)
-{
-    m_fontManager.WriteString(msg, fontName, size, pos, color);
-}
-
 void GraphicsLayer::Shutdown()
 {
+    if(NULL != stringSprite)
+        delete stringSprite;
+    stringSprite = NULL;
+    
     if( NULL != m_pEffect)
         m_pEffect->Release();
     m_pEffect = NULL;
@@ -332,7 +350,6 @@ void GraphicsLayer::Shutdown()
         m_pD3D->Release();
     m_pD3D = NULL;
 
-    m_fontManager.Shutdown();
 }
 
 }

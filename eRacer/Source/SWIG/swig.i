@@ -38,6 +38,7 @@
 #include "..\Graphics\SkyBox.h"
 #include "..\Graphics\CoordinateCross.h"
 #include "..\Graphics\QuadNode.h"
+#include "..\Graphics\StringSprite.h"
 
 
 // Sound
@@ -149,6 +150,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 %ignore debugRenderable;
 %include "..\Graphics\GraphicsLayer.h"
 %include "..\Graphics\Window.h"
+%include "..\Graphics\StringSprite.h"
 
 %ignore Star;
 %include "..\Graphics\Starfield.h"

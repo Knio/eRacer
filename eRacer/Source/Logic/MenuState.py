@@ -50,12 +50,12 @@ class MenuState(State):
     y = 240
     for i,m in enumerate(self.MENU):
       name = m[0]
-      game().graphics.graphics.WriteString(
+      self.view.WriteString(
         name, "Verdana", 32, Point3(100,y,0), i==self.selected and RED or WHITE
       ) 
       if len(m)>1:
         options = m[1]
-        game().graphics.graphics.WriteString(
+        self.view.WriteString(
           options[self.subSelected[i]], "Verdana", 32, Point3(400,y,0), WHITE
         ) 
         
@@ -124,7 +124,7 @@ class MainMenuState(MenuState):
   def Tick(self, time):
     p = Point3(500,350,0)
     for i in ['Don Ha', 'John Stuart', 'Michael Blackadar', 'Tom Flanagan', 'Ole Rehmsen']:
-      game().graphics.graphics.WriteString(
+      self.view.WriteString(
         i, "Verdana", 28, p
       )
       p = p + Point3(0, 30, 0)
@@ -202,7 +202,7 @@ class PauseMenuState(MenuState):
       game().PopState()
           
   def Tick(self, time):
-    game().graphics.graphics.WriteString(
+    self.view.WriteString(
       "PAUSED",
       "Verdana", 40, Point3(300,100,0)
     )

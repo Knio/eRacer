@@ -33,7 +33,7 @@ public:
 	/**
 	 * @brief Comparison operator for sorting - sorts by the address of the font used
 	 */
-	bool operator<(const StringRenderable& s);
+	bool operator<(const StringRenderable& s) const;
 
 	virtual void Draw(IDirect3DDevice9*) const;
 };
@@ -42,25 +42,24 @@ public:
 
 class FontManager
 {
-private:
-	map<FontDescription, ID3DXFont*> m_fontCacheSimple;
-	vector<StringRenderable> m_strList;	//List of strings to render
-
-	LPDIRECT3DDEVICE9   m_pd3dDevice;
-	ID3DXSprite*        m_pTextSprite;
-
 public:
 	const static char* CUSTOM_FONTS[1];
+
+	static FontManager instance;
 
 	FontManager();
 	~FontManager();
 
-	void Init(LPDIRECT3DDEVICE9 device);
-
-	void WriteString(const char* msg, const char* fontName, int size, const Vector3 &pos, const Vector3 &color);
-
-	void Draw();
+	StringRenderable CreateStringRenderable(	const char* msg, 
+																	const char* fontFamily, 
+																	int fontSize, 
+																	const Vector3 &pos, 
+																	const Vector3 &color,
+																	ID3DXSprite* sprite);
 	void Shutdown();
+	
+private:
+	map<FontDescription, ID3DXFont*> cache;
 };
 
 };

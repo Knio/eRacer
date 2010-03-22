@@ -58,7 +58,7 @@ class PlayerInterface(object):
     
   def Tick(self, time):
     #Track Place HUD
-    game().graphics.graphics.WriteString(self.ordinal(self.player.place), "Verdana", 60, Point3(20, 20,0))
+    self.view.WriteString(self.ordinal(self.player.place), "Verdana", 60, Point3(20, 20,0))
     
   
     for vehicle in self.state.vehicleList:
@@ -80,14 +80,10 @@ class PlayerInterface(object):
     if self.player.Backwards == True and self.player.trackpos > self.player.lasttrackpos and playerdirection > 0:
        self.player.Backwards = False
     if self.player.Backwards == True:
-       game().graphics.graphics.WriteString( "WRONG WAY", "Verdana", 50, Point3(300,200,0))
+       self.view.WriteString( "WRONG WAY", "Verdana", 50, Point3(300,200,0))
 
 
                                   
-    # playerLaps = max(1, min(self.player.lapcount, self.state.laps))
-    # game().graphics.graphics.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
-    # game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
-    # game().graphics.graphics.WriteString("%d" % (self.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
 
     # if self.player.lapcount:
     #   l = list(self.stats.get(self.player,[0.]))
@@ -100,9 +96,9 @@ class PlayerInterface(object):
     if self.player.lapcount:
       playerLaps = min(self.player.lapcount, self.state.laps)
       
-      game().graphics.graphics.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
-      game().graphics.graphics.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
-      game().graphics.graphics.WriteString("%d" % (self.state.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
+      self.view.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
+      self.view.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
+      self.view.WriteString("%d" % (self.state.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
     
       l = list(self.state.stats.get(self.player,[0.]))
       l.append(game().time.get_seconds())
@@ -110,8 +106,8 @@ class PlayerInterface(object):
       y = 100
       for i,t in enumerate(l):
         if not i or i>self.state.laps: continue
-        game().graphics.graphics.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
-        game().graphics.graphics.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
+        self.view.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
+        self.view.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
         y += 15    
 
   def CameraChangedEvent(self):
