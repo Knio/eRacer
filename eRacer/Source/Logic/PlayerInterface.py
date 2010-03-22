@@ -31,10 +31,9 @@ class PlayerInterface(object):
       self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", self.player==vehicle and "bluemarker.png" or "redmarker.png", 150-8, 50-12, 16, 16))
 
     for view in self.views:
-      state.Add(Starfield(1024, 1000.0, view.camera))
-      state.Add(Starfield(1024, 100.0,  view.camera))
-      state.Add(Starfield(1024, 20.0,   view.camera))
-      
+      view.AddRenderable(state.Add(Starfield(1024, 1000.0, view.camera)))
+      view.AddRenderable(state.Add(Starfield(4096, 100.0,  view.camera)))
+      view.AddRenderable(state.Add(Starfield( 512, 20.0,   view.camera)))
     
   def get_view(self):
     return self.views[self.viewIndex]
