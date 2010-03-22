@@ -259,7 +259,7 @@ class GameState(State):
       self.lastMeteorTime += time.game_delta
       if self.lastMeteorTime > CONSTS.AIMED_METEOR_INTERVAL*time.RESOLUTION:
         self.lastMeteorTime = 0
-        self.meteorManager.spawnTargeted(self.player)
+        self.meteorManager.spawnTargeted(random.choice(self.vehicleList))
     
     self.meteorManager.Tick(time)
     
