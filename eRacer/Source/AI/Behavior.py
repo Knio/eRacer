@@ -45,7 +45,7 @@ class AIBehavior(Behavior):
   def Tick(self,time):    
     pos = self.parent.physics.GetPosition()
     nowFrame  = self.line.GetFrame(self.parent.trackpos)
-    frame1  = self.line.GetFrame(self.parent.trackpos + 20.0)
+    frame1 = self.line.GetFrame(self.parent.trackpos + 20.0)
     frame2 = self.line.GetFrame(self.parent.trackpos + 50.0)
     frame3 = self.line.GetFrame(self.parent.trackpos + 100.0)
     tx    = self.parent.physics.GetTransform()

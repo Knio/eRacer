@@ -42,7 +42,6 @@ class Main(Game):
         self.test = cpp.TestModule();
     
     self.event.Register(self.QuitEvent)
-    # self.PushState(MainMenuState())    
     
   def Init(self):
     Game.Init(self)

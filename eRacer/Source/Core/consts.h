@@ -21,11 +21,16 @@ struct Constants
 	float	PHYS_SKIN_WIDTH;
 	
 	int		NUM_METEORS;
+	float AIMED_METEOR_INTERVAL;
+	
+	
 	int 	TRACK_DEBUG;
 	
 	// Vehicle
 	int		CAR_DEBUG;
+	int 	CAR_CPP;
 	
+	float CAR_DISPLACEMENT;
 	float	CAR_MASS;
 	float CAR_GRAVITY;
 	

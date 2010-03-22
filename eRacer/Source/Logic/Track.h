@@ -1,3 +1,5 @@
+#ifndef _TRACK_H
+#define _TRACK_H
 #include "Math.h"
 #include <vector>
 #include <iostream>
@@ -75,3 +77,5 @@ inline void Track::Add(const Frame &f)
 }
 
 }
+
+#endif

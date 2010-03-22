@@ -17,6 +17,8 @@ class Graphics(Module):
     game().hinst.disown()
     game().window = self.window
     
+    
+    
     self.graphics.Init(game().hwnd)
     
     self.d3d = self.graphics.GetDevice()
@@ -29,7 +31,6 @@ class Graphics(Module):
 
   def Init(self):
     Module.Init(self)
-    print "init graphics"
     self.width  = self.graphics.width
     self.height = self.graphics.height
 

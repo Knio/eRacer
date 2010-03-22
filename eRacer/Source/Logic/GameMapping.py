@@ -68,7 +68,7 @@ class KeyboardDebugMapping(VehicleMapping):
     elif key == KEY.DOWN:  return E.CameraAccelerateEvent (+1.0)
     elif key == KEY.LEFT:  return E.CameraStrafeEvent     (+1.0)
     elif key == KEY.RIGHT: return E.CameraStrafeEvent     (-1.0)
-    
+        
     elif key == KEY.TAB:  
       if CONSTS.CAR_DEBUG: 
         print "DebugMode is On"

@@ -99,8 +99,8 @@ class GameState(State):
       self.Remove(i)
         
     self.vehicleList = []
+    self.stats = {}
     del self.track
-    del self.player
 
     # print '*******'
     # import gc
@@ -113,7 +113,7 @@ class GameState(State):
     # if self in gc.garbage:
     #   print 'AAAAAAAAHHHHHHH'
     
-  
+ 
   def AddVehicle(self, isAI):
       n = len(self.vehicleList)    
       x = (n % 3 - 1)*15
@@ -154,7 +154,6 @@ class GameState(State):
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
-
     startFrame = self.track.GetFrame(0.0)
     
     # TODO: this should load "StartLine.x" but it is not appearing properly
@@ -166,18 +165,15 @@ class GameState(State):
     for i in range(nAIs):
       self.AddVehicle(True)
 
-
     self.interfaces = []
-
     viewports = self.SetupViewports(nPlayers)
-      
+    
     for viewport in viewports:
       player = self.AddVehicle(False)
       pi = PlayerInterface(self, player, viewport)
       pi.AddRenderable(self.scene)
       pi.AddRenderable(self.skybox)
       self.interfaces.append(pi)
-
 
 
     self.SetupInputMapping(nPlayers)
@@ -210,15 +206,15 @@ class GameState(State):
       return [(0,0,w,h)]
     elif nPlayers==2:
       return [
-        (0,   0,  w2,  h),
-        (w2, 0,  w2,  h),
+        (0,   0,  w, h2),
+        (0,   h2, w, h2),
       ]
     elif nPlayers==4:
       return [
-        (0,   0,    w2, h2),
-        (w2, 0,    w2, h2),
-        (0,   h2,  w2, h2),
-        (w2, h2,  w2, h2),
+        (0,   0,  w2, h2),
+        (w2,  0,  w2, h2),
+        (0,   h2, w2, h2),
+        (w2,  h2, w2, h2),
       ]
       
   def SetupInputMapping(self, nPlayers):
@@ -234,9 +230,12 @@ class GameState(State):
           Keyboard1Mapping(self.interfaces[0]),
           Keyboard2Mapping(self.interfaces[1]),
                                  ])
+    if nPlayers == 4:
+      self.mapping = GameMapping([
+          Keyboard1Mapping(self.interfaces[0]),
+          Keyboard2Mapping(self.interfaces[1]),
+                                 ])
   
-  AIMED_METEOR_INTERVAL = 2.
-    
   def Tick(self, time):
     
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
@@ -259,18 +258,15 @@ class GameState(State):
       game().graphics.views.append(interface.hud)
 
     
-    # if not self.gameOver:
-    #   self.lastMeteorTime += time.game_delta
-    #   if self.lastMeteorTime > self.AIMED_METEOR_INTERVAL*time.RESOLUTION:
-    #     self.lastMeteorTime = 0
-    #     self.meteorManager.spawnTargeted(self.player)
+    if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL:
+      self.lastMeteorTime += time.game_delta
+      if self.lastMeteorTime > CONSTS.AIMED_METEOR_INTERVAL*time.RESOLUTION:
+        self.lastMeteorTime = 0
+        self.meteorManager.spawnTargeted(self.player)
     
     self.meteorManager.Tick(time)
     
     State.Tick(self, time)
-    
-  
-
       
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
@@ -281,10 +277,6 @@ class GameState(State):
     #     game().PushState(GameEndState(self.stats))
         
     #   vehicle.Brake(1)
-        
-
-      
-
     
   def ReloadConstsEvent(self):
     game().config.read()
