@@ -10,10 +10,7 @@ class Starfield(Entity, cpp.Starfield):
     cpp.Starfield.__init__(self, n, size)
     
   def Tick(self, time):
-    Entity.Tick(self, time)
-    
-    print self.camera.GetPosition()
-    
+    Entity.Tick(self, time)       
     self.Update(self.camera.GetViewMatrix(), self.camera.GetPosition())
 
 
