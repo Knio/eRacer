@@ -117,12 +117,12 @@ class GameState(State):
   def AddVehicle(self, isAI):
       n = len(self.vehicleList)    
       x = (n % 3 - 1)*15
-      z = (3-(n / 3))*-15
+      z = ((n / 3))*-15
       
       vehicle    = self.Add(Vehicle(
         isAI and random.choice(self.AI_NAMES) or "Player1",    
         self.track, 
-        Matrix(Point3(x, 3, z)) * self.startOrientation, 
+        Matrix(Point3(x, 7, z)) * self.startOrientation, 
         (not isAI) and 1 or self.AI_MODEL_NUMS.pop()
       ))
       self.Add(Shadow(vehicle))
