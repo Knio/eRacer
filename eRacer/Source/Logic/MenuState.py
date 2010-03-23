@@ -183,6 +183,7 @@ class PauseMenuState(MenuState):
     MenuState.__init__(self)
     
   def Activate(self):
+    print "activate pause!!!!"
     game().simspeed = 0.
     MenuState.Activate(self)
     

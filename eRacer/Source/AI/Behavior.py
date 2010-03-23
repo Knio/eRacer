@@ -61,11 +61,11 @@ class AIBehavior(Behavior):
     if distFromCentre > 0:
      # print "right"
       if distFromCentre > self.line.maxX:
-          print "offtrack"
+        pass
     else:
       #print "left"
       if distFromCentre < self.line.minX:
-        print "offtrack"
+        pass
     
     if self.arrow: 
       self.arrow.transform = Matrix(frame2.position)
