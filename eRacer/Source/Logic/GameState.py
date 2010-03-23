@@ -76,6 +76,7 @@ class GameState(State):
     self.laps   = 2 # TODO CONST
     self.stats  = {}
     self.gameOver = False
+    self.nPlayersRacing = nPlayers
 
     
     self.load(track,nPlayers,nAIs)
@@ -125,6 +126,7 @@ class GameState(State):
         Matrix(Point3(x, 7, z)) * self.startOrientation, 
         (not isAI) and 1 or self.AI_MODEL_NUMS.pop()
       ))
+      vehicle.isAI = isAI
       self.Add(Shadow(vehicle))
       self.vehicleList.append(vehicle)
       if isAI:
@@ -273,12 +275,14 @@ class GameState(State):
   def LapEvent(self, vehicle, lap):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
     
-    # if lap == self.laps+1:
-    #   if vehicle == self.player:
-    #     self.gameOver = True
-    #     game().PushState(GameEndState(self.stats))
+    if lap == self.laps+1:
+      if not vehicle.isAI:
+        self.nPlayersRacing-=1
+        if self.nPlayersRacing == 0:
+          self.gameOver = True
+          game().PushState(GameEndState(self.stats))
         
-    #   vehicle.Brake(1)
+      vehicle.Brake(1)
     
   def ReloadConstsEvent(self):
     game().config.read()
