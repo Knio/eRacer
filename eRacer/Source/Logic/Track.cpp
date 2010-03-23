@@ -191,7 +191,7 @@ ID3DXMesh* Track::CreateMesh(const vector<TrackVertex>& profile)
     if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ax, D3DCOLOR_COLORVALUE(0,1,0,1));
     if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ay, D3DCOLOR_COLORVALUE(1,0,0,1));
     if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, az, D3DCOLOR_COLORVALUE(0,0,1,1));
-    
+
     for (int j=0;j<D;j++)  
     {
       TrackVertex& v = meshverts[i*D + j];
@@ -199,7 +199,13 @@ ID3DXMesh* Track::CreateMesh(const vector<TrackVertex>& profile)
       v.normal   = mul0(tx, profile[j].normal);
       v.tu = profile[j].tu;
       v.tv = profile[j].tv * frame.dist;
-      
+	  if (profile[j].position.x > maxX){
+		  maxX = profile[j].position.x;
+	  }
+	  if (profile[j].position.x < minX){
+		  minX = profile[j].position.x;
+	  }
+
       // Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(v.position, v.normal);
       
       
@@ -249,7 +255,7 @@ ID3DXMesh* Track::CreateMesh(const vector<TrackVertex>& profile)
       meshidx[((i*(D-1) + j)*2 + 1)*3 + 1] = ((i+1)%N)*D + ((j + 1)%D);
       meshidx[((i*(D-1) + j)*2 + 1)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
       
-    }
+	}
   }
    
   assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
@@ -267,5 +273,18 @@ ID3DXMesh* Track::CreateMesh(const vector<TrackVertex>& profile)
   return mesh;
 }
 
-
+float Track::GetOffsetFromCentre(const Point3& pos){
+	Frame frame = GetFrame(pos);
+	Vector3 left = cross(frame.fw, frame.up);
+	Vector3 vProj = project(pos-frame.position, left);
+	float cosTheta = dot(vProj, left) / length(vProj);
+	if(cosTheta > 0.999 && cosTheta < 1.001){
+		// to the left
+		return -length(vProj);
+	}
+	else{
+		//to the right
+		return length(vProj);
+	}
+}
 }

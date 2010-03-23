@@ -53,7 +53,8 @@ class Track
 public:
   Track()
   {
-    
+   minX = 1;
+   maxX = -1;
   }
   
   float GetTotalDist() { return dist; }
@@ -69,6 +70,12 @@ public:
   void Subdivide(int NSUBDIV=5);
   
   ID3DXMesh* CreateMesh(const vector<TrackVertex>& profile);
+  /**
+  * returns distance from centre of track (where the x-coordinate of the profile is 0)
+  * positive is on the right side of the track when looking down the positive z-axis
+  */
+  float GetOffsetFromCentre(const Point3& pos);
+  float minX, maxX; //the width of the track
 };
 
 inline void Track::Add(const Frame &f)

@@ -54,47 +54,45 @@ class AIBehavior(Behavior):
     #wantedVec = normalized(frame1.fw * 2.0 + frame2.fw * 0.3 + frame3.fw * 0.2) # vector created by track
     cur = nowFrame.position
     wantedVec = normalized((frame1.position-pos) * 1.0 +  (frame2.position-pos) * 1.0 + (frame3.position-pos) * 1.0)
+    
+    #see if 5 meters ahead of me is on the track)
+    distFromCentre = self.line.GetOffsetFromCentre(pos + bodyForward * 5.0)
+    #print distFromCentre
+    if distFromCentre > 0:
+     # print "right"
+      if distFromCentre > self.line.maxX:
+          print "offtrack"
+    else:
+      #print "left"
+      if distFromCentre < self.line.minX:
+        print "offtrack"
+    
     if self.arrow: 
       self.arrow.transform = Matrix(frame2.position)
-    # game().graphics.graphics.WriteString(
-    #   "cur waypoint: " + str(cur),
-    #   "Verdana", 12, Point3(0,0,0)
-    # )
-    # game().graphics.graphics.WriteString(
-    #   "ai speed: " + str(self.parent.physics.GetSpeed()),
-    #   "Verdana", 12, Point3(0,10,0)
-    # )
-    # game().graphics.graphics.WriteString(
-    #   "state: " + str(self.curState),
-    #   "Verdana", 12, Point3(0,20,0)
-    # )
     
-
     if self.curState == AIState.DRIVE:
-      #print toWaypoint.x, toWaypoint.y, toWaypoint.z
       turnProj = project(wantedVec, bodyRight)
-      
-      if length(turnProj) < 0.001:
-        self.parent.Turn(0)
-      else:
-        turnScale = 5.0
-        turnSize = min(1.0, length(turnProj) * turnScale)
-        costheta = dot(turnProj, bodyRight) / length(turnProj)
+     
+      turnScale = 5.0
+      turnSize = min(1.0, length(turnProj) * turnScale)
+      costheta = dot(turnProj, bodyRight) / length(turnProj)
    
-        if 0.999 < costheta < 1.001:#right turn
-          self.parent.Turn(turnSize)
-        else:
-          self.parent.Turn(-turnSize)
-        #basic boost code: if we don't need to turn off boost until the turn becomes large
-        #print turnSize
-        if turnSize < 0.5 and self.parent.boostFuel > 2.5:
-          #print "boost"
-          self.parent.Boost(True)
-        if turnSize > 0.8:
-          #print "boost off"
-          self.parent.Boost(False)
+      if 0.999 < costheta < 1.001:#right turn
+        self.parent.Turn(turnSize)
+      else:
+        self.parent.Turn(-turnSize)
+      #basic boost code: we don't need to turn off boost until the turn becomes large
+      #print turnSize
+      if turnSize < 0.5 and self.parent.boostFuel > 2.5:
+        #print "boost"
+        self.parent.Boost(False)
+      if turnSize > 0.8:
+        #print "boost off"
+        self.parent.Boost(False)
         
       self.parent.Accelerate(1.0)
+      if length(turnProj) < 0.001:
+        self.parent.Turn(0)
 
       #now change state if needed
       if self.parent.physics.GetSpeed() < 2.0 and self.objectInFront(1.0, tx):
