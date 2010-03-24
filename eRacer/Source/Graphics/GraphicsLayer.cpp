@@ -274,7 +274,7 @@ void GraphicsLayer::PreRender(){
 void GraphicsLayer::PostRender(){
 
 	stringSprite->Draw(m_pd3dDevice);
-
+    stringSprite->Clear();
     // draw debug
     debugRenderable->Draw(m_pd3dDevice);
     debugRenderable->Clear();
