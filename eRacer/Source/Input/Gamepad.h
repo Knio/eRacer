@@ -57,6 +57,8 @@ public:
 	static const unsigned int DEAD_RADIUS;
 
 	IDirectInput8* m_lpdi;
+	int m_padNum;
+	int m_lastPadFound;
 
 	Gamepad();
 	virtual ~Gamepad();
@@ -69,6 +71,7 @@ public:
 	 * 			a pointer to the DirectInput object
 	 */
 	void Init(	HWND hWnd, IDirectInput8* directInput);
+	void Init(	HWND hWnd, IDirectInput8* directInput, int padnum);
 
 	/**
 	 * @brief Call Update every frame to poll the device

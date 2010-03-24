@@ -17,7 +17,8 @@ namespace Input{
 Gamepad::Gamepad() 
 : Device()
 {
-
+	m_padNum = 0;
+	m_lastPadFound = 0;
 }
 
 Gamepad::~Gamepad() { 
@@ -36,7 +37,11 @@ BOOL CALLBACK enumCallback(const DIDEVICEINSTANCE* instance, VOID* context)
 	if (FAILED(hr)) { 
 		return DIENUM_CONTINUE;
 	}
-	//Take the first gamepad we find
+	else if (mypad->m_lastPadFound >= mypad->m_padNum) { //Take pads in order
+		mypad->m_lastPadFound++;
+		return DIENUM_CONTINUE;
+	}
+
 	return DIENUM_STOP;
 }
 
@@ -91,6 +96,12 @@ void Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 	flipBuffers();
 	initialized_=true;
 
+}
+
+void Gamepad::Init(HWND hWnd, IDirectInput8* directInput, int padNum)
+{
+	m_padNum = padNum;
+	Init(hWnd, directInput);
 }
 
 void Gamepad::Update(void)
