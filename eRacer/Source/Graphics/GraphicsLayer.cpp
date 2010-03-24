@@ -255,6 +255,10 @@ void GraphicsLayer::SetViewport(int x, int y, int w, int h)
     
     m_pd3dDevice->SetViewport(&vp);
 }
+void GraphicsLayer::ResetViewport(){
+    SetViewport(0,0,width,height);
+}
+
 
 void GraphicsLayer::PreRender(){
     

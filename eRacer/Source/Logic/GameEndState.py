@@ -18,7 +18,7 @@ class GameEndState(State):
     
     game().graphics.graphics.WriteString(
       "GAME OVER",
-      "Verdana", 40, Point3(300,100,0)
+      "Sony Sketch EF", 40, Point3(300,100,0)
     )
 
     le = 0

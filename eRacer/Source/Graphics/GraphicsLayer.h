@@ -62,6 +62,7 @@ public:
 	ID3DXSprite* CreateSprite(int x, int y, int w);	
 	
 	void 		SetViewport(int x, int y, int w, int h);
+	void ResetViewport();
 
 	IDirect3DDevice9* GetDevice() const { return m_pd3dDevice; }
 	
