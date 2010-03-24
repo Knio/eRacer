@@ -20,6 +20,15 @@ class Event(cpp.Event):
       import traceback
       traceback.print_exc()
       
+  def UnRegister(self, obj, event=None):
+    if callable(obj):
+      event = obj.__name__
+      func = obj
+    else:
+      func = getattr(obj, event)
+    self.listeners[event].remove(obj)
+    
+    
 
   def __getattribute__(self, attr):
     if attr.endswith('Event'):

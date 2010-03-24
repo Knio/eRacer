@@ -10,9 +10,11 @@ class MeteorManager(object):
   def __init__(self, state):
     self.state = state
     self.meteors = []
+    
     game().event.Register(self.MeteorMeteorCollisionEvent)
     game().event.Register(self.MeteorCarCollisionEvent)
     game().event.Register(self.MeteorTrackCollisionEvent)
+    
 
     self.meteorfx = cpp.SoundFx();
     self.meteorfx.isLooping  = False
@@ -89,7 +91,9 @@ class MeteorManager(object):
   def Release(self):
     self.meteors = []
     self.state = None
-
+    game().event.UnRegister(self.MeteorMeteorCollisionEvent)
+    game().event.UnRegister(self.MeteorCarCollisionEvent)
+    game().event.UnRegister(self.MeteorTrackCollisionEvent)
 
 class Meteor(Model):
   DENSITY   = 200.
