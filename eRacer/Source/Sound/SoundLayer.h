@@ -32,6 +32,7 @@ namespace Sound {
 typedef map<string, FSOUND_SAMPLE*> FilenameCache;
 typedef pair<string, int> SoundDescription;
 
+class SoundLayer;
 
 class SoundFx 
 {
@@ -69,12 +70,8 @@ public:
 	  maxDist = 1000000000.0f;
 	  minDist = 50.0f;
    }
-   ~SoundFx()
-   {
-		if (NULL!= soundsample)
-			FSOUND_Sample_Free(soundsample); 
-
-   }
+   ~SoundFx();
+   
 
 };
 

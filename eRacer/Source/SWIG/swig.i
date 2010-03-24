@@ -75,6 +75,18 @@ These are the classes that get exposed to Python
 If a class doesn't need to be exported to Python, it can be left out.
 */
 
+// Exception handling test. Currently only going to put director classes here
+%include "exception.i"
+
+%exception {
+  try {
+    $action
+  } catch (Swig::DirectorException) { 
+    SWIG_fail;
+  } catch(...) {
+    SWIG_exception(SWIG_RuntimeError,"Exception calling $fulldecl");
+  }
+}
 
 // SWIG *******************************
 %include "std_string.i"
@@ -93,18 +105,8 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Game\State.h"
 
 
-// Exception handling test. Currently only going to put director classes here
-%include "exception.i"
 
-%exception {
-  try {
-    $action
-  } catch (Swig::DirectorException) { 
-    SWIG_fail;
-  } catch(...) {
-    SWIG_exception(SWIG_RuntimeError,"Exception calling $fulldecl");
-  }
-}
+// exceptions go here
 
 %feature("director:except") {
     if ($error != NULL) {
@@ -128,7 +130,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 %template(VectorTexture) std::vector<IDirect3DTexture9*>; 
 %include "..\IO\IO.h"
 
-%exception;
+// %exception;
 
 
 // Logic
