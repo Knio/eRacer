@@ -112,8 +112,10 @@ class Vehicle(Model):
   
   def Tick(self, time):
     
-    # if not time.game_delta:
-    #   return
+    if not time.game_delta:
+      self.sound.isPaused = True
+      game().sound.sound.UpdateSoundFx(self.sound)
+      return
     
     phys  = self.physics
     tx    = phys.GetTransform()
