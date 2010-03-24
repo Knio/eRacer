@@ -7,6 +7,19 @@ SoundLayer* SoundLayer::m_pGlobalSoundLayer = NULL;
 const string SoundLayer::SOUND_FOLDER("Resources/Sounds/");
 
 
+SoundFx::~SoundFx()
+   {
+	   //isLooping = false;
+	   //SoundLayer::GetInstance()->UpdateSoundFx(this);
+		//*	
+	   if (NULL!= soundsample) // check if FMOD is still alive first
+		{
+			FSOUND_Sample_Free(soundsample); 
+			soundsample = NULL;
+		}//*/
+   }
+
+
 SoundLayer::SoundLayer()
 {
 }
@@ -146,11 +159,9 @@ int SoundLayer::Update()
 
 int SoundLayer::Shutdown()
 {
-	//Clear the Cache
-    for( FilenameCache::const_iterator it = m_SoundCache2D.begin(); it != m_SoundCache2D.end(); ++it)
-		FSOUND_Sample_Free(it->second);
-
-    FSOUND_Close();
+    
+	// FSOUND_Close(); // causes crash in SoundFx dtor
+	m_sou
 	return 0;
 }
 

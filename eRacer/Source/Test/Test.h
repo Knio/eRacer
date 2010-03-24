@@ -6,6 +6,8 @@
 #include "Game/Game.h"
 #include "Graphics/GraphicsLayer.h"
 
+
+
 class TestModule : public Module, public Listener
 {
 public:
@@ -44,10 +46,11 @@ public:
 	void Start()
 	{
 		// main loop is about to start!
-		Sound::SoundFx sound;
-		sound.isPaused 	= FALSE;
-		sound.is3D 			= FALSE;
-		Sound::Sound()->LoadSoundFx("EngineSound.wav", &sound);
+		
+		// Sound::SoundFx sound;
+		// sound.isPaused 	= FALSE;
+		// sound.is3D 			= FALSE;
+		// Sound::Sound()->LoadSoundFx("EngineSound.wav", &sound);
 		
 	}
 	void Tick(Time& t)
