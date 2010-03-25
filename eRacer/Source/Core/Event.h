@@ -107,15 +107,14 @@ public:
 	DEFINE_EVENT(MouseMovedEvent, long relativeX, long relativeY)
 	DEFINE_EVENT(MouseWheelEvent, long relativeWheel)
 
-	DEFINE_EVENT(GamepadButtonPressedEvent,  int gamepadButton)
-	DEFINE_EVENT(GamepadButtonReleasedEvent, int gamepadButton)
-	DEFINE_EVENT(GamepadStick1AbsoluteEvent, long x, long y)
-	DEFINE_EVENT(GamepadStick2AbsoluteEvent, long x, long y)
-	DEFINE_EVENT(GamepadStick1RelativeEvent, long x, long y)
-	DEFINE_EVENT(GamepadStick2RelativeEvent, long x, long y)
-
-	DEFINE_EVENT(GamepadTriggerAbsoluteEvent, long z)
-	DEFINE_EVENT(GamepadTriggerRelativeEvent, long z)
+	DEFINE_EVENT(GamepadButtonPressedEvent, int gamepadId, int gamepadButton)
+	DEFINE_EVENT(GamepadButtonReleasedEvent, int gamepadId, int gamepadButton)
+	DEFINE_EVENT(GamepadStick1AbsoluteEvent, int gamepadId, long x, long y)
+	DEFINE_EVENT(GamepadStick2AbsoluteEvent, int gamepadId, long x, long y)
+	DEFINE_EVENT(GamepadStick1RelativeEvent, int gamepadId, long x, long y)
+	DEFINE_EVENT(GamepadStick2RelativeEvent, int gamepadId, long x, long y)
+	DEFINE_EVENT(GamepadTriggerAbsoluteEvent, int gamepadId, long z)
+	DEFINE_EVENT(GamepadTriggerRelativeEvent, int gamepadId, long z)
 
 
 	DEFINE_EVENT(ReloadConstsEvent)

@@ -14,10 +14,10 @@ namespace Input{
 	const unsigned int Gamepad::DEAD_RADIUS = 150;
 
 
-Gamepad::Gamepad() 
+Gamepad::Gamepad(int padNum) 
 : Device()
 {
-	m_padNum = 0;
+	m_padNum = padNum;
 	m_lastPadFound = 0;
 }
 
@@ -77,10 +77,8 @@ void Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 	assert(SUCCEEDED(m_lpdi->EnumDevices(DI8DEVCLASS_GAMECTRL, enumCallback, this, DIEDFL_ATTACHEDONLY)));
 
 	// Make sure we got a device
-	//TODO for some reason, this always finds a gamepad - even if there is none.
 	if (m_pDevice == NULL)
 		throw runtime_error("Could find any gamepads!");
-
 
 	assert(SUCCEEDED(m_pDevice->SetDataFormat(&c_dfDIJoystick2)));
 
@@ -95,13 +93,6 @@ void Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 	memset(&m_States,0,2*sizeof(DIJOYSTATE2));
 	flipBuffers();
 	initialized_=true;
-
-}
-
-void Gamepad::Init(HWND hWnd, IDirectInput8* directInput, int padNum)
-{
-	m_padNum = padNum;
-	Init(hWnd, directInput);
 }
 
 void Gamepad::Update(void)
@@ -134,9 +125,9 @@ void Gamepad::Update(void)
 	for(unsigned int i=0; i<N_GAMEPAD_BUTTONS; i++)
 	{
 		if (GamepadUp(currentState().rgbButtons, i) && GamepadDown(oldState().rgbButtons, i))
-			EVENT(GamepadButtonReleasedEvent(i));
+			EVENT(GamepadButtonReleasedEvent(m_padNum,i));
 		else if (GamepadDown(currentState().rgbButtons, i) && GamepadUp(oldState().rgbButtons, i))
-			EVENT(GamepadButtonPressedEvent(i));
+			EVENT(GamepadButtonPressedEvent(m_padNum,i));
 	}
 	
 
@@ -151,20 +142,20 @@ void Gamepad::Update(void)
 		currentState().lRy = 0;
 	
 	if(hasStick1Changed()){
-		EVENT(GamepadStick1AbsoluteEvent(currentState().lX,currentState().lY));
-		EVENT(GamepadStick1RelativeEvent(oldState().lX-currentState().lX,
+		EVENT(GamepadStick1AbsoluteEvent(m_padNum,currentState().lX,currentState().lY));
+		EVENT(GamepadStick1RelativeEvent(m_padNum,oldState().lX-currentState().lX,
 											oldState().lY-currentState().lY));
 	}
 
 	if(hasStick2Changed()){
-		EVENT(GamepadStick2AbsoluteEvent(currentState().lRx, currentState().lRy));
-		EVENT(GamepadStick2RelativeEvent(oldState().lRx-currentState().lRx,
+		EVENT(GamepadStick2AbsoluteEvent(m_padNum,currentState().lRx, currentState().lRy));
+		EVENT(GamepadStick2RelativeEvent(m_padNum,oldState().lRx-currentState().lRx,
 										 oldState().lRy-currentState().lRy));
 	}
 
 	if(hasTriggerChanged()){
-		EVENT(GamepadTriggerAbsoluteEvent(currentState().lZ));
-		EVENT(GamepadTriggerRelativeEvent(oldState().lZ-currentState().lZ));	
+		EVENT(GamepadTriggerAbsoluteEvent(m_padNum,currentState().lZ));
+		EVENT(GamepadTriggerRelativeEvent(m_padNum,oldState().lZ-currentState().lZ));	
 	}
 
 	flipBuffers();

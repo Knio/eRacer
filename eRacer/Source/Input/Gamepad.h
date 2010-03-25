@@ -53,14 +53,18 @@ private:
 	const DIJOYSTATE2& currentState() const { return m_States[m_BufferFlip]; }
 	const DIJOYSTATE2& oldState() const { return m_States[!m_BufferFlip]; }
 
-public:
-	static const unsigned int DEAD_RADIUS;
 
-	IDirectInput8* m_lpdi;
+
+public:
 	int m_padNum;
 	int m_lastPadFound;
 
-	Gamepad();
+
+	static const unsigned int DEAD_RADIUS;
+
+	IDirectInput8* m_lpdi;
+
+	Gamepad(int padnum=0);
 	virtual ~Gamepad();
 
 	/**
@@ -71,7 +75,6 @@ public:
 	 * 			a pointer to the DirectInput object
 	 */
 	void Init(	HWND hWnd, IDirectInput8* directInput);
-	void Init(	HWND hWnd, IDirectInput8* directInput, int padnum);
 
 	/**
 	 * @brief Call Update every frame to poll the device

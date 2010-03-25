@@ -30,6 +30,9 @@ from Graphics.SkyBox  import SkyBox
 
 
 
+      
+    
+
 
 # TODO
 # need a lock so that loading of IO does not happen
@@ -67,9 +70,8 @@ class LoadingState(State):
 
 class GameState(State):
   AI_MODEL_NUMS = [2,3,4,5,6,8,4]
-  AI_NAMES = ["Arthur Dent", "Ford Prefect", "Zaphod Beeblebrox", "Marvin", "Trillian", "Slartibartfast"]
   
-  def __init__(self, track='Track1', nPlayers=1, nAIs=3):
+  def __init__(self, settings):
     State.__init__(self)
     self.loaded = False
     
@@ -77,9 +79,19 @@ class GameState(State):
     self.stats  = {}
     self.gameOver = False
     self.nPlayersRacing = nPlayers
+    self.freeAINames =  [
+      "Arthur Dent", 
+      "Ford Prefect", 
+      "Zaphod Beeblebrox", 
+      "Marvin", 
+      "Trillian", 
+      "Slartibartfast",
+      "Philip J. Fry",
+      "Bender Bending Rodriguez",
+      "Turanga Leela"]
 
     
-    self.load(track,nPlayers,nAIs)
+    self.load(settings)
     
   def Activate(self):
     State.Activate(self)
@@ -115,30 +127,33 @@ class GameState(State):
     #   print 'AAAAAAAAHHHHHHH'
     
  
-  def AddVehicle(self, isAI):
+  def AddVehicle(self, player = None):
       n = len(self.vehicleList)    
       x = (n % 3 - 1)*15
       z = ((n / 3))*-15
       
       vehicle    = self.Add(Vehicle(
-        isAI and random.choice(self.AI_NAMES) or "Player1",    
+        player and player[0] or self.freeAINames.pop(),    
         self.track, 
         Matrix(Point3(x, 7, z)) * self.startOrientation, 
-        (not isAI) and 1 or self.AI_MODEL_NUMS.pop()
+        player and player[2] or self.GetRandomTextureId()
       ))
-      vehicle.isAI = isAI
+      vehicle.isAI = player and True or False
       self.Add(Shadow(vehicle))
       self.vehicleList.append(vehicle)
-      if isAI:
-        AIBehavior(vehicle, self.track)
-      else:
+      if player:
         PlayerBehavior(vehicle)
-        vehicle.Backwards = False
+        vehicle.Backwards = False #???
+      else:
+        AIBehavior(vehicle, self.track)
       
       return vehicle                
+      
+  def GetRandomTextureId(self):
+    return len(self.freeTextureIds) > 0 and self.freeTextureIds.pop() or random.choice(self.aiTextureIds)
     
 
-  def load(self, track, nPlayers, nAIs):
+  def load(self, settings):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
@@ -148,9 +163,13 @@ class GameState(State):
     # TODO
     # can we render a fake loading screen here until the real one works?
     
+    self.freeTextureIds = settings.freeTextureIds
+    random.shuffle(self.freeTextureIds)
     random.shuffle(self.AI_MODEL_NUMS)
+    random.shuffle(self.freeAINames)
     
-    self.track = self.Add(Track(track))
+    
+    self.track = self.Add(Track(settings.track))
     self.vehicleList = []
 
     frame = self.track.GetFrame(-30.0)
@@ -165,15 +184,12 @@ class GameState(State):
     self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
 
     self.skybox = SkyBox()
-    
-    for i in range(nAIs):
-      self.AddVehicle(True)
 
     self.interfaces = []
-    viewports = self.SetupViewports(nPlayers)
+    viewports = self.SetupViewports(len(settings.players))
     
-    for viewport in viewports:
-      player = self.AddVehicle(False)
+    for player in settings.players:
+      vehicle = self.AddVehicle(False, player)
       pi = PlayerInterface(self, player, viewport)
       pi.AddRenderable(self.scene)
       pi.AddRenderable(self.skybox)
@@ -182,6 +198,8 @@ class GameState(State):
 
     self.SetupInputMapping(nPlayers)
 
+    for i in range(settings.nAIs):
+      self.AddVehicle(True)
        
     self.meteorManager = MeteorManager(self)
 
@@ -226,7 +244,7 @@ class GameState(State):
       self.mapping = GameMapping([
           Keyboard1Mapping(self.interfaces[0]),
           KeyboardDebugMapping(None),
-          Gamepad1Mapping(self.interfaces[0]),
+          GamepadMapping(0, self.interfaces[0]),
           GamepadDebugMapping(None), 
                                  ])
     if nPlayers == 2:
@@ -238,6 +256,8 @@ class GameState(State):
       self.mapping = GameMapping([
           Keyboard1Mapping(self.interfaces[0]),
           Keyboard2Mapping(self.interfaces[1]),
+          GamepadMapping(0, self.interfaces[2]),
+          GamepadMapping(1, self.interfaces[3]),
                                  ])
   
   def Tick(self, time):

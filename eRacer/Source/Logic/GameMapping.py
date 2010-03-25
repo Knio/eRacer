@@ -81,25 +81,53 @@ class KeyboardDebugMapping(VehicleMapping):
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
       
 
-class Gamepad1Mapping(VehicleMapping):
-  def __init__(self,target):
+class GamepadMapping(VehicleMapping):
+  def __init__(self, gamepadId, target):
     VehicleMapping.__init__(self,target)
+    self.gamepadId = gamepadId
 
-  def GamepadStick1AbsoluteEvent(self, x, y):
-    return self.target.player.behavior.PlayerTurnEvent(x/1000.0)  
+  def GamepadStick1AbsoluteEvent(self, gamepadId, x, y):
+    if gamepadId == self.gamepadId:
+      return self.target.player.behavior.PlayerTurnEvent(x/1000.0)  
 
-  def GamepadTriggerAbsoluteEvent(self, z):
-    return self.target.player.behavior.PlayerAccelerateEvent(z/-1000.0)
+  def GamepadTriggerAbsoluteEvent(self, gamepadId, z):
+    if gamepadId == self.gamepadId:
+      return self.target.player.behavior.PlayerAccelerateEvent(z/-1000.0)
     
-  def GamepadButtonPressedEvent(self, button):
-    if   button == cpp.BUTTON_START:   return E.PauseEvent()
-    elif button == cpp.BUTTON_A:       return self.target.player.behavior.PlayerBoostEvent(True)
-    elif button == cpp.BUTTON_B:       return self.target.player.behavior.PlayerBrakeEvent(True)
-    elif button == cpp.BUTTON_Y:       return self.target.CameraChangedEvent()
+  def GamepadButtonPressedEvent(self, gamepadId, button):
+    if gamepadId == self.gamepadId:
+      if   button == cpp.BUTTON_START:
+        return E.PauseEvent()
+      elif button == cpp.BUTTON_A:
+        return self.target.player.behavior.PlayerBoostEvent(True)
+      elif button == cpp.BUTTON_B:
+        return self.target.player.behavior.PlayerBrakeEvent(True)
+      elif button == cpp.BUTTON_Y:
+        return self.target.CameraChangedEvent()
 
-  def GamepadButtonReleasedEvent(self, button):
-    if button == cpp.BUTTON_B:         return self.target.player.behavior.PlayerBrakeEvent(False)
-    elif button == cpp.BUTTON_A:       return self.target.player.behavior.PlayerBoostEvent(False)
+  def GamepadButtonReleasedEvent(self, gamepadId, button):
+    if gamepadId == self.gamepadId:
+      if button == cpp.BUTTON_B:
+        return self.target.player.behavior.PlayerBrakeEvent(False)
+      elif button == cpp.BUTTON_A:
+        return self.target.player.behavior.PlayerBoostEvent(False)
+        
+class Gamepad0Mapping(GamepadMapping):
+  def __init__(self, target):
+    GamepadMapping(self, 0, target)
+
+class Gamepad1Mapping(GamepadMapping):
+  def __init__(self, target):
+    GamepadMapping(self, 1, target)
+
+class Gamepad2Mapping(GamepadMapping):
+  def __init__(self, target):
+    GamepadMapping(self, 2, target)
+
+class Gamepad3Mapping(GamepadMapping):
+  def __init__(self, target):
+    GamepadMapping(self, 3, target)
+        
 
 class GamepadDebugMapping(VehicleMapping):
   def __init__(self,target):

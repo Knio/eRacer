@@ -21,10 +21,7 @@ Input::Input()
 }
 
 void Input::Init(){
-	HWND hWnd = 					Game::GetInstance()->hwnd;
-	HINSTANCE hInstance = Game::GetInstance()->hinst;
-	
-	HRESULT hr = DirectInput8Create(hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, NULL);
+	HRESULT hr = DirectInput8Create(Game::GetInstance()->hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput_, NULL);
 	
 	assert(DIERR_BETADIRECTINPUTVERSION != hr);
 	assert(DIERR_INVALIDPARAM != hr);
@@ -34,16 +31,27 @@ void Input::Init(){
 		throw runtime_error("Could not create DirectInput object - out of memory!");
 	
 	
+	ReloadDevices();
+
+}
+
+void Input::ReloadDevices(){
 	try { 
 		Device* keyboard = new Keyboard();
-		keyboard->Init(hWnd, directInput_);
+		keyboard->Init(Game::GetInstance()->hwnd, directInput_);
 		devices_.push_back(keyboard);
-		
-	}	catch (runtime_error) {}
+		hasKeyboard_ = true;	
+	}	catch (runtime_error) {
+		hasKeyboard_ = false;
+	}
 	try { 
-		Device* gamepad = new Gamepad();
-		gamepad->Init(hWnd, directInput_);
-		devices_.push_back(gamepad);
+		nGamepads_ = 0;
+		while(nGamepads_<4){
+			Gamepad* gamepad = new Gamepad(nGamepads_);
+			gamepad->Init(Game::GetInstance()->hwnd, directInput_);
+			devices_.push_back(gamepad);
+			nGamepads_++;
+		}
 	}	catch (runtime_error) {
 		if(devices_.size()<1)
 			throw runtime_error("Fatal error: Neither keyboard, nor gamepad found!");
@@ -51,12 +59,28 @@ void Input::Init(){
 
 	try {
 		Device* mouse = new Mouse();
-		mouse->Init(hWnd, directInput_);
+		mouse->Init(Game::GetInstance()->hwnd, directInput_);
 		devices_.push_back(mouse);
+		hasMouse_ = true;
 	}	
-	catch (runtime_error) {} //mouse is not necessary
-
+	catch (runtime_error) {
+		hasMouse_ = false;
+	}
 }
+
+
+bool Input::hasKeyboard() const{
+	return hasKeyboard_;
+}
+
+bool Input::hasMouse() const{
+	return hasMouse_;
+}
+
+int Input::getNumGamepads() const{
+	return nGamepads_;
+}
+
 
 void Input::Tick(const Time &t){
 	for(vector<Device*>::iterator i = devices_.begin();

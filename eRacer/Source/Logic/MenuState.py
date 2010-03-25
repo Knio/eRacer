@@ -5,21 +5,55 @@ from Camera           import Camera, CirclingCamera, OrthographicCamera
 from Quad             import Quad
 from HudQuad          import HudQuad
 from MenuMapping      import MainMenuMapping, PauseMenuMapping
+from GameMapping      import *
 from Graphics.View    import View
 
 
 from Box import Box
 
+class GameSettings(object):
+  def __init__(self):
+    self.freeTextureIds = [1,2,3,4,5,6,8]
+    self.track = 'Track1'
+    self.players = [
+      ('Player 1', Keyboard1Mapping,1)
+      ]
+    self.debugMappings = [KeyboardDebugMapping, GamepadDebugMapping]
+    self.nAIs = 3
+      
+  def SetNPlayers(self, nPlayers):
+    assert nPlayers==1 or nPlayers==2 or nPlayers==4
+
+
+class MenuItem(object):
+  def __init__(self, label):
+    self.label = label
+    
+class ApplyMenuItem(MenuItem):
+  def __init__(self, label):
+    MenuItem.__init__(self,label)
+    
+  def Select(self):
+    pass
+    
+class SelectMenuItem(MenuItem):
+  def __init__(self, label, options, default=0):
+    MenuItem.__init__(self,label)
+    self.options = options
+    self.index = default;
+
+  def Prev(self):
+    self.index = (self.index-1)%len(self.options)
+    
+  def Next(self):
+    self.index = (self.index+1)%len(self.options)
+    
+    
 
 class MenuState(State):
-  MENU = []
   def __init__(self):
     State.__init__(self)
     self.selected = 0
-    self.subSelected = {}
-    for i,m in enumerate(self.MENU):
-      if len(m)>1:
-        self.subSelected[i] = len(m)>= 3 and m[2] or 0
     
     #width and height should not be hardcoded!
     
@@ -39,6 +73,7 @@ class MenuState(State):
     self.menuSel.is3D     = False
     self.menuSel.isPaused = True
     game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
+    self.menu = []
     
   def Tick(self, time):
     State.Tick(self, time)
@@ -48,57 +83,61 @@ class MenuState(State):
       return
       
     y = 240
-    for i,m in enumerate(self.MENU):
+    for i,m in enumerate(self.menu):
       name = m[0]
       self.view.WriteString(
         name, "Verdana", 32, Point3(100,y,0), i==self.selected and RED or WHITE
       ) 
       if len(m)>1:
         options = m[1]
+        subSelected = m[2]
         self.view.WriteString(
-          options[self.subSelected[i]], "Verdana", 32, Point3(400,y,0), WHITE
+          options[subSelected], "Verdana", 32, Point3(400,y,0), WHITE
         ) 
         
       y += 50
       
   def MenuUpEvent(self):
     game().sound.sound.PlaySoundFx(self.menuNav)
-    self.selected = (self.selected-1) % len(self.MENU)
+    self.selected = (self.selected-1) % len(self.menu)
   
   def MenuDownEvent(self):
     game().sound.sound.PlaySoundFx(self.menuNav)
-    self.selected = (self.selected+1) % len(self.MENU)
+    self.selected = (self.selected+1) % len(self.menu)
 
   def MenuLeftEvent(self):
-    if len(self.MENU[self.selected])>1:
+    if len(self.menu[self.selected])>1:
       game().sound.sound.PlaySoundFx(self.menuNav)
-      self.subSelected[self.selected] = (self.subSelected[self.selected]-1) % len(self.MENU[self.selected][1])
+      self.menu[self.selected][2] = (self.menu[self.selected][2]-1) % len(self.menu[self.selected][1])
+      self.Callback(self.SelectedOption(self.selected))
 
   def MenuRightEvent(self):
-    if len(self.MENU[self.selected])>1:
+    if len(self.menu[self.selected])>1:
       game().sound.sound.PlaySoundFx(self.menuNav)
-      self.subSelected[self.selected] = (self.subSelected[self.selected]+1) % len(self.MENU[self.selected][1])
+      self.menu[self.selected][2] = (self.menu[self.selected][2]+1) % len(self.menu[self.selected][1])
+      self.Callback(self.SelectedOption(self.selected))
 
   def MenuSelectEvent(self):
-    if len(self.MENU[self.selected]) == 1:
+    if len(self.menu[self.selected]) == 1:
       game().sound.sound.PlaySoundFx(self.menuSel)
-      name = self.MENU[self.selected][0]
-      getattr(self, 'Menu_%s' % name.replace(' ','_'))()
+      self.Callback()
+
+  def Callback(self, value = None):
+    name = self.menu[self.selected][0]
+    method = getattr(self, 'Menu_%s' % name.replace(' ','_'))
+    value and method(value) or method()
+    
     
   def Menu_Exit(self):
     game().event.QuitEvent()  
     
   def SelectedOption(self,index):
-    return self.MENU[index][1][self.subSelected[index]]
+    return self.menu[index][1][self.menu[index][2]]
   
 
     
 class MainMenuState(MenuState):
   MAPPING = MainMenuMapping
-  MENU = [
-    ('New Game',),
-    ('Exit',)
-  ]
   
   def __init__(self):
     MenuState.__init__(self)
@@ -112,6 +151,11 @@ class MainMenuState(MenuState):
     self.sound.is3D = False
     self.sound.isPaused = False
     game().sound.sound.LoadSoundFx("Terran5.ogg", self.sound)
+    
+    self.menu = [
+      ('New Game',),
+      ('Exit',)
+    ]
         
   def Pause(self):
     self.sound.isPaused = True
@@ -119,7 +163,7 @@ class MainMenuState(MenuState):
     
   def Menu_New_Game(self):
     # game().PushState(GameState())
-    game().PushState(GameSelectState(self.view))
+    game().PushState(SetupGameMenuState(self.view))
     
   def Tick(self, time):
     p = Point3(500,350,0)
@@ -132,20 +176,16 @@ class MainMenuState(MenuState):
     MenuState.Tick(self, time)
     
     
-class GameSelectState(MenuState):
+class SetupGameMenuState(MenuState):
   MAPPING = MainMenuMapping
-  MENU = [
-    ('Start',),
-    ('Human Players',['1','2','4'],0),
-    ('AI Players',map(str,range(8)),2),
-    ('Track',['Track1','Track2'],0),
-    ('Back',),
-  ]
+
   
   def __init__(self, view):
     MenuState.__init__(self)
     
     self._view = self.view
+    
+    self.settings = GameSettings()
     
     # image1 = Quad(self._view,"track1.png")
     # image1.scale(600,235,1)
@@ -159,17 +199,76 @@ class GameSelectState(MenuState):
     
     
     self.view = view
-  
-  def Menu_Start(self):
-    self.parent.Pause()
-    nPlayers = int(self.SelectedOption(1))
-    nAIs = int(self.SelectedOption(2))
-    track = self.SelectedOption(3)
     
-    game().PushState(GameState(track,nPlayers,nAIs))
+    self.menu = [
+      ('Start',),
+      ('Setup Players',),
+      ('AI Players',map(str,range(8)),self.settings.nAIs),
+      ('Track',['Track1','Track2'],0),
+      ('Back',),
+    ]
+    
+  def Menu_Start(self):
+    self.parent.Pause() # ???
+    game().PushState(GameState(self.settings))
+    
+    
+  def Menu_AI_Players(self, value):
+    self.settings.nAIs = int(value)
+    
+  def Menu_Track(self,value):
+    self.settings.track = value
+    
+    
+  def Menu_Setup_Players(self):
+    game().PushState(SetupPlayersMenuState(self.view, self.settings))    
     
   def Menu_Back(self):
     game().PopState()
+    
+class SetupPlayersMenuState(MenuState):
+  MAPPING = MainMenuMapping
+  
+  def __init__(self, view, settings):
+    MenuState.__init__(self)
+    
+    self._view = self.view
+    
+    self.view = view
+    self.settings = settings
+    self.menu = [
+      ('Human Players',['1','2','4'],0),
+      ('Back',),
+    ]
+
+  def Menu_Human_Players(self, value):
+    nPlayers = int(value)
+    self.settings.debugMappings = nPlayers > 1 and [] or [KeyboardDebugMapping, GamepadDebugMapping]
+    
+    while len(self.settings.players) < nPlayers:
+      name = 'Player %d' % (len(self.players)+1)
+      self.menu.insert(len(self.menu)-1, ('Player name',))
+
+      mappingIndex = len(self.freeMappingIndices)>0 and self.freeMappingIndices.pop() or None
+      mapping = self.availableMappings[mappingIndex]
+      self.menu.insert(len(self.menu)-1, ('Controls', str(mapping),mappingIndex))
+      
+      textureIndex = self.freeTextureIndices.pop()
+      textureId = self.textureIds[textureIndex]
+      self.menu.insert(len(self.menu)-1, ('Colors', self.textureStrings,textureIndex))
+      
+      self.players.append((name, mapping, textureId))
+      
+    while len(self.players) > nPlayers:
+      self.menu.pop(len(self.menu)-1)
+      self.menu.pop(len(self.menu)-1)
+      self.menu.pop(len(self.menu)-1)
+
+      self.players.pop()
+ 
+  
+  def Menu_Back(self):
+    game().PopState()    
 
 class PauseMenuState(MenuState):
   MAPPING = PauseMenuMapping

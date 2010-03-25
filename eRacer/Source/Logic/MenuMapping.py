@@ -12,7 +12,7 @@ class MenuMapping(Mapping):
     elif key == KEY.RIGHT:   return E.MenuRightEvent()
     elif key == KEY.RETURN: return E.MenuSelectEvent()
     
-  def GamepadStick1AbsoluteEvent(self, x, y):
+  def GamepadStick1AbsoluteEvent(self, id, x, y):
     if self.gamepadReleased:
       if y < -700.0:
         self.gamepadReleased = False
@@ -23,7 +23,7 @@ class MenuMapping(Mapping):
     elif abs(y) < 500:
       self.gamepadReleased = True
     
-  def GamepadButtonPressedEvent(self, button):
+  def GamepadButtonPressedEvent(self, id, button):
     if button == cpp.BUTTON_A: return E.MenuSelectEvent()
     
 class MainMenuMapping(MenuMapping):
@@ -36,7 +36,7 @@ class PauseMenuMapping(MenuMapping):
     if key == KEY.ESCAPE:     return E.UnPauseEvent()
     return MenuMapping.KeyPressedEvent(self, key)
     
-  def GamepadButtonPressedEvent(self, button):
+  def GamepadButtonPressedEvent(self, id, button):
     if button == eRacer.BUTTON_START:  return E.UnPauseEvent()
     return MenuMapping.GamepadButtonPressedEvent(self, button)
     

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <float.h>
 #include "CarBody.h"
 
 #include "Core/Consts.h"
@@ -125,7 +126,7 @@ float CarBody::SimWheel(
   const Point3 worldsuspoint = mul1(tx, localsuspoint);
   
   float dist = dot(frame.up, (worldsuspoint - frame.position)) - upamount;
-  if (length(worldsuspoint - frame.position) > 26.f) dist = 1e99; // off the road
+  if (length(worldsuspoint - frame.position) > 26.f) dist = FLT_MAX; // off the road
   const float disp = CONSTS.CAR_DISPLACEMENT - dist;
   
   if (dist < localpos.y)  return dist; // car is inside road

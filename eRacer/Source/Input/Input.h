@@ -47,6 +47,16 @@ public:
 	 */
 	void Init();
 
+
+	void ReloadDevices();
+
+
+	bool hasKeyboard() const;
+
+	bool hasMouse() const;
+
+	int getNumGamepads() const;
+
 	/**
 	 * @brief update all devices - this triggers polling
 	 */
@@ -60,6 +70,11 @@ public:
 private:
 	IDirectInput8* directInput_;
 	vector<Device*> devices_;
+
+	bool hasKeyboard_;
+	bool hasMouse_;
+	int nGamepads_;
+
 
 };
 
