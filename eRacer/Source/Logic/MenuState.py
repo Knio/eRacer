@@ -233,7 +233,7 @@ class SetupGameMenuState(MenuState):
     game().PushState(GameState(self.settings))
         
   def Menu_AI_Players(self, value):
-    self.settings.nAIs = int(value)
+    self.settings.nAIs = value[1]
     
   def Menu_Track(self,value):
     self.settings.track = value    
@@ -270,28 +270,48 @@ class SetupPlayersMenuState(MenuState):
     self.textureIds = [1,2,3,4,5,6,8]
     self.freeTextureIndices = range(6)
     
-    self.Menu_Human_Players('1')    
+    self.textureMap = {}
+    self.textureMap[1] = "Blue"
+    self.textureMap[2] = "Red"
+    self.textureMap[3] = "Magenta"
+    self.textureMap[4] = "Cyan"
+    self.textureMap[5] = "Green"
+    self.textureMap[6] = "Black"
+    self.textureMap[8] = "Orange"
+    
+    self.Menu_Human_Players(('1',1))    
 
   def Menu_Human_Players(self, value):
-    nPlayers = int(value)
+    nPlayers = value[1]
     self.settings.debugMappings = nPlayers > 1 and [] or [KeyboardDebugMapping, GamepadDebugMapping]
     
     while len(self.settings.players) < nPlayers:
-      name = 'Player %d' % (len(self.settings.players)+1)
+      playerId = len(self.settings.players)
+      name = 'Player %d' % (playerId+1)
       self.menu.insert(len(self.menu)-1, InputMenuItem('Player name',self.Menu_Player_Name, name))
 
       mappingIndex = len(self.freeMappingIndices)>0 and self.freeMappingIndices.pop(0) or 0
       mapping = self.availableMappings[mappingIndex]
+      
+      mappingOptions = []
+      for mapping in self.availableMappings:
+        mappingOptions.append((str(mapping),playerId,mapping))
+        
       self.menu.insert(len(self.menu)-1, SelectMenuItem('Controls', 
                                                 self.Menu_Controls, 
-                                                map(str, self.availableMappings), 
+                                                mappingOptions, 
                                                 mappingIndex))
+      
+      textureOptions = []
+
+      for textureId in self.textureIds:
+        textureOptions.append((self.textureMap[textureId], playerId, textureId))
       
       textureIndex = self.freeTextureIndices.pop()
       textureId = self.textureIds[textureIndex]
-      self.menu.insert(len(self.menu)-1, SelectMenuItem('Colors', 
-                                            self.Menu_Colors,
-                                            map(str,self.textureIds),
+      self.menu.insert(len(self.menu)-1, SelectMenuItem('Color', 
+                                            self.Menu_Color,
+                                            textureOptions,
                                             textureIndex))
       
       self.settings.players.append((name, mapping, textureId))
@@ -310,7 +330,7 @@ class SetupPlayersMenuState(MenuState):
   def Menu_Controls(self, value):
     pass
     
-  def Menu_Colors(self, value):
+  def Menu_Color(self, value):
     pass
   
   
