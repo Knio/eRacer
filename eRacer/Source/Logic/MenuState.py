@@ -15,10 +15,8 @@ class GameSettings(object):
   def __init__(self):
     self.freeTextureIds = [1,2,3,4,5,6,8]
     self.track = 'Track1'
-    self.players = [
-      ('Player 1', Keyboard1Mapping,1)
-      ]
-    self.debugMappings = [KeyboardDebugMapping, GamepadDebugMapping]
+    self.players = []
+    self.debugMappings = []
     self.nAIs = 3
       
   def SetNPlayers(self, nPlayers):
@@ -64,7 +62,7 @@ class SelectMenuItem(MenuItem):
   def draw(self, view, position, selected):
     MenuItem.draw(self, view, position, selected)
     view.WriteString(
-      self.options[self.index], "Sony Sketch EF", 32, position+Point3(300,0,0), WHITE
+      self.options[self.index][0], "Sony Sketch EF", 32, position+Point3(300,0,0), WHITE
       ) 
       
     #return height  
@@ -218,10 +216,14 @@ class SetupGameMenuState(MenuState):
     
     self.view = view
     
+    aiPlayerOptions = []
+    for i in range(8):
+      aiPlayerOptions.append((str(i),i))
+    
     self.menu = [
       ApplyMenuItem('Start', self.Menu_Start),
       ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
-      SelectMenuItem('AI Players', self.Menu_AI_Players, map(str,range(8)), self.settings.nAIs),
+      SelectMenuItem('AI Players', self.Menu_AI_Players, aiPlayerOptions, self.settings.nAIs),
       SelectMenuItem('Track', self.Menu_Track, ['Track1','Track2'], 0),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
@@ -250,18 +252,25 @@ class SetupPlayersMenuState(MenuState):
     
     self._view = self.view
     
+    humanPlayerOptions = []
+    for i in [1,2,4]:
+      humanPlayerOptions.append((str(i),i))    
+    
     self.view = view
     self.settings = settings
     self.menu = [
-      SelectMenuItem('Human Players',self.Menu_Human_Players, ['1','2','4'], 0),
+      SelectMenuItem('Human Players',self.Menu_Human_Players, humanPlayerOptions, 0),
       ApplyMenuItem('Back',self.Menu_Back),
     ]
     
     self.availableMappings = [None, Keyboard1Mapping, Keyboard2Mapping]
     self.freeMappingIndices = [0,1,2]
     
+    
     self.textureIds = [1,2,3,4,5,6,8]
-    self.freeTextureIndices = range(6)    
+    self.freeTextureIndices = range(6)
+    
+    self.Menu_Human_Players('1')    
 
   def Menu_Human_Players(self, value):
     nPlayers = int(value)
@@ -288,9 +297,9 @@ class SetupPlayersMenuState(MenuState):
       self.settings.players.append((name, mapping, textureId))
       
     while len(self.settings.players) > nPlayers:
-      self.menu.pop(len(self.menu)-1)
-      self.menu.pop(len(self.menu)-1)
-      self.menu.pop(len(self.menu)-1)
+      self.menu.pop(len(self.menu)-2)
+      self.menu.pop(len(self.menu)-2)
+      self.menu.pop(len(self.menu)-2)
 
       self.settings.players.pop()
  
