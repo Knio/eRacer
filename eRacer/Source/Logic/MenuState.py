@@ -29,25 +29,61 @@ class MenuItem(object):
   def __init__(self, label):
     self.label = label
     
-class ApplyMenuItem(MenuItem):
-  def __init__(self, label):
-    MenuItem.__init__(self,label)
+  def draw(self, view, position, selected):
+    view.WriteString(
+      self.label, "Sony Sketch EF", 32, position, selected and RED or WHITE
+    ) 
+      
+    #return height  
+    return 50 
     
-  def Select(self):
-    pass
+class ApplyMenuItem(MenuItem):
+  def __init__(self, label, callback):
+    MenuItem.__init__(self,label)
+    self.callback = callback
+    
+  def MenuSelectEvent(self):
+    self.callback()
+    
     
 class SelectMenuItem(MenuItem):
-  def __init__(self, label, options, default=0):
+  def __init__(self, label, callback, options, default=0):
     MenuItem.__init__(self,label)
+    self.callback = callback
     self.options = options
     self.index = default;
 
-  def Prev(self):
+  def MenuLeftEvent(self):
     self.index = (self.index-1)%len(self.options)
+    self.callback(self.options[self.index])
     
-  def Next(self):
+  def MenuRightEvent(self):
     self.index = (self.index+1)%len(self.options)
+    self.callback(self.options[self.index])
     
+  def draw(self, view, position, selected):
+    MenuItem.draw(self, view, position, selected)
+    view.WriteString(
+      self.options[self.index], "Sony Sketch EF", 32, position+Point3(300,0,0), WHITE
+      ) 
+      
+    #return height  
+    return 50
+    
+class InputMenuItem(MenuItem):
+  def __init__(self, label, callback, default):
+    MenuItem.__init__(self,label)
+    self.callback = callback
+    self.value = default;
+
+  def draw(self, view, position, selected):
+    MenuItem.draw(self, view, position, selected)
+    view.WriteString(
+      self.value, "Sony Sketch EF", 32, position+Point3(300,0,0), WHITE
+      ) 
+      
+    #return height  
+    return 50
     
 
 class MenuState(State):
@@ -82,20 +118,11 @@ class MenuState(State):
     if not self.active:
       return
       
-    y = 240
+    position = Point3(100,240,0)  
+
     for i,m in enumerate(self.menu):
-      name = m[0]
-      self.view.WriteString(
-        name, "Verdana", 32, Point3(100,y,0), i==self.selected and RED or WHITE
-      ) 
-      if len(m)>1:
-        options = m[1]
-        subSelected = m[2]
-        self.view.WriteString(
-          options[subSelected], "Verdana", 32, Point3(400,y,0), WHITE
-        ) 
-        
-      y += 50
+      yOffset = m.draw(self.view,position, i == self.selected)
+      position.y += yOffset
       
   def MenuUpEvent(self):
     game().sound.sound.PlaySoundFx(self.menuNav)
@@ -106,35 +133,26 @@ class MenuState(State):
     self.selected = (self.selected+1) % len(self.menu)
 
   def MenuLeftEvent(self):
-    if len(self.menu[self.selected])>1:
+    method = getattr(self.menu[self.selected], 'MenuLeftEvent', None)
+    if method: 
       game().sound.sound.PlaySoundFx(self.menuNav)
-      self.menu[self.selected][2] = (self.menu[self.selected][2]-1) % len(self.menu[self.selected][1])
-      self.Callback(self.SelectedOption(self.selected))
+      method()
 
   def MenuRightEvent(self):
-    if len(self.menu[self.selected])>1:
+    method = getattr(self.menu[self.selected], 'MenuRightEvent', None)
+    if method: 
       game().sound.sound.PlaySoundFx(self.menuNav)
-      self.menu[self.selected][2] = (self.menu[self.selected][2]+1) % len(self.menu[self.selected][1])
-      self.Callback(self.SelectedOption(self.selected))
+      method()
 
   def MenuSelectEvent(self):
-    if len(self.menu[self.selected]) == 1:
+    method = getattr(self.menu[self.selected], 'MenuSelectEvent', None)
+    if method: 
       game().sound.sound.PlaySoundFx(self.menuSel)
-      self.Callback()
+      method()
 
-  def Callback(self, value = None):
-    name = self.menu[self.selected][0]
-    method = getattr(self, 'Menu_%s' % name.replace(' ','_'))
-    value and method(value) or method()
-    
-    
   def Menu_Exit(self):
     game().event.QuitEvent()  
     
-  def SelectedOption(self,index):
-    return self.menu[index][1][self.menu[index][2]]
-  
-
     
 class MainMenuState(MenuState):
   MAPPING = MainMenuMapping
@@ -153,8 +171,8 @@ class MainMenuState(MenuState):
     game().sound.sound.LoadSoundFx("Terran5.ogg", self.sound)
     
     self.menu = [
-      ('New Game',),
-      ('Exit',)
+      ApplyMenuItem('New Game', self.Menu_New_Game),
+      ApplyMenuItem('Exit', self.Menu_Exit)
     ]
         
   def Pause(self):
@@ -201,24 +219,22 @@ class SetupGameMenuState(MenuState):
     self.view = view
     
     self.menu = [
-      ('Start',),
-      ('Setup Players',),
-      ('AI Players',map(str,range(8)),self.settings.nAIs),
-      ('Track',['Track1','Track2'],0),
-      ('Back',),
+      ApplyMenuItem('Start', self.Menu_Start),
+      ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
+      SelectMenuItem('AI Players', self.Menu_AI_Players, map(str,range(8)), self.settings.nAIs),
+      SelectMenuItem('Track', self.Menu_Track, ['Track1','Track2'], 0),
+      ApplyMenuItem('Back', self.Menu_Back),
     ]
     
   def Menu_Start(self):
     self.parent.Pause() # ???
     game().PushState(GameState(self.settings))
-    
-    
+        
   def Menu_AI_Players(self, value):
     self.settings.nAIs = int(value)
     
   def Menu_Track(self,value):
-    self.settings.track = value
-    
+    self.settings.track = value    
     
   def Menu_Setup_Players(self):
     game().PushState(SetupPlayersMenuState(self.view, self.settings))    
@@ -237,35 +253,57 @@ class SetupPlayersMenuState(MenuState):
     self.view = view
     self.settings = settings
     self.menu = [
-      ('Human Players',['1','2','4'],0),
-      ('Back',),
+      SelectMenuItem('Human Players',self.Menu_Human_Players, ['1','2','4'], 0),
+      ApplyMenuItem('Back',self.Menu_Back),
     ]
+    
+    self.availableMappings = [None, Keyboard1Mapping, Keyboard2Mapping]
+    self.freeMappingIndices = [0,1,2]
+    
+    self.textureIds = [1,2,3,4,5,6,8]
+    self.freeTextureIndices = range(6)    
 
   def Menu_Human_Players(self, value):
     nPlayers = int(value)
     self.settings.debugMappings = nPlayers > 1 and [] or [KeyboardDebugMapping, GamepadDebugMapping]
     
     while len(self.settings.players) < nPlayers:
-      name = 'Player %d' % (len(self.players)+1)
-      self.menu.insert(len(self.menu)-1, ('Player name',))
+      name = 'Player %d' % (len(self.settings.players)+1)
+      self.menu.insert(len(self.menu)-1, InputMenuItem('Player name',self.Menu_Player_Name, name))
 
-      mappingIndex = len(self.freeMappingIndices)>0 and self.freeMappingIndices.pop() or None
+      mappingIndex = len(self.freeMappingIndices)>0 and self.freeMappingIndices.pop(0) or 0
       mapping = self.availableMappings[mappingIndex]
-      self.menu.insert(len(self.menu)-1, ('Controls', str(mapping),mappingIndex))
+      self.menu.insert(len(self.menu)-1, SelectMenuItem('Controls', 
+                                                self.Menu_Controls, 
+                                                map(str, self.availableMappings), 
+                                                mappingIndex))
       
       textureIndex = self.freeTextureIndices.pop()
       textureId = self.textureIds[textureIndex]
-      self.menu.insert(len(self.menu)-1, ('Colors', self.textureStrings,textureIndex))
+      self.menu.insert(len(self.menu)-1, SelectMenuItem('Colors', 
+                                            self.Menu_Colors,
+                                            map(str,self.textureIds),
+                                            textureIndex))
       
-      self.players.append((name, mapping, textureId))
+      self.settings.players.append((name, mapping, textureId))
       
-    while len(self.players) > nPlayers:
+    while len(self.settings.players) > nPlayers:
       self.menu.pop(len(self.menu)-1)
       self.menu.pop(len(self.menu)-1)
       self.menu.pop(len(self.menu)-1)
 
-      self.players.pop()
+      self.settings.players.pop()
  
+  
+  def Menu_Player_Name(self, value):
+    pass
+    
+  def Menu_Controls(self, value):
+    pass
+    
+  def Menu_Colors(self, value):
+    pass
+  
   
   def Menu_Back(self):
     game().PopState()    
