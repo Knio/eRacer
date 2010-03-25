@@ -78,7 +78,7 @@ class GameState(State):
     self.laps   = 2 # TODO CONST
     self.stats  = {}
     self.gameOver = False
-    self.nPlayersRacing = nPlayers
+    self.nPlayersRacing = len(settings.players)
     self.freeAINames =  [
       "Arthur Dent", 
       "Ford Prefect", 
@@ -186,20 +186,21 @@ class GameState(State):
     self.skybox = SkyBox()
 
     self.interfaces = []
+    print "Number of players",len(settings.players)
     viewports = self.SetupViewports(len(settings.players))
     
     for player in settings.players:
-      vehicle = self.AddVehicle(False, player)
+      vehicle = self.AddVehicle(player)
       pi = PlayerInterface(self, player, viewport)
       pi.AddRenderable(self.scene)
       pi.AddRenderable(self.skybox)
       self.interfaces.append(pi)
 
 
-    self.SetupInputMapping(nPlayers)
+    self.SetupInputMapping(settings)
 
     for i in range(settings.nAIs):
-      self.AddVehicle(True)
+      self.AddVehicle(None)
        
     self.meteorManager = MeteorManager(self)
 
@@ -239,33 +240,23 @@ class GameState(State):
         (w2,  h2, w2, h2),
       ]
       
-  def SetupInputMapping(self, nPlayers):
-    if nPlayers == 1:
-      self.mapping = GameMapping([
-          Keyboard1Mapping(self.interfaces[0]),
-          KeyboardDebugMapping(None),
-          GamepadMapping(0, self.interfaces[0]),
-          GamepadDebugMapping(None), 
-                                 ])
-    if nPlayers == 2:
-      self.mapping = GameMapping([
-          Keyboard1Mapping(self.interfaces[0]),
-          Keyboard2Mapping(self.interfaces[1]),
-                                 ])
-    if nPlayers == 4:
-      self.mapping = GameMapping([
-          Keyboard1Mapping(self.interfaces[0]),
-          Keyboard2Mapping(self.interfaces[1]),
-          GamepadMapping(0, self.interfaces[2]),
-          GamepadMapping(1, self.interfaces[3]),
-                                 ])
+  def SetupInputMapping(self, settings):
+    self.mapping = []
+    
+    for mapping in settings.debugMappings:
+      self.mapping.append(mapping(None))
+      
+    for i,player in enumerate(settings.players):
+      self.mapping.append(player[1](self.interfaces[i]))
+    
   
   def Tick(self, time):
     
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
-    cam = self.interfaces[0].view.camera
-    # TODO camera velocity
-    game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
+    if len(self.interfaces) > 0:
+      cam = self.interfaces[0].view.camera
+      # TODO camera velocity
+      game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
     
     _time.sleep(CONSTS.SLEEP_TIME)
     

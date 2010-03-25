@@ -18,9 +18,7 @@ class GameSettings(object):
     self.players = []
     self.debugMappings = []
     self.nAIs = 3
-      
-  def SetNPlayers(self, nPlayers):
-    assert nPlayers==1 or nPlayers==2 or nPlayers==4
+
 
 
 class MenuItem(object):
