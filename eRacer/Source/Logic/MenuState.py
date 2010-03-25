@@ -26,14 +26,16 @@ class GameSettings(object):
 class MenuItem(object):
   def __init__(self, label):
     self.label = label
+    self.fontsize = 32
+    self.lineheight = 50
     
   def draw(self, view, position, selected):
     view.WriteString(
-      self.label, "Sony Sketch EF", 32, position, selected and RED or WHITE
+      self.label, "Sony Sketch EF", self.fontsize, position, selected and RED or WHITE
     ) 
       
     #return height  
-    return 50 
+    return self.lineheight 
     
 class ApplyMenuItem(MenuItem):
   def __init__(self, label, callback):
@@ -62,11 +64,11 @@ class SelectMenuItem(MenuItem):
   def draw(self, view, position, selected):
     MenuItem.draw(self, view, position, selected)
     view.WriteString(
-      self.options[self.index][0], "Sony Sketch EF", 32, position+Point3(300,0,0), WHITE
+      self.options[self.index][0], "Sony Sketch EF", self.fontsize, position+Point3(300,0,0), WHITE
       ) 
       
     #return height  
-    return 50
+    return self.lineheight
     
 class InputMenuItem(MenuItem):
   def __init__(self, label, callback, default):
@@ -77,11 +79,11 @@ class InputMenuItem(MenuItem):
   def draw(self, view, position, selected):
     MenuItem.draw(self, view, position, selected)
     view.WriteString(
-      self.value, "Sony Sketch EF", 32, position+Point3(300,0,0), WHITE
+      self.value, "Sony Sketch EF", self.fontsize, position+Point3(300,0,0), WHITE
       ) 
       
     #return height  
-    return 50
+    return self.lineheight
     
 
 class MenuState(State):
@@ -108,6 +110,7 @@ class MenuState(State):
     self.menuSel.isPaused = True
     game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
     self.menu = []
+    self.menuTop = 50
     
   def Tick(self, time):
     State.Tick(self, time)
@@ -116,7 +119,7 @@ class MenuState(State):
     if not self.active:
       return
       
-    position = Point3(100,240,0)  
+    position = Point3(100,self.menuTop,0)  
 
     for i,m in enumerate(self.menu):
       yOffset = m.draw(self.view,position, i == self.selected)
@@ -159,7 +162,7 @@ class MainMenuState(MenuState):
     MenuState.__init__(self)
 
     logo = HudQuad("Logo","eRacerXLogoNegative.png", 0, 0, 600, 235)
-    logo.SetCenter(400, 150)
+    logo.SetLeftTop(30, 35)
     self.Add(logo)
     
     self.sound = cpp.SoundFx();
@@ -172,6 +175,8 @@ class MainMenuState(MenuState):
       ApplyMenuItem('New Game', self.Menu_New_Game),
       ApplyMenuItem('Exit', self.Menu_Exit)
     ]
+    self.menuTop = 240
+
         
   def Pause(self):
     self.sound.isPaused = True
@@ -179,13 +184,13 @@ class MainMenuState(MenuState):
     
   def Menu_New_Game(self):
     # game().PushState(GameState())
-    game().PushState(SetupGameMenuState(self.view))
+    game().PushState(SetupGameMenuState())
     
   def Tick(self, time):
     p = Point3(500,350,0)
     for i in ['Don Ha', 'John Stuart', 'Michael Blackadar', 'Tom Flanagan', 'Ole Rehmsen']:
       self.view.WriteString(
-        i, "Verdana", 28, p
+        i, "Sony Sketch EF", 28, p
       )
       p = p + Point3(0, 30, 0)
     
@@ -196,10 +201,8 @@ class SetupGameMenuState(MenuState):
   MAPPING = MainMenuMapping
 
   
-  def __init__(self, view):
+  def __init__(self):
     MenuState.__init__(self)
-    
-    self._view = self.view
     
     self.settings = GameSettings()
     
@@ -214,8 +217,6 @@ class SetupGameMenuState(MenuState):
     # game().logic.Add(image1)
     
     
-    self.view = view
-    
     aiPlayerOptions = []
     for i in range(8):
       aiPlayerOptions.append((str(i),i))
@@ -224,7 +225,7 @@ class SetupGameMenuState(MenuState):
       ApplyMenuItem('Start', self.Menu_Start),
       ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
       SelectMenuItem('AI Players', self.Menu_AI_Players, aiPlayerOptions, self.settings.nAIs),
-      SelectMenuItem('Track', self.Menu_Track, ['Track1','Track2'], 0),
+      SelectMenuItem('Track', self.Menu_Track, [('Track1',),('Track2',)], 0),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
     
@@ -239,7 +240,7 @@ class SetupGameMenuState(MenuState):
     self.settings.track = value    
     
   def Menu_Setup_Players(self):
-    game().PushState(SetupPlayersMenuState(self.view, self.settings))    
+    game().PushState(SetupPlayersMenuState(self.settings))    
     
   def Menu_Back(self):
     game().PopState()
@@ -247,28 +248,31 @@ class SetupGameMenuState(MenuState):
 class SetupPlayersMenuState(MenuState):
   MAPPING = MainMenuMapping
   
-  def __init__(self, view, settings):
+  def __init__(self, settings):
     MenuState.__init__(self)
     
-    self._view = self.view
     
     humanPlayerOptions = []
     for i in [1,2,4]:
       humanPlayerOptions.append((str(i),i))    
     
-    self.view = view
     self.settings = settings
     self.menu = [
       SelectMenuItem('Human Players',self.Menu_Human_Players, humanPlayerOptions, 0),
       ApplyMenuItem('Back',self.Menu_Back),
     ]
     
-    self.availableMappings = [None, Keyboard1Mapping, Keyboard2Mapping]
-    self.freeMappingIndices = [0,1,2]
+    self.availableMappings = [None, 
+                              Keyboard1Mapping, 
+                              Keyboard2Mapping, 
+                              Gamepad0Mapping, 
+                              Gamepad1Mapping, 
+                              Gamepad2Mapping, 
+                              Gamepad3Mapping, 
+                              ]
     
     
     self.textureIds = [1,2,3,4,5,6,8]
-    self.freeTextureIndices = range(6)
     
     self.textureMap = {}
     self.textureMap[1] = "Blue"
@@ -285,13 +289,19 @@ class SetupPlayersMenuState(MenuState):
     nPlayers = value[1]
     self.settings.debugMappings = nPlayers > 1 and [] or [KeyboardDebugMapping, GamepadDebugMapping]
     
+    fontsize = 24
+    lineheight = 24
+    padding = 10
+    
     while len(self.settings.players) < nPlayers:
       playerId = len(self.settings.players)
       name = 'Player %d' % (playerId+1)
       self.menu.insert(len(self.menu)-1, InputMenuItem('Player name',self.Menu_Player_Name, name))
 
-      mappingIndex = len(self.freeMappingIndices)>0 and self.freeMappingIndices.pop(0) or 0
-      mapping = self.availableMappings[mappingIndex]
+      self.menu[-2].fontsize = fontsize
+      self.menu[-2].lineheight = lineheight
+
+      mapping = self.availableMappings[playerId]
       
       mappingOptions = []
       for mapping in self.availableMappings:
@@ -300,19 +310,25 @@ class SetupPlayersMenuState(MenuState):
       self.menu.insert(len(self.menu)-1, SelectMenuItem('Controls', 
                                                 self.Menu_Controls, 
                                                 mappingOptions, 
-                                                mappingIndex))
+                                                playerId+1))
+
+      self.menu[-2].fontsize = fontsize
+      self.menu[-2].lineheight = lineheight
+
       
       textureOptions = []
 
       for textureId in self.textureIds:
         textureOptions.append((self.textureMap[textureId], playerId, textureId))
       
-      textureIndex = self.freeTextureIndices.pop()
-      textureId = self.textureIds[textureIndex]
+      textureId = self.textureIds[playerId]
       self.menu.insert(len(self.menu)-1, SelectMenuItem('Color', 
                                             self.Menu_Color,
                                             textureOptions,
-                                            textureIndex))
+                                            playerId))
+
+      self.menu[-2].fontsize = fontsize
+      self.menu[-2].lineheight = lineheight+padding
       
       self.settings.players.append((name, mapping, textureId))
       
@@ -321,7 +337,8 @@ class SetupPlayersMenuState(MenuState):
       self.menu.pop(len(self.menu)-2)
       self.menu.pop(len(self.menu)-2)
 
-      self.settings.players.pop()
+      p = self.settings.players.pop()
+
  
   
   def Menu_Player_Name(self, value):
@@ -371,7 +388,7 @@ class PauseMenuState(MenuState):
   def Tick(self, time):
     self.view.WriteString(
       "PAUSED",
-      "Verdana", 40, Point3(300,100,0)
+      "Sony Sketch EF", 40, Point3(300,100,0)
     )
     MenuState.Tick(self, time)
     self.parent.Tick(time)
