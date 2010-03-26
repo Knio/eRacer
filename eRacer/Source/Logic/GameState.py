@@ -128,15 +128,16 @@ class GameState(State):
     
  
   def AddVehicle(self, player = None):
+      if player: print vars(player)
       n = len(self.vehicleList)    
       x = (n % 3 - 1)*15
       z = ((n / 3))*-15
       
       vehicle    = self.Add(Vehicle(
-        player and player[0] or self.freeAINames.pop(),    
+        player and player.name or self.freeAINames.pop(),    
         self.track, 
         Matrix(Point3(x, 7, z)) * self.startOrientation, 
-        player and player[2] or self.GetRandomTextureId()
+        player and player.textureId or self.GetRandomTextureId()
       ))
       vehicle.isAI = player and True or False
       self.Add(Shadow(vehicle))
@@ -189,9 +190,13 @@ class GameState(State):
     print "Number of players",len(settings.players)
     viewports = self.SetupViewports(len(settings.players))
     
-    for player in settings.players:
-      vehicle = self.AddVehicle(player)
-      pi = PlayerInterface(self, player, viewport)
+    self.playerVehicles = [self.AddVehicle(player) for player in settings.players] 
+
+    for i in range(settings.nAIs):
+      self.AddVehicle(None)
+
+    for i,vehicle in enumerate(self.playerVehicles):
+      pi = PlayerInterface(self, vehicle, viewports[i])
       pi.AddRenderable(self.scene)
       pi.AddRenderable(self.skybox)
       self.interfaces.append(pi)
@@ -199,8 +204,6 @@ class GameState(State):
 
     self.SetupInputMapping(settings)
 
-    for i in range(settings.nAIs):
-      self.AddVehicle(None)
        
     self.meteorManager = MeteorManager(self)
 
@@ -241,13 +244,15 @@ class GameState(State):
       ]
       
   def SetupInputMapping(self, settings):
-    self.mapping = []
+    mappings = []
     
     for mapping in settings.debugMappings:
-      self.mapping.append(mapping(None))
+      mappings.append(mapping(None))
       
     for i,player in enumerate(settings.players):
-      self.mapping.append(player[1](self.interfaces[i]))
+      mappings.append(player.mapping(self.interfaces[i]))
+      
+    self.mapping = GameMapping(mappings)
     
   
   def Tick(self, time):

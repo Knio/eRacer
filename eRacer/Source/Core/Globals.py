@@ -64,6 +64,10 @@ def clamp(x, _min, _max):
 
 CONSTS    = cpp.Constants().g_Constants
 
+class Struct:
+  def __init__(self, **entries): 
+    self.__dict__.update(entries)
+
 from Game.Module  	import Module
 from Game.Entity    import Entity
 from Logic.Model      import Model

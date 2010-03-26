@@ -4,21 +4,9 @@ from Game.State       import State
 from Camera           import Camera, CirclingCamera, OrthographicCamera
 from Quad             import Quad
 from HudQuad          import HudQuad
-from MenuMapping      import MainMenuMapping, PauseMenuMapping
-from GameMapping      import *
+from MenuMapping      import *
 from Graphics.View    import View
-
-
-from Box import Box
-
-class GameSettings(object):
-  def __init__(self):
-    self.freeTextureIds = [1,2,3,4,5,6,8]
-    self.track = 'Track1'
-    self.players = []
-    self.debugMappings = []
-    self.nAIs = 3
-
+from GameSettings     import GameSettings  
 
 
 class MenuItem(object):
@@ -32,7 +20,6 @@ class MenuItem(object):
       self.label, "Sony Sketch EF", self.fontsize, position, selected and RED or WHITE
     ) 
       
-    #return height  
     return self.lineheight 
     
 class ApplyMenuItem(MenuItem):
@@ -65,7 +52,6 @@ class SelectMenuItem(MenuItem):
       self.options[self.index][0], "Sony Sketch EF", self.fontsize, position+Point3(300,0,0), WHITE
       ) 
       
-    #return height  
     return self.lineheight
     
 class InputMenuItem(MenuItem):
@@ -80,7 +66,6 @@ class InputMenuItem(MenuItem):
       self.value, "Sony Sketch EF", self.fontsize, position+Point3(300,0,0), WHITE
       ) 
       
-    #return height  
     return self.lineheight
     
 
@@ -247,106 +232,63 @@ class SetupPlayersMenuState(MenuState):
   MAPPING = MainMenuMapping
   
   def __init__(self, settings):
-    MenuState.__init__(self)
-    
-    
-    humanPlayerOptions = []
-    for i in [1,2,4]:
-      humanPlayerOptions.append((str(i),i))    
+    MenuState.__init__(self)  
     
     self.settings = settings
-    self.menu = [
-      SelectMenuItem('Human Players',self.Menu_Human_Players, humanPlayerOptions, 0),
-      ApplyMenuItem('Back',self.Menu_Back),
-    ]
-    
-    self.availableMappings = [None, 
-                              Keyboard1Mapping, 
-                              Keyboard2Mapping, 
-                              Gamepad0Mapping, 
-                              Gamepad1Mapping, 
-                              Gamepad2Mapping, 
-                              Gamepad3Mapping, 
-                              ]
-    
-    
-    self.textureIds = [1,2,3,4,5,6,8]
-    
-    self.textureMap = {}
-    self.textureMap[1] = "Blue"
-    self.textureMap[2] = "Red"
-    self.textureMap[3] = "Magenta"
-    self.textureMap[4] = "Cyan"
-    self.textureMap[5] = "Green"
-    self.textureMap[6] = "Black"
-    self.textureMap[8] = "Orange"
-    
-    self.Menu_Human_Players(('1',1))    
+   
+    self.UpdateMenu()    
 
-  def Menu_Human_Players(self, value):
-    nPlayers = value[1]
-    self.settings.debugMappings = nPlayers > 1 and [] or [KeyboardDebugMapping, GamepadDebugMapping]
+  def UpdateMenu(self):
+    self.menu = []
+
+    humanPlayerOptions = []
+    for i,num in enumerate(GameSettings.PLAYER_NUMS):
+      humanPlayerOptions.append((str(num),i))   
+
+    self.menu.append(SelectMenuItem('Human Players', self.Menu_Human_Players, humanPlayerOptions, self.settings.nPlayersIndex))
     
     fontsize = 24
     lineheight = 24
     padding = 10
+
+    for playerId,player in enumerate(self.settings.playersIndices):
+      self.menu.append(InputMenuItem('Name', self.Menu_Name, player.name))
+      self.menu[-1].fontsize = fontsize
+      self.menu[-1].lineheight = lineheight
     
-    while len(self.settings.players) < nPlayers:
-      playerId = len(self.settings.players)
-      name = 'Player %d' % (playerId+1)
-      self.menu.insert(len(self.menu)-1, InputMenuItem('Player name',self.Menu_Player_Name, name))
-
-      self.menu[-2].fontsize = fontsize
-      self.menu[-2].lineheight = lineheight
-
-      mapping = self.availableMappings[playerId]
-      
       mappingOptions = []
-      for mapping in self.availableMappings:
-        mappingOptions.append((str(mapping),playerId,mapping))
-        
-      self.menu.insert(len(self.menu)-1, SelectMenuItem('Controls', 
-                                                self.Menu_Controls, 
-                                                mappingOptions, 
-                                                playerId+1))
-
-      self.menu[-2].fontsize = fontsize
-      self.menu[-2].lineheight = lineheight
-
+      for i,mapping in enumerate(GameSettings.MAPPINGS):
+        mappingOptions.append((str(mapping),playerId,i))   
+    
+      self.menu.append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex))
+      self.menu[-1].fontsize = fontsize
+      self.menu[-1].lineheight = lineheight
       
       textureOptions = []
 
-      for textureId in self.textureIds:
-        textureOptions.append((self.textureMap[textureId], playerId, textureId))
+      for i,textureId in enumerate(GameSettings.TEXTURE_IDS):
+        textureOptions.append((GameSettings.TEXTURE_NAMES[i], playerId, i))
       
-      textureId = self.textureIds[playerId]
-      self.menu.insert(len(self.menu)-1, SelectMenuItem('Color', 
-                                            self.Menu_Color,
-                                            textureOptions,
-                                            playerId))
+      self.menu.append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
+      self.menu[-1].fontsize = fontsize
+      self.menu[-1].lineheight = lineheight + padding
 
-      self.menu[-2].fontsize = fontsize
-      self.menu[-2].lineheight = lineheight+padding
-      
-      self.settings.players.append((name, mapping, textureId))
-      
-    while len(self.settings.players) > nPlayers:
-      self.menu.pop(len(self.menu)-2)
-      self.menu.pop(len(self.menu)-2)
-      self.menu.pop(len(self.menu)-2)
+    
+    self.menu.append(ApplyMenuItem('Back', self.Menu_Back))
+    
 
-      p = self.settings.players.pop()
+  def Menu_Human_Players(self, value):
+    self.settings.nPlayersIndex = value[1]      
+    self.UpdateMenu()
 
- 
-  
-  def Menu_Player_Name(self, value):
-    pass
+  def Menu_Name(self, value):
+    self.settings.playersIndices[value[1]].name = value[2] 
     
   def Menu_Controls(self, value):
-    pass
+    self.settings.playersIndices[value[1]].mappingIndex = value[2]
     
   def Menu_Color(self, value):
-    pass
+    self.settings.playersIndices[value[1]].textureIndex = value[2]
   
   
   def Menu_Back(self):
@@ -354,14 +296,15 @@ class SetupPlayersMenuState(MenuState):
 
 class PauseMenuState(MenuState):
   MAPPING = PauseMenuMapping
-  MENU = [
-    ('Continue',),
-    ('Main menu',),
-    ('Exit',) 
-  ]
   
   def __init__(self):
     MenuState.__init__(self)
+    self.menu = [
+      ApplyMenuItem('Continue',self.Menu_Continue),
+      ApplyMenuItem('Main menu',self.Menu_Main_menu),
+      ApplyMenuItem('Exit',self.Menu_Exit),
+    ]
+    self.menuTop = 240
     
   def Activate(self):
     print "activate pause!!!!"
