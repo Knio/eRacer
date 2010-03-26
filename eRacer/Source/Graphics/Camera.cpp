@@ -77,6 +77,11 @@ void Camera::UpdateUp(){
 	up_ = cross(cross(viewDirection, up_),viewDirection);
 }
 
+float Camera::GetAspectRatio() const{
+	return aspectRatio_;
+}
+
+
 void Camera::SetAspectRatio(float aspectRatio){
 	assert(aspectRatio>0);
 	aspectRatio_ = aspectRatio;

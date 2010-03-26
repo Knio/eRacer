@@ -139,6 +139,7 @@ class GameState(State):
         Matrix(Point3(x, 7, z)) * self.startOrientation, 
         player and player.textureId or self.GetRandomTextureId()
       ))
+      vehicle.finishPlace = -1
       vehicle.isAI = player and True or False
       self.Add(Shadow(vehicle))
       self.vehicleList.append(vehicle)
@@ -197,8 +198,8 @@ class GameState(State):
 
     for i,vehicle in enumerate(self.playerVehicles):
       pi = PlayerInterface(self, vehicle, viewports[i])
-      pi.AddRenderable(self.scene)
       pi.AddRenderable(self.skybox)
+      pi.AddRenderable(self.scene)
       self.interfaces.append(pi)
 
 
@@ -216,6 +217,7 @@ class GameState(State):
     #self.sound.looping  = True
     #self.sound.is3D     = False
     #self.sound.isPaused = False
+    #self.sound.volume = 64
     #game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
     
     game().time.Zero()
@@ -292,6 +294,7 @@ class GameState(State):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
     
     if lap == self.laps+1:
+      vehicle.finishPlace = vehicle.place
       if not vehicle.isAI:
         self.nPlayersRacing-=1
         if self.nPlayersRacing == 0:

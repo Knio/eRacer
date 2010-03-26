@@ -48,6 +48,8 @@ class CirclingCamera(Camera):
     self.SetPosition(pos)
 
 class ChasingCamera(Camera):
+  MAX_FOV = PI*7./8.  
+    
   def __init__(self, target): 
     Camera.__init__(self)
     self.target   = target
@@ -76,7 +78,9 @@ class ChasingCamera(Camera):
     
     alpha = math.pow(0.01, float(time.game_delta) / time.RESOLUTION)
     self.position = self.position*alpha + behindworld*(1-alpha)
-    self.fov      = max(self.fov*alpha      + fov*(1-alpha), math.pi/12.)
+    self.fov      = self.fov*alpha      + fov*(1-alpha)
+    
+    self.fov = min(self.fov, self.MAX_FOV/self.GetAspectRatio())
 
     alpha = math.pow(0.65, float(time.game_delta) / time.RESOLUTION)
     upworld = mul0(self.target.transform, Y*10)
