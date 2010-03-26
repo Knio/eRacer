@@ -8,6 +8,10 @@ struct Constants
 {
 	static Constants* g_Constants;
 	
+	int SCREEN_WIDTH;
+	int SCREEN_HEIGHT;
+	
+	
 	// PhysX
 	float MAX_TIMESTEP;
 	float MIN_TIMESTEP;
@@ -29,6 +33,7 @@ struct Constants
 	// Vehicle
 	int		CAR_DEBUG;
 	int 	CAR_CPP;
+	float CAR_TURN1;
 	
 	float CAR_DISPLACEMENT;
 	float	CAR_MASS;

@@ -145,14 +145,14 @@ float CarBody::SimWheel(
   const float weight = length(downforce+slowforce);
   
   if (i >= 2) turning = 0;
-  const float angle  = turning * min(1.f, 60.f / max(1.f, powf(length(wheelvel[i]), 1.3f)));
+  const float angle  = turning * min(1.f, CONSTS.CAR_TURN1 / max(1.f, powf(length(wheelvel[i]), 1.3f)));
   // wheel rolling direction
   const Vector3 worldrollingdir     = mul0(tx, mul0(CreateMatrix(ORIGIN, angle, Y), Z));
   // motion along the wheel's rolling direction
   const Vector3 worldrollingvel     = project(wheelvel[i], worldrollingdir);
   const Vector3 worldrollingvelroad = projectOnto(worldrollingvel, worldroadnormal);
   // motion the wheel WANTS to be going
-  const Vector3 worldforwardvel     = worldrollingdir * enginespeed;
+  const Vector3 worldforwardvel     = worldrollingdir * enginespeed * CONSTS.MAX_ENG_FORCE;
   const Vector3 worldforwardvelroad = projectOnto(worldforwardvel, worldroadnormal);
   // wheel's current velocity projected on the surface of the road
   const Vector3 worldvelroad        = projectOnto(wheelvel[i],  worldroadnormal);
