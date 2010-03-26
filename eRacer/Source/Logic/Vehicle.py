@@ -128,7 +128,7 @@ class Vehicle(Model):
     if boostState == True and self.boostFuel > 0.5:
       if self.sumHeight/4 < 2 and self.boosting == 0:
         self.boostFuel = self.boostFuel - 0.5
-        pushForce = normalized(Vector3(0,1,2)) * 270000 
+        pushForce = normalized(Vector3(0,1,1)) * 270000 
         self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
       self.boosting = 1
     else:
@@ -207,7 +207,7 @@ class Vehicle(Model):
     #if 0 < phys.RaycastDown(mul1(tx, center), worldroadnormal) < 20:
     tempD = game().physics.physics.Raycast(mul1(tx, center), dir, worldroadnormal)
     #print tempD
-    if 0 < tempD < 20:
+    if 0 < tempD < 40:
       worldroadnormal = up      
       gravity = worldroadnormal * (-CONSTS.CAR_GRAVITY * self.MASS)
       if delta: phys.AddWorldForceAtLocalPos(gravity, self.MASS_CENTRE)
