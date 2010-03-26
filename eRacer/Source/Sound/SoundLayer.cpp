@@ -8,16 +8,13 @@ const string SoundLayer::SOUND_FOLDER("Resources/Sounds/");
 
 
 SoundFx::~SoundFx()
-   {
-	   //isLooping = false;
-	   //SoundLayer::GetInstance()->UpdateSoundFx(this);
-		//*	
-	   if (NULL!= soundsample) // check if FMOD is still alive first
-		{
-			FSOUND_Sample_Free(soundsample); 
-			soundsample = NULL;
-		}//*/
-   }
+{
+	if ((SoundLayer::GetInstance()->m_isShutdown == false) && (NULL!= soundsample)) // check if FMOD is still alive first
+	{
+		FSOUND_Sample_Free(soundsample); 
+		soundsample = NULL;
+	}
+}
 
 
 SoundLayer::SoundLayer()
@@ -136,6 +133,8 @@ int SoundLayer::Init()
         printf("%s\n", FMOD_ErrorString(FSOUND_GetError()));
     }
 
+	m_isShutdown = false;
+
 	return 0;
 }
 
@@ -159,9 +158,9 @@ int SoundLayer::Update()
 
 int SoundLayer::Shutdown()
 {
-    //TODO~!!!!
-	// FSOUND_Close(); // causes crash in SoundFx dtor
-	//m_sou
+	m_isShutdown = true;
+	FSOUND_Close();
+
 	return 0;
 }
 

@@ -84,6 +84,7 @@ private:
 	FilenameCache m_SoundCache2D;
 	map<SoundDescription, FSOUND_SAMPLE*> m_SoundCacheSimple;
 
+
 	//TODO: GLOBAL_VOLUME
 
 protected:
@@ -93,6 +94,7 @@ protected:
 
 public:
 	static const string SOUND_FOLDER;
+	bool m_isShutdown;
 
 	~SoundLayer();	//Destructor
 
