@@ -45,9 +45,10 @@ Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
   
   vb->Unlock();
   
-  view = new Matrix[2];
-  view[0] = IDENTITY;
-  view[1] = IDENTITY;
+  view = new Matrix[32];
+  curview = 0;
+  length = 1;
+  for (int i=0;i<32;i++) view[i] = IDENTITY;
   
   effect = GraphicsLayer::GetInstance()->GetEffect("Starfield.fx");
   effect->SetTechnique("Starfield");
@@ -75,8 +76,10 @@ void Starfield::Update(const Matrix& newview, const Point3 &newpos)
   // camera = g->GetCamera();
   
   // TODO rotate with bigger circular buffer
-  view[1] = view[0];
-  view[0] = newview;
+  // view[1] = view[0];  
+  // view[0] = newview;
+  curview = (curview+1) % 32;
+  view[curview] = newview;
   
   pos = newpos;
   // _Update();
@@ -98,23 +101,25 @@ void Starfield::Draw(IDirect3DDevice9* dev) const
   camPos.y = pos.y;
   camPos.z = pos.z;
   
-
-  effect->SetMatrix("PMatrix",  &GraphicsLayer::GetInstance()->GetCamera()->GetProjectionMatrix());
-  effect->SetMatrix("V1Matrix", &view[0]);
-  effect->SetMatrix("V2Matrix", &view[1]);
-  effect->SetFloat ("SIZE",     SIZE);
-  effect->SetVector("camPos",   &camPos);
-  
-  unsigned int p;
-  effect->Begin(&p, 0);
-  for (unsigned int i=0;i<p;i++)
+  for (int i=0;i<length;i++)
   {
-    effect->BeginPass(i);
-    dev->DrawPrimitive(D3DPT_LINELIST,  0,   N);
-    dev->DrawPrimitive(D3DPT_POINTLIST, 0, 2*N);
-    effect->EndPass();
+    effect->SetMatrix("PMatrix",  &GraphicsLayer::GetInstance()->GetCamera()->GetProjectionMatrix());
+    effect->SetMatrix("V1Matrix", &view[(curview-i+32) % 32]);
+    effect->SetMatrix("V2Matrix", &view[(curview-i+31) % 32]);
+    effect->SetFloat ("SIZE",     SIZE);
+    effect->SetVector("camPos",   &camPos);
+    
+    unsigned int p;
+    effect->Begin(&p, 0);
+    for (unsigned int i=0;i<p;i++)
+    {
+      effect->BeginPass(i);
+      dev->DrawPrimitive(D3DPT_LINELIST,  0,   N);
+      // draw again as points because DX doesnt like to draw zero-length lines
+      dev->DrawPrimitive(D3DPT_POINTLIST, 0, 2*N);
+      effect->EndPass();
+    }
+    effect->End();
   }
-  effect->End();
-  // draw again as points because DX doesnt like to draw zero-length lines
 }
 }
