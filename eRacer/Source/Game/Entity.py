@@ -18,5 +18,5 @@ class Entity(object):
   def Release(self):
     pass
   
-  def __del__(self):
-    print 'del %d %r' % (self.id, self)
+  # def __del__(self):
+  #   print 'del %d %r' % (self.id, self)
