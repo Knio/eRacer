@@ -58,6 +58,9 @@ class Vehicle(Model):
     
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
     self.physics.SetId(self.id)
+    
+    # tip of the car - should not be hardcoded ideally
+    self.tip = Point3(0, 0, 1.11+9.03/2+1.2)
 
   
     self.throttle = 0.      # position of the throttle on game controller from 0 to 1
@@ -89,6 +92,27 @@ class Vehicle(Model):
 
     game().event.Register(self.ReloadedConstsEvent)
 
+  MAX_STEALING_DISTANCE = 10.
+  STEALING_SPEED = 1. #boost fuel/second
+
+  def BoostStealing(self, delta_s):
+    for obstacle in self.obstacles:
+      if isinstance(obstacle, Vehicle):
+        obstaclePosition = mul1(obstacle.transform, ORIGIN)
+        stealerPosition = mul1(self.transform, self.tip)
+        vector = obstaclePosition-stealerPosition
+        distance = length(vector)
+        if(distance < self.MAX_STEALING_DISTANCE):
+          stealerDirection = mul0(self.transform,Z)
+          
+          #to the front?
+          if dot(vector, stealerDirection)>0:
+            self.boostFuel += self.STEALING_SPEED*delta_s
+            obstacle.boostFuel -= 0.5*self.STEALING_SPEED*delta_s
+            
+          
+        
+    
     
   # control events
   def Brake(self, brake):
@@ -117,9 +141,12 @@ class Vehicle(Model):
       game().sound.sound.UpdateSoundFx(self.sound)
       return
     
+    delta = float(time.game_delta) / time.RESOLUTION
+
+    self.BoostStealing(delta)
+    
     phys  = self.physics
     tx    = phys.GetTransform()
-    delta = float(time.game_delta) / time.RESOLUTION
     worldpos   = mul1(tx, ORIGIN)
     self.velocity = phys.GetVelocity()
     
