@@ -210,7 +210,7 @@ class SetupGameMenuState(MenuState):
       ApplyMenuItem('Start', self.Menu_Start),
       ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
       SelectMenuItem('AI Players', self.Menu_AI_Players, aiPlayerOptions, self.settings.nAIs),
-      SelectMenuItem('Track', self.Menu_Track, [('Track1',),('Track2',)], 0),
+      SelectMenuItem('Track', self.Menu_Track, [('Triple Eight',0),('Cyclone',1)], 0),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
     
@@ -223,7 +223,7 @@ class SetupGameMenuState(MenuState):
     self.settings.nAIs = value[1]
     
   def Menu_Track(self,value):
-    self.settings.track = value    
+    self.settings.trackIndex = value[1]    
     
   def Menu_Setup_Players(self):
     game().PushState(SetupPlayersMenuState(self.settings))    
