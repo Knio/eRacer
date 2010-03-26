@@ -121,8 +121,8 @@ class Meteor(Model):
       self.physics.PutToSleep()
       direction = normalized(force)
       pos = self.physics.GetPosition()-direction*self.scale
-      #self.physics.SetVelocity(Vector3(0,0,0))
-      #self.physics.SetAngVelocity(Vector3(0,0,0));
+      self.physics.SetVelocity(Vector3(0,0,0))
+      self.physics.SetAngVelocity(Vector3(0,0,0));
       self.physics.SetPosition(pos)
         
     

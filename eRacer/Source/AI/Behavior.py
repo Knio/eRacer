@@ -51,48 +51,76 @@ class AIBehavior(Behavior):
     tx    = self.parent.physics.GetTransform()
     bodyForward = mul0(tx, Z) # forward direction of body
     bodyRight = mul0(tx, X) #vector pointing right of body
-    #wantedVec = normalized(frame1.fw * 2.0 + frame2.fw * 0.3 + frame3.fw * 0.2) # vector created by track
+    bodyUp = mul0(tx, Y)
+    
     cur = nowFrame.position
     wantedVec = normalized((frame1.position-pos) * 1.0 +  (frame2.position-pos) * 1.0 + (frame3.position-pos) * 1.0)
-    
-    #see if 5 meters ahead of me is on the track)
-    distFromCentre = self.line.GetOffsetFromCentre(pos + bodyForward * 5.0)
-    #print distFromCentre
-    if distFromCentre > 0:
-     # print "right"
-      if distFromCentre > self.line.maxX:
-        pass
-    else:
-      #print "left"
-      if distFromCentre < self.line.minX:
-        pass
+    #this is the way we want to go if there are no obstacles in our way and if we are not too close to the wall
+    distFromCentre = self.line.GetOffsetFromCentre(pos)
     
     if self.arrow: 
       self.arrow.transform = Matrix(frame2.position)
     
     if self.curState == AIState.DRIVE:
-      turnProj = project(wantedVec, bodyRight)
-     
-      turnScale = 5.0
-      turnSize = min(1.0, length(turnProj) * turnScale)
-      costheta = dot(turnProj, bodyRight) / length(turnProj)
-   
-      if 0.999 < costheta < 1.001:#right turn
-        self.parent.Turn(turnSize)
+      #first check for obstacles and see if we must avoid them.
+      dodgeMode = False
+      closestDist = 99999
+      closestObs = 0
+      frontPos = pos + bodyForward * 5.0 #look from the front of the car
+      for obs in self.parent.obstacles:
+        toObs = mul1(obs.transform, ORIGIN) - frontPos
+        obsProj = projectOnto(toObs, bodyUp)
+        costheta = dot(obsProj, bodyForward) / length(obsProj)
+        if length(toObs) < closestDist:
+          closestDist = length(toObs)
+          closestObs = obs
+        #obstacle in cone in front of car
+        if length(toObs) < 10.0 and costheta > math.sqrt(2)/2 :
+          dodgeMode = True
+     # print "closest", closestDist
+      if dodgeMode:
+        #print "must dodge"
+        if distFromCentre > 0: 
+        #we are on the right side, so it would be better to go left ot the centre
+          self.parent.Turn(-0.5)
+        else:
+          self.parent.Turn(0.5)
       else:
-        self.parent.Turn(-turnSize)
-      #basic boost code: we don't need to turn off boost until the turn becomes large
-      #print turnSize
-      if turnSize < 0.5 and self.parent.boostFuel > 2.5:
-        #print "boost"
-        self.parent.Boost(False)
-      if turnSize > 0.8:
-        #print "boost off"
-        self.parent.Boost(False)
-        
+        #print "nothing to dodge"
+        #if here, we can drive normally trying to follow the track
+        turnProj = project(wantedVec, bodyRight)
+     
+        turnScale = 5.0
+        turnSize = min(1.0, length(turnProj) * turnScale)
+        if turnSize < 0.05:
+          turnSize = 0
+        costheta = dot(turnProj, bodyRight) / length(turnProj)
+        fwProj = projectOnto(nowFrame.fw, bodyUp)#check if we are driving into the walls
+        fwCosth = dot(fwProj, bodyRight) / length(fwProj)
+
+        if 0.999 < costheta < 1.001:#right turn
+          #if close to right wall and we're going to hit the wall, adjust to centre
+          if fwCosth > 0.2 and distFromCentre > self.line.maxX - 5.0:
+            #print "too close to right wall"
+            self.parent.Turn(-0.5)
+          else:
+            self.parent.Turn(turnSize)
+        else:
+          #if close to left wall and we're going to hit the wall, adjust to centre
+          if fwCosth < -0.2 and distFromCentre < self.line.minX + 5.0:
+            #print "too close to left wall"
+            self.parent.Turn(0.5)
+          else:
+            self.parent.Turn(-turnSize)
+        #basic boost code: we don't need to turn off boost until the turn becomes large
+        #print turnSize
+        #if turnSize < 0.5 and self.parent.boostFuel > 2.5:
+          #print "boost"
+          #  self.parent.Boost(True)
+        #if turnSize > 0.8:
+          #print "boost off"
+          #  self.parent.Boost(False)
       self.parent.Accelerate(1.0)
-      if length(turnProj) < 0.001:
-        self.parent.Turn(0)
 
       #now change state if needed
       if self.parent.physics.GetSpeed() < 2.0 and self.objectInFront(1.0, tx):
@@ -100,7 +128,7 @@ class AIBehavior(Behavior):
         self.curState = AIState.STUCK
     
     if self.curState == AIState.STUCK:
-      self.parent.Accelerate(-0.5)
+      self.parent.Accelerate(-1.0)
       self.parent.Turn(0)
       
       if not self.objectInFront(8.0, tx):
