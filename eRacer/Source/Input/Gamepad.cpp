@@ -35,9 +35,11 @@ BOOL CALLBACK enumCallback(const DIDEVICEINSTANCE* instance, VOID* context)
 	hr = mypad->m_lpdi->CreateDevice(instance->guidInstance, &mypad->m_pDevice, NULL);
 
 	if (FAILED(hr)) { 
+		mypad->m_pDevice = NULL;
 		return DIENUM_CONTINUE;
 	}
-	else if (mypad->m_lastPadFound >= mypad->m_padNum) { //Take pads in order
+	else if (mypad->m_lastPadFound < mypad->m_padNum) { //Take pads in order
+		mypad->m_pDevice = NULL;
 		mypad->m_lastPadFound++;
 		return DIENUM_CONTINUE;
 	}

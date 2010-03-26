@@ -44,6 +44,6 @@ class PauseMenuMapping(MenuMapping):
     return MenuMapping.KeyPressedEvent(self, key)
     
   def GamepadButtonReleasedEvent(self, id, button):
-    if button == eRacer.BUTTON_START:  return E.UnPauseEvent()
+    if button == cpp.BUTTON_START:  return E.UnPauseEvent()
     return MenuMapping.GamepadButtonPressedEvent(self, button)
     
