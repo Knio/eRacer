@@ -175,6 +175,9 @@ public:
 	 */
 	void SetFar(float far);
 
+
+	float GetAspectRatio() const;
+
 	/**
 	 * @brief set the aspect ratio (width/height)
 	 *
