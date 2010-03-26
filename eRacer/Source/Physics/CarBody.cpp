@@ -120,7 +120,7 @@ float CarBody::SimWheel(
   wheelvel[i] = wheelvel[i]*(1-CONSTS.WHEELVEL_ALPHA) + worldvel*CONSTS.WHEELVEL_ALPHA;
   
   // find distance to road
-  const float upamount = 2.f;
+  const float upamount = 0.5;
   const Vector3 worldroadnormal = frame.up;
   const Point3 localsuspoint = Point3(localpos.x, localpos.y + upamount, localpos.z);
   const Point3 worldsuspoint = mul1(tx, localsuspoint);

@@ -77,7 +77,6 @@ class Vehicle(Model):
     self.boosting = 0.
     self.lapcount = 0
     self.boostFuel = 0.
-    self.sumHeight = 0.
     
     self.sound = cpp.SoundFx();
     self.sound.isLooping  = True
@@ -109,11 +108,7 @@ class Vehicle(Model):
           if dot(vector, stealerDirection)>0:
             self.boostFuel += self.STEALING_SPEED*delta_s
             obstacle.boostFuel -= 0.5*self.STEALING_SPEED*delta_s
-            
-          
-        
-    
-    
+   
   # control events
   def Brake(self, brake):
     self.brake = brake
@@ -125,10 +120,13 @@ class Vehicle(Model):
     self.steerPos = turn
   
   def Boost(self, boostState):
+    tx = self.physics.GetTransform()
     if boostState == True and self.boostFuel > 0.5:
-      if self.sumHeight/4 < 2 and self.boosting == 0:
+      normal = Vector3(0, 0, 0)
+      dist = game().physics.physics.Raycast(mul1(tx, ORIGIN), mul0(tx, -Y), normal)
+      if dist < 3.0 and self.boosting == 0:
         self.boostFuel = self.boostFuel - 0.5
-        pushForce = normalized(Vector3(0,1,1)) * 270000 
+        pushForce = normalized(Vector3(0,1,1)) * 250000 
         self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
       self.boosting = 1
     else:
@@ -149,7 +147,6 @@ class Vehicle(Model):
     tx    = phys.GetTransform()
     worldpos   = mul1(tx, ORIGIN)
     self.velocity = phys.GetVelocity()
-    
     
     frame = self.track.GetFrame(worldpos, self.trackpos)
     self.frame = frame
@@ -258,6 +255,7 @@ class Vehicle(Model):
       worldsuspoint   = mul1(tx, localsuspoint)
       # dist = dist = game().physics.physics.Raycast(worldsuspoint, dir, worldroadnormal) - upamount
       dist = dot(up, (worldsuspoint - frame.position)) - upamount
+      print "dist", dist
       if length(worldsuspoint - frame.position) > 26:
         dist = 1e99
 
@@ -433,7 +431,7 @@ class Vehicle(Model):
       self.boostFuel = max( 0, self.boostFuel - delta )
       if self.boostFuel == 0:
         self.boosting = 0
-      pushForce = normalized(Vector3(0,0,1)) * 4000
+      pushForce = normalized(Vector3(0,-0.5,1)) * 4000
       phys.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
     else:    
       self.boostFuel = min( 5, self.boostFuel + delta/3 )
