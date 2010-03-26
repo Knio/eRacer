@@ -8,6 +8,7 @@ from Game.State     import State
 from GameMapping    import *
 from MenuState      import PauseMenuState
 from GameEndState   import GameEndState
+from GameSettings   import GameSettings
 
 # Entities
 from Track      import Track
@@ -27,10 +28,6 @@ from AI.Raceline import Raceline
 # View stuff
 from Graphics.View    import View
 from Graphics.SkyBox  import SkyBox
-
-
-
-      
     
 
 
@@ -69,7 +66,6 @@ class LoadingState(State):
 
 
 class GameState(State):
-  AI_MODEL_NUMS = [2,3,4,5,6,8,4]
   
   def __init__(self, settings):
     State.__init__(self)
@@ -78,7 +74,7 @@ class GameState(State):
     self.laps   = 2 # TODO CONST
     self.stats  = {}
     self.gameOver = False
-    self.nPlayersRacing = len(settings.players)
+    self.nPlayersRacing = settings.nPlayers
     self.freeAINames =  [
       "Arthur Dent", 
       "Ford Prefect", 
@@ -137,10 +133,10 @@ class GameState(State):
         player and player.name or self.freeAINames.pop(),    
         self.track, 
         Matrix(Point3(x, 7, z)) * self.startOrientation, 
-        player and player.textureId or self.GetRandomTextureId()
+        player and player.textureId or random.choice(GameSettings.TEXTURE_IDS)
       ))
       vehicle.finishPlace = -1
-      vehicle.isAI = player and True or False
+      vehicle.isAI = player==None
       self.Add(Shadow(vehicle))
       self.vehicleList.append(vehicle)
       if player:
@@ -151,8 +147,8 @@ class GameState(State):
       
       return vehicle                
       
-  def GetRandomTextureId(self):
-    return len(self.freeTextureIds) > 0 and self.freeTextureIds.pop() or random.choice(self.aiTextureIds)
+  # def GetRandomTextureId(self):
+  #   return len(self.freeTextureIds) > 0 and self.freeTextureIds.pop() or random.choice(self.TEXTURE_IDS)
     
 
   def load(self, settings):
@@ -165,9 +161,9 @@ class GameState(State):
     # TODO
     # can we render a fake loading screen here until the real one works?
     
-    self.freeTextureIds = settings.freeTextureIds
-    random.shuffle(self.freeTextureIds)
-    random.shuffle(self.AI_MODEL_NUMS)
+    #self.freeTextureIds = settings.freeTextureIds
+    #random.shuffle(self.freeTextureIds)
+    #random.shuffle(self.AI_MODEL_NUMS)
     random.shuffle(self.freeAINames)
     
     
@@ -294,6 +290,8 @@ class GameState(State):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
     
     if lap == self.laps+1:
+      print vehicle.name, " made it. he is an AI ",vehicle.isAI
+      print self.nPlayersRacing," human players still racing"
       vehicle.finishPlace = vehicle.place
       if not vehicle.isAI:
         self.nPlayersRacing-=1

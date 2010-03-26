@@ -16,12 +16,13 @@ class GameSettings(object):
   TEXTURE_NAMES = ['Blue','Red', 'Magenta', 'Cyan', 'Green', 'Black', 'Orange']
 
   def __init__(self):
-    self.freeTextureIds = list(self.TEXTURE_IDS)
+    #self.freeTextureIds = list(self.TEXTURE_IDS)
     self.trackIndex = 0
     self.playersIndices = []
     self.debugMappings = []
     self.nPlayersIndex = 0
     self.nAIs = 3
+    
     
   def get_track(self):
     return self.TRACKS[self.trackIndex]
