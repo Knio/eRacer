@@ -30,10 +30,12 @@ class PlayerInterface(object):
     for vehicle in state.vehicleList:
       self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", self.vehicle==vehicle and "bluemarker.png" or "redmarker.png", 150-8, 50-12, 16, 16))
 
+    self.starfields = []
+    self.starlen = 2
     for view in self.views:
-      view.AddRenderable(state.Add(Starfield(1024, 1000.0, view.camera)))
-      view.AddRenderable(state.Add(Starfield(4096, 100.0,  view.camera)))
-      view.AddRenderable(state.Add(Starfield( 512, 20.0,   view.camera)))
+      self.starfields.append(view.AddRenderable(state.Add(Starfield(1024, 1000.0, view.camera))))
+      self.starfields.append(view.AddRenderable(state.Add(Starfield(1024, 100.0,  view.camera))))
+      self.starfields.append(view.AddRenderable(state.Add(Starfield( 256, 20.0,   view.camera))))
     
   def get_view(self):
     return self.views[self.viewIndex]
@@ -56,6 +58,15 @@ class PlayerInterface(object):
     
     
   def Tick(self, time):
+    delta = float(time.game_delta) / time.RESOLUTION
+    
+    if self.vehicle.boosting: self.starlen += delta * 15
+    else:                     self.starlen -= delta * 15
+    
+    self.starlen = max(min(self.starlen, 32), 2)
+    for i in self.starfields:
+      i.length = int(self.starlen)
+    
     #Track Place HUD
     if self.vehicle.finishPlace < 0: 
       self.hud.WriteString(self.ordinal(self.vehicle.place), "Sony Sketch EF", 60, Point3(20, 5,0))
