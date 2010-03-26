@@ -66,6 +66,18 @@ class LoadingState(State):
 
 
 class GameState(State):
+  AI_NAMES = [
+      "Arthur Dent", 
+      "Ford Prefect", 
+      "Zaphod Beeblebrox", 
+      "Marvin", 
+      "Trillian", 
+      "Slartibartfast",
+      "Philip J. Fry",
+      "Bender Bending Rodriguez",
+      "Turanga Leela"
+    ]
+  
   
   def __init__(self, settings):
     State.__init__(self)
@@ -75,19 +87,11 @@ class GameState(State):
     self.stats  = {}
     self.gameOver = False
     self.nPlayersRacing = settings.nPlayers
-    self.freeAINames =  [
-      "Arthur Dent", 
-      "Ford Prefect", 
-      "Zaphod Beeblebrox", 
-      "Marvin", 
-      "Trillian", 
-      "Slartibartfast",
-      "Philip J. Fry",
-      "Bender Bending Rodriguez",
-      "Turanga Leela"]
+    self.freeAINames =  list(self.AI_NAMES)
+    self.settings = settings
 
     
-    self.load(settings)
+    self.load()
     
   def Activate(self):
     State.Activate(self)
@@ -133,7 +137,7 @@ class GameState(State):
         player and player.name or self.freeAINames.pop(),    
         self.track, 
         Matrix(Point3(x, 7, z)) * self.startOrientation, 
-        player and player.textureId or random.choice(GameSettings.TEXTURE_IDS)
+        player and player.textureId or self.settings.RandomTextureId()
       ))
       vehicle.finishPlace = -1
       vehicle.isAI = player==None
@@ -151,7 +155,7 @@ class GameState(State):
   #   return len(self.freeTextureIds) > 0 and self.freeTextureIds.pop() or random.choice(self.TEXTURE_IDS)
     
 
-  def load(self, settings):
+  def load(self):
     # testing stuff
     # game().sound.PlaySound2D("jaguar.wav")
     print "GameState::load begin"
@@ -161,13 +165,10 @@ class GameState(State):
     # TODO
     # can we render a fake loading screen here until the real one works?
     
-    #self.freeTextureIds = settings.freeTextureIds
-    #random.shuffle(self.freeTextureIds)
-    #random.shuffle(self.AI_MODEL_NUMS)
     random.shuffle(self.freeAINames)
     
     
-    self.track = self.Add(Track(settings.track))
+    self.track = self.Add(Track(self.settings.track))
     self.vehicleList = []
 
     frame = self.track.GetFrame(-30.0)
@@ -184,12 +185,11 @@ class GameState(State):
     self.skybox = SkyBox()
 
     self.interfaces = []
-    print "Number of players",len(settings.players)
-    viewports = self.SetupViewports(len(settings.players))
+    viewports = self.SetupViewports(self.settings.nPlayers)
     
-    self.playerVehicles = [self.AddVehicle(player) for player in settings.players] 
+    self.playerVehicles = [self.AddVehicle(player) for player in self.settings.players] 
 
-    for i in range(settings.nAIs):
+    for i in range(self.settings.nAIs):
       self.AddVehicle(None)
 
     for i,vehicle in enumerate(self.playerVehicles):
@@ -199,7 +199,7 @@ class GameState(State):
       self.interfaces.append(pi)
 
 
-    self.SetupInputMapping(settings)
+    self.SetupInputMapping()
 
        
     self.meteorManager = MeteorManager(self)
@@ -241,13 +241,13 @@ class GameState(State):
         (w2,  h2, w2, h2),
       ]
       
-  def SetupInputMapping(self, settings):
+  def SetupInputMapping(self):
     mappings = []
     
-    for mapping in settings.debugMappings:
+    for mapping in self.settings.debugMappings:
       mappings.append(mapping(None))
       
-    for i,player in enumerate(settings.players):
+    for i,player in enumerate(self.settings.players):
       mappings.append(player.mapping(self.interfaces[i]))
       
     self.mapping = GameMapping(mappings)
@@ -290,8 +290,6 @@ class GameState(State):
     self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
     
     if lap == self.laps+1:
-      print vehicle.name, " made it. he is an AI ",vehicle.isAI
-      print self.nPlayersRacing," human players still racing"
       vehicle.finishPlace = vehicle.place
       if not vehicle.isAI:
         self.nPlayersRacing-=1

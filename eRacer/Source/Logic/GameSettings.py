@@ -13,16 +13,27 @@ class GameSettings(object):
               Gamepad3Mapping, 
              ]
   TEXTURE_IDS = [1,2,3,4,5,6,8]
-  TEXTURE_NAMES = ['Blue','Red', 'Magenta', 'Cyan', 'Green', 'Black', 'Orange']
+  TEXTURE_NAMES = ['Blue', 'Red', 'Magenta', 'Cyan', 'Green', 'Black', 'Orange']
 
   def __init__(self):
-    #self.freeTextureIds = list(self.TEXTURE_IDS)
+    self.freeTextureIndices = set()
     self.trackIndex = 0
     self.playersIndices = []
     self.debugMappings = []
     self.nPlayersIndex = 0
     self.nAIs = 3
     
+  def ResetFreeTextures(self):
+    self.freeTextureIndices = set(range(len(self.TEXTURE_IDS)))
+    for player in self.playersIndices:
+      self.freeTextureIndices.discard(player.textureIndex)
+    
+  
+  def RandomTextureId(self):
+    if len(self.freeTextureIndices)==0:
+        self.ResetFreeTextures()
+    
+    return self.TEXTURE_IDS[self.freeTextureIndices.pop()]
     
   def get_track(self):
     return self.TRACKS[self.trackIndex]
