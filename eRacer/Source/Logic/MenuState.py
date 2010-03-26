@@ -28,6 +28,7 @@ class ApplyMenuItem(MenuItem):
     self.callback = callback
     
   def MenuSelectEvent(self):
+    print "ApplyButton",self.label,"got menu select"
     self.callback()
     
     
@@ -129,6 +130,7 @@ class MenuState(State):
       method()
 
   def MenuSelectEvent(self):
+    print "MenuSelect",self
     method = getattr(self.menu[self.selected], 'MenuSelectEvent', None)
     if method: 
       game().sound.sound.PlaySoundFx(self.menuSel)
@@ -213,6 +215,7 @@ class SetupGameMenuState(MenuState):
     ]
     
   def Menu_Start(self):
+    print "menu start"
     self.parent.Pause() # ???
     game().PushState(GameState(self.settings))
         

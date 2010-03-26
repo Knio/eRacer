@@ -124,9 +124,10 @@ void Gamepad::Update(void)
 
 	for(unsigned int i=0; i<N_GAMEPAD_BUTTONS; i++)
 	{
-		if (GamepadUp(currentState().rgbButtons, i) && GamepadDown(oldState().rgbButtons, i))
+		if (GamepadUp(currentState().rgbButtons, i) && GamepadDown(oldState().rgbButtons, i)){
+			
 			EVENT(GamepadButtonReleasedEvent(m_padNum,i));
-		else if (GamepadDown(currentState().rgbButtons, i) && GamepadUp(oldState().rgbButtons, i))
+		}else if (GamepadDown(currentState().rgbButtons, i) && GamepadUp(oldState().rgbButtons, i))
 			EVENT(GamepadButtonPressedEvent(m_padNum,i));
 	}
 	
