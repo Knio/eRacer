@@ -57,7 +57,10 @@ class PlayerInterface(object):
     
   def Tick(self, time):
     #Track Place HUD
-    self.hud.WriteString(self.ordinal(self.vehicle.place), "Sony Sketch EF", 60, Point3(20, 5,0))
+    if self.vehicle.finishPlace < 0: 
+      self.hud.WriteString(self.ordinal(self.vehicle.place), "Sony Sketch EF", 60, Point3(20, 5,0))
+    else:
+      self.hud.WriteString(self.ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 60, Point3(20, 5,0))
     
   
     for vehicle in self.state.vehicleList:
