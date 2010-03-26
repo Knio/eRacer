@@ -76,7 +76,7 @@ class Vehicle(Model):
     
     self.boosting = 0.
     self.lapcount = 0
-    self.boostFuel = 0.
+    self.boostFuel = 5.
     self.sumHeight = 0.
     
     self.sound = cpp.SoundFx();
@@ -93,7 +93,7 @@ class Vehicle(Model):
     game().event.Register(self.ReloadedConstsEvent)
 
   MAX_STEALING_DISTANCE = 10.
-  STEALING_SPEED = 1. #boost fuel/second
+  STEALING_SPEED = 0.5 #boost fuel/second
 
   def BoostStealing(self, delta_s):
     for obstacle in self.obstacles:
@@ -106,9 +106,10 @@ class Vehicle(Model):
           stealerDirection = mul0(self.transform,Z)
           
           #to the front?
-          if dot(vector, stealerDirection)>0:
-            self.boostFuel += self.STEALING_SPEED*delta_s
-            obstacle.boostFuel -= 0.5*self.STEALING_SPEED*delta_s
+          if dot(vector, stealerDirection) > 0:
+            if obstacle.boostFuel >=self.STEALING_SPEED*delta_s:
+              self.boostFuel += self.STEALING_SPEED*delta_s
+              obstacle.boostFuel -= self.STEALING_SPEED*delta_s
             
           
         
