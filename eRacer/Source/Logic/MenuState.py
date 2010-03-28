@@ -300,6 +300,7 @@ class PauseMenuState(MenuState):
     MenuState.__init__(self)
     self.menu = [
       ApplyMenuItem('Continue',self.Menu_Continue),
+      ApplyMenuItem('Restart race', self.Menu_Restart_race),
       ApplyMenuItem('Main menu',self.Menu_Main_menu),
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
@@ -323,6 +324,12 @@ class PauseMenuState(MenuState):
   def Menu_Main_menu(self):
     self.parent = None
     while not game().states[-1].__class__ is MainMenuState:
+      game().PopState()
+      
+  def Menu_Restart_race(self):
+    self.parent.loaded = False
+    self.parent.load(self.parent.settings)
+    while not game().states[-1].__class__ is GameState:
       game().PopState()
           
   def Tick(self, time):
