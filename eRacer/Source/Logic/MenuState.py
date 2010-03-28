@@ -28,6 +28,7 @@ class ApplyMenuItem(MenuItem):
     self.callback = callback
     
   def MenuSelectEvent(self):
+    print "ApplyButton",self.label,"got menu select"
     self.callback()
     
     
@@ -129,6 +130,7 @@ class MenuState(State):
       method()
 
   def MenuSelectEvent(self):
+    print "MenuSelect",self
     method = getattr(self.menu[self.selected], 'MenuSelectEvent', None)
     if method: 
       game().sound.sound.PlaySoundFx(self.menuSel)
@@ -208,11 +210,12 @@ class SetupGameMenuState(MenuState):
       ApplyMenuItem('Start', self.Menu_Start),
       ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
       SelectMenuItem('AI Players', self.Menu_AI_Players, aiPlayerOptions, self.settings.nAIs),
-      SelectMenuItem('Track', self.Menu_Track, [('Track1',),('Track2',)], 0),
+      SelectMenuItem('Track', self.Menu_Track, [('Triple Eight',0),('Cyclone',1)], 0),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
     
   def Menu_Start(self):
+    print "menu start"
     self.parent.Pause() # ???
     game().PushState(GameState(self.settings))
         
@@ -220,7 +223,7 @@ class SetupGameMenuState(MenuState):
     self.settings.nAIs = value[1]
     
   def Menu_Track(self,value):
-    self.settings.track = value    
+    self.settings.trackIndex = value[1]    
     
   def Menu_Setup_Players(self):
     game().PushState(SetupPlayersMenuState(self.settings))    

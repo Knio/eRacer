@@ -6,6 +6,7 @@
 #include "Renderable.h"
 #include "Camera.h"
 
+#define MAX_LEN (32)
 
 namespace Graphics {
 
@@ -20,6 +21,7 @@ class Starfield : public Renderable
 	int 	N;
 	
 	Matrix* view;
+	int curview;
 	Point3 	pos;
 	
 	
@@ -29,6 +31,7 @@ class Starfield : public Renderable
 	ID3DXEffect* effect;
 	
 public:
+	int length;
 	Starfield(int n, float s);
 	void Update(const Matrix& newview, const Point3 &newpos);
 	virtual void Draw(IDirect3DDevice9*) const;

@@ -30,10 +30,12 @@ class PlayerInterface(object):
     for vehicle in state.vehicleList:
       self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", self.vehicle==vehicle and "bluemarker.png" or "redmarker.png", 150-8, 50-12, 16, 16))
 
+    self.starfields = []
+    self.starlen = 2
     for view in self.views:
-      view.AddRenderable(state.Add(Starfield(1024, 1000.0, view.camera)))
-      view.AddRenderable(state.Add(Starfield(4096, 100.0,  view.camera)))
-      view.AddRenderable(state.Add(Starfield( 512, 20.0,   view.camera)))
+      self.starfields.append(view.AddRenderable(state.Add(Starfield(1024, 1000.0, view.camera))))
+      self.starfields.append(view.AddRenderable(state.Add(Starfield(1024, 100.0,  view.camera))))
+      self.starfields.append(view.AddRenderable(state.Add(Starfield( 256, 20.0,   view.camera))))
     
   def get_view(self):
     return self.views[self.viewIndex]
@@ -56,6 +58,15 @@ class PlayerInterface(object):
     
     
   def Tick(self, time):
+    delta = float(time.game_delta) / time.RESOLUTION
+    
+    if self.vehicle.boosting: self.starlen += delta * 15
+    else:                     self.starlen -= delta * 15
+    
+    self.starlen = max(min(self.starlen, 32), 2)
+    for i in self.starfields:
+      i.length = int(self.starlen)
+    
     #Track Place HUD
     if self.vehicle.finishPlace < 0: 
       self.hud.WriteString(self.ordinal(self.vehicle.place), "Sony Sketch EF", 60, Point3(20, 5,0))
@@ -84,9 +95,11 @@ class PlayerInterface(object):
     if self.vehicle.Backwards == True:
        self.hud.WriteString( "WRONG WAY", "Sony Sketch EF", 50, Point3(300,200,0))
 
-                                  
-    if self.vehicle.lapcount:
+    #Lap counter
+    
+    if self.vehicle.lapcount or True: # ???
       playerLaps = min(self.vehicle.lapcount, self.state.laps)
+      playerLaps = max(1, playerLaps);
       
       self.hud.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
       self.hud.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
@@ -97,10 +110,13 @@ class PlayerInterface(object):
       
       y = 100
       for i,t in enumerate(l):
-        if not i or i>self.state.laps: continue
-        self.hud.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
-        self.hud.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
-        y += 15    
+        #if not i or i>self.state.laps or self.vehicle.lapcount == 0: continue
+        #if not i or self.vehicle.lapcount == 0: continue
+        if i>self.state.laps: continue
+        if self.vehicle.lapBugCount > 0 and not i == 0:
+          self.hud.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
+          self.hud.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
+          y += 15    
 
   def CameraChangedEvent(self):
     self.viewIndex = (self.viewIndex+1) % len(self.views)    

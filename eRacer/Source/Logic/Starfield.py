@@ -8,6 +8,7 @@ class Starfield(Entity, cpp.Starfield):
     self.camera = camera
     Entity.__init__(self)
     cpp.Starfield.__init__(self, n, size)
+    self.length = 15
     
   def Tick(self, time):
     Entity.Tick(self, time)       

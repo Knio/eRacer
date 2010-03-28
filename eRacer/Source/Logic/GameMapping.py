@@ -133,11 +133,11 @@ class GamepadDebugMapping(VehicleMapping):
   def __init__(self,target):
     VehicleMapping.__init__(self,target)
 
-  def GamepadStick2AbsoluteEvent(self, relX, relY):
+  def GamepadStick2AbsoluteEvent(self, gamepadId, relX, relY):
     #needs calibration
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
 
-  def GamepadButtonPressedEvent(self, button):
+  def GamepadButtonPressedEvent(self, gamepadId, button):
     if button == cpp.BUTTON_X: 
       if CONSTS.CAR_DEBUG: 
         print "DebugMode is Off"

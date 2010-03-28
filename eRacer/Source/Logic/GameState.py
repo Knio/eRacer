@@ -69,12 +69,12 @@ class GameState(State):
   AI_NAMES = [
       "Arthur Dent", 
       "Ford Prefect", 
-      "Zaphod Beeblebrox", 
+      "Zaphod", 
       "Marvin", 
       "Trillian", 
       "Slartibartfast",
       "Philip J. Fry",
-      "Bender Bending Rodriguez",
+      "Bender",
       "Turanga Leela"
     ]
   
@@ -140,6 +140,7 @@ class GameState(State):
         player and player.textureId or self.settings.RandomTextureId()
       ))
       vehicle.finishPlace = -1
+      vehicle.lapBugCount = 0
       vehicle.isAI = player==None
       self.Add(Shadow(vehicle))
       self.vehicleList.append(vehicle)
@@ -213,7 +214,7 @@ class GameState(State):
     #self.sound.looping  = True
     #self.sound.is3D     = False
     #self.sound.isPaused = False
-    #self.sound.volume = 64
+    #self.sound.volume = 24
     #game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
     
     game().time.Zero()
@@ -287,7 +288,11 @@ class GameState(State):
     State.Tick(self, time)
       
   def LapEvent(self, vehicle, lap):
-    self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+    print "Lap Event %d" % (lap) 
+    #len(self.stats[vehicle])
+    if vehicle.lapBugCount < lap:
+      self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+      vehicle.lapBugCount+=1
     
     if lap == self.laps+1:
       vehicle.finishPlace = vehicle.place
