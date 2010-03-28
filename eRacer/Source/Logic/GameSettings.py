@@ -14,6 +14,17 @@ class GameSettings(object):
              ]
   TEXTURE_IDS = [1,2,3,4,5,6,8]
   TEXTURE_NAMES = ['Blue', 'Red', 'Magenta', 'Cyan', 'Green', 'Black', 'Orange']
+  AI_NAMES = [
+    "Arthur Dent", 
+    "Ford Prefect", 
+    "Zaphod", 
+    "Marvin", 
+    "Trillian", 
+    "Slartibartfast",
+    "Philip J. Fry",
+    "Bender",
+    "Turanga Leela"
+  ]
 
   def __init__(self):
     self.freeTextureIndices = set()
@@ -22,6 +33,7 @@ class GameSettings(object):
     self.debugMappings = []
     self.nPlayersIndex = 0
     self.nAIs = 3
+    self.nTotalLaps = 2
     
   def ResetFreeTextures(self):
     self.freeTextureIndices = set(range(len(self.TEXTURE_IDS)))

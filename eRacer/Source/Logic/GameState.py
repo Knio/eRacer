@@ -30,6 +30,8 @@ from Graphics.View    import View
 from Graphics.SkyBox  import SkyBox
     
 
+    # TODO
+    # can we render a fake loading screen here until the real one works?
 
 # TODO
 # need a lock so that loading of IO does not happen
@@ -66,67 +68,70 @@ class LoadingState(State):
 
 
 class GameState(State):
-  AI_NAMES = [
-      "Arthur Dent", 
-      "Ford Prefect", 
-      "Zaphod", 
-      "Marvin", 
-      "Trillian", 
-      "Slartibartfast",
-      "Philip J. Fry",
-      "Bender",
-      "Turanga Leela"
-    ]
-  
-  
   def __init__(self, settings):
     State.__init__(self)
     self.loaded = False
-    
-    self.laps   = 2 # TODO CONST
-    self.stats  = {}
-    self.gameOver = False
-    self.nPlayersRacing = settings.nPlayers
-    self.freeAINames =  list(self.AI_NAMES)
-    self.settings = settings
-
-    
-    self.load()
-    
-  def Activate(self):
-    State.Activate(self)
-    #if not self.loaded:
-    #  game().PushState(LoadingState(self.load))
-    print "Activate game state"
-
-  def Deactivate(self):
-    State.Deactivate(self)    
-    # self.sound.isPaused = True
-    # game().sound.sound.UpdateSoundFx(self.sound)
-    
-  def Pop(self):
-    self.meteorManager.Release()
-    del self.meteorManager
-    
-    for i in self.entities.values():
-      self.Remove(i)
-        
-    self.vehicleList = []
-    self.stats = {}
-    del self.track
-
-    # print '*******'
-    # import gc
-    # print gc.collect()
-    
-    # print '\n\n'.join(map(repr,gc.get_referrers(self)))
-    # print '*******'
-    # print '\n\n'.join(gc.garbage)
-    
-    # if self in gc.garbage:
-    #   print 'AAAAAAAAHHHHHHH'
-    
+    self.load(settings)
  
+
+  def load(self, settings):
+    self.settings = settings
+   
+    self.laps   = self.settings.nTotalLaps
+    self.stats  = {}
+ 
+    self.gameOver = False
+ 
+    self.nPlayersRacing = self.settings.nPlayers
+ 
+    self.freeAINames =  list(GameSettings.AI_NAMES)
+    random.shuffle(self.freeAINames)
+    
+    
+    self.track = self.Add(Track(self.settings.track))
+    self.vehicleList = []
+
+    frame = self.track.GetFrame(-30.0)
+    self.startOrientation = Matrix(frame.position, frame.up, frame.fw)
+    
+    forwardMat = Matrix(ORIGIN, -PI/2.0, X)
+    
+    startFrame = self.track.GetFrame(0.0)
+    
+    finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
+    self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
+
+    self.skybox = SkyBox()
+
+    self.interfaces = []
+    viewports = self.SetupViewports(self.settings.nPlayers)
+    
+    self.playerVehicles = [self.AddVehicle(player) for player in self.settings.players] 
+
+    for i in range(self.settings.nAIs):
+      self.AddVehicle(None)
+
+    for i,vehicle in enumerate(self.playerVehicles):
+      pi = PlayerInterface(self, vehicle, viewports[i])
+      pi.AddRenderable(self.skybox)
+      pi.AddRenderable(self.scene)
+      self.interfaces.append(pi)
+
+    self.SetupInputMapping()
+       
+    self.meteorManager = MeteorManager(self)
+
+    for i in range(CONSTS.NUM_METEORS):
+      self.meteorManager.spawnRandom()
+    
+    self.lastMeteorTime = 0
+    
+    
+    self.LoadMusic("Adventure.mp3")
+    
+    game().time.Zero()
+    self.loaded = True
+  
   def AddVehicle(self, player = None):
       if player: print vars(player)
       n = len(self.vehicleList)    
@@ -152,74 +157,6 @@ class GameState(State):
       
       return vehicle                
       
-  # def GetRandomTextureId(self):
-  #   return len(self.freeTextureIds) > 0 and self.freeTextureIds.pop() or random.choice(self.TEXTURE_IDS)
-    
-
-  def load(self):
-    # testing stuff
-    # game().sound.PlaySound2D("jaguar.wav")
-    print "GameState::load begin"
-    scene = cpp.Scene()
-    self.scene = scene
-    
-    # TODO
-    # can we render a fake loading screen here until the real one works?
-    
-    random.shuffle(self.freeAINames)
-    
-    
-    self.track = self.Add(Track(self.settings.track))
-    self.vehicleList = []
-
-    frame = self.track.GetFrame(-30.0)
-    self.startOrientation = Matrix(frame.position, frame.up, frame.fw)
-    
-    forwardMat = Matrix(ORIGIN, -PI/2.0, X)
-    
-    startFrame = self.track.GetFrame(0.0)
-    
-    # TODO: this should load "StartLine.x" but it is not appearing properly
-    finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
-    self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
-
-    self.skybox = SkyBox()
-
-    self.interfaces = []
-    viewports = self.SetupViewports(self.settings.nPlayers)
-    
-    self.playerVehicles = [self.AddVehicle(player) for player in self.settings.players] 
-
-    for i in range(self.settings.nAIs):
-      self.AddVehicle(None)
-
-    for i,vehicle in enumerate(self.playerVehicles):
-      pi = PlayerInterface(self, vehicle, viewports[i])
-      pi.AddRenderable(self.skybox)
-      pi.AddRenderable(self.scene)
-      self.interfaces.append(pi)
-
-
-    self.SetupInputMapping()
-
-       
-    self.meteorManager = MeteorManager(self)
-
-    for i in range(CONSTS.NUM_METEORS):
-      self.meteorManager.spawnRandom()
-    
-    self.lastMeteorTime = 0
-    
-    #self.sound = cpp.SoundFx();
-    #self.sound.looping  = True
-    #self.sound.is3D     = False
-    #self.sound.isPaused = False
-    #self.sound.volume = 24
-    #game().sound.sound.LoadSoundFx("Adventure.mp3", self.sound)
-    
-    game().time.Zero()
-    self.loaded = True
-  
 
   def SetupViewports(self, nPlayers):  
     w = game().graphics.width
@@ -253,6 +190,7 @@ class GameState(State):
       
     self.mapping = GameMapping(mappings)
     
+  
   
   def Tick(self, time):
     
@@ -323,5 +261,26 @@ class GameState(State):
     obstacle = self.entities[obstacleId]
     vehicle.obstacles.append(obstacle)
     
+  def Activate(self):
+    State.Activate(self)
+    #if not self.loaded:
+    #  game().PushState(LoadingState(self.load))
+    print "Activate game state"
+
+  def Deactivate(self):
+    State.Deactivate(self)    
+    # self.sound.isPaused = True
+    # game().sound.sound.UpdateSoundFx(self.sound)
+    
+  def Pop(self):
+    self.meteorManager.Release()
+    del self.meteorManager
+    
+    for i in self.entities.values():
+      self.Remove(i)
+        
+    self.vehicleList = []
+    self.stats = {}
+    del self.track
       
 

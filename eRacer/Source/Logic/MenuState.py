@@ -150,11 +150,7 @@ class MainMenuState(MenuState):
     logo.SetLeftTop(30, 35)
     self.Add(logo)
     
-    self.sound = cpp.SoundFx();
-    self.sound.isLooping = True
-    self.sound.is3D = False
-    self.sound.isPaused = False
-    game().sound.sound.LoadSoundFx("Terran5.ogg", self.sound)
+    self.LoadMusic("Terran5.ogg")
     
     self.menu = [
       ApplyMenuItem('New Game', self.Menu_New_Game),
@@ -164,8 +160,8 @@ class MainMenuState(MenuState):
 
         
   def Pause(self):
-    self.sound.isPaused = True
-    game().sound.sound.UpdateSoundFx(self.sound)
+    self.music.isPaused = True
+    game().sound.sound.UpdateSoundFx(self.music)
     
   def Menu_New_Game(self):
     # game().PushState(GameState())
