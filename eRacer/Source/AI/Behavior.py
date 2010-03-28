@@ -97,21 +97,25 @@ class AIBehavior(Behavior):
         costheta = dot(turnProj, bodyRight) / length(turnProj)
         fwProj = projectOnto(nowFrame.fw, bodyUp)#check if we are driving into the walls
         fwCosth = dot(fwProj, bodyRight) / length(fwProj)
-
+        #print distFromCentre
+       # print "fwcost", fwCosth
         if 0.999 < costheta < 1.001:#right turn
           #if close to right wall and we're going to hit the wall, adjust to centre
-          if fwCosth > 0.2 and distFromCentre > self.line.maxX - 5.0:
-            #print "too close to right wall"
-            self.parent.Turn(-0.5)
-          else:
-            self.parent.Turn(turnSize)
+          if fwCosth > 0.1 and distFromCentre > self.line.maxX - 15.0:
+           # print "too close to right wall"
+           # print distFromCentre
+            turnSize = turnSize - fwCosth*0.5
         else:
+          turnSize = -turnSize
           #if close to left wall and we're going to hit the wall, adjust to centre
-          if fwCosth < -0.2 and distFromCentre < self.line.minX + 5.0:
-            #print "too close to left wall"
-            self.parent.Turn(0.5)
-          else:
-            self.parent.Turn(-turnSize)
+          if fwCosth < -0.1 and distFromCentre < self.line.minX + 15.0:
+           # print "too close to left wall"
+            #print distFromCentre
+            #note that here fwCosth is negative, so make it positive in order to turn right
+            #-turnsize because we originally wanted to go left
+            turnSize = turnSize + fwCosth*-0.5
+            
+        self.parent.Turn(min(max(turnSize, -1.0), 1.0))
         #basic boost code: we don't need to turn off boost until the turn becomes large
         #print turnSize
         #if turnSize < 0.5 and self.parent.boostFuel > 2.5:
