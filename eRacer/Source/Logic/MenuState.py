@@ -327,7 +327,7 @@ class PauseMenuState(MenuState):
       game().PopState()
       
   def Menu_Restart_race(self):
-    self.parent.loaded = False
+    self.parent.Release()
     self.parent.load(self.parent.settings)
     while not game().states[-1].__class__ is GameState:
       game().PopState()

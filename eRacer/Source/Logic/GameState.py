@@ -261,6 +261,16 @@ class GameState(State):
     obstacle = self.entities[obstacleId]
     vehicle.obstacles.append(obstacle)
     
+  def Release(self):
+    self.loaded = False
+    self.meteorManager.Release()
+    del self.meteorManager
+    
+    for i in self.entities.values():
+      self.Remove(i)
+    del self.track
+    
+    
   def Activate(self):
     State.Activate(self)
     #if not self.loaded:
@@ -273,14 +283,9 @@ class GameState(State):
     # game().sound.sound.UpdateSoundFx(self.sound)
     
   def Pop(self):
-    self.meteorManager.Release()
-    del self.meteorManager
-    
-    for i in self.entities.values():
-      self.Remove(i)
+    self.Release()
         
     self.vehicleList = []
     self.stats = {}
-    del self.track
       
 
