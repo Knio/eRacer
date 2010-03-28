@@ -84,16 +84,6 @@ class PlayerInterface(object):
     if self.vehicle.Backwards == True:
        self.hud.WriteString( "WRONG WAY", "Sony Sketch EF", 50, Point3(300,200,0))
 
-
-                                  
-
-    # if self.vehicle.lapcount:
-    #   l = list(self.stats.get(self.vehicle,[0.]))
-    #   l.append(game().time.get_seconds())
-
-
-  
-
                                   
     if self.vehicle.lapcount:
       playerLaps = min(self.vehicle.lapcount, self.state.laps)
