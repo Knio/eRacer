@@ -27,8 +27,12 @@ class PlayerInterface(object):
     self.hud      = View(OrthographicCamera(game().graphics.width, game().graphics.height), viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
     self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8))
+    
     for vehicle in state.vehicleList:
-      self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", self.vehicle==vehicle and "bluemarker.png" or "redmarker.png", 150-8, 50-12, 16, 16))
+      if not vehicle == self.vehicle:
+        self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", "redmarker.png", 150-8, 50-12, 16, 16))
+    self.icons[self.vehicle.name] = self.AddHud(HudQuad(self.vehicle.name+"Icon", "bluemarker.png", 150-8, 50-12, 16, 16))
+
 
     self.starfields = []
     self.starlen = 2
