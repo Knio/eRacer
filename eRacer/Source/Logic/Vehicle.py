@@ -107,6 +107,13 @@ class Vehicle(Model):
           
           #to the front?
           if dot(vector, stealerDirection) > 0:
+            scale = Matrix(1,1,1) #Matrix(1,1,distance)
+            pos = stealerPosition
+            up = Vector3(0,1,0)
+            fw = Vector3(0,0,1) #stealerDirection
+            beamTransform = scale * Matrix(pos, up, fw)
+            model = Model('StealBeam', 'box.x', None, beamTransform)
+            
             if obstacle.boostFuel >=self.STEALING_SPEED*delta_s:
               self.boostFuel += self.STEALING_SPEED*delta_s
               obstacle.boostFuel -= self.STEALING_SPEED*delta_s

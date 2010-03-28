@@ -52,7 +52,8 @@ bool IO::_LoadMesh(const char* file, CachedMesh& mesh)
     {
 		// Copy the material
 		mesh.materials[i]		= materialBufferPointer[i].MatD3D;
-		mesh.texturePatterns[i]	= materialBufferPointer[i].pTextureFilename;
+		const char* c = materialBufferPointer[i].pTextureFilename;
+		mesh.texturePatterns[i]	= NULL != c ? c : "";
         
 		// Set the ambient color for the material (D3DX does not do this)
 		mesh.materials[i].Ambient = mesh.materials[i].Diffuse;
