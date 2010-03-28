@@ -18,11 +18,11 @@ class PlayerInterface(object):
     cam = state.Add(ChasingCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
     
-    cam = state.Add(FirstPersonCamera())
-    self.views.append(View(cam, viewport=self.viewport))
-    
     cam = state.Add(CarCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
+    
+    debugCam = state.Add(FirstPersonCamera())
+    self.views.append(View(debugCam, viewport=self.viewport))
     
     self.hud      = View(OrthographicCamera(game().graphics.width, game().graphics.height), viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
@@ -123,7 +123,16 @@ class PlayerInterface(object):
           y += 15    
 
   def CameraChangedEvent(self):
-    self.viewIndex = (self.viewIndex+1) % len(self.views)    
+    #don't use last camera, it's the debug one
+    self.viewIndex = (self.viewIndex+1) % (len(self.views) - 1)    
+    
+  def DebugCameraToggle(self):
+    if self.viewIndex == len(self.views) - 1:
+      #go back to standard camera
+      self.viewIndex = 0
+    else:
+      #turn on debug camera
+      self.viewIndex = len(self.views) - 1
     
   
     

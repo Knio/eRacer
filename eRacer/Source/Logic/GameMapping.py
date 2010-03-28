@@ -19,6 +19,7 @@ class Keyboard1Mapping(VehicleMapping):
     elif key == KEY.C:      return self.target.CameraChangedEvent               (    )
     elif key == KEY.ESCAPE: return E.PauseEvent                       (    )
     elif key == KEY.T:      return self.target.vehicle.behavior.RespawnCarEvent        (    )
+    elif key == KEY.F5:     return self.target.DebugCameraToggle()
     
   def KeyReleasedEvent(self, key):
     if   key == KEY.W:     return self.target.vehicle.behavior.PlayerAccelerateEvent ( 0)
