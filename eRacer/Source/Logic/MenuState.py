@@ -257,7 +257,8 @@ class SetupPlayersMenuState(MenuState):
     
       mappingOptions = []
       for i,mapping in enumerate(GameSettings.MAPPINGS):
-        mappingOptions.append((str(mapping),playerId,i))   
+        s = mapping and mapping.__name__.replace('Mapping','') or 'None'
+        mappingOptions.append((s,playerId,i))   
     
       self.menu.append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex))
       self.menu[-1].fontsize = fontsize

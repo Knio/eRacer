@@ -7,10 +7,10 @@ class GameSettings(object):
   MAPPINGS = [None, 
               Keyboard1Mapping, 
               Keyboard2Mapping, 
-              Gamepad0Mapping, 
               Gamepad1Mapping, 
               Gamepad2Mapping, 
               Gamepad3Mapping, 
+              Gamepad4Mapping, 
              ]
   TEXTURE_IDS = [1,2,3,4,5,6,8]
   TEXTURE_NAMES = ['Blue', 'Red', 'Magenta', 'Cyan', 'Green', 'Black', 'Orange']
