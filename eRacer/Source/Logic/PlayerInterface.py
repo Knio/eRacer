@@ -3,6 +3,7 @@ from Starfield        import Starfield
 from Camera           import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera, CirclingCamera
 from HudQuad          import HudQuad
 from Graphics.View    import View
+from GameEndState     import GameEndState
 
 class PlayerInterface(object):
   def __init__(self, state, vehicle, viewport):
@@ -73,12 +74,17 @@ class PlayerInterface(object):
     self.starlen = max(min(self.starlen, 8), 2)
     for i in self.starfields:
       i.length = int(self.starlen)
+
+
+    t = time.seconds*5
     
     #Track Place HUD
     if self.vehicle.finishPlace < 0: 
       self.hud.WriteString(self.ordinal(self.vehicle.place), "Sony Sketch EF", 60, Point3(20, 5,0))
     else:
       self.hud.WriteString(self.ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 60, Point3(20, 5,0))
+      if game().states[-1].__class__ is not GameEndState:
+        self.hud.WriteString(self.ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 80, Point3(330, 350,0), Vector3(math.cos(t),math.sin(t),math.sin(t)))
     
   
     for vehicle in self.state.vehicleList:
