@@ -57,10 +57,11 @@ class AIBehavior(Behavior):
     wantedVec = normalized((frame1.position-pos) * 1.0 +  (frame2.position-pos) * 1.0 + (frame3.position-pos) * 1.0)
     #this is the way we want to go if there are no obstacles in our way and if we are not too close to the wall
     distFromCentre = self.line.GetOffsetFromCentre(pos)
-    
+    if self.parent.isShutoff:
+      self.curState = AIState.FINISHED
     if self.arrow: 
       self.arrow.transform = Matrix(frame2.position)
-    
+      
     if self.curState == AIState.DRIVE:
       #first check for obstacles and see if we must avoid them.
       dodgeMode = False
@@ -136,7 +137,7 @@ class AIBehavior(Behavior):
       if self.parent.physics.GetSpeed() < 1.0 and self.objectInFront(1.0, tx):
         #object close in front has almost stopped us
         self.curState = AIState.STUCK
-    
+       
     if self.curState == AIState.STUCK:
       self.parent.Accelerate(-1.0)
       self.parent.Turn(0)
@@ -144,7 +145,11 @@ class AIBehavior(Behavior):
       if not self.objectInFront(10.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE
-  
+        
+    if self.curState == AIState.FINISHED:
+      self.parent.Turn(0)
+      self.parent.Accelerate(0)
+      self.parent.Boost(False)
 #checks whether there is an object in front of the car, within specified distance
 #does not check if this is a tiny thing or something that is preventing
 #the car from moving 
@@ -187,3 +192,4 @@ class AIBehavior(Behavior):
 class AIState:
   DRIVE = "DRIVE"
   STUCK = "STUCK"
+  FINISHED = "FINISHED"
