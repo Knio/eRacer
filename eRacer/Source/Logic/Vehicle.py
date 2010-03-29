@@ -94,8 +94,6 @@ class Vehicle(Model):
 
     game().event.Register(self.ReloadedConstsEvent)
 
-  MAX_STEALING_DISTANCE = 10.
-  STEALING_SPEED = 0.5 #boost fuel/second
 
   def BoostStealing(self, delta_s):
     
@@ -109,24 +107,23 @@ class Vehicle(Model):
         vector = obstaclePosition-stealerPosition
         distance = length(vector)
         
-        if(distance < self.MAX_STEALING_DISTANCE):
+        if(distance < CONSTS.MAX_STEALING_DISTANCE):
           stealerDirection = mul0(self.transform,Z)
           
           #to the front?
           if dot(vector, stealerDirection) > 0:
-            scale = Matrix(1,1,1) #Matrix(1,1,distance)
             pos = stealerPosition
             up = Vector3(0,1,0)
             fw = Vector3(0,0,1) #stealerDirection
-            beamTransform = scale * Matrix(pos, up, fw)
+            beamTransform = Matrix(0.1, 0.1, distance) * Matrix(pos, up, vector)
             # TODO: I think every car should only be able to steal from 2 or 3 other cars at a time
             # this would allow us to store a fixed number of models for the beam and only make them 
             # (in)visible/ change position
             
             
-            if obstacle.boostFuel >=self.STEALING_SPEED*delta_s:
-              self.boostFuel += self.STEALING_SPEED*delta_s
-              obstacle.boostFuel -= self.STEALING_SPEED*delta_s
+            if obstacle.boostFuel >=CONSTS.STEALING_SPEED*delta_s:
+              self.boostFuel += CONSTS.STEALING_SPEED*delta_s
+              obstacle.boostFuel -= CONSTS.STEALING_SPEED*delta_s
 
               game().event.BoostStealEvent(self, obstacle, beamTransform)   
     

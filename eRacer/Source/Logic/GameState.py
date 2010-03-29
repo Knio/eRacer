@@ -152,6 +152,7 @@ class GameState(State):
       b.active = True
       b.graphics.visible = True
       b.transform = tx
+      return
       
   def AddVehicle(self, player = None):
     if player: print vars(player)
