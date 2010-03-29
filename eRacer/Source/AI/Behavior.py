@@ -81,8 +81,9 @@ class AIBehavior(Behavior):
           closestDist = length(toObs)
           closestObs = obs
         #obstacle in cone in front of car
-        if length(toObs) < 30.0 and costheta > math.sqrt(2)/2 :
+        if length(toObs) < 20.0 and costheta > math.sqrt(2)/2 :
           dodgeMode = True
+          #print "must dodge"
      # print "closest", closestDist
       if dodgeMode:
         #print "must dodge"
@@ -118,10 +119,10 @@ class AIBehavior(Behavior):
            # print "too close to left wall"
             #print distFromCentre
             #note that here fwCosth is negative, so make it positive in order to turn right
-            #-turnsize because we originally wanted to go left
             turnSize = turnSize + fwCosth*-0.3
-            
-        self.parent.Turn(min(max(turnSize, -1.0), 1.0))
+        cappedTurn = min(max(turnSize, -1.0), 1.0)
+        #print cappedTurn
+        self.parent.Turn(cappedTurn)
         #basic boost code: we don't need to turn off boost until the turn becomes large
         #print turnSize
         distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 50.0)
