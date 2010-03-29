@@ -21,6 +21,10 @@ struct Constants
 	float	PHYS_GRAVITY_Y;
 	float	PHYS_GRAVITY_Z;
 	
+	
+	float MAX_STEALING_DISTANCE;
+	float STEALING_SPEED;
+	
 	int		PHYS_DEBUG_MODE;
 	float	PHYS_SKIN_WIDTH;
 	
