@@ -1,6 +1,6 @@
 from Core.Globals     import *
 from Starfield        import Starfield
-from Camera           import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera
+from Camera           import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera, CirclingCamera
 from HudQuad          import HudQuad
 from Graphics.View    import View
 
@@ -23,6 +23,9 @@ class PlayerInterface(object):
     
     debugCam = state.Add(FirstPersonCamera())
     self.views.append(View(debugCam, viewport=self.viewport))
+
+    circCam = state.Add(CirclingCamera(vehicle))
+    self.views.append(View(circCam, viewport = self.viewport))
     
     self.hud      = View(OrthographicCamera(game().graphics.width, game().graphics.height), viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
@@ -67,7 +70,7 @@ class PlayerInterface(object):
     if self.vehicle.boosting: self.starlen += delta * 15
     else:                     self.starlen -= delta * 15
     
-    self.starlen = max(min(self.starlen, 32), 2)
+    self.starlen = max(min(self.starlen, 3), 2)
     for i in self.starfields:
       i.length = int(self.starlen)
     
@@ -100,7 +103,6 @@ class PlayerInterface(object):
        self.hud.WriteString( "WRONG WAY", "Sony Sketch EF", 50, Point3(300,200,0))
 
     #Lap counter
-    
     if self.vehicle.lapcount or True: # ???
       playerLaps = min(self.vehicle.lapcount, self.state.laps)
       playerLaps = max(1, playerLaps);
@@ -121,10 +123,17 @@ class PlayerInterface(object):
           self.hud.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
           self.hud.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
           y += 15    
+  
+    #Personal Endgamestuff
+    if self.vehicle.lapcount > self.state.laps:
+      self.viewIndex = 3
 
   def CameraChangedEvent(self):
     #don't use last camera, it's the debug one
-    self.viewIndex = (self.viewIndex+1) % (len(self.views) - 1)    
+    self.viewIndex = (self.viewIndex+1) % (len(self.views) - 2)    
+
+  def SpinCameraEvent(self):
+    self.viewIndex = 3
     
   def DebugCameraToggle(self):
     if self.viewIndex == len(self.views) - 1:

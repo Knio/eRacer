@@ -127,7 +127,7 @@ class GameState(State):
     self.lastMeteorTime = 0
     
     
-    self.LoadMusic("Adventure.mp3")
+    #self.LoadMusic("Adventure.mp3")
     
     game().time.Zero()
     self.loaded = True
@@ -241,6 +241,8 @@ class GameState(State):
           game().PushState(GameEndState(self.stats))
         
       vehicle.Brake(1)
+      vehicle.isShutoff = True
+      
     
   def ReloadConstsEvent(self):
     game().config.read()
