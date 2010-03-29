@@ -39,10 +39,15 @@ class AIBehavior(Behavior):
     Behavior.__init__(self,parent)
     self.line = track
     self.arrow = arrow
+    self.startDist = 0.0 # the distance around the track at the last check
+    self.resetDist = 50.0 # if travelled less than this in interval, reset
+    self.resetCheckTime = 5.0 # how often to check if we should reset
+    self.resetCounter = -5.0 # don't check for the first 2 seconds
     
     self.curState = AIState.DRIVE
   
   def Tick(self,time):    
+    delta = float(time.game_delta) / time.RESOLUTION
     pos = self.parent.physics.GetPosition()
     nowFrame  = self.line.GetFrame(self.parent.trackpos)
     frame1 = self.line.GetFrame(self.parent.trackpos + 20.0)
@@ -132,6 +137,7 @@ class AIBehavior(Behavior):
           #print "boost off"
           self.parent.Boost(False)
       self.parent.Accelerate(1.0)
+      self.ResetChecker(delta, nowFrame)
 
       #now change state if needed
       if self.parent.physics.GetSpeed() < 1.0 and self.objectInFront(1.0, tx):
@@ -141,8 +147,8 @@ class AIBehavior(Behavior):
     if self.curState == AIState.STUCK:
       self.parent.Accelerate(-1.0)
       self.parent.Turn(0)
-      
-      if not self.objectInFront(10.0, tx):
+      self.ResetChecker(delta, nowFrame)
+      if not self.objectInFront(8.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE
         
@@ -189,6 +195,20 @@ class AIBehavior(Behavior):
     else:
       return False
     
+    
+  def ResetChecker(self, delta, nowFrame):
+    self.resetCounter = self.resetCounter + delta
+    if(self.resetCounter > self.resetCheckTime):
+      distTravelled = nowFrame.dist - self.startDist
+      #print "travelled" , distTravelled
+      if(distTravelled < self.resetDist):
+        #print "must reset, we didn't travel far"
+        self.parent.resetCar()
+      
+      self.startDist = nowFrame.dist
+      self.resetCounter = 0.0
+    
+  
 class AIState:
   DRIVE = "DRIVE"
   STUCK = "STUCK"
