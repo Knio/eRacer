@@ -28,10 +28,9 @@ class MenuMapping(Mapping):
         return E.MenuRightEvent()
     elif abs(y) < 500 and abs(x) < 500:
       self.gamepadReleased = True
-    
-  def GamepadButtonReleasedEvent(self, id, button):
-    print "GamepadReleased"
+  def GamepadButtonPressedEvent(self, id, button):
     if button == cpp.BUTTON_A: return E.MenuSelectEvent()
+    return MenuMapping.GamepadButtonPressedEvent(self, button)
     
 class MainMenuMapping(MenuMapping):
   def KeyPressedEvent(self, key):
@@ -43,7 +42,8 @@ class PauseMenuMapping(MenuMapping):
     if key == KEY.ESCAPE:     return E.UnPauseEvent()
     return MenuMapping.KeyPressedEvent(self, key)
     
-  def GamepadButtonReleasedEvent(self, id, button):
+  def GamepadButtonPressedEvent(self, id, button):
     if button == cpp.BUTTON_START:  return E.UnPauseEvent()
+    elif button == cpp.BUTTON_A: return E.MenuSelectEvent()
     return MenuMapping.GamepadButtonPressedEvent(self, button)
     
