@@ -88,6 +88,7 @@ class Vehicle(Model):
     self.sound.minDist  = 50
     
     self.obstacles = []
+    self.stealingBeams = {}
 
     game().sound.sound.LoadSoundFx("EngineSound.wav", self.sound)
 
@@ -97,12 +98,17 @@ class Vehicle(Model):
   STEALING_SPEED = 0.5 #boost fuel/second
 
   def BoostStealing(self, delta_s):
+    
+    stealingBeams = self.stealingBeams
+    self.stealingBeams = {}
+    
     for obstacle in self.obstacles:
       if isinstance(obstacle, Vehicle):
         obstaclePosition = mul1(obstacle.transform, ORIGIN)
         stealerPosition = mul1(self.transform, self.tip)
         vector = obstaclePosition-stealerPosition
         distance = length(vector)
+        
         if(distance < self.MAX_STEALING_DISTANCE):
           stealerDirection = mul0(self.transform,Z)
           
@@ -117,11 +123,14 @@ class Vehicle(Model):
             # this would allow us to store a fixed number of models for the beam and only make them 
             # (in)visible/ change position
             
-            # model = Model('StealBeam', 'box.x', None, beamTransform)
             
             if obstacle.boostFuel >=self.STEALING_SPEED*delta_s:
               self.boostFuel += self.STEALING_SPEED*delta_s
               obstacle.boostFuel -= self.STEALING_SPEED*delta_s
+
+              game().event.BoostStealEvent(self, obstacle, beamTransform)   
+    
+    
 
   # control events
   def Brake(self, brake):
