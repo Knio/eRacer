@@ -31,7 +31,7 @@
 
 \hypersetup 
 {% 
-pdftitle = {eRacerX Milestone 3 Readme}, 
+pdftitle = {eRacerX Milestone 4 Readme}, 
 pdfauthor = {Michael Blackadar, Tom Flanagan, Don Ha, Ole Rehmsen, John Stuart}, 
 pdfkeywords = {eRacerX, racing, boost},
 colorlinks={false},
@@ -61,7 +61,7 @@ Department of Computer Science\\
 \includegraphics[width=12cm]{img/eRacerX-Logo.png}\\
 \textsc{
 \Huge
-Milestone 3 Readme
+Milestone 4 Readme
 }
 }
 \vspace{5mm}
@@ -98,93 +98,91 @@ John Stuart
 \label{introduction}
 \section{Introduction}
 
-This document is meant to provide some information related to the release of milestone 3 of the space racing simulation \emph{eRacerX} by \emph{Wallsocket Studios}. Section \ref{design-decisions} points out major changes in the design as compared to the design document shipped with milestone 1 and the readme for milestone 2. Section \ref{new-features} discusses as selection of new features in milestone 3. Section \ref{future-work} outlines our plans for the milestone 4.
+This document is meant to provide some information related to the release of milestone 4 of the space racing simulation \emph{eRacerX} by \emph{Wallsocket Studios}. Section \ref{new-features} discusses a selection of new features in milestone 4. Section \ref{known-issues} lists some bugs that we have encountered and were not able to fix on time. Section \ref{future-work} outlines our plans for final product.
 
 General information that has been revised since the readme for milestone 2 such as the controls (Section \ref{controls}), building from source and running  the game (Section \ref{building-from-source}) has been moved to the appendix at the end of the document. 
-
-\section{Design decisions}
-\label{design-decisions}
-
-In this section we will highlight some deviations from the design document and the schedule distributed with milestone 1 and the readme distribueted with milestone 2 of \emph{eRacerX}.
-
-\subsection{Spline Track}
-
-After experiencing many problems with creating a smooth track that negatively affected both driving stability and rendering,
-we decided to model the track as a B-Spline curve with a track profile cruve. We currently use a subdivision algorithm to compute a
-closed curve and interpolate the normals at each point. We are, however, planning to extend the concept to open b-spline curves 
-to allow for discontinuities and jumps in the track. 
-
-\subsection{Car physics using multiple capsules instead of a simple box}
-
-To achieve a better fit and to make collisions with the wall less punishing we have replaced the simple box representing the shape of the car in milestone 2 by a composition of multiple capsules.   
 
 
 \section{New features}
 \label{new-features}
 
-Here is a list of some of the new features since milestone 2 that in our opinion deserve explicit mentioning.
+Here is a list of some of the new features since milestone 3 that in our opinion deserve explicit mentioning.
 
-\subsection{Variable gravity direction}
+\subsection{Boost}
 
-As planned, we have removed the global gravitational force and replaced it by an attractive force applied normal to the closest track segment.
-This allows for a very flexible track design with upside-down sections. The magnetism currently only acts on cars - meteors for example are not affected by it.
+Boost will now not only let you go faster, it will also give you a small initial hop that can be used to clear meteors. The star effect has been improved for boosting to make for a better sense of speed. Boost also recharges significantly slower since the players additionally have the opportunity to steal boost.
 
-\subsection{Improved camera}
+\subsubsection{Boost stealing}
 
-To achieve a better sense of speed and handle the upside-down segments of the track better, we have changed the following camera to be mounted lower and focus on the road before the car instead of the car. We further changed it to use the road normal instead of a global normal as up vector but have it lagging behind enough to give a good feeling of the banking of the track.
+Players can now steal each others boost by driving up behind another vehicle. The stealing is automatic if one is close enough. A simple laser beam indicates whether or not you are currently stealing. One can steal until the other player has no boost left to steal.
 
-\subsection{AI}
 
-Milestone 3 features a basic AI that is able to race along the track. It uses waypoints extracted from the b-spline underlying the track and is able to back up in case it gets stuck.
 
-\subsection{Meteors}
+\subsection{Multiplayer}
 
-Also new are meteors that roam the skies around the track and potentially collide with each other, the track or the cars. The meteors can be devided into two categories: Random meteors that are relatively large, slow and cross an imaginary sphere around the whole track, getting respawned at a random location on the surface of the sphere as they leave the sphere in any direction. These meteors are purposely not spawned only around the player camera, as they may change the course of a race and for multiplayer should depend on where the camera is looking. 
+\emph{eRacerX} now features a split-screen multiplayer. There can be 1,2 or 4 human players which can chose from one of 2 keyboard mappings and 4 controllers in the race setup menu. 
 
-The second category of meteors is targeted meteors. Those are relatively small meteors that are aimed in front of the player car(s) and spawned every couple of seconds to force the player to react and change his route to avoid them.
+\subsection{Advanced menu}
 
-\subsection{3D sound}
+There is now a more advanced menu that lets you chose the color and controls of the players as well as the number of AIs to use. There is also the option to go back to main menu from paused state or even to restart the race with the same settings as the current race.
 
-We have reworked the 3D sound code and finally actually put in some sound. The engine noise is pitching with the motor speed and adds to the realism of the game. 
+\subsection{Hud}
+
+We have added a number of hud elements to display information about the game: In addition to the lap counter, the players position is displayed. There is a simple boost bar showing how much boost fuel is available and interface element showing how far each vehicle has proceeded in the lap. There is an indicator if the vehicle is facing the wrong way. There is also a personal finish screen to inform players in multiplayer that they have finished.
+
+\subsection{More content}
+
+To offer a more immersive experience, we have added additional sounds for meteor collisions as well as in the menu. Textures have been improved to have a grungier appearance and more car colors are available. Sections of the tracks are now surrounded by glass rings to provide more variety and a reference point that improves the sense of speed.
+
+\subsection{Driving code in C++}
+
+Porting the vehicle to C++ led to a more stable integration of the physics and thereby allowed us to further speed up vehicles. 
+
+\subsection{Improved AI}
+
+The AI now dodges meteors and vehicles instead just driving straight and following the race line. This is especially noticable at the start where they used to drive through vehicles in their way. They also use boost whenever they are on a straight section of the track and are not running danger of jumping off the edge. 
+
+\subsection{Improved track}
+
+We have modified the second track by compressing the exciting features on a shorter overall lap length to make driving less monotone.
+
 
 \section{Known issues}
+\label{known-issues}
+
+
+\subsection{Support for variable screen resolution and aspect ratios}
+
+Currently, most of the hud and menu rendering depends on the resolution of the rendering surface. This is noticable if one plays two player multiplayer, where the aspect ratio is 8:3 instead of 4:3. Also the current resolution of 800 by 600 is relatively low and should be selectable from the menu instead. Support for full screen rendering would also be desirable.
+This has not been fixed yet due to a driver bug in DirectX, that results in sprites being rendered in the viewport on most graphics cards but not in others (such as the nVidia 8600M GT). 
+
+\subsection{Sound bug}
+
+On some machines we had issues with sound popping, but not on others. This does not seem to correlate with the overall power of the machines or the frame rate. We will have to explore this in future. 
 
 \subsection{Alpha blending order}
 
-The alpha blending for the blob shadow is not working properly if one flies off the track because the rendering is not happening in the correct order. This will be fixed by the next milestone.
-
-\subsection{Object Culling}
-
-Culling is currently disabled because there is a bug in the computation of the camera planes.
-
-\subsection{Fallback font}
-
-On some computers, loading our custom font causes a out of memory error (for unknown reasons). In this case we fall back to a system font.
+The alpha blending for the blob shadow is not working properly if one flies off the track because the rendering is not happening in the correct order. This will be fixed in final version of the game (promise:-).
 
 \section{Future work}
 \label{future-work}
 
-In this section we want to touch on a few topics that we want to work on until the next milestone.
+In this section we want to touch on a few topics that we want to work on for the final product. The last weeks will be used predominantly for bug fixing, beautification and game play tweaks.
 
-\subsection{Smarter AI}
+\subsection{Beautification}
 
-We want to improve the AI to be able to avoid obstacles and each other. We also want it to behave less predictable and more dynamic. Lastly it should use boost to its advantage.
+We want to have more props in the game to make the world look more vivid. The graphics of the hud will be revised. We want to add more visual effects, such as the partially transparent track (depends on alpha sorting), an animated boost stealing beam and particle effects for both the rocket propulsion and when the vehicle collides with the walls. 
 
-\subsection{Improved boost}
+\subsection{Gameplay tweaks}
 
-The boost as it is implemented currently is very simple and unlimited. For the next milestone we want to have a limited amount of boost that can be restored using the mechanism described in the design document shipped with milestone 1. The amount of boost available should be displayed as part of the HUD. 
+\subsubsection{Even smarter AI}
 
-\subsection{Refined track}
+The AI should be less predictable and more dynamic. It should also use some rubber banding to ensure it does not get too far ahead, or behind. The AI also currently does not actually try to steal the players boost. This can be improved.
 
-We currently have two tracks, one relatively small, the other long but a bit unrefined. The latter needs to be imrpoved to make it less likely to fall off and maybe tighten the turns a bit to make it more exciting.
+\subsubsection{Discontinuous track and jumps}
 
-\subsection{Props}
+At this point a track is a closed b-spline. We would like to experiment with multiple open b-spline sections that would allow us to have jumps. This will only be used if it turns out to make the game more fun.
 
-The game still does not feel as fast as we would like it to be. One cause of this is that we have virtually no static objects that the player can relate to to estimate size and speed. For the next milestone, we want to have props along the roadside that will give you a better feeling for the speed the car is moving with.
-
-\subsection{Transparent track texture}
-
-We want to use alpha blending to make the track partially transparent. With the solid texture used currently, a large part of the screen is taken up by the track, hiding the space with meteors, planets and nebulas. Being able to see through the track will make the space scenario much more fun and rewarding.
 
 \appendix
 
@@ -203,7 +201,8 @@ depending on whether you are in the actual game or in a menu.
 %This is the header for the first page of the table...
 \hline \hline \\[-2ex]
    \multicolumn{1}{c}{\textbf{Command}} &
-   \multicolumn{1}{c}{\textbf{Keyboard}} &
+   \multicolumn{1}{c}{\textbf{Keyboard1}} &
+   \multicolumn{1}{c}{\textbf{Keyboard2}} &
    \multicolumn{1}{c}{\textbf{Gamepad}} \\[0.5ex] \hline
    \\[-1.8ex]
 \endfirsthead
@@ -212,7 +211,8 @@ depending on whether you are in the actual game or in a menu.
 \multicolumn{3}{c}{{\tablename} \thetable{} -- Continued} \\[0.5ex]
   \hline \hline \\[-2ex]
   \multicolumn{1}{c}{\textbf{Command}} &
-  \multicolumn{1}{c}{\textbf{Keyboard}} &
+  \multicolumn{1}{c}{\textbf{Keyboard1}} &
+  \multicolumn{1}{c}{\textbf{Keyboard2}} &
   \multicolumn{1}{c}{\textbf{Gamepad}} \\[0.5ex] \hline
   \\[-1.8ex]
 \endhead
@@ -226,16 +226,14 @@ depending on whether you are in the actual game or in a menu.
 \endlastfoot
 
 %Now the data...
-Accelerate & W & Right Trigger \\ 
-Reverse & S & Left Trigger \\
-Break & Left Shift & B \\ 
-Steer left & A & \multirow{2}{*}{Left Analog Stick} \\ 
-Steer right & D \\
-Boost & Space & A \\
-Cycle cameras & C & Y \\
-Move flying camera & Arrow keys &  \\
-Reload tuning parameters & R & \\
-Pause menu & Esc & Start \\
+Accelerate & W & Up & Right Trigger \\ 
+Reverse & S & Down & Left Trigger \\
+Break & Left Shift & Right Control & B \\ 
+Steer left & A & Left & \multirow{2}{*}{Left Analog Stick} \\ 
+Steer right & D & Right \\
+Boost & Space & Numpad 0 & A \\
+Cycle cameras & C & Numpad Decimal & Y \\
+Pause menu & Esc & Pause key & Start \\
 \end{longtable}
 \end{center}
 
