@@ -75,16 +75,16 @@ class AIBehavior(Behavior):
           closestDist = length(toObs)
           closestObs = obs
         #obstacle in cone in front of car
-        if length(toObs) < 10.0 and costheta > math.sqrt(2)/2 :
+        if length(toObs) < 30.0 and costheta > math.sqrt(2)/2 :
           dodgeMode = True
      # print "closest", closestDist
       if dodgeMode:
         #print "must dodge"
         if distFromCentre > 0: 
         #we are on the right side, so it would be better to go left ot the centre
-          self.parent.Turn(-0.5)
+          self.parent.Turn(-1)
         else:
-          self.parent.Turn(0.5)
+          self.parent.Turn(1)
       else:
         #print "nothing to dodge"
         #if here, we can drive normally trying to follow the track
@@ -104,7 +104,7 @@ class AIBehavior(Behavior):
           if fwCosth > 0.1 and distFromCentre > self.line.maxX - 15.0:
            # print "too close to right wall"
            # print distFromCentre
-            turnSize = turnSize - fwCosth*0.5
+            turnSize = turnSize - fwCosth*0.3
         else:
           turnSize = -turnSize
           #if close to left wall and we're going to hit the wall, adjust to centre
@@ -113,21 +113,27 @@ class AIBehavior(Behavior):
             #print distFromCentre
             #note that here fwCosth is negative, so make it positive in order to turn right
             #-turnsize because we originally wanted to go left
-            turnSize = turnSize + fwCosth*-0.5
+            turnSize = turnSize + fwCosth*-0.3
             
         self.parent.Turn(min(max(turnSize, -1.0), 1.0))
         #basic boost code: we don't need to turn off boost until the turn becomes large
         #print turnSize
-        #if turnSize < 0.5 and self.parent.boostFuel > 2.5:
-          #print "boost"
-          #  self.parent.Boost(True)
-        #if turnSize > 0.8:
+        distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 50.0)
+        if turnSize < 0.1 and self.parent.boostFuel > 2 and not dodgeMode:
+          if distAhead < self.line.maxX and distAhead > self.line.minX:
+          #make sure we won't jump off the edge
+            #print "boost"
+            self.parent.Boost(True)
+          else:
+             #print "1st check passed, no boost though"
+             pass
+        if turnSize > 0.5:
           #print "boost off"
-          #  self.parent.Boost(False)
+          self.parent.Boost(False)
       self.parent.Accelerate(1.0)
 
       #now change state if needed
-      if self.parent.physics.GetSpeed() < 2.0 and self.objectInFront(1.0, tx):
+      if self.parent.physics.GetSpeed() < 1.0 and self.objectInFront(1.0, tx):
         #object close in front has almost stopped us
         self.curState = AIState.STUCK
     
@@ -135,7 +141,7 @@ class AIBehavior(Behavior):
       self.parent.Accelerate(-1.0)
       self.parent.Turn(0)
       
-      if not self.objectInFront(8.0, tx):
+      if not self.objectInFront(10.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE
   
