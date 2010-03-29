@@ -264,6 +264,7 @@ class GameState(State):
   def Release(self):
     self.loaded = False
     self.meteorManager.Release()
+    self.PauseMusic()
     del self.meteorManager
     
     for i in self.entities.values():
