@@ -2,7 +2,7 @@ from Core.Globals     import *
 from Starfield        import Starfield
 from Camera           import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera
 from HudQuad          import HudQuad
-from Graphics.View    import View
+from Graphics.View    import View, HudView
 
 class PlayerInterface(object):
   def __init__(self, state, vehicle, viewport):
@@ -24,7 +24,7 @@ class PlayerInterface(object):
     cam = state.Add(CarCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
     
-    self.hud      = View(OrthographicCamera(game().graphics.width, game().graphics.height), viewport=self.viewport)
+    self.hud      = HudView(viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
     self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8))
     
@@ -54,11 +54,7 @@ class PlayerInterface(object):
     self.hud.AddRenderable(entity.graphics)    
     return entity
   
-  def ordinal(self, num):
-    if   num == 1: return "1st"
-    elif num == 2: return "2nd"
-    elif num == 3: return "3rd"
-    else:          return "%1dth" % num
+
     
     
   def Tick(self, time):
@@ -67,15 +63,13 @@ class PlayerInterface(object):
     if self.vehicle.boosting: self.starlen += delta * 15
     else:                     self.starlen -= delta * 15
     
-    self.starlen = max(min(self.starlen, 32), 2)
+    self.starlen = clamp(self.starlen,2,32)
     for i in self.starfields:
       i.length = int(self.starlen)
     
     #Track Place HUD
-    if self.vehicle.finishPlace < 0: 
-      self.hud.WriteString(self.ordinal(self.vehicle.place), "Sony Sketch EF", 60, Point3(20, 5,0))
-    else:
-      self.hud.WriteString(self.ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 60, Point3(20, 5,0))
+    place = self.vehicle.finishPlace < 0 and self.vehicle.place or self.vehicle.finishPlace
+    self.hud.WriteString(ordinal(place), "Sony Sketch EF", 60, Point3(20, 5,0))
     
   
     for vehicle in self.state.vehicleList:

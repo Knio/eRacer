@@ -127,7 +127,7 @@ class GameState(State):
     self.lastMeteorTime = 0
     
     
-    self.LoadMusic("Adventure.mp3")
+    # self.LoadMusic("Adventure.mp3")
     
     game().time.Zero()
     self.loaded = True

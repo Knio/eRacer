@@ -6,7 +6,7 @@ from Camera           import Camera, CirclingCamera, OrthographicCamera
 from Quad             import Quad
 from HudQuad          import HudQuad
 from MenuMapping      import *
-from Graphics.View    import View
+from Graphics.View    import View, HudView
 from GameSettings     import GameSettings  
 
 
@@ -15,12 +15,7 @@ class MenuState(State):
     State.__init__(self)
     self.selected = 0
     
-    #width and height should not be hardcoded!
-    
-    camera = OrthographicCamera(800,600)
-    self.Add(camera)
-
-    self.view = View(camera,[self.scene])
+    self.view = HudView([self.scene])
 
     self.menuNav = cpp.SoundFx();
     self.menuNav.isLooping  = False
@@ -70,7 +65,6 @@ class MenuState(State):
       method()
 
   def MenuSelectEvent(self):
-    print "MenuSelect",self
     method = getattr(self.menu[self.selected], 'MenuSelectEvent', None)
     if method: 
       game().sound.sound.PlaySoundFx(self.menuSel)
@@ -86,8 +80,7 @@ class MainMenuState(MenuState):
   def __init__(self):
     MenuState.__init__(self)
 
-    logo = HudQuad("Logo","eRacerXLogoNegative.png", 0, 0, 600, 235)
-    logo.SetLeftTop(30, 35)
+    logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
     self.Add(logo)
     
     self.LoadMusic("Terran5.ogg")

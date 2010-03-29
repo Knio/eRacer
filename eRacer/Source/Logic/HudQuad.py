@@ -7,7 +7,7 @@ class HudQuad(Quad):
     self.top = top
     self.width = width
     self.height = height
-    p = Point3(left+width/2., game().graphics.height-(top+height/2.), 0)
+    p = Point3(left+width/2., 600-(top+height/2.), 0)
     t = Matrix(p, width, height, 1)
     
     Quad.__init__(self, name, texture,t)

@@ -67,6 +67,12 @@ CONSTS    = cpp.Constants().g_Constants
 class Struct:
   def __init__(self, **entries): 
     self.__dict__.update(entries)
+    
+def ordinal(num):
+  if   num == 1: return "1st"
+  elif num == 2: return "2nd"
+  elif num == 3: return "3rd"
+  else:          return "%1dth" % num    
 
 from Game.Module  	import Module
 from Game.Entity    import Entity

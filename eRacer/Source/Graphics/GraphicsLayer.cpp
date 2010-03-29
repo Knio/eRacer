@@ -12,24 +12,6 @@ GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
 
 
 
-ID3DXSprite* GraphicsLayer::CreateSprite(float x, float y, float w){
-    float h = w*3/4.0f;
-
-    float wr = w/width;
-    float hr = h/height;
-    
-    //cout << "Creating sprite with dimensions "<< x << ", "<< y << ", " << w << ", " << h << endl;
-    
-    Matrix m(  wr,          0,          0, 0,
-                0,          -hr,        0, 0,
-                0,          0,          1, 0,
-                x,          ((float)height)-y,   0, 1);
-    
-    ID3DXSprite* result;
-    D3DXCreateSprite(m_pd3dDevice, &result);
-    result->SetTransform(&m);
-    return result;
-}    
 
 
 GraphicsLayer::GraphicsLayer()
@@ -54,12 +36,12 @@ void GraphicsLayer::SetCamera(Camera& cam)
 
     // HACK!
     // In the future this will be done inside a loop to handle each shader/effect
-	D3DXMATRIXA16 viewMat = cam.GetViewMatrix();
-	D3DXMATRIXA16 projMat = cam.GetProjectionMatrix();
-	HRESULT hr;
-	hr = m_pEffect->SetMatrix( "g_ViewMatrix", &viewMat );
-	hr = m_pEffect->SetMatrix( "g_ProjectionMatrix", &projMat );
-	hr = m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
+    D3DXMATRIXA16 viewMat = cam.GetViewMatrix();
+    D3DXMATRIXA16 projMat = cam.GetProjectionMatrix();
+    HRESULT hr;
+    hr = m_pEffect->SetMatrix( "g_ViewMatrix", &viewMat );
+    hr = m_pEffect->SetMatrix( "g_ProjectionMatrix", &projMat );
+    hr = m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
 }
 
 ID3DXEffect* GraphicsLayer::GetEffect(char* file)
@@ -111,7 +93,7 @@ int GraphicsLayer::Init( HWND hWnd )
         return E_FAIL;
     }
 
-	resetPresentationParameters();
+    resetPresentationParameters();
     
     
     // Create the D3DDevice
@@ -135,14 +117,14 @@ int GraphicsLayer::Init( HWND hWnd )
 
     assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_LINEAR)));
     assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR)));
-	assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP)));
-	assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP)));
+    assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP)));
+    assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP)));
     
     // AA
     assert(SUCCEEDED(m_pd3dDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE)));
     
-	//Shaders
-	
+    //Shaders
+    
     m_pEffect = GetEffect("BasicHLSL.fx");
 
     // Set effect variables as needed
@@ -151,8 +133,8 @@ int GraphicsLayer::Init( HWND hWnd )
     m_pEffect->SetValue( "g_MaterialAmbientColor", &colorMtrlAmbient, sizeof( D3DXCOLOR ) );
     m_pEffect->SetValue( "g_MaterialDiffuseColor", &colorMtrlDiffuse, sizeof( D3DXCOLOR ) );
 
-	D3DXCOLOR colorMtrlTint( 1.0f, 1.0f, 1.0f, 1.0f );
-	m_pEffect->SetValue( "g_ColorTint", &colorMtrlTint, sizeof( D3DXCOLOR ) );
+    D3DXCOLOR colorMtrlTint( 1.0f, 1.0f, 1.0f, 1.0f );
+    m_pEffect->SetValue( "g_ColorTint", &colorMtrlTint, sizeof( D3DXCOLOR ) );
 
     // save the screen surface
     m_pd3dDevice->GetRenderTarget(0, &screen);
@@ -260,6 +242,26 @@ void GraphicsLayer::ResetViewport(){
     SetViewport(0,0,width,height);
 }
 
+ID3DXSprite* GraphicsLayer::CreateSprite(float x, float y, float w){
+    float h = w*3/4.0f;
+
+    float wr = w/width;
+    float hr = h/height;
+    
+    //cout << "Creating sprite with dimensions "<< x << ", "<< y << ", " << w << ", " << h << endl;
+    
+    //cout << "Scale: " << wr << ", " << -hr << endl;
+    cout << "Translate: " << x << ", " << 600-y << endl;
+    
+    Matrix scale = CreateMatrix(wr, -hr, 1);
+    Matrix translate = CreateMatrix(Point3(x,600-y,0));
+    Matrix m = scale*translate;
+    
+    ID3DXSprite* result;
+    D3DXCreateSprite(m_pd3dDevice, &result);
+    result->SetTransform(&m);
+    return result;
+}    
 
 void GraphicsLayer::PreRender(){
     
