@@ -3,6 +3,7 @@ from Starfield        import Starfield
 from Camera           import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera, CirclingCamera
 from HudQuad          import HudQuad
 from Graphics.View    import View
+from GameEndState     import GameEndState
 
 class PlayerInterface(object):
   def __init__(self, state, vehicle, viewport):
@@ -20,12 +21,12 @@ class PlayerInterface(object):
     
     cam = state.Add(CarCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
-    
-    debugCam = state.Add(FirstPersonCamera())
-    self.views.append(View(debugCam, viewport=self.viewport))
 
     circCam = state.Add(CirclingCamera(vehicle))
     self.views.append(View(circCam, viewport = self.viewport))
+
+    debugCam = state.Add(FirstPersonCamera())
+    self.views.append(View(debugCam, viewport=self.viewport))
     
     self.hud      = View(OrthographicCamera(game().graphics.width, game().graphics.height), viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
@@ -70,15 +71,20 @@ class PlayerInterface(object):
     if self.vehicle.boosting: self.starlen += delta * 15
     else:                     self.starlen -= delta * 15
     
-    self.starlen = max(min(self.starlen, 3), 2)
+    self.starlen = max(min(self.starlen, 8), 2)
     for i in self.starfields:
       i.length = int(self.starlen)
+
+
+    t = time.seconds*5
     
     #Track Place HUD
     if self.vehicle.finishPlace < 0: 
       self.hud.WriteString(self.ordinal(self.vehicle.place), "Sony Sketch EF", 60, Point3(20, 5,0))
     else:
       self.hud.WriteString(self.ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 60, Point3(20, 5,0))
+      if game().states[-1].__class__ is not GameEndState:
+        self.hud.WriteString(self.ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 80, Point3(330, 350,0), Vector3(math.cos(t),math.sin(t),math.sin(t)))
     
   
     for vehicle in self.state.vehicleList:
@@ -126,15 +132,12 @@ class PlayerInterface(object):
   
     #Personal Endgamestuff
     if self.vehicle.lapcount > self.state.laps:
-      self.viewIndex = 3
+      self.viewIndex = 2
 
   def CameraChangedEvent(self):
     #don't use last camera, it's the debug one
     self.viewIndex = (self.viewIndex+1) % (len(self.views) - 2)    
 
-  def SpinCameraEvent(self):
-    self.viewIndex = 3
-    
   def DebugCameraToggle(self):
     if self.viewIndex == len(self.views) - 1:
       #go back to standard camera
