@@ -99,7 +99,16 @@ class GameState(State):
     startFrame = self.track.GetFrame(0.0)
     
     finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
-    self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
+    self.Add(Model('Finish Line', 'FinishLine.x', None, finishLineTransform))
+
+
+    x = 300.
+    for i in xrange(64):
+      frame = self.track.GetFrame(x+10*i)
+      tx = Matrix(2.7, 2.7, 2.7) * Matrix(frame.position, frame.up, frame.fw)
+      self.Add(Model("Ring", 'Ring2.x', None, tx))
+      
+
 
     self.skybox = SkyBox()
 
