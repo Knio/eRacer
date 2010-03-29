@@ -19,6 +19,7 @@ class Keyboard1Mapping(VehicleMapping):
     elif key == KEY.C:      return self.target.CameraChangedEvent               (    )
     elif key == KEY.ESCAPE: return E.PauseEvent                       (    )
     elif key == KEY.T:      return self.target.vehicle.behavior.RespawnCarEvent        (    )
+    elif key == KEY.F5:     return self.target.DebugCameraToggle()
     
   def KeyReleasedEvent(self, key):
     if   key == KEY.W:     return self.target.vehicle.behavior.PlayerAccelerateEvent ( 0)
@@ -112,19 +113,19 @@ class GamepadMapping(VehicleMapping):
       elif button == cpp.BUTTON_A:
         return self.target.vehicle.behavior.PlayerBoostEvent(False)
         
-class Gamepad0Mapping(GamepadMapping):
+class Gamepad1Mapping(GamepadMapping):
   def __init__(self, target):
     GamepadMapping.__init__(self, 0, target)
 
-class Gamepad1Mapping(GamepadMapping):
+class Gamepad2Mapping(GamepadMapping):
   def __init__(self, target):
     GamepadMapping.__init__(self, 1, target)
 
-class Gamepad2Mapping(GamepadMapping):
+class Gamepad3Mapping(GamepadMapping):
   def __init__(self, target):
     GamepadMapping.__init__(self, 2, target)
 
-class Gamepad3Mapping(GamepadMapping):
+class Gamepad4Mapping(GamepadMapping):
   def __init__(self, target):
     GamepadMapping.__init__(self, 3, target)
         

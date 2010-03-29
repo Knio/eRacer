@@ -150,11 +150,7 @@ class MainMenuState(MenuState):
     logo.SetLeftTop(30, 35)
     self.Add(logo)
     
-    self.sound = cpp.SoundFx();
-    self.sound.isLooping = True
-    self.sound.is3D = False
-    self.sound.isPaused = False
-    game().sound.sound.LoadSoundFx("Terran5.ogg", self.sound)
+    self.LoadMusic("Terran5.ogg")
     
     self.menu = [
       ApplyMenuItem('New Game', self.Menu_New_Game),
@@ -164,8 +160,8 @@ class MainMenuState(MenuState):
 
         
   def Pause(self):
-    self.sound.isPaused = True
-    game().sound.sound.UpdateSoundFx(self.sound)
+    self.music.isPaused = True
+    game().sound.sound.UpdateSoundFx(self.music)
     
   def Menu_New_Game(self):
     # game().PushState(GameState())
@@ -261,7 +257,8 @@ class SetupPlayersMenuState(MenuState):
     
       mappingOptions = []
       for i,mapping in enumerate(GameSettings.MAPPINGS):
-        mappingOptions.append((str(mapping),playerId,i))   
+        s = mapping and mapping.__name__.replace('Mapping','') or 'None'
+        mappingOptions.append((s,playerId,i))   
     
       self.menu.append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex))
       self.menu[-1].fontsize = fontsize
@@ -304,6 +301,7 @@ class PauseMenuState(MenuState):
     MenuState.__init__(self)
     self.menu = [
       ApplyMenuItem('Continue',self.Menu_Continue),
+      ApplyMenuItem('Restart race', self.Menu_Restart_race),
       ApplyMenuItem('Main menu',self.Menu_Main_menu),
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
@@ -327,6 +325,12 @@ class PauseMenuState(MenuState):
   def Menu_Main_menu(self):
     self.parent = None
     while not game().states[-1].__class__ is MainMenuState:
+      game().PopState()
+      
+  def Menu_Restart_race(self):
+    self.parent.Release()
+    self.parent.load(self.parent.settings)
+    while not game().states[-1].__class__ is GameState:
       game().PopState()
           
   def Tick(self, time):

@@ -18,17 +18,21 @@ class PlayerInterface(object):
     cam = state.Add(ChasingCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
     
-    cam = state.Add(FirstPersonCamera())
-    self.views.append(View(cam, viewport=self.viewport))
-    
     cam = state.Add(CarCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
+    
+    debugCam = state.Add(FirstPersonCamera())
+    self.views.append(View(debugCam, viewport=self.viewport))
     
     self.hud      = View(OrthographicCamera(game().graphics.width, game().graphics.height), viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
     self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8))
+    
     for vehicle in state.vehicleList:
-      self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", self.vehicle==vehicle and "bluemarker.png" or "redmarker.png", 150-8, 50-12, 16, 16))
+      if not vehicle == self.vehicle:
+        self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", "redmarker.png", 150-8, 50-12, 16, 16))
+    self.icons[self.vehicle.name] = self.AddHud(HudQuad(self.vehicle.name+"Icon", "bluemarker.png", 150-8, 50-12, 16, 16))
+
 
     self.starfields = []
     self.starlen = 2
@@ -95,16 +99,9 @@ class PlayerInterface(object):
     if self.vehicle.Backwards == True:
        self.hud.WriteString( "WRONG WAY", "Sony Sketch EF", 50, Point3(300,200,0))
 
-
-                                  
-
-    # if self.vehicle.lapcount:
-    #   l = list(self.stats.get(self.vehicle,[0.]))
-    #   l.append(game().time.get_seconds())
-
     #Lap counter
     
-    if self.vehicle.lapcount or True:
+    if self.vehicle.lapcount or True: # ???
       playerLaps = min(self.vehicle.lapcount, self.state.laps)
       playerLaps = max(1, playerLaps);
       
@@ -126,7 +123,16 @@ class PlayerInterface(object):
           y += 15    
 
   def CameraChangedEvent(self):
-    self.viewIndex = (self.viewIndex+1) % len(self.views)    
+    #don't use last camera, it's the debug one
+    self.viewIndex = (self.viewIndex+1) % (len(self.views) - 1)    
+    
+  def DebugCameraToggle(self):
+    if self.viewIndex == len(self.views) - 1:
+      #go back to standard camera
+      self.viewIndex = 0
+    else:
+      #turn on debug camera
+      self.viewIndex = len(self.views) - 1
     
   
     
