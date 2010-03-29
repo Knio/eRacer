@@ -55,6 +55,7 @@ class Vehicle(Model):
     self.frame = cpp.Frame(mul1(tx, ORIGIN), mul0(tx, Y), mul0(tx, Z), 0.0)
     self.resetFrame = self.frame
     self.velocity = ORIGIN
+    self.isShutoff = False
     
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
     self.physics.SetId(self.id)
@@ -225,6 +226,8 @@ class Vehicle(Model):
     vel = phys.GetLocalPointWorldVelocity(ORIGIN)
     
     self.sound.isPaused = delta==0
+    if self.isShutoff == True:
+      self.sound.isPaused = True;
     
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
