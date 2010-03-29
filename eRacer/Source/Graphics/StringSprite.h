@@ -7,7 +7,7 @@ namespace Graphics {
 
 class StringSprite : public Renderable {
 public:	
-	StringSprite(int l, int t, int w, int h);
+	StringSprite(float l, float t, float w, float h);
 	void Write(const char* msg, const char* fontName, int size, const Vector3 &pos, const Vector3 &color);
 	void Clear();
 

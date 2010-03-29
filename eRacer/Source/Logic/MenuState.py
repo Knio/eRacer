@@ -150,11 +150,7 @@ class MainMenuState(MenuState):
     logo.SetLeftTop(30, 35)
     self.Add(logo)
     
-    self.sound = cpp.SoundFx();
-    self.sound.isLooping = True
-    self.sound.is3D = False
-    self.sound.isPaused = False
-    game().sound.sound.LoadSoundFx("Terran5.ogg", self.sound)
+    self.LoadMusic("Terran5.ogg")
     
     self.menu = [
       ApplyMenuItem('New Game', self.Menu_New_Game),
@@ -163,9 +159,7 @@ class MainMenuState(MenuState):
     self.menuTop = 240
 
         
-  def Pause(self):
-    self.sound.isPaused = True
-    game().sound.sound.UpdateSoundFx(self.sound)
+
     
   def Menu_New_Game(self):
     # game().PushState(GameState())
@@ -215,8 +209,7 @@ class SetupGameMenuState(MenuState):
     ]
     
   def Menu_Start(self):
-    print "menu start"
-    self.parent.Pause() # ???
+    self.parent.PauseMusic()
     game().PushState(GameState(self.settings))
         
   def Menu_AI_Players(self, value):
@@ -261,7 +254,8 @@ class SetupPlayersMenuState(MenuState):
     
       mappingOptions = []
       for i,mapping in enumerate(GameSettings.MAPPINGS):
-        mappingOptions.append((str(mapping),playerId,i))   
+        s = mapping and mapping.__name__.replace('Mapping','') or 'None'
+        mappingOptions.append((s,playerId,i))   
     
       self.menu.append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex))
       self.menu[-1].fontsize = fontsize
@@ -304,6 +298,7 @@ class PauseMenuState(MenuState):
     MenuState.__init__(self)
     self.menu = [
       ApplyMenuItem('Continue',self.Menu_Continue),
+      ApplyMenuItem('Restart race', self.Menu_Restart_race),
       ApplyMenuItem('Main menu',self.Menu_Main_menu),
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
@@ -328,6 +323,14 @@ class PauseMenuState(MenuState):
     self.parent = None
     while not game().states[-1].__class__ is MainMenuState:
       game().PopState()
+      
+  def Menu_Restart_race(self):
+    while not game().states[-1].__class__ is GameState:
+      game().PopState()
+    
+    gamestate = game().states[-1]
+    gamestate.Release()
+    gamestate.load(gamestate.settings)
           
   def Tick(self, time):
     self.view.WriteString(

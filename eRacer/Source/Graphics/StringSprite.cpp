@@ -3,11 +3,11 @@
 
 namespace Graphics {
 
-StringSprite::StringSprite(int l, int t, int w, int h)
+StringSprite::StringSprite(float l, float t, float w, float h)
 {
 	GraphicsLayer* graphics = GraphicsLayer::GetInstance();
-  sprite = graphics->CreateSprite(l, t, w);
-  ratio = h/(w*3/4.0f);
+	sprite = graphics->CreateSprite(l, t, w);
+	ratio = h/(w*3/4.0f);
 }
 
 void StringSprite::Write(const char* text, const char* family, int size, const Vector3 &pos, const Vector3 &color){

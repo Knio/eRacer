@@ -107,6 +107,17 @@ class Vehicle(Model):
           
           #to the front?
           if dot(vector, stealerDirection) > 0:
+            scale = Matrix(1,1,1) #Matrix(1,1,distance)
+            pos = stealerPosition
+            up = Vector3(0,1,0)
+            fw = Vector3(0,0,1) #stealerDirection
+            beamTransform = scale * Matrix(pos, up, fw)
+            # TODO: I think every car should only be able to steal from 2 or 3 other cars at a time
+            # this would allow us to store a fixed number of models for the beam and only make them 
+            # (in)visible/ change position
+            
+            # model = Model('StealBeam', 'box.x', None, beamTransform)
+            
             if obstacle.boostFuel >=self.STEALING_SPEED*delta_s:
               self.boostFuel += self.STEALING_SPEED*delta_s
               obstacle.boostFuel -= self.STEALING_SPEED*delta_s
