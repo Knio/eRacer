@@ -8,7 +8,7 @@ class Track(Entity, cpp.Track):
     Entity.__init__(self)
     cpp.Track.__init__(self)
     
-    self.graphics = MeshNode("track")
+    self.graphics = []
     self.physics  = cpp.TriMesh()
     
     # HACK
@@ -31,19 +31,24 @@ class Track(Entity, cpp.Track):
     for i in track.PROFILE:
       profile.push_back(i)
     
-    mesh = self.CreateMesh(profile)
-    tex  = game().io.LoadTexture('ConcretePlates.jpg')
-    mat  = game().graphics.graphics.DefaultMaterial()
-    mesh.disown()
-    mat.disown()
-    self.mesh = cpp.Mesh(mesh, mat, tex)
+    meshes = self.CreateMesh(profile)
     
-    self.graphics.Init(self.mesh)
-    self.physics.Init(mesh)
-    self.physics.SetId(self.id)
+    for i in xrange(meshes.size()):
+      tex   = game().io.LoadTexture('ConcretePlates.jpg')
+      mat   = game().graphics.graphics.DefaultMaterial()
+      mat.disown()
+      
+      g = MeshNode("track")
+      g.Init(cpp.Mesh(mesh, mat, tex))
+      self.graphics.append(g)
+      
+      p = cpp.TriMesh()
+      p.Init(mesh)
+      p.SetId(self.id)
+      p.SetGroup(cpp.TRACK)
+      self.physics.append(p)
+      
 
-    self.physics.SetGroup(cpp.TRACK)
-    
   def Release(self):
     self.graphics.Release()
     self.physics.Release()
