@@ -32,6 +32,7 @@ class Track(Entity, cpp.Track):
       profile.push_back(i)
     
     meshes = self.CreateMesh(profile)
+    print meshes
     
     for i in xrange(meshes.size()):
       tex   = game().io.LoadTexture('ConcretePlates.jpg')
@@ -39,11 +40,11 @@ class Track(Entity, cpp.Track):
       mat.disown()
       
       g = MeshNode("track")
-      g.Init(cpp.Mesh(mesh, mat, tex))
+      g.Init(cpp.Mesh(meshes[i], mat, tex))
       self.graphics.append(g)
       
       p = cpp.TriMesh()
-      p.Init(mesh)
+      p.Init(meshes[i])
       p.SetId(self.id)
       p.SetGroup(cpp.TRACK)
       self.physics.append(p)

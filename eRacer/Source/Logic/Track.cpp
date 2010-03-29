@@ -133,7 +133,6 @@ void Track::Subdivide(int NSUBDIV)
     arclen[dist] = d-1;
 }
 
-
 std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, int newmesh)
 {
   int N = track.size();
@@ -265,12 +264,22 @@ std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, in
       
     }
     
+
     if (i == newmesh * meshes.size())
     {
       if (newmesh * (meshes.size()+1) > N) newmesh = N - newmesh * (meshes.size()+1);
       
       assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
       assert(SUCCEEDED(mesh->UnlockIndexBuffer()));
+      
+      D3DXATTRIBUTERANGE att;
+      att.AttribId     =  0;
+      att.FaceStart    =  0;
+      att.FaceCount    =  N*(D-1)*2;
+      att.VertexStart  =  0;
+      att.VertexCount  =  N*D;
+      
+      mesh->SetAttributeTable(&att, 1);
       
       ID3DXMesh *m;
       assert(SUCCEEDED(D3DXCreateMeshFVF(
@@ -290,7 +299,7 @@ std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, in
     }
     
   }
-   
+  
   assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
   assert(SUCCEEDED(mesh->UnlockIndexBuffer()));
   
