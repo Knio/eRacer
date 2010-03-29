@@ -98,11 +98,8 @@ class GameState(State):
     
     startFrame = self.track.GetFrame(0.0)
     
-    #finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
-    #self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
-
     finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
-    self.Add(Model('Finish Line','StartLine.x',None,finishLineTransform))
+    self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
 
     for x in [200., 2200.]:
       for i in xrange(64):
