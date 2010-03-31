@@ -25,10 +25,12 @@
 #include "..\Logic\Track.h"
 
 // Graphics
+
+#include "..\Graphics\BoundingSphere.h"
+#include "..\Graphics\Spatial.h"
 #include "..\Graphics\Renderable.h"
 #include "..\Graphics\Camera.h"
 #include "..\Graphics\Scene.h"
-#include "..\Graphics\BoundingSphere.h"
 #include "..\Graphics\Mesh.h"
 #include "..\Graphics\RenderableNode.h"
 #include "..\Graphics\MeshNode.h"
@@ -143,6 +145,7 @@ If a class doesn't need to be exported to Python, it can be left out.
 %include "..\Graphics\Camera.h"
 
 %include "..\Graphics\BoundingSphere.h"
+%include "..\Graphics\Spatial.h"
 %include "..\Graphics\Mesh.h"
 %include "..\Graphics\RenderableNode.h"
 %include "..\Graphics\MeshNode.h"

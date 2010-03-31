@@ -2906,7 +2906,7 @@ Material {
 0;0;0;;
 0;0;0;;
 TextureFilename {
-"ring1texture.jpg";
+"ring2texture.jpg";
 }
 }
 }

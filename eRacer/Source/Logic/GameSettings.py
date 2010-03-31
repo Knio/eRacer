@@ -12,8 +12,8 @@ class GameSettings(object):
               Gamepad3Mapping, 
               Gamepad4Mapping, 
              ]
-  TEXTURE_IDS = [1,2,3,4,5,6,8]
-  TEXTURE_NAMES = ['Blue', 'Red', 'Magenta', 'Cyan', 'Green', 'Black', 'Orange']
+  TEXTURE_IDS = [1,2,3,4,5,6,7,8,9,10]
+  TEXTURE_NAMES = ['Blue', 'Red', 'Green', 'Yellow', 'Orange', 'Magenta', 'Black', 'Grey', 'Cyan', 'White']
   AI_NAMES = [
     "Arthur Dent", 
     "Ford Prefect", 

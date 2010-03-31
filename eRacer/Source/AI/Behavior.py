@@ -39,10 +39,15 @@ class AIBehavior(Behavior):
     Behavior.__init__(self,parent)
     self.line = track
     self.arrow = arrow
+    self.startDist = 0.0 # the distance around the track at the last check
+    self.resetDist = 50.0 # if travelled less than this in interval, reset
+    self.resetCheckTime = 5.0 # how often to check if we should reset
+    self.resetCounter = -5.0 # don't check for the first 2 seconds
     
     self.curState = AIState.DRIVE
   
   def Tick(self,time):    
+    delta = float(time.game_delta) / time.RESOLUTION
     pos = self.parent.physics.GetPosition()
     nowFrame  = self.line.GetFrame(self.parent.trackpos)
     frame1 = self.line.GetFrame(self.parent.trackpos + 20.0)
@@ -57,10 +62,11 @@ class AIBehavior(Behavior):
     wantedVec = normalized((frame1.position-pos) * 1.0 +  (frame2.position-pos) * 1.0 + (frame3.position-pos) * 1.0)
     #this is the way we want to go if there are no obstacles in our way and if we are not too close to the wall
     distFromCentre = self.line.GetOffsetFromCentre(pos)
-    
+    if self.parent.isShutoff:
+      self.curState = AIState.FINISHED
     if self.arrow: 
       self.arrow.transform = Matrix(frame2.position)
-    
+      
     if self.curState == AIState.DRIVE:
       #first check for obstacles and see if we must avoid them.
       dodgeMode = False
@@ -75,16 +81,17 @@ class AIBehavior(Behavior):
           closestDist = length(toObs)
           closestObs = obs
         #obstacle in cone in front of car
-        if length(toObs) < 10.0 and costheta > math.sqrt(2)/2 :
+        if length(toObs) < 20.0 and costheta > math.sqrt(2)/2 :
           dodgeMode = True
+          #print "must dodge"
      # print "closest", closestDist
       if dodgeMode:
         #print "must dodge"
         if distFromCentre > 0: 
         #we are on the right side, so it would be better to go left ot the centre
-          self.parent.Turn(-0.5)
+          self.parent.Turn(-1)
         else:
-          self.parent.Turn(0.5)
+          self.parent.Turn(1)
       else:
         #print "nothing to dodge"
         #if here, we can drive normally trying to follow the track
@@ -97,44 +104,59 @@ class AIBehavior(Behavior):
         costheta = dot(turnProj, bodyRight) / length(turnProj)
         fwProj = projectOnto(nowFrame.fw, bodyUp)#check if we are driving into the walls
         fwCosth = dot(fwProj, bodyRight) / length(fwProj)
-
+        #print distFromCentre
+       # print "fwcost", fwCosth
         if 0.999 < costheta < 1.001:#right turn
           #if close to right wall and we're going to hit the wall, adjust to centre
-          if fwCosth > 0.2 and distFromCentre > self.line.maxX - 5.0:
-            #print "too close to right wall"
-            self.parent.Turn(-0.5)
-          else:
-            self.parent.Turn(turnSize)
+          if fwCosth > 0.1 and distFromCentre > self.line.maxX - 15.0:
+           # print "too close to right wall"
+           # print distFromCentre
+            turnSize = turnSize - fwCosth*0.3
         else:
+          turnSize = -turnSize
           #if close to left wall and we're going to hit the wall, adjust to centre
-          if fwCosth < -0.2 and distFromCentre < self.line.minX + 5.0:
-            #print "too close to left wall"
-            self.parent.Turn(0.5)
-          else:
-            self.parent.Turn(-turnSize)
+          if fwCosth < -0.1 and distFromCentre < self.line.minX + 15.0:
+           # print "too close to left wall"
+            #print distFromCentre
+            #note that here fwCosth is negative, so make it positive in order to turn right
+            turnSize = turnSize + fwCosth*-0.3
+        cappedTurn = min(max(turnSize, -1.0), 1.0)
+        #print cappedTurn
+        self.parent.Turn(cappedTurn)
         #basic boost code: we don't need to turn off boost until the turn becomes large
         #print turnSize
-        #if turnSize < 0.5 and self.parent.boostFuel > 2.5:
-          #print "boost"
-          #  self.parent.Boost(True)
-        #if turnSize > 0.8:
+        distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 50.0)
+        if turnSize < 0.1 and self.parent.boostFuel > 2 and not dodgeMode:
+          if distAhead < self.line.maxX and distAhead > self.line.minX:
+          #make sure we won't jump off the edge
+            #print "boost"
+            self.parent.Boost(True)
+          else:
+             #print "1st check passed, no boost though"
+             pass
+        if turnSize > 0.5:
           #print "boost off"
-          #  self.parent.Boost(False)
+          self.parent.Boost(False)
       self.parent.Accelerate(1.0)
+      self.ResetChecker(delta, nowFrame)
 
       #now change state if needed
-      if self.parent.physics.GetSpeed() < 2.0 and self.objectInFront(1.0, tx):
+      if self.parent.physics.GetSpeed() < 1.0 and self.objectInFront(1.0, tx):
         #object close in front has almost stopped us
         self.curState = AIState.STUCK
-    
+       
     if self.curState == AIState.STUCK:
       self.parent.Accelerate(-1.0)
       self.parent.Turn(0)
-      
+      self.ResetChecker(delta, nowFrame)
       if not self.objectInFront(8.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE
-  
+        
+    if self.curState == AIState.FINISHED:
+      self.parent.Turn(0)
+      self.parent.Accelerate(0)
+      self.parent.Boost(False)
 #checks whether there is an object in front of the car, within specified distance
 #does not check if this is a tiny thing or something that is preventing
 #the car from moving 
@@ -174,6 +196,21 @@ class AIBehavior(Behavior):
     else:
       return False
     
+    
+  def ResetChecker(self, delta, nowFrame):
+    self.resetCounter = self.resetCounter + delta
+    if(self.resetCounter > self.resetCheckTime):
+      distTravelled = nowFrame.dist - self.startDist
+      #print "travelled" , distTravelled
+      if(distTravelled < self.resetDist):
+        #print "must reset, we didn't travel far"
+        self.parent.resetCar()
+      
+      self.startDist = nowFrame.dist
+      self.resetCounter = 0.0
+    
+  
 class AIState:
   DRIVE = "DRIVE"
   STUCK = "STUCK"
+  FINISHED = "FINISHED"

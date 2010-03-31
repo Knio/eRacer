@@ -92,9 +92,7 @@ class MainMenuState(MenuState):
     self.menuTop = 240
 
         
-  def Pause(self):
-    self.music.isPaused = True
-    game().sound.sound.UpdateSoundFx(self.music)
+
     
   def Menu_New_Game(self):
     # game().PushState(GameState())
@@ -144,8 +142,7 @@ class SetupGameMenuState(MenuState):
     ]
     
   def Menu_Start(self):
-    print "menu start"
-    self.parent.Pause() # ???
+    self.parent.PauseMusic()
     game().PushState(GameState(self.settings))
         
   def Menu_AI_Players(self, value):
@@ -261,10 +258,12 @@ class PauseMenuState(MenuState):
       game().PopState()
       
   def Menu_Restart_race(self):
-    self.parent.Release()
-    self.parent.load(self.parent.settings)
     while not game().states[-1].__class__ is GameState:
       game().PopState()
+    
+    gamestate = game().states[-1]
+    gamestate.Release()
+    gamestate.load(gamestate.settings)
           
   def Tick(self, time):
     self.view.WriteString(

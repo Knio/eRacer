@@ -278,7 +278,7 @@ float Track::GetOffsetFromCentre(const Point3& pos){
 	Vector3 left = cross(frame.fw, frame.up);
 	Vector3 vProj = project(pos-frame.position, left);
 	float cosTheta = dot(vProj, left) / length(vProj);
-	if(cosTheta > 0.999 && cosTheta < 1.001){
+	if(cosTheta > 0.98 && cosTheta < 1.02){
 		// to the left
 		return -length(vProj);
 	}

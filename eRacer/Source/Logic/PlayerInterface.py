@@ -1,8 +1,9 @@
 from Core.Globals     import *
 from Starfield        import Starfield
-from Camera           import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera
+from Camera           import ChasingCamera, FirstPersonCamera, CarCamera, OrthographicCamera, CirclingCamera
 from HudQuad          import HudQuad
 from Graphics.View    import View, HudView
+from GameEndState     import GameEndState
 
 class PlayerInterface(object):
   def __init__(self, state, vehicle, viewport):
@@ -18,19 +19,22 @@ class PlayerInterface(object):
     cam = state.Add(ChasingCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
     
-    cam = state.Add(FirstPersonCamera())
-    self.views.append(View(cam, viewport=self.viewport))
-    
     cam = state.Add(CarCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
+
+    circCam = state.Add(CirclingCamera(vehicle))
+    self.views.append(View(circCam, viewport = self.viewport))
+
+    debugCam = state.Add(FirstPersonCamera())
+    self.views.append(View(debugCam, viewport=self.viewport))
     
     self.hud      = HudView(viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
     self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8))
     
     for vehicle in state.vehicleList:
-      if not vehicle == self.vehicle:
-        self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", "redmarker.png", 150-8, 50-12, 16, 16))
+      if vehicle == self.vehicle: continue
+      self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", "redmarker.png", 150-8, 50-12, 16, 16))
     self.icons[self.vehicle.name] = self.AddHud(HudQuad(self.vehicle.name+"Icon", "bluemarker.png", 150-8, 50-12, 16, 16))
 
 
@@ -63,13 +67,18 @@ class PlayerInterface(object):
     if self.vehicle.boosting: self.starlen += delta * 15
     else:                     self.starlen -= delta * 15
     
-    self.starlen = clamp(self.starlen,2,32)
+    self.starlen = clamp(self.starlen,2,8)
     for i in self.starfields:
       i.length = int(self.starlen)
+
+
+    t = time.seconds*5
     
     #Track Place HUD
     place = self.vehicle.finishPlace < 0 and self.vehicle.place or self.vehicle.finishPlace
     self.hud.WriteString(ordinal(place), "Sony Sketch EF", 60, Point3(20, 5,0))
+    if not self.vehicle.finishPlace < 0 and game().states[-1].__class__ is not GameEndState:
+        self.hud.WriteString(self.ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 80, Point3(330, 350,0), Vector3(math.cos(t),math.sin(t),math.sin(t)))
     
   
     for vehicle in self.state.vehicleList:
@@ -94,7 +103,6 @@ class PlayerInterface(object):
        self.hud.WriteString( "WRONG WAY", "Sony Sketch EF", 50, Point3(300,200,0))
 
     #Lap counter
-    
     if self.vehicle.lapcount or True: # ???
       playerLaps = min(self.vehicle.lapcount, self.state.laps)
       playerLaps = max(1, playerLaps);
@@ -115,9 +123,22 @@ class PlayerInterface(object):
           self.hud.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
           self.hud.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
           y += 15    
+  
+    #Personal Endgamestuff
+    if self.vehicle.lapcount > self.state.laps:
+      self.viewIndex = 2
 
   def CameraChangedEvent(self):
-    self.viewIndex = (self.viewIndex+1) % len(self.views)    
+    #don't use last camera, it's the debug one
+    self.viewIndex = (self.viewIndex+1) % (len(self.views) - 2)    
+
+  def DebugCameraToggle(self):
+    if self.viewIndex == len(self.views) - 1:
+      #go back to standard camera
+      self.viewIndex = 0
+    else:
+      #turn on debug camera
+      self.viewIndex = len(self.views) - 1
     
   
     

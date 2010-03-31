@@ -20,6 +20,7 @@ class MeteorManager(object):
     self.meteorfx.isLooping  = False
     self.meteorfx.is3D     = True
     self.meteorfx.isPaused = True
+    self.meteorfx.volume = 200
     self.meteorfx.minDist  = 70
     game().sound.sound.LoadSoundFx("MeteorCollision.wav", self.meteorfx)
     
