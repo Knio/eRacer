@@ -1,5 +1,6 @@
 from Core.Globals import *
 from Logic.Camera import Camera, OrthographicCamera
+from Logic.HudQuad  import HudQuad
 
 class View(object):
   def __init__(self, camera=None, renderables=None, viewport=None):
@@ -30,13 +31,21 @@ class HudView(View):
     self.camera       = OrthographicCamera(800,600)
     self.renderables  = renderables or []
     self.stringSprite = cpp.StringSprite(*self.viewport)
-        
+      
+  def AddRenderable(self, obj):
+    if isinstance(obj, HudQuad):
+      obj.aspectRatio = float(self.viewport[3])/self.viewport[2]
+      obj.Update()
+      print obj, obj.aspectRatio
+      obj = obj.graphics
+    return View.AddRenderable(self, obj)    
+  
   def WriteString(self, text, family, size, pos, color=cpp.WHITE):
     self.stringSprite.Write(text, family, size, pos, color)
 
   def Draw(self):
     View.Draw(self)
     d3d = game().graphics.graphics.GetDevice()
-      
+    
     self.stringSprite.Draw(d3d)  
     self.stringSprite.Clear()

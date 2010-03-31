@@ -81,7 +81,7 @@ class MainMenuState(MenuState):
     MenuState.__init__(self)
 
     logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
-    self.Add(logo)
+    self.view.Add(logo)
     
     self.LoadMusic("Terran5.ogg")
     

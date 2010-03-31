@@ -15,7 +15,6 @@ class PlayerInterface(object):
     
     self.icons = {}
     
-    
     cam = state.Add(ChasingCamera(vehicle))
     self.views.append(View(cam, viewport=self.viewport))
     
@@ -30,7 +29,7 @@ class PlayerInterface(object):
     
     self.hud      = HudView(viewport=self.viewport)
     self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
-    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8))
+    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8, True))
     
     for vehicle in state.vehicleList:
       if vehicle == self.vehicle: continue
@@ -55,11 +54,8 @@ class PlayerInterface(object):
       
   def AddHud(self,entity):
     self.state.Add(entity,False)
-    self.hud.AddRenderable(entity.graphics)    
+    self.hud.AddRenderable(entity)    
     return entity
-  
-
-    
     
   def Tick(self, time):
     delta = float(time.game_delta) / time.RESOLUTION

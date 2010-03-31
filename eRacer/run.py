@@ -6,7 +6,7 @@ import time
 
 
 
-debug   = False
+debug   = True
 profile = False
 
 
