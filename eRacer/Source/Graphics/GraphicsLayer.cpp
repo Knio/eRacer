@@ -251,15 +251,15 @@ ID3DXSprite* GraphicsLayer::CreateSprite(float x, float y, float w){
     //cout << "Creating sprite with dimensions "<< x << ", "<< y << ", " << w << ", " << h << endl;
     
     //cout << "Scale: " << wr << ", " << -hr << endl;
-    cout << "Translate: " << x << ", " << 600-y << endl;
+    // cout << "Translate: " << x << ", " << 600-y << endl;
     
-    Matrix scale = CreateMatrix(wr, -hr, 1);
-    Matrix translate = CreateMatrix(Point3(x,600-y,0));
-    Matrix m = scale*translate;
+    // Matrix scale = CreateMatrix(wr, -hr, 1);
+    // Matrix translate = CreateMatrix(Point3(x,600-y,0));
+    // Matrix m = scale*translate;
     
     ID3DXSprite* result;
     D3DXCreateSprite(m_pd3dDevice, &result);
-    result->SetTransform(&m);
+    // result->SetTransform(&m);
     return result;
 }    
 
