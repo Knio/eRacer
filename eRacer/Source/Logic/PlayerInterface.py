@@ -74,7 +74,7 @@ class PlayerInterface(object):
     place = self.vehicle.finishPlace < 0 and self.vehicle.place or self.vehicle.finishPlace
     self.hud.WriteString(ordinal(place), "Sony Sketch EF", 60, Point3(20, 5,0))
     if not self.vehicle.finishPlace < 0 and game().states[-1].__class__ is not GameEndState:
-        self.hud.WriteString(self.ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 80, Point3(330, 350,0), Vector3(math.cos(t),math.sin(t),math.sin(t)))
+        self.hud.WriteString(ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 80, Point3(330, 350,0), Vector3(math.cos(t),math.sin(t),math.sin(t)))
     
   
     for vehicle in self.state.vehicleList:
