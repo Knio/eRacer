@@ -32,10 +32,12 @@ class Track(Entity, cpp.Track):
       profile.push_back(i)
     
     mesh = self.CreateMesh(profile)
-    tex  = game().io.LoadTexture('ConcretePlates.jpg')
+    tex  = game().io.LoadTexture('AlphaTrackTexture2.png')
+    #tex  = game().io.LoadTexture('ConcretePlates.jpg')
     mat  = game().graphics.graphics.DefaultMaterial()
     mesh.disown()
     mat.disown()
+    # self.mesh = cpp.Mesh(mesh, mat, tex, Vector4(0,1.0,0.3,0.75))
     self.mesh = cpp.Mesh(mesh, mat, tex)
     
     self.graphics.Init(self.mesh)

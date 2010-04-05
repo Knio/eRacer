@@ -87,26 +87,26 @@ class GameState(State):
     self.freeAINames =  list(GameSettings.AI_NAMES)
     random.shuffle(self.freeAINames)
     
-    
-    self.track = self.Add(Track(self.settings.track))
+    track = Track(self.settings.track)
     self.vehicleList = []
 
-    frame = self.track.GetFrame(-30.0)
+    frame = track.GetFrame(-30.0)
     self.startOrientation = Matrix(frame.position, frame.up, frame.fw)
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
-    startFrame = self.track.GetFrame(0.0)
+    startFrame = track.GetFrame(0.0)
     
     finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
     self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
 
     for x in [200., 2200.]:
       for i in xrange(64):
-        frame = self.track.GetFrame(x+10*i)
+        frame = track.GetFrame(x+10*i)
         tx = Matrix(3.0, 3.0, 6.0) * Matrix(frame.position, frame.up, frame.fw)
         self.Add(Model("Ring", 'Ring2.x', None, tx))
 
+    self.track = self.Add(track)
       
     
     self.skybox = SkyBox()

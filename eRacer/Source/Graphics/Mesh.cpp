@@ -10,7 +10,6 @@
 #include "GraphicsLayer.h"
 #include "IO/IO.h"
 
-
 namespace Graphics {
 
 Mesh::Mesh()
@@ -20,9 +19,10 @@ Mesh::Mesh()
 	initialized(false),
 	cached(false)
 {
+	m_colorMtrlTint = D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f );
 }
 
-Mesh::Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture) :
+Mesh::Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture, Vector4 meshCol ) :
 	d3dMesh_(mesh), 
 	nMaterials_(1)
 {
@@ -33,8 +33,9 @@ Mesh::Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture) :
 	
 	initialized = true;
 	cached = false;
-	
+
 	localBounds.recompute(*d3dMesh_);
+	m_colorMtrlTint = D3DXCOLOR( meshCol.x, meshCol.y, meshCol.z, meshCol.w );
 }
 
 Mesh::~Mesh(){
