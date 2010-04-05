@@ -20,7 +20,7 @@ class GameEndMapping(Mapping):
   def MouseMovedEvent(self, relX, relY):
     return E.CameraLookAroundEvent(relX/300.,relY/300.)
         
-  def GamepadButtonPressedEvent(self, button):
+  def GamepadButtonPressedEvent(self, gamepadId, button):
     if   button == cpp.BUTTON_START:   return E.PauseEvent()
     elif button == cpp.BUTTON_A:       return E.ReloadConstsEvent()
     elif button == cpp.BUTTON_Y:       return E.CameraChangedEvent()
