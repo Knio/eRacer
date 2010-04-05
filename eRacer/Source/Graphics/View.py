@@ -41,11 +41,11 @@ class HudView(View):
     return View.AddRenderable(self, obj)    
   
   def WriteString(self, text, family, size, pos, color=cpp.WHITE):
-    pos.x = pos.x * (self.viewport[3]/600.0)
-    pos.y = pos.y * (self.viewport[3]/600.0)
-    # pos.y *= float(self.viewport[3])/self.viewport[2]
-    pos = pos + Vector3(self.viewport[0], self.viewport[1], 0)
-    self.stringSprite.Write(text, family, size, pos, color)
+    p = Point3(0,0,0)
+    p.x = pos.x  * (self.viewport[2]/800.0)
+    p.y = pos.y  * (self.viewport[3]/600.0)
+    p = p + Vector3(self.viewport[0], self.viewport[1], 0)
+    self.stringSprite.Write(text, family, int(size * (self.viewport[3]/600.0)), p, color)
 
   def Draw(self):
     View.Draw(self)
