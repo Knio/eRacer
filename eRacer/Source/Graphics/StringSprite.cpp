@@ -6,7 +6,7 @@ namespace Graphics {
 StringSprite::StringSprite(float l, float t, float w, float h)
 {
 	GraphicsLayer* graphics = GraphicsLayer::GetInstance();
-	D3DXCreateSprite(graphics->m_pd3dDevice, &sprite);
+	D3DXCreateSprite(graphics->GetDevice(), &sprite);
 }
 
 void StringSprite::Write(const char* text, const char* family, int size, const Vector3 &pos, const Vector3 &color){
