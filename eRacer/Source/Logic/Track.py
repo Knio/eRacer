@@ -36,7 +36,7 @@ class Track(Entity, cpp.Track):
     mat  = game().graphics.graphics.DefaultMaterial()
     mesh.disown()
     mat.disown()
-    self.mesh = cpp.Mesh(mesh, mat, tex)
+    self.mesh = cpp.Mesh(mesh, mat, tex, Vector4(1.0,1.0,1.0,0.75))
     
     self.graphics.Init(self.mesh)
     self.physics.Init(mesh)
