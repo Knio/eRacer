@@ -186,7 +186,7 @@ class SetupPlayersMenuState(MenuState):
       self.menu[-1].lineheight = lineheight
     
       mappingOptions = []
-      for i,mapping in enumerate(GameSettings.MAPPINGS):
+      for i,mapping in enumerate(self.settings.availableMappings):
         s = mapping and mapping.__name__.replace('Mapping','') or 'None'
         mappingOptions.append((s,playerId,i))   
     

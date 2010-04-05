@@ -12,6 +12,18 @@ class GameSettings(object):
               Gamepad3Mapping, 
               Gamepad4Mapping, 
              ]
+
+  KEYBOARD_MAPPINGS = [
+                        Keyboard1Mapping, 
+                        Keyboard2Mapping, 
+                      ]
+             
+  GAMEPAD_MAPPINGS =  [
+                        Gamepad1Mapping, 
+                        Gamepad2Mapping, 
+                        Gamepad3Mapping, 
+                        Gamepad4Mapping, 
+                      ]
   TEXTURE_IDS = [1,2,3,4,5,6,7,8,9,10]
   TEXTURE_NAMES = ['Blue', 'Red', 'Green', 'Yellow', 'Orange', 'Magenta', 'Black', 'Grey', 'Cyan', 'White']
   AI_NAMES = [
@@ -27,6 +39,11 @@ class GameSettings(object):
   ]
 
   def __init__(self):
+    self.availableMappings = [None]
+    if game().input.HasKeyboard():
+      self.availableMappings.extend(self.KEYBOARD_MAPPINGS)
+    self.availableMappings.extend(self.GAMEPAD_MAPPINGS[:game().input.GetNumGamepads()])
+    
     self.freeTextureIndices = set()
     self.trackIndex = 0
     self.playersIndices = []
