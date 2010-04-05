@@ -2,6 +2,11 @@
 
 #include "Core/Time.h"
 #include "Math.h"
+#include "Game/Game.h"
+
+
+#include "Core/Consts.h"
+extern Constants CONSTS;
 
 #include <iostream>
 using namespace std;
@@ -178,6 +183,78 @@ int GraphicsLayer::Init( HWND hWnd )
     return S_OK;
 }
 
+void GraphicsLayer::resetPresentationParameters(){
+    // Set up the structure used to create the D3DDevice. Since we are now
+    // using more complex geometry, we will create a device with a zbuffer.
+    ZeroMemory( &m_presentationParameters, sizeof( m_presentationParameters ) );
+    m_presentationParameters.Windowed = CONSTS.WINDOWED;
+    m_presentationParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    m_presentationParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
+    m_presentationParameters.MultiSampleQuality = 0;
+    m_presentationParameters.BackBufferFormat = D3DFMT_UNKNOWN;
+    m_presentationParameters.BackBufferCount = 0;
+    m_presentationParameters.EnableAutoDepthStencil = TRUE;
+    m_presentationParameters.AutoDepthStencilFormat = D3DFMT_D16;
+    m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+    m_presentationParameters.hDeviceWindow = Game::GetInstance()->hwnd;
+    
+    
+    // //The displayDevice is used to retrieve the device name
+    // DISPLAY_DEVICE displayDevice;
+    // displayDevice.cb = sizeof(DISPLAY_DEVICE);
+    // WCHAR strDeviceName[256] = {0};
+    
+    // assert(EnumDisplayDevices(0, 0, &displayDevice, 0));
+    
+    // //Making sure we have the correct device.
+    // if (displayDevice.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP)
+    // {
+    //     StringCchCopy(strDeviceName, 256, displayDevice.DeviceName);
+        
+    //     //devMode retrieve monitor settings
+    //     DEVMODE devMode;
+    //     devMode.dmSize = sizeof(DEVMODE);
+        
+    //     success = EnumDisplaySettings(strDeviceName, ENUM_REGISTRY_SETTINGS, &devMode);
+        
+    //     // float fDesktopAspectRatio = devMode.dmPelsWidth / (float)devMode.dmPelsHeight;
+    // }
+    
+    D3DDISPLAYMODE mode;
+    for (UINT i=0; i<m_pD3D->GetAdapterModeCount(0, D3DFMT_R5G6B5); i++)
+    { 
+        assert(SUCCEEDED(m_pD3D->EnumAdapterModes(
+            D3DADAPTER_DEFAULT,
+            D3DFMT_R5G6B5,
+            i,
+            &mode
+        )));
+        printf("%4dx%4dx%2d\n", mode.Width, mode.Height, mode.RefreshRate);
+
+        
+    }
+
+    
+    if(CONSTS.WINDOWED)
+    {
+        m_presentationParameters.FullScreen_RefreshRateInHz = 0;
+        SetWindowLong(Game::GetInstance()->hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+        SetWindowPos(Game::GetInstance()->hwnd, HWND_TOP, 0, 0, CONSTS.SCREEN_WIDTH, CONSTS.SCREEN_HEIGHT,
+            SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+    }
+    else
+    {
+        m_presentationParameters.BackBufferWidth    = mode.Width;
+        m_presentationParameters.BackBufferHeight   = mode.Height;
+        m_presentationParameters.FullScreen_RefreshRateInHz = mode.RefreshRate;
+        m_presentationParameters.BackBufferFormat   = mode.Format;
+        SetWindowLong(Game::GetInstance()->hwnd, GWL_STYLE, WS_POPUPWINDOW);
+        SetWindowPos(Game::GetInstance()->hwnd, HWND_TOP, 0, 0, 0, 0,
+            SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+    }
+    
+}
+
 D3DMATERIAL9 GraphicsLayer::DefaultMaterial()
 {
     //set a default material so that even stuff without material or shaders renders
@@ -211,19 +288,6 @@ D3DMATERIAL9 GraphicsLayer::DefaultMaterial()
     return material;
 }
 
-void GraphicsLayer::resetPresentationParameters(){
-    // Set up the structure used to create the D3DDevice. Since we are now
-    // using more complex geometry, we will create a device with a zbuffer.
-    ZeroMemory( &m_presentationParameters, sizeof( m_presentationParameters ) );
-    m_presentationParameters.Windowed = TRUE;
-    m_presentationParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-    m_presentationParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
-    m_presentationParameters.MultiSampleQuality = 0;
-    m_presentationParameters.BackBufferFormat = D3DFMT_UNKNOWN;
-    m_presentationParameters.EnableAutoDepthStencil = TRUE;
-    m_presentationParameters.AutoDepthStencilFormat = D3DFMT_D16;
-    m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-}
 
 void GraphicsLayer::SetViewport(int x, int y, int w, int h)
 {

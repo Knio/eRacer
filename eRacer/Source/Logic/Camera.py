@@ -163,4 +163,3 @@ class FirstPersonCamera(Camera):
     # printvec(lookat)
     
     self.SetFrame(self.position, lookat)
-    

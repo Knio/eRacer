@@ -8,9 +8,9 @@ struct Constants
 {
 	static Constants* g_Constants;
 	
+	int WINDOWED;
 	int SCREEN_WIDTH;
 	int SCREEN_HEIGHT;
-	
 	
 	// PhysX
 	float MAX_TIMESTEP;
