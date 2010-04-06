@@ -229,7 +229,7 @@ void GraphicsLayer::resetPresentationParameters(){
             i,
             &mode
         )));
-        printf("%4dx%4dx%2d\n", mode.Width, mode.Height, mode.RefreshRate);
+        // printf("%4dx%4dx%2d\n", mode.Width, mode.Height, mode.RefreshRate);
 
         
     }

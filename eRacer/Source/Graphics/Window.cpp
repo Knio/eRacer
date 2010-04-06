@@ -54,6 +54,11 @@ int Window::Poll()
 		EVENT(QuitEvent());
 		return 0;
 	}
+    if(msg.message == WM_CHAR)
+    {
+        EVENT(CharacterTypedEvent((char)msg.wParam));
+        return 0;
+    }
 	return 1;
 }
 

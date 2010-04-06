@@ -181,7 +181,7 @@ class SetupPlayersMenuState(MenuState):
     padding = 10
 
     for playerId,player in enumerate(self.settings.playersIndices):
-      self.menu.append(InputMenuItem('Name', self.Menu_Name, player.name))
+      self.menu.append(InputMenuItem('Name', self.Menu_Name, playerId, player.name))
       self.menu[-1].fontsize = fontsize
       self.menu[-1].lineheight = lineheight
     
@@ -211,8 +211,8 @@ class SetupPlayersMenuState(MenuState):
     self.settings.nPlayersIndex = value[1]      
     self.UpdateMenu()
 
-  def Menu_Name(self, value):
-    self.settings.playersIndices[value[1]].name = value[2] 
+  def Menu_Name(self, id, value):
+    self.settings.playersIndices[id].name = value 
     
   def Menu_Controls(self, value):
     self.settings.playersIndices[value[1]].mappingIndex = value[2]
