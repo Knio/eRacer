@@ -32,7 +32,7 @@ class GameSettings(object):
 
   def __init__(self):
     self.availableMappings = [None]
-    self.availableMappings.extend(self.GAMEPAD_MAPPINGS[:game().input.GetNumGamepads()])
+    self.availableMappings.extend(self.GAMEPAD_MAPPINGS[:game().input.GetNumGamepads()-1])
     if game().input.HasKeyboard():
       self.availableMappings.extend(self.KEYBOARD_MAPPINGS)
     
