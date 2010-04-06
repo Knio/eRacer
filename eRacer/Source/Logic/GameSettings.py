@@ -36,6 +36,12 @@ class GameSettings(object):
     if game().input.HasKeyboard():
       self.availableMappings.extend(self.KEYBOARD_MAPPINGS)
     
+    self.availablePlayerNums = []
+    for num in self.PLAYER_NUMS:
+      if num < len(self.availableMappings):
+        self.availablePlayerNums.append(num)
+    
+        
     self.freeTextureIndices = set()
     self.trackIndex = 0
     self.playersIndices = []

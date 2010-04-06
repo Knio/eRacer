@@ -171,7 +171,7 @@ class SetupPlayersMenuState(MenuState):
     self.menu = []
 
     humanPlayerOptions = []
-    for i,num in enumerate(GameSettings.PLAYER_NUMS):
+    for i,num in enumerate(self.settings.availablePlayerNums):
       humanPlayerOptions.append((str(num),i))   
 
     self.menu.append(SelectMenuItem('Human Players', self.Menu_Human_Players, humanPlayerOptions, self.settings.nPlayersIndex))
