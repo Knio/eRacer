@@ -73,7 +73,7 @@ class PlayerInterface(object):
     #Track Place HUD
     place = self.vehicle.finishPlace < 0 and self.vehicle.place or self.vehicle.finishPlace
     self.hud.WriteString(ordinal(place), "Sony Sketch EF", 60, Point3(20, 5,0))
-    if not self.vehicle.finishPlace < 0 and game().states[-1].__class__ is not GameEndState:
+    if not self.vehicle.finishPlace < 0 and self.state.active:
         self.hud.WriteString(ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 80, Point3(330, 350,0), Vector3(math.cos(t),math.sin(t),math.sin(t)))
     
   

@@ -9,6 +9,7 @@ from GameMapping    import *
 from MenuState      import PauseMenuState
 from GameEndState   import GameEndState
 from GameSettings   import GameSettings
+from PlayerInterface  import PlayerInterface
 
 # Entities
 from Track      import Track
@@ -17,9 +18,6 @@ from Shadow     import Shadow
 from Meteor     import Meteor, MeteorManager
 from Quad       import Quad
 from HudQuad    import HudQuad
-from PlayerInterface  import PlayerInterface
-# from CoordinateCross  import CoordinateCross
-
 
 # AI stuff
 from AI.Behavior import PlayerBehavior, AIBehavior
