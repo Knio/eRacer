@@ -31,8 +31,10 @@ class Track(Entity, cpp.Track):
     for i in track.PROFILE:
       profile.push_back(i)
     
-    meshes = self.CreateMesh(profile)
-    print meshes
+    meshes = cpp.VectorMesh()
+    
+    self.CreateMesh(profile, meshes)
+    print "Number of track meshes: ",meshes.size()
     
     for i in xrange(meshes.size()):
       tex   = game().io.LoadTexture('ConcretePlates.jpg')

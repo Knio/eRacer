@@ -133,14 +133,13 @@ void Track::Subdivide(int NSUBDIV)
     arclen[dist] = d-1;
 }
 
-std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, int newmesh)
+void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh*>& outputMeshes, int newmesh)
 {
   int N = track.size();
   int D = profile.size();
   
   if (newmesh > N) newmesh = N;
   
-  std::vector<ID3DXMesh*> meshes;
   // create vertex buffer
   ID3DXMesh *mesh;
   assert(SUCCEEDED(D3DXCreateMeshFVF(
@@ -151,7 +150,7 @@ std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, in
     Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
     &mesh                       // LPD3DXMESH * ppMesh
   )));
-  meshes.push_back(mesh);
+  outputMeshes.push_back(mesh);
   
   TrackVertex* meshverts;
   unsigned short* meshidx;
@@ -251,7 +250,7 @@ std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, in
       
       */
       
-      if (i == newmesh * meshes.size()) continue;
+      if (i == newmesh * outputMeshes.size()) continue;
       if (j == D-1) continue;
       
       meshidx[((i*(D-1) + j)*2 + 0)*3 + 0] = ((i+0)%N)*D + ((j + 0)%D);
@@ -265,9 +264,9 @@ std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, in
     }
     
 
-    if (i == newmesh * meshes.size())
+    if (i == newmesh * outputMeshes.size())
     {
-      if (newmesh * (meshes.size()+1) > N) newmesh = N - newmesh * (meshes.size()+1);
+      if (newmesh * (outputMeshes.size()+1) > N) newmesh = N - newmesh * (outputMeshes.size()+1);
       
       assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
       assert(SUCCEEDED(mesh->UnlockIndexBuffer()));
@@ -290,7 +289,7 @@ std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, in
         Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
         &m                          // LPD3DXMESH * ppMesh
       )));
-      meshes.push_back(m);
+      outputMeshes.push_back(m);
       
       assert(SUCCEEDED(mesh->LockVertexBuffer(0, (void**)&meshverts)));
       assert(SUCCEEDED(mesh->LockIndexBuffer(0,  (void**)&meshidx)));
@@ -311,8 +310,6 @@ std::vector<ID3DXMesh*> Track::CreateMesh(const vector<TrackVertex>& profile, in
   att.VertexCount  =  N*D;
   
   mesh->SetAttributeTable(&att, 1);
-  
-  return meshes;
 }
 
 float Track::GetOffsetFromCentre(const Point3& pos){
