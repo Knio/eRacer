@@ -8,6 +8,12 @@ class State(cpp.State):
     self.active   = False
     self.entities = {}
     self.scene    = cpp.Scene()
+
+    self.music          = cpp.SoundFx();
+    self.music.looping  = True
+    self.music.is3D     = False
+    self.music.isPaused = False
+    self.music.volume   = 24
     
   def Add(self, obj, scene=True):
     self.entities[obj.id] = obj
@@ -35,10 +41,9 @@ class State(cpp.State):
     pass
     
   def LoadMusic(self, filename):
-    self.music          = cpp.SoundFx();
-    self.music.looping  = True
-    self.music.is3D     = False
-    self.music.isPaused = False
-    self.music.volume   = 24
     game().sound.sound.LoadSoundFx(filename, self.music)
+    
+  def PauseMusic(self):
+    self.music.isPaused = True
+    game().sound.sound.UpdateSoundFx(self.music)    
   

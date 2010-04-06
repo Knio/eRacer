@@ -9,6 +9,7 @@ from GameMapping    import *
 from MenuState      import PauseMenuState
 from GameEndState   import GameEndState
 from GameSettings   import GameSettings
+from PlayerInterface  import PlayerInterface
 
 # Entities
 from Track      import Track
@@ -17,9 +18,6 @@ from Shadow     import Shadow
 from Meteor     import Meteor, MeteorManager
 from Quad       import Quad
 from HudQuad    import HudQuad
-from PlayerInterface  import PlayerInterface
-# from CoordinateCross  import CoordinateCross
-
 
 # AI stuff
 from AI.Behavior import PlayerBehavior, AIBehavior
@@ -77,7 +75,7 @@ class GameState(State):
   def load(self, settings):
     self.settings = settings
    
-    self.laps   = self.settings.nTotalLaps
+    self.laps   = self.settings.nLaps
     self.stats  = {}
  
     self.gameOver = False
@@ -87,20 +85,28 @@ class GameState(State):
     self.freeAINames =  list(GameSettings.AI_NAMES)
     random.shuffle(self.freeAINames)
     
-    
-    self.track = self.Add(Track(self.settings.track))
+    track = Track(self.settings.track)
     self.vehicleList = []
 
-    frame = self.track.GetFrame(-30.0)
+    frame = track.GetFrame(-30.0)
     self.startOrientation = Matrix(frame.position, frame.up, frame.fw)
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
-    startFrame = self.track.GetFrame(0.0)
+    startFrame = track.GetFrame(0.0)
     
     finishLineTransform = Matrix(30, 1, 3) * Matrix(startFrame.position+startFrame.up, startFrame.up, startFrame.fw)
     self.Add(Model('Finish Line','FinishLine.x',None,finishLineTransform))
 
+    for x in [200., 2200.]:
+      for i in xrange(64):
+        frame = track.GetFrame(x+10*i)
+        tx = Matrix(3.0, 3.0, 6.0) * Matrix(frame.position, frame.up, frame.fw)
+        self.Add(Model("Ring", 'Ring2.x', None, tx))
+
+    self.track = self.Add(track)
+      
+    
     self.skybox = SkyBox()
 
     self.interfaces = []
@@ -126,36 +132,52 @@ class GameState(State):
     
     self.lastMeteorTime = 0
     
-    
+    # self.LoadMusic("Adventure.mp3")
+
+    self.music.volume = 20
     self.LoadMusic("Adventure.mp3")
+        
+    self.boostbeams = []
+    for i in xrange(16):
+      beam = Model('StealBeam%d'%i, 'boostStealBeam.x', None, IDENTITY)
+      beam.active = False
+      self.boostbeams.append(self.Add(beam))
     
     game().time.Zero()
     self.loaded = True
   
+  def BoostStealEvent(self, stealer, stealee, tx):
+    for b in self.boostbeams:
+      if b.active: continue
+      b.active = True
+      b.graphics.visible = True
+      b.transform = tx
+      return
+      
   def AddVehicle(self, player = None):
-      if player: print vars(player)
-      n = len(self.vehicleList)    
-      x = (n % 3 - 1)*15
-      z = ((n / 3))*-15
-      
-      vehicle    = self.Add(Vehicle(
-        player and player.name or self.freeAINames.pop(),    
-        self.track, 
-        Matrix(Point3(x, 7, z)) * self.startOrientation, 
-        player and player.textureId or self.settings.RandomTextureId()
-      ))
-      vehicle.finishPlace = -1
-      vehicle.lapBugCount = 0
-      vehicle.isAI = player==None
-      self.Add(Shadow(vehicle))
-      self.vehicleList.append(vehicle)
-      if player:
-        PlayerBehavior(vehicle)
-        vehicle.Backwards = False #???
-      else:
-        AIBehavior(vehicle, self.track)
-      
-      return vehicle                
+    if player: print vars(player)
+    n = len(self.vehicleList)    
+    x = (n % 3 - 1)*15
+    z = ((n / 3))*-15
+    
+    vehicle    = self.Add(Vehicle(
+      player and player.name or self.freeAINames.pop(),    
+      self.track, 
+      Matrix(Point3(x, 7, z)) * self.startOrientation, 
+      player and player.textureId or self.settings.RandomTextureId()
+    ))
+    vehicle.finishPlace = -1
+    vehicle.lapBugCount = 0
+    vehicle.isAI = player==None
+    self.Add(Shadow(vehicle))
+    self.vehicleList.append(vehicle)
+    if player:
+      PlayerBehavior(vehicle)
+      vehicle.Backwards = False #???
+    else:
+      AIBehavior(vehicle, self.track)
+    
+    return vehicle                
       
 
   def SetupViewports(self, nPlayers):  
@@ -193,6 +215,10 @@ class GameState(State):
   
   
   def Tick(self, time):
+    
+    for b in self.boostbeams:
+      b.active = False
+      b.graphics.visible = False
     
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
     if len(self.interfaces) > 0:
@@ -241,6 +267,8 @@ class GameState(State):
           game().PushState(GameEndState(self.stats))
         
       vehicle.Brake(1)
+      vehicle.isShutoff = True
+      
     
   def ReloadConstsEvent(self):
     game().config.read()
@@ -264,6 +292,7 @@ class GameState(State):
   def Release(self):
     self.loaded = False
     self.meteorManager.Release()
+    self.PauseMusic()
     del self.meteorManager
     
     for i in self.entities.values():

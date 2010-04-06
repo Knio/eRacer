@@ -51,11 +51,11 @@ public:
 	void ReloadDevices();
 
 
-	bool hasKeyboard() const;
+	bool HasKeyboard() const;
 
-	bool hasMouse() const;
+	bool HasMouse() const;
 
-	int getNumGamepads() const;
+	int GetNumGamepads() const;
 
 	/**
 	 * @brief update all devices - this triggers polling

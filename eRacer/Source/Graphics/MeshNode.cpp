@@ -46,6 +46,12 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
     GraphicsLayer::GetInstance()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
 	//m_pEffect->SetTexture( "g_MeshTexture", geometry->Textures()[i] );
 
+	
+	
+	//D3DXCOLOR colorMtrlTint( 1.0f, 1.0f, 1.0f, 0.75f );
+	//mesh_->m_colorMtrlTint = D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f );
+	GraphicsLayer::GetInstance()->m_pEffect->SetValue( "g_ColorTint", &mesh_->m_colorMtrlTint, sizeof( D3DXCOLOR ) );
+
 	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" )));
 	UINT cPasses = 1;
 	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->Begin( &cPasses, 0 )));

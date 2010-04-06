@@ -55,6 +55,7 @@ class Vehicle(Model):
     self.frame = cpp.Frame(mul1(tx, ORIGIN), mul0(tx, Y), mul0(tx, Z), 0.0)
     self.resetFrame = self.frame
     self.velocity = ORIGIN
+    self.isShutoff = False
     
     self.physics.SetCentreOfMass(self.MASS_CENTRE)
     self.physics.SetId(self.id)
@@ -87,40 +88,46 @@ class Vehicle(Model):
     self.sound.minDist  = 50
     
     self.obstacles = []
+    self.stealingBeams = {}
 
     game().sound.sound.LoadSoundFx("EngineSound.wav", self.sound)
 
     game().event.Register(self.ReloadedConstsEvent)
 
-  MAX_STEALING_DISTANCE = 10.
-  STEALING_SPEED = 0.5 #boost fuel/second
 
   def BoostStealing(self, delta_s):
+    
+    stealingBeams = self.stealingBeams
+    self.stealingBeams = {}
+    
     for obstacle in self.obstacles:
       if isinstance(obstacle, Vehicle):
         obstaclePosition = mul1(obstacle.transform, ORIGIN)
         stealerPosition = mul1(self.transform, self.tip)
         vector = obstaclePosition-stealerPosition
         distance = length(vector)
-        if(distance < self.MAX_STEALING_DISTANCE):
+        
+        if(distance < CONSTS.MAX_STEALING_DISTANCE):
           stealerDirection = mul0(self.transform,Z)
           
           #to the front?
           if dot(vector, stealerDirection) > 0:
-            scale = Matrix(1,1,1) #Matrix(1,1,distance)
             pos = stealerPosition
             up = Vector3(0,1,0)
             fw = Vector3(0,0,1) #stealerDirection
-            beamTransform = scale * Matrix(pos, up, fw)
+            beamTransform = Matrix(0.1, 0.1, distance) * Matrix(pos, up, vector)
             # TODO: I think every car should only be able to steal from 2 or 3 other cars at a time
             # this would allow us to store a fixed number of models for the beam and only make them 
             # (in)visible/ change position
             
-            # model = Model('StealBeam', 'box.x', None, beamTransform)
             
-            if obstacle.boostFuel >=self.STEALING_SPEED*delta_s:
-              self.boostFuel += self.STEALING_SPEED*delta_s
-              obstacle.boostFuel -= self.STEALING_SPEED*delta_s
+            if obstacle.boostFuel >=CONSTS.STEALING_SPEED*delta_s:
+              self.boostFuel += CONSTS.STEALING_SPEED*delta_s
+              obstacle.boostFuel -= CONSTS.STEALING_SPEED*delta_s
+
+              game().event.BoostStealEvent(self, obstacle, beamTransform)   
+    
+    
 
   # control events
   def Brake(self, brake):
@@ -225,6 +232,8 @@ class Vehicle(Model):
     vel = phys.GetLocalPointWorldVelocity(ORIGIN)
     
     self.sound.isPaused = delta==0
+    if self.isShutoff == True:
+      self.sound.isPaused = True;
     
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel

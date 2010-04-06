@@ -2,6 +2,11 @@
 
 #include "Core/Time.h"
 #include "Math.h"
+#include "Game/Game.h"
+
+
+#include "Core/Consts.h"
+extern Constants CONSTS;
 
 #include <iostream>
 using namespace std;
@@ -12,24 +17,6 @@ GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
 
 
 
-ID3DXSprite* GraphicsLayer::CreateSprite(float x, float y, float w){
-    float h = w*3/4.0f;
-
-    float wr = w/width;
-    float hr = h/height;
-    
-    //cout << "Creating sprite with dimensions "<< x << ", "<< y << ", " << w << ", " << h << endl;
-    
-    Matrix m(  wr,          0,          0, 0,
-                0,          -hr,        0, 0,
-                0,          0,          1, 0,
-                x,          ((float)height)-y,   0, 1);
-    
-    ID3DXSprite* result;
-    D3DXCreateSprite(m_pd3dDevice, &result);
-    result->SetTransform(&m);
-    return result;
-}    
 
 
 GraphicsLayer::GraphicsLayer()
@@ -54,12 +41,12 @@ void GraphicsLayer::SetCamera(Camera& cam)
 
     // HACK!
     // In the future this will be done inside a loop to handle each shader/effect
-	D3DXMATRIXA16 viewMat = cam.GetViewMatrix();
-	D3DXMATRIXA16 projMat = cam.GetProjectionMatrix();
-	HRESULT hr;
-	hr = m_pEffect->SetMatrix( "g_ViewMatrix", &viewMat );
-	hr = m_pEffect->SetMatrix( "g_ProjectionMatrix", &projMat );
-	hr = m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
+    D3DXMATRIXA16 viewMat = cam.GetViewMatrix();
+    D3DXMATRIXA16 projMat = cam.GetProjectionMatrix();
+    HRESULT hr;
+    hr = m_pEffect->SetMatrix( "g_ViewMatrix", &viewMat );
+    hr = m_pEffect->SetMatrix( "g_ProjectionMatrix", &projMat );
+    hr = m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" );
 }
 
 ID3DXEffect* GraphicsLayer::GetEffect(char* file)
@@ -111,7 +98,7 @@ int GraphicsLayer::Init( HWND hWnd )
         return E_FAIL;
     }
 
-	resetPresentationParameters();
+    resetPresentationParameters();
     
     
     // Create the D3DDevice
@@ -135,14 +122,14 @@ int GraphicsLayer::Init( HWND hWnd )
 
     assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_MINFILTER,D3DTEXF_LINEAR)));
     assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_MAGFILTER,D3DTEXF_LINEAR)));
-	assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP)));
-	assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP)));
+    assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_ADDRESSU,D3DTADDRESS_WRAP)));
+    assert(SUCCEEDED(m_pd3dDevice->SetSamplerState(0,D3DSAMP_ADDRESSV,D3DTADDRESS_WRAP)));
     
     // AA
     assert(SUCCEEDED(m_pd3dDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE)));
     
-	//Shaders
-	
+    //Shaders
+    
     m_pEffect = GetEffect("BasicHLSL.fx");
 
     // Set effect variables as needed
@@ -151,8 +138,8 @@ int GraphicsLayer::Init( HWND hWnd )
     m_pEffect->SetValue( "g_MaterialAmbientColor", &colorMtrlAmbient, sizeof( D3DXCOLOR ) );
     m_pEffect->SetValue( "g_MaterialDiffuseColor", &colorMtrlDiffuse, sizeof( D3DXCOLOR ) );
 
-	D3DXCOLOR colorMtrlTint( 1.0f, 1.0f, 1.0f, 1.0f );
-	m_pEffect->SetValue( "g_ColorTint", &colorMtrlTint, sizeof( D3DXCOLOR ) );
+    D3DXCOLOR colorMtrlTint( 1.0f, 1.0f, 1.0f, 1.0f );
+    m_pEffect->SetValue( "g_ColorTint", &colorMtrlTint, sizeof( D3DXCOLOR ) );
 
     // save the screen surface
     m_pd3dDevice->GetRenderTarget(0, &screen);
@@ -196,6 +183,78 @@ int GraphicsLayer::Init( HWND hWnd )
     return S_OK;
 }
 
+void GraphicsLayer::resetPresentationParameters(){
+    // Set up the structure used to create the D3DDevice. Since we are now
+    // using more complex geometry, we will create a device with a zbuffer.
+    ZeroMemory( &m_presentationParameters, sizeof( m_presentationParameters ) );
+    m_presentationParameters.Windowed = CONSTS.WINDOWED;
+    m_presentationParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    m_presentationParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
+    m_presentationParameters.MultiSampleQuality = 0;
+    m_presentationParameters.BackBufferFormat = D3DFMT_UNKNOWN;
+    m_presentationParameters.BackBufferCount = 0;
+    m_presentationParameters.EnableAutoDepthStencil = TRUE;
+    m_presentationParameters.AutoDepthStencilFormat = D3DFMT_D16;
+    m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+    m_presentationParameters.hDeviceWindow = Game::GetInstance()->hwnd;
+    
+    
+    // //The displayDevice is used to retrieve the device name
+    // DISPLAY_DEVICE displayDevice;
+    // displayDevice.cb = sizeof(DISPLAY_DEVICE);
+    // WCHAR strDeviceName[256] = {0};
+    
+    // assert(EnumDisplayDevices(0, 0, &displayDevice, 0));
+    
+    // //Making sure we have the correct device.
+    // if (displayDevice.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP)
+    // {
+    //     StringCchCopy(strDeviceName, 256, displayDevice.DeviceName);
+        
+    //     //devMode retrieve monitor settings
+    //     DEVMODE devMode;
+    //     devMode.dmSize = sizeof(DEVMODE);
+        
+    //     success = EnumDisplaySettings(strDeviceName, ENUM_REGISTRY_SETTINGS, &devMode);
+        
+    //     // float fDesktopAspectRatio = devMode.dmPelsWidth / (float)devMode.dmPelsHeight;
+    // }
+    
+    D3DDISPLAYMODE mode;
+    for (UINT i=0; i<m_pD3D->GetAdapterModeCount(0, D3DFMT_R5G6B5); i++)
+    { 
+        assert(SUCCEEDED(m_pD3D->EnumAdapterModes(
+            D3DADAPTER_DEFAULT,
+            D3DFMT_R5G6B5,
+            i,
+            &mode
+        )));
+        // printf("%4dx%4dx%2d\n", mode.Width, mode.Height, mode.RefreshRate);
+
+        
+    }
+
+    
+    if(CONSTS.WINDOWED)
+    {
+        m_presentationParameters.FullScreen_RefreshRateInHz = 0;
+        SetWindowLong(Game::GetInstance()->hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
+        SetWindowPos(Game::GetInstance()->hwnd, HWND_TOP, 0, 0, CONSTS.SCREEN_WIDTH, CONSTS.SCREEN_HEIGHT,
+            SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+    }
+    else
+    {
+        m_presentationParameters.BackBufferWidth    = mode.Width;
+        m_presentationParameters.BackBufferHeight   = mode.Height;
+        m_presentationParameters.FullScreen_RefreshRateInHz = mode.RefreshRate;
+        m_presentationParameters.BackBufferFormat   = mode.Format;
+        SetWindowLong(Game::GetInstance()->hwnd, GWL_STYLE, WS_POPUPWINDOW);
+        SetWindowPos(Game::GetInstance()->hwnd, HWND_TOP, 0, 0, 0, 0,
+            SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+    }
+    
+}
+
 D3DMATERIAL9 GraphicsLayer::DefaultMaterial()
 {
     //set a default material so that even stuff without material or shaders renders
@@ -229,19 +288,6 @@ D3DMATERIAL9 GraphicsLayer::DefaultMaterial()
     return material;
 }
 
-void GraphicsLayer::resetPresentationParameters(){
-    // Set up the structure used to create the D3DDevice. Since we are now
-    // using more complex geometry, we will create a device with a zbuffer.
-    ZeroMemory( &m_presentationParameters, sizeof( m_presentationParameters ) );
-    m_presentationParameters.Windowed = TRUE;
-    m_presentationParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-    m_presentationParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
-    m_presentationParameters.MultiSampleQuality = 0;
-    m_presentationParameters.BackBufferFormat = D3DFMT_UNKNOWN;
-    m_presentationParameters.EnableAutoDepthStencil = TRUE;
-    m_presentationParameters.AutoDepthStencilFormat = D3DFMT_D16;
-    m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-}
 
 void GraphicsLayer::SetViewport(int x, int y, int w, int h)
 {
@@ -260,6 +306,26 @@ void GraphicsLayer::ResetViewport(){
     SetViewport(0,0,width,height);
 }
 
+ID3DXSprite* GraphicsLayer::CreateSprite(float x, float y, float w){
+    float h = w*3/4.0f;
+
+    float wr = w/width;
+    float hr = h/height;
+    
+    //cout << "Creating sprite with dimensions "<< x << ", "<< y << ", " << w << ", " << h << endl;
+    
+    //cout << "Scale: " << wr << ", " << -hr << endl;
+    // cout << "Translate: " << x << ", " << 600-y << endl;
+    
+    // Matrix scale = CreateMatrix(wr, -hr, 1);
+    // Matrix translate = CreateMatrix(Point3(x,600-y,0));
+    // Matrix m = scale*translate;
+    
+    ID3DXSprite* result;
+    D3DXCreateSprite(m_pd3dDevice, &result);
+    // result->SetTransform(&m);
+    return result;
+}    
 
 void GraphicsLayer::PreRender(){
     

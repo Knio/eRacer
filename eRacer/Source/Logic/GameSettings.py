@@ -3,17 +3,24 @@ from GameMapping      import *
 
 class GameSettings(object):
   PLAYER_NUMS = [1,2,4]
+  
   TRACKS = ['Track1', 'Track2']
-  MAPPINGS = [None, 
-              Keyboard1Mapping, 
-              Keyboard2Mapping, 
-              Gamepad1Mapping, 
-              Gamepad2Mapping, 
-              Gamepad3Mapping, 
-              Gamepad4Mapping, 
-             ]
-  TEXTURE_IDS = [1,2,3,4,5,6,8]
-  TEXTURE_NAMES = ['Blue', 'Red', 'Magenta', 'Cyan', 'Green', 'Black', 'Orange']
+
+  KEYBOARD_MAPPINGS = [
+                        Keyboard1Mapping, 
+                        Keyboard2Mapping, 
+                      ]
+             
+  GAMEPAD_MAPPINGS =  [
+                        Gamepad1Mapping, 
+                        Gamepad2Mapping, 
+                        Gamepad3Mapping, 
+                        Gamepad4Mapping, 
+                      ]
+  TEXTURE_IDS = [1,2,3,4,5,6,7,8,9,10]
+  
+  TEXTURE_NAMES = ['Blue', 'Red', 'Green', 'Yellow', 'Orange', 'Magenta', 'Black', 'Grey', 'Cyan', 'White']
+  
   AI_NAMES = [
     "Arthur Dent", 
     "Ford Prefect", 
@@ -25,15 +32,28 @@ class GameSettings(object):
     "Bender",
     "Turanga Leela"
   ]
+  
+  LAP_COUNTS = range(1,6)
 
   def __init__(self):
+    self.availableMappings = [None]
+    self.availableMappings.extend(self.GAMEPAD_MAPPINGS[:game().input.GetNumGamepads()-1])
+    if game().input.HasKeyboard():
+      self.availableMappings.extend(self.KEYBOARD_MAPPINGS)
+    
+    self.availablePlayerNums = []
+    for num in self.PLAYER_NUMS:
+      if num < len(self.availableMappings):
+        self.availablePlayerNums.append(num)
+    
+        
     self.freeTextureIndices = set()
     self.trackIndex = 0
+    self.lapCountIndex = 1
     self.playersIndices = []
     self.debugMappings = []
     self.nPlayersIndex = 0
     self.nAIs = 3
-    self.nTotalLaps = 2
     
   def ResetFreeTextures(self):
     self.freeTextureIndices = set(range(len(self.TEXTURE_IDS)))
@@ -53,7 +73,7 @@ class GameSettings(object):
 
   def get_players(self):
     return [Struct(name = player.name, 
-                   mapping=self.MAPPINGS[player.mappingIndex], 
+                   mapping=self.availableMappings[player.mappingIndex], 
                    textureId=self.TEXTURE_IDS[player.textureIndex]) for player in self.playersIndices]
   players = property(get_players)
   
@@ -83,4 +103,9 @@ class GameSettings(object):
     
     while len(self.playersIndices) > nPlayers:
       self.playersIndices.pop()
-  nPlayersIndex = property(get_n_players_index, set_n_players_index)    
+  nPlayersIndex = property(get_n_players_index, set_n_players_index)  
+  
+  def get_num_laps(self):
+    return self.LAP_COUNTS[self.lapCountIndex]
+    
+  nLaps = property(get_num_laps)

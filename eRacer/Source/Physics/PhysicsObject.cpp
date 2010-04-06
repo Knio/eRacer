@@ -13,7 +13,7 @@ PhysicsObject::~PhysicsObject()
 void PhysicsObject::Release()
 {
 	if (!Actor)	return;
-	std::cout << "Removing physicsobject " << (int)(Actor->userData) << endl;
+	// std::cout << "Removing physicsobject " << (int)(Actor->userData) << endl;
 	PhysicsLayer::g_PhysicsLayer->RemoveActor(Actor);
 	Actor = NULL;
 }

@@ -159,41 +159,14 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
   
   for (int i=0;i<N;i++)
   {
-    
     Frame frame = track[i];
-    Vector3 ap = frame.position;
-    Vector3 az = frame.fw;      
-    Vector3 ax = normalized(cross(frame.up, az));
-    Vector3 ay = cross(az, ax);
-    /*
-    
-    http://msdn.microsoft.com/en-us/library/ee422511(VS.85).aspx
+    Matrix tx = CreateMatrix(frame.position, frame.up, frame.fw);
 
-                          ( ax.x  ay.x  az.x    0 )
-                          ( ax.y  ay.y  az.y    0 )
-                          ( ax.z  ay.z  az.z    0 )
-                        * ( ap.x  ap.y  ap.z    1 )      
-    ( 1  0  0  0  )     = (                       )
-    
-          
-    */
-    Matrix tx(
-       ax.x, ax.y, ax.z,   0,
-       ay.x, ay.y, ay.z,   0,
-       az.x, az.y, az.z,   0,
-         
-       ap.x, ap.y, ap.z,   1
-    );
-    // does the frame make sense?
-    // assert(length(mul0(tx, X)      - ax) < 0.01);
-    // assert(length(mul0(tx, Y)      - ay) < 0.01);
-    // assert(length(mul0(tx, Z)      - az) < 0.01);
-    // assert(length(mul1(tx, ORIGIN) - ap) < 0.01);
-    
-    if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ax, D3DCOLOR_COLORVALUE(0,1,0,1));
-    if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ay, D3DCOLOR_COLORVALUE(1,0,0,1));
-    if (CONSTS.TRACK_DEBUG) Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, az, D3DCOLOR_COLORVALUE(0,0,1,1));
-
+    // if (CONSTS.TRACK_DEBUG) {
+    //   Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ax, D3DCOLOR_COLORVALUE(0,1,0,1));
+    //   Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ay, D3DCOLOR_COLORVALUE(1,0,0,1));
+    //   Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, az, D3DCOLOR_COLORVALUE(0,0,1,1));
+    // }
     
     for (int j=0;j<D;j++)  
     {
@@ -266,7 +239,8 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
 
     if (i == newmesh * outputMeshes.size())
     {
-      if (newmesh * (outputMeshes.size()+1) > N) newmesh = N - newmesh * (outputMeshes.size()+1);
+      if (newmesh * (outputMeshes.size()+1) > N) 
+        newmesh = N - newmesh * (outputMeshes.size()+1);
       
       assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
       assert(SUCCEEDED(mesh->UnlockIndexBuffer()));

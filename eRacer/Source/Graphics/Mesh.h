@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <cassert>
+#include "..\Core\Math.h"
 
 using namespace std;
 
@@ -32,12 +33,14 @@ namespace Graphics{
  */
 class Mesh : public Renderable {
 public:
+	D3DXCOLOR m_colorMtrlTint;
+
 	/**
 	 * @brief Constructor. Setup a mesh in uninitialized state.
 	 */
 	Mesh();
 
-	Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture);
+	Mesh(ID3DXMesh* mesh, D3DMATERIAL9 material, IDirect3DTexture9* texture, Vector4 meshCol = D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	virtual ~Mesh();
 

@@ -30,22 +30,21 @@ class OrthographicCamera(Camera):
     Camera.Tick(self, time)
 
 class CirclingCamera(Camera):
-  def __init__(self):
+  def __init__(self, target): 
     Camera.__init__(self)
-    
+    self.target   = target
+    self.origin   = mul1(self.target.transform, ORIGIN)
+    self.position = Point3(0, 50, -1)
+  
   def Tick(self, time):
     Camera.Tick(self, time)
     
-    # spin around a circle, looking at the origin
-    t = time.seconds / 10
-    pos = Vector3(
-      math.cos(t), 
-      math.sin(t)*0.5+1, 
-      math.sin(t)
-    )
-    pos *= 20
+    # spin around a circle, target the vehicle
+    t = float(time.wall_total) / time.RESOLUTION / 4.0
     
-    self.SetPosition(pos)
+    pos = self.origin + Point3(math.cos(t)*50,16,math.sin(t)*50)
+    self.SetFrame(pos, self.origin, Y)
+    
 
 class ChasingCamera(Camera):
   MAX_FOV = PI*7./8.  
@@ -164,4 +163,3 @@ class FirstPersonCamera(Camera):
     # printvec(lookat)
     
     self.SetFrame(self.position, lookat)
-    

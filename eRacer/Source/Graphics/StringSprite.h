@@ -15,7 +15,7 @@ public:
 private:
 	ID3DXSprite* sprite;
   
-  float ratio;
+  // float ratio;
 	
   vector<StringRenderable> strings;
 };

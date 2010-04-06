@@ -797,14 +797,14 @@
 					RelativePath=".\Source\SWIG\swig_wrap.cxx"
 					>
 				</File>
-				<File
-					RelativePath=".\Source\SWIG\swig_wrap.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Test"
 				>
+				<File
+					RelativePath=".\Source\SWIG\swig_wrap.h"
+					>
+				</File>
 				<File
 					RelativePath=".\Source\Test\Test.h"
 					>

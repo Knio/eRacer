@@ -37,7 +37,7 @@ class Track(Entity, cpp.Track):
     print "Number of track meshes: ",meshes.size()
     
     for i in xrange(meshes.size()):
-      tex   = game().io.LoadTexture('ConcretePlates.jpg')
+      tex   = game().io.LoadTexture('AlphaTrackTexture2.png')
       mat   = game().graphics.graphics.DefaultMaterial()
       mat.disown()
       
@@ -50,7 +50,7 @@ class Track(Entity, cpp.Track):
       p.SetId(self.id)
       p.SetGroup(cpp.TRACK)
       self.physics.append(p)
-      
+
 
   def Release(self):
     self.graphics.Release()

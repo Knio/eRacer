@@ -69,15 +69,15 @@ void Input::ReloadDevices(){
 }
 
 
-bool Input::hasKeyboard() const{
+bool Input::HasKeyboard() const{
 	return hasKeyboard_;
 }
 
-bool Input::hasMouse() const{
+bool Input::HasMouse() const{
 	return hasMouse_;
 }
 
-int Input::getNumGamepads() const{
+int Input::GetNumGamepads() const{
 	return nGamepads_;
 }
 

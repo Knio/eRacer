@@ -15,7 +15,7 @@ print sys.path
 setup(
   name='eRacer',
   version='1.0',
-  console=['run-release.py'],
+  console=['run.py'],
   #zipfile='eRacer.data',
   options={
     'py2exe': {
