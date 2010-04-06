@@ -9,7 +9,7 @@ class Track(Entity, cpp.Track):
     cpp.Track.__init__(self)
     
     self.graphics = []
-    self.physics  = cpp.TriMesh()
+    self.physics  = []
     
     # HACK
     track = None
@@ -40,12 +40,14 @@ class Track(Entity, cpp.Track):
       tex   = game().io.LoadTexture('AlphaTrackTexture2.png')
       mat   = game().graphics.graphics.DefaultMaterial()
       mat.disown()
+      meshes[i].disown()
       
-      g = MeshNode("track")
+      g = MeshNode("Track Segment %d" % i)
       g.Init(cpp.Mesh(meshes[i], mat, tex))
       self.graphics.append(g)
       
       p = cpp.TriMesh()
+      print "initializing mesh ",meshes[i]
       p.Init(meshes[i])
       p.SetId(self.id)
       p.SetGroup(cpp.TRACK)
@@ -53,5 +55,7 @@ class Track(Entity, cpp.Track):
 
 
   def Release(self):
-    self.graphics.Release()
-    self.physics.Release()
+    for g in self.graphics:
+      g.Release()
+    for p in self.physics:
+      p.Release()

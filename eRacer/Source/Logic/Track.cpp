@@ -133,157 +133,122 @@ void Track::Subdivide(int NSUBDIV)
     arclen[dist] = d-1;
 }
 
-void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh*>& outputMeshes, int newmesh)
+void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh*>& outputMeshes, int framesPerMesh)
 {
-  int N = track.size();
-  int D = profile.size();
+  assert(framesPerMesh>0);
   
-  if (newmesh > N) newmesh = N;
+  const unsigned int N = track.size();
+  const unsigned int D = profile.size();
   
-  // create vertex buffer
-  ID3DXMesh *mesh;
-  assert(SUCCEEDED(D3DXCreateMeshFVF(
-    (newmesh-1)*(D-1)*2,        // DWORD NumFaces,
-    newmesh*D,                  // DWORD NumVertices,
-    0,                          // DWORD Options,
-    Vertex_Format,              // DWORD FVF,
-    Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
-    &mesh                       // LPD3DXMESH * ppMesh
-  )));
-  outputMeshes.push_back(mesh);
+  const unsigned int nMeshes = (int)ceil(N/(float)framesPerMesh);
+  unsigned int currentFrameIndex = 0;
   
-  TrackVertex* meshverts;
-  unsigned short* meshidx;
-  assert(SUCCEEDED(mesh->LockVertexBuffer(0, (void**)&meshverts)));
-  assert(SUCCEEDED(mesh->LockIndexBuffer(0,  (void**)&meshidx)));
-  
-  for (int i=0;i<N;i++)
-  {
-    Frame frame = track[i];
-    Matrix tx = CreateMatrix(frame.position, frame.up, frame.fw);
-
-    // if (CONSTS.TRACK_DEBUG) {
-    //   Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ax, D3DCOLOR_COLORVALUE(0,1,0,1));
-    //   Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, ay, D3DCOLOR_COLORVALUE(1,0,0,1));
-    //   Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(ap, az, D3DCOLOR_COLORVALUE(0,0,1,1));
-    // }
+  for(unsigned int meshIndex=0; meshIndex<nMeshes; meshIndex++){
+    //for the last mesh there may be less frames
+    if(meshIndex==nMeshes-1)
+      framesPerMesh = N % framesPerMesh;
     
-    for (int j=0;j<D;j++)  
-    {
-      TrackVertex& v = meshverts[i*D + j];
-      v.position = mul1(tx, profile[j].position);
-      v.normal   = mul0(tx, profile[j].normal);
-      v.tu = profile[j].tu;
-      v.tv = profile[j].tv * frame.dist;
+    
+    
+    ID3DXMesh *mesh;
+    assert(SUCCEEDED(D3DXCreateMeshFVF(
+      framesPerMesh*(D-1)*2,        // DWORD NumFaces,
+      framesPerMesh*D,                  // DWORD NumVertices,
+      0,                          // DWORD Options,
+      Vertex_Format,              // DWORD FVF,
+      Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
+      &mesh                       // LPD3DXMESH * ppMesh
+    )));
+
+    TrackVertex* meshverts;
+    unsigned short* meshidx;
+    assert(SUCCEEDED(mesh->LockVertexBuffer(0, (void**)&meshverts)));
+    assert(SUCCEEDED(mesh->LockIndexBuffer(0,  (void**)&meshidx)));    
+
+
+    
+    for(int i=0; i<framesPerMesh; i++){
+      Frame frame = track[meshIndex*framesPerMesh+i];
+      Matrix tx = CreateMatrix(frame.position, frame.up, frame.fw);
+
+    
+      for(unsigned int j=0; j<D; j++)  
+      {
+        TrackVertex& v = meshverts[i*D + j];
+        v.position = mul1(tx, profile[j].position);
+        v.normal   = mul0(tx, profile[j].normal);
+        v.tu = profile[j].tu;
+        v.tv = profile[j].tv * frame.dist;
+        
+        if (profile[j].position.x > maxX)
+          maxX = profile[j].position.x;
+        
+        if (profile[j].position.x < minX)
+          minX = profile[j].position.x;
+        
+        /* Index buffer
+        
+        Track looks like this:
+        
+        j
+        0   1   2   3   4 ..
+        
+        |  \|  \|  \|  \|
+        *---*---*---*---*-  i+1
+        |\  |\  |\  |\  |\
+        | \ | \ | \ | \ |
+        |  \|  \|  \|  \|
+        *---*---*---*---*- i+0
+        |\  |\  |\  |\  |\
+        
+        
+        vertex buffer:
+        
+        4--5
+        |\ |
+        | \|
+        2--3
+        |\ |
+        | \|
+        0--1
+        
+        idx buffer:
+        
+        0 1 2
+        1 2 3
+        2 3 4
+        3 4 5
+        
+        */
+        
+        // if (i == newmesh * outputMeshes.size()) continue;
+        if (j == D-1) break;
+        
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 0] = ((i+0)%N)*D + ((j + 0)%D);
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 1] = ((i+0)%N)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
+        
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 0] = ((i+0)%N)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 1] = ((i+1)%N)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
       
-      if (profile[j].position.x > maxX){
-        maxX = profile[j].position.x;
       }
-      if (profile[j].position.x < minX){
-        minX = profile[j].position.x;
-      }
-      
-
-      // Graphics::GraphicsLayer::GetInstance()->debugRenderable->AddNormal(v.position, v.normal);
-      
-      
-      
-      /* Index buffer
-      
-      Track looks like this:
-      
-      j
-      0   1   2   3   4 ..
-      
-      |  \|  \|  \|  \|
-      *---*---*---*---*-  i+1
-      |\  |\  |\  |\  |\
-      | \ | \ | \ | \ |
-      |  \|  \|  \|  \|
-      *---*---*---*---*- i+0
-      |\  |\  |\  |\  |\
-      
-      
-      vertex buffer:
-      
-      4--5
-      |\ |
-      | \|
-      2--3
-      |\ |
-      | \|
-      0--1
-      
-      idx buffer:
-      
-      0 1 2
-      1 2 3
-      2 3 4
-      3 4 5
-      
-      */
-      
-      if (i == newmesh * outputMeshes.size()) continue;
-      if (j == D-1) continue;
-      
-      meshidx[((i*(D-1) + j)*2 + 0)*3 + 0] = ((i+0)%N)*D + ((j + 0)%D);
-      meshidx[((i*(D-1) + j)*2 + 0)*3 + 1] = ((i+0)%N)*D + ((j + 1)%D);
-      meshidx[((i*(D-1) + j)*2 + 0)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
-      
-      meshidx[((i*(D-1) + j)*2 + 1)*3 + 0] = ((i+0)%N)*D + ((j + 1)%D);
-      meshidx[((i*(D-1) + j)*2 + 1)*3 + 1] = ((i+1)%N)*D + ((j + 1)%D);
-      meshidx[((i*(D-1) + j)*2 + 1)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
-      
     }
-    
 
-    if (i == newmesh * outputMeshes.size())
-    {
-      if (newmesh * (outputMeshes.size()+1) > N) 
-        newmesh = N - newmesh * (outputMeshes.size()+1);
-      
-      assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
-      assert(SUCCEEDED(mesh->UnlockIndexBuffer()));
-      
-      D3DXATTRIBUTERANGE att;
-      att.AttribId     =  0;
-      att.FaceStart    =  0;
-      att.FaceCount    =  N*(D-1)*2;
-      att.VertexStart  =  0;
-      att.VertexCount  =  N*D;
-      
-      mesh->SetAttributeTable(&att, 1);
-      
-      ID3DXMesh *m;
-      assert(SUCCEEDED(D3DXCreateMeshFVF(
-        newmesh*(D-1)*2,            // DWORD NumFaces,
-        newmesh*D,                  // DWORD NumVertices,
-        0,                          // DWORD Options,
-        Vertex_Format,              // DWORD FVF,
-        Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
-        &m                          // LPD3DXMESH * ppMesh
-      )));
-      outputMeshes.push_back(m);
-      
-      assert(SUCCEEDED(mesh->LockVertexBuffer(0, (void**)&meshverts)));
-      assert(SUCCEEDED(mesh->LockIndexBuffer(0,  (void**)&meshidx)));
-      
-      i--;
-    }
+    assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
+    assert(SUCCEEDED(mesh->UnlockIndexBuffer()));
     
+    D3DXATTRIBUTERANGE att;
+    att.AttribId     =  0;
+    att.FaceStart    =  0;
+    att.FaceCount    =  framesPerMesh*(D-1)*2;
+    att.VertexStart  =  0;
+    att.VertexCount  =  N*D;
+    
+    mesh->SetAttributeTable(&att, 1);
+
+    outputMeshes.push_back(mesh);
   }
-  
-  assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
-  assert(SUCCEEDED(mesh->UnlockIndexBuffer()));
-  
-  D3DXATTRIBUTERANGE att;
-  att.AttribId     =  0;
-  att.FaceStart    =  0;
-  att.FaceCount    =  N*(D-1)*2;
-  att.VertexStart  =  0;
-  att.VertexCount  =  N*D;
-  
-  mesh->SetAttributeTable(&att, 1);
 }
 
 float Track::GetOffsetFromCentre(const Point3& pos){
