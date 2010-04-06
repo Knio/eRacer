@@ -75,7 +75,7 @@ class GameState(State):
   def load(self, settings):
     self.settings = settings
    
-    self.laps   = self.settings.nTotalLaps
+    self.laps   = self.settings.nLaps
     self.stats  = {}
  
     self.gameOver = False

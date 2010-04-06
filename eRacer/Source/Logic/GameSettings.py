@@ -3,6 +3,7 @@ from GameMapping      import *
 
 class GameSettings(object):
   PLAYER_NUMS = [1,2,4]
+  
   TRACKS = ['Track1', 'Track2']
 
   KEYBOARD_MAPPINGS = [
@@ -17,7 +18,9 @@ class GameSettings(object):
                         Gamepad4Mapping, 
                       ]
   TEXTURE_IDS = [1,2,3,4,5,6,7,8,9,10]
+  
   TEXTURE_NAMES = ['Blue', 'Red', 'Green', 'Yellow', 'Orange', 'Magenta', 'Black', 'Grey', 'Cyan', 'White']
+  
   AI_NAMES = [
     "Arthur Dent", 
     "Ford Prefect", 
@@ -29,6 +32,8 @@ class GameSettings(object):
     "Bender",
     "Turanga Leela"
   ]
+  
+  LAP_COUNTS = range(1,6)
 
   def __init__(self):
     self.availableMappings = [None]
@@ -44,11 +49,11 @@ class GameSettings(object):
         
     self.freeTextureIndices = set()
     self.trackIndex = 0
+    self.lapCountIndex = 1
     self.playersIndices = []
     self.debugMappings = []
     self.nPlayersIndex = 0
     self.nAIs = 3
-    self.nTotalLaps = 2
     
   def ResetFreeTextures(self):
     self.freeTextureIndices = set(range(len(self.TEXTURE_IDS)))
@@ -98,4 +103,9 @@ class GameSettings(object):
     
     while len(self.playersIndices) > nPlayers:
       self.playersIndices.pop()
-  nPlayersIndex = property(get_n_players_index, set_n_players_index)    
+  nPlayersIndex = property(get_n_players_index, set_n_players_index)  
+  
+  def get_num_laps(self):
+    return self.LAP_COUNTS[self.lapCountIndex]
+    
+  nLaps = property(get_num_laps)

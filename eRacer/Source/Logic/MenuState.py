@@ -137,7 +137,8 @@ class SetupGameMenuState(MenuState):
       ApplyMenuItem('Start', self.Menu_Start),
       ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
       SelectMenuItem('AI Players', self.Menu_AI_Players, aiPlayerOptions, self.settings.nAIs),
-      SelectMenuItem('Track', self.Menu_Track, [('Triple Eight',0),('Cyclone',1)], 0),
+      SelectMenuItem('Track', self.Menu_Track, [('Triple Eight',0),('Cyclone',1)], self.settings.trackIndex),
+      SelectMenuItem('Lap Count', self.Menu_Lap_Count, map(lambda x: (str(x[1]),x[0]) , enumerate(GameSettings.LAP_COUNTS)), self.settings.lapCountIndex),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
     
@@ -148,8 +149,11 @@ class SetupGameMenuState(MenuState):
   def Menu_AI_Players(self, value):
     self.settings.nAIs = value[1]
     
-  def Menu_Track(self,value):
+  def Menu_Track(self, value):
     self.settings.trackIndex = value[1]    
+
+  def Menu_Lap_Count(self, value):
+    self.settings.lapCountIndex = value[1]    
     
   def Menu_Setup_Players(self):
     game().PushState(SetupPlayersMenuState(self.settings))    
