@@ -2,7 +2,7 @@ from Core.Globals     import *
 from GameMapping      import *
 
 class GameSettings(object):
-  PLAYER_NUMS = [1,2,4]
+  PLAYER_NUMS = [1,2,3,4]
   
   TRACKS = ['Track1', 'Track2']
 
@@ -37,7 +37,7 @@ class GameSettings(object):
 
   def __init__(self):
     self.availableMappings = [None]
-    self.availableMappings.extend(self.GAMEPAD_MAPPINGS[:game().input.GetNumGamepads()-1])
+    self.availableMappings.extend(self.GAMEPAD_MAPPINGS[:game().input.GetNumGamepads()])
     if game().input.HasKeyboard():
       self.availableMappings.extend(self.KEYBOARD_MAPPINGS)
     

@@ -193,7 +193,7 @@ class GameState(State):
         (0,   0,  w, h2),
         (0,   h2, w, h2),
       ]
-    elif nPlayers==4:
+    elif nPlayers>2:
       return [
         (0,   0,  w2, h2),
         (w2,  0,  w2, h2),
