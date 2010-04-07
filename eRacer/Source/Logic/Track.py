@@ -34,7 +34,6 @@ class Track(Entity, cpp.Track):
     meshes = cpp.VectorMesh()
     
     self.CreateMesh(profile, meshes)
-    print "Number of track meshes: ",meshes.size()
     
     for i in xrange(meshes.size()):
       tex   = game().io.LoadTexture('AlphaTrackTexture2.png')
@@ -43,19 +42,18 @@ class Track(Entity, cpp.Track):
       meshes[i].disown()
       
       g = MeshNode("Track Segment %d" % i)
+      m = cpp.Mesh(meshes[i], mat, tex)
+      m.thisown = 0
+      g.Init(m)
+      self.graphics.append(g)
+
+
       p = cpp.TriMesh()
-
-      # why does this only work in this order????
       p.Init(meshes[i])
-      g.Init(cpp.Mesh(meshes[i], mat, tex))
-
-
-
       p.SetId(self.id)
       p.SetGroup(cpp.TRACK)
-
-      self.graphics.append(g)
       self.physics.append(p)
+
       
       # print "initializing mesh ",meshes[i]
 

@@ -151,14 +151,21 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
     
     
     ID3DXMesh *mesh;
-    assert(SUCCEEDED(D3DXCreateMeshFVF(
+    
+    HRESULT r = D3DXCreateMeshFVF(
       framesPerMesh*(D-1)*2,        // DWORD NumFaces,
       framesPerMesh*D,                  // DWORD NumVertices,
       0,                          // DWORD Options,
       Vertex_Format,              // DWORD FVF,
       Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
       &mesh                       // LPD3DXMESH * ppMesh
-    )));
+    );
+    
+    if(r==E_OUTOFMEMORY){
+      cout << "Ran out of memory creating meshes!" << endl;
+      return;
+	}
+    assert(SUCCEEDED(r));
 
     TrackVertex* meshverts;
     unsigned short* meshidx;
