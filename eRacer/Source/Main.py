@@ -57,4 +57,5 @@ class Main(Game):
           
   def QuitEvent(self):
     self.state = 0
+    self.config.save()
 

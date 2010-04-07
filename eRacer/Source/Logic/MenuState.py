@@ -217,6 +217,7 @@ class SetupPlayersMenuState(MenuState):
 
   def Menu_Name(self, id, value):
     self.settings.playersIndices[id].name = value 
+    game().config.cp.set('MENU', 'PLAYER%dNAME'%(id+1), value)
     
   def Menu_Controls(self, value):
     self.settings.playersIndices[value[1]].mappingIndex = value[2]

@@ -46,7 +46,8 @@ class GameSettings(object):
       if num < len(self.availableMappings):
         self.availablePlayerNums.append(num)
     
-        
+    
+    
     self.freeTextureIndices = set()
     self.trackIndex = 0
     self.lapCountIndex = 1
@@ -95,7 +96,7 @@ class GameSettings(object):
       playerId = len(self.playersIndices)
       
       player = Struct()
-      player.name = 'Player %d' % (playerId+1)
+      player.name = game().config.cp.get('MENU', 'PLAYER%dNAME'%(playerId+1))
       player.mappingIndex = playerId+1
       player.textureIndex = playerId
       
