@@ -29,7 +29,12 @@ class State(cpp.State):
   def Remove(self, obj):
     del self.entities[obj.id]
     g = getattr(obj, 'graphics', None)
-    if g: self.scene.Remove(g)
+    if g:
+      if isinstance(g,list):
+        for i in g:
+          self.scene.Remove(i)
+      else:
+         self.scene.Remove(g)
     obj.Release()
     
   def Tick(self, time):

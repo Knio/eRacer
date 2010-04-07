@@ -33,7 +33,8 @@ class Track(Entity, cpp.Track):
     
     meshes = cpp.VectorMesh()
     
-    self.CreateMesh(profile, meshes)
+    self.CreateMesh(profile, meshes, 400)
+    print meshes.size()
     
     for i in xrange(meshes.size()):
       tex   = game().io.LoadTexture('AlphaTrackTexture2.png')

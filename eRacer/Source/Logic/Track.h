@@ -69,7 +69,7 @@ public:
   
   void Subdivide(int NSUBDIV=5);
   
-  void CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh*>& outputMesh, int framesPerMesh=512);
+  void CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh*>& outputMesh, int framesPerMesh=128);
   /**
   * returns distance from centre of track (where the x-coordinate of the profile is 0)
   * positive is on the right side of the track when looking down the positive z-axis

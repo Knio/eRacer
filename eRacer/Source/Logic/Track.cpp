@@ -1,6 +1,7 @@
 #include "Track.h"
 #include "Core/Consts.h"
 #include <float.h>
+#include <stdexcept>
 extern Constants CONSTS;
 
 namespace Logic {
@@ -140,12 +141,16 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
   const unsigned int N = track.size();
   const unsigned int D = profile.size();
   
-  const unsigned int nMeshes = (int)ceil(N/(float)framesPerMesh);
-  unsigned int currentFrameIndex = 0;
   
-  for(unsigned int meshIndex=0; meshIndex<nMeshes; meshIndex++){
+  // 100/10 = 10
+  // 101/10 = 11  
+  const unsigned int nMeshes = N/framesPerMesh + !!(N%framesPerMesh);
+  const unsigned int frameStep = framesPerMesh;
+  
+  for(unsigned int meshIndex=0; meshIndex<nMeshes; meshIndex++)
+  {
     //for the last mesh there may be less frames
-    if(meshIndex==nMeshes-1)
+    if(meshIndex==nMeshes-1 && (N%framesPerMesh))
       framesPerMesh = N % framesPerMesh;
     
     
@@ -153,18 +158,19 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
     ID3DXMesh *mesh;
     
     HRESULT r = D3DXCreateMeshFVF(
-      framesPerMesh*(D-1)*2,        // DWORD NumFaces,
-      framesPerMesh*D,                  // DWORD NumVertices,
+      framesPerMesh*(D-1)*2,      // DWORD NumFaces,
+      (framesPerMesh+1)*D,        // DWORD NumVertices,
       0,                          // DWORD Options,
       Vertex_Format,              // DWORD FVF,
       Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
       &mesh                       // LPD3DXMESH * ppMesh
     );
     
-    if(r==E_OUTOFMEMORY){
+    if(r==E_OUTOFMEMORY)
+    {
       cout << "Ran out of memory creating meshes!" << endl;
-      return;
-	}
+      throw std::runtime_error("Failed to create mesh");
+    }
     assert(SUCCEEDED(r));
 
     TrackVertex* meshverts;
@@ -174,11 +180,12 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
 
 
     
-    for(int i=0; i<framesPerMesh; i++){
-      Frame frame = track[meshIndex*framesPerMesh+i];
+    for (int i=0; i<(framesPerMesh+1); i++){
+      Frame frame = track[(meshIndex*frameStep+i)%N];
       Matrix tx = CreateMatrix(frame.position, frame.up, frame.fw);
 
-    
+      
+      
       for(unsigned int j=0; j<D; j++)  
       {
         TrackVertex& v = meshverts[i*D + j];
@@ -193,6 +200,7 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
         if (profile[j].position.x < minX)
           minX = profile[j].position.x;
         
+          
         /* Index buffer
         
         Track looks like this:
@@ -228,16 +236,16 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
         
         */
         
-        // if (i == newmesh * outputMeshes.size()) continue;
+        if (i == framesPerMesh) continue;
         if (j == D-1) break;
         
-        meshidx[((i*(D-1) + j)*2 + 0)*3 + 0] = ((i+0)%N)*D + ((j + 0)%D);
-        meshidx[((i*(D-1) + j)*2 + 0)*3 + 1] = ((i+0)%N)*D + ((j + 1)%D);
-        meshidx[((i*(D-1) + j)*2 + 0)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 0] = (i+0)*D + ((j + 0)%D);
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 1] = (i+0)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 0)*3 + 2] = (i+1)*D + ((j + 0)%D);
         
-        meshidx[((i*(D-1) + j)*2 + 1)*3 + 0] = ((i+0)%N)*D + ((j + 1)%D);
-        meshidx[((i*(D-1) + j)*2 + 1)*3 + 1] = ((i+1)%N)*D + ((j + 1)%D);
-        meshidx[((i*(D-1) + j)*2 + 1)*3 + 2] = ((i+1)%N)*D + ((j + 0)%D);
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 0] = (i+0)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 1] = (i+1)*D + ((j + 1)%D);
+        meshidx[((i*(D-1) + j)*2 + 1)*3 + 2] = (i+1)*D + ((j + 0)%D);
       
       }
     }
@@ -250,7 +258,7 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
     att.FaceStart    =  0;
     att.FaceCount    =  framesPerMesh*(D-1)*2;
     att.VertexStart  =  0;
-    att.VertexCount  =  N*D;
+    att.VertexCount  =  (framesPerMesh+1)*D;
     
     mesh->SetAttributeTable(&att, 1);
 

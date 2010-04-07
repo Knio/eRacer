@@ -47,7 +47,7 @@ namespace Physics {
 		cooking->NxInitCooking();
 		
 		NXU::MemoryWriteBuffer writeBuffer;
-  		assert(cooking->NxCookTriangleMesh(meshDesc, writeBuffer));
+  	assert(cooking->NxCookTriangleMesh(meshDesc, writeBuffer));
 	
 		NXU::MemoryReadBuffer readBuffer(writeBuffer.data);
   		meshShapeDesc.meshData = PhysicsLayer::g_PhysicsLayer->CreateTriangleMesh(readBuffer);
