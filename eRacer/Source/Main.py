@@ -19,8 +19,9 @@ from Physics.Physics    import Physics
 import time as _time
 
 class Main(Game):
-  def __init__(self):
+  def __init__(self, debug=False):
     Game.__init__(self)
+    self.debug  = debug
     self.config = Config()
     self.event  = Event(self)
     

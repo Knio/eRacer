@@ -21,11 +21,12 @@ def run():
     from Logic.MenuState import MainMenuState
     from Logic.GameState import GameState
     
-    m = Main()
-    
+        
     if debug:
       import gc
       gc.set_debug(gc.DEBUG_COLLECTABLE | gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_INSTANCES | gc.DEBUG_OBJECTS)
+    
+    m = Main(debug)
     
     if profile:
       m.Init()
@@ -35,6 +36,7 @@ def run():
       stats.sort_stats('cumulative') 
       stats.print_stats(0.1)
       stats.print_callees(0.1)
+      
     else:
       m.Init()
       m.PushState(MainMenuState())

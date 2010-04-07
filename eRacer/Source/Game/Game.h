@@ -29,14 +29,14 @@ public:
 		assert(g_Game);
 		return g_Game; 
 	}
-	HWND 				hwnd;
+	HWND 					hwnd;
 	HINSTANCE			hinst;
-	
+	bool 					debug;	
 	Graphics::Window* 	window; 
 private:
 	static Game* g_Game;
 protected:
-	Game() { g_Game = this; }
+	Game() { g_Game = this; debug=FALSE; }
 	
 public:
 	virtual ~Game() {}
