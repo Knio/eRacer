@@ -1,12 +1,12 @@
 /**
- * @file TriMesh.cpp
+ * @file Trimesh->cpp
  * @brief Implementation of the Physics::TriMesh class
  *
  * @date 31.01.2010
  * @author: Ole Rehmsen
  */
 
-#include "TriMesh.h"
+#include "Trimesh.h"
 #include <NXU_Streaming.h>
 #include <NxCooking.h>
 
@@ -20,20 +20,20 @@ namespace Physics {
 	}
 
 
-	void TriMesh::Init(ID3DXMesh& mesh){
+	void TriMesh::Init(ID3DXMesh* mesh){
 		NxTriangleMeshDesc meshDesc;
 		//generate our mesh using the cooking API
-		meshDesc.numTriangles 				= mesh.GetNumFaces();
-		meshDesc.numVertices 					= mesh.GetNumVertices();
-		meshDesc.pointStrideBytes  		= mesh.GetNumBytesPerVertex();
+		meshDesc.numTriangles 				= mesh->GetNumFaces();
+		meshDesc.numVertices 					= mesh->GetNumVertices();
+		meshDesc.pointStrideBytes  		= mesh->GetNumBytesPerVertex();
 		meshDesc.triangleStrideBytes 	= 3*sizeof(unsigned short);
 		meshDesc.flags = NX_MF_16_BIT_INDICES;
 
 		void* points;
 		void* triangles;
 		
-		assert(SUCCEEDED(mesh.LockVertexBuffer(D3DLOCK_READONLY, &points)));
-		assert(SUCCEEDED(mesh.LockIndexBuffer( D3DLOCK_READONLY, &triangles)));
+		assert(SUCCEEDED(mesh->LockVertexBuffer(D3DLOCK_READONLY, &points)));
+		assert(SUCCEEDED(mesh->LockIndexBuffer( D3DLOCK_READONLY, &triangles)));
 		
 		meshDesc.points 		= points;
 		meshDesc.triangles 	= triangles;
@@ -57,8 +57,8 @@ namespace Physics {
 		
 		CreateActor(actorDesc);
 		
-		assert(SUCCEEDED(mesh.UnlockIndexBuffer()));
-		assert(SUCCEEDED(mesh.UnlockVertexBuffer()));
+		assert(SUCCEEDED(mesh->UnlockIndexBuffer()));
+		assert(SUCCEEDED(mesh->UnlockVertexBuffer()));
 
 		cooking->NxCloseCooking();
 	}

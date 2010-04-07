@@ -43,15 +43,21 @@ class Track(Entity, cpp.Track):
       meshes[i].disown()
       
       g = MeshNode("Track Segment %d" % i)
-      g.Init(cpp.Mesh(meshes[i], mat, tex))
-      self.graphics.append(g)
-      
       p = cpp.TriMesh()
-      print "initializing mesh ",meshes[i]
+
+      # why does this only work in this order????
       p.Init(meshes[i])
+      g.Init(cpp.Mesh(meshes[i], mat, tex))
+
+
+
       p.SetId(self.id)
       p.SetGroup(cpp.TRACK)
+
+      self.graphics.append(g)
       self.physics.append(p)
+      
+      # print "initializing mesh ",meshes[i]
 
 
   def Release(self):

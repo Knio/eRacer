@@ -34,7 +34,7 @@ public:
 	 * @param mesh
 	 * 			the Direct3D mesh to stream the mesh data from
 	 */
-	void Init(ID3DXMesh& mesh);
+	void Init(ID3DXMesh* mesh);
 
 };
 
