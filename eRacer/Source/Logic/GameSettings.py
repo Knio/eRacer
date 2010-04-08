@@ -61,11 +61,14 @@ class GameSettings(object):
     self.nAIs = 3
 
     self.availableTracks = []
+    self.availableTrackNames = []
     
     for importer, modname, ispkg in pkgutil.iter_modules(Tracks.__path__): 
       self.availableTracks.append(modname)
-
-    print self.availableTracks
+      track = __import__("Tracks."+modname,fromlist=['NAME'])
+      self.availableTrackNames.append(hasattr(track,'NAME') and track.NAME or modname)
+      
+        
     
     
   def ResetFreeTextures(self):

@@ -146,8 +146,8 @@ class SetupGameMenuState(MenuState):
       aiPlayerOptions.append((str(i),i))
     
     trackOptions = []
-    for i,track in enumerate(self.settings.availableTracks):
-      trackOptions.append((track,i))
+    for i,trackName in enumerate(self.settings.availableTrackNames):
+      trackOptions.append((trackName,i))
     
     self.menu = [
       ApplyMenuItem('Start', self.Menu_Start),
