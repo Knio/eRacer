@@ -47,7 +47,7 @@ class GameSettings(object):
     
     self.availablePlayerNums = []
     for num in self.PLAYER_NUMS:
-      if num < len(self.availableMappings):
+      if num < len(self.availableMappings) or game().debug:
         self.availablePlayerNums.append(num)
     
     
@@ -109,7 +109,11 @@ class GameSettings(object):
       
       player = Struct()
       player.name = game().config.get_setting('PLAYER%dNAME'%(playerId+1))
+
       player.mappingIndex = playerId+1
+      if player.mappingIndex>=len(self.availableMappings):
+        player.mappingIndex = 0
+
       player.textureIndex = playerId
       
       self.playersIndices.append(player)
