@@ -30,6 +30,8 @@ class MenuState(State):
     game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
     self.menu = []
     self.menuTop = 50
+
+    
     
   def Tick(self, time):
     State.Tick(self, time)
@@ -94,7 +96,6 @@ class MainMenuState(MenuState):
 
     logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
     self.view.Add(logo)
-    
     self.LoadMusic("Terran5.ogg")
     
     self.menu = [
@@ -257,6 +258,8 @@ class PauseMenuState(MenuState):
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
     self.menuTop = 240
+    textbox = HudQuad("TextBox", "futureui1.png", 50,107,700,400, True)
+    self.view.Add(textbox)
     
   def Activate(self):
     print "activate pause!!!!"
@@ -289,8 +292,9 @@ class PauseMenuState(MenuState):
   def Tick(self, time):
     self.view.WriteString(
       "PAUSED",
-      "Sony Sketch EF", 40, Point3(300,100,0)
+      "Sony Sketch EF", 40, Point3(300,100,0), Vector3(1,0.5,0.25)
     )
+    #1, 0.5, 0.25
     MenuState.Tick(self, time)
     self.parent.Tick(time)
       
