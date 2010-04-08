@@ -51,29 +51,22 @@ class InputMenuItem(MenuItem):
     MenuItem.__init__(self,label)
     self.callback = callback
     self.value = default;
-    self.active = False
     self.id = id
-    game().event.Register(self.CharacterTypedEvent)
-    game().event.Register(self.KeyPressedEvent)
 
   def draw(self, view, position, selected):
     MenuItem.draw(self, view, position, selected)
     view.WriteString(
-      self.value, self.fontfamily, self.fontsize, position+Point3(300,0,0), self.active and RED or WHITE
+      self.value, self.fontfamily, self.fontsize, position+Point3(300,0,0), selected and RED or WHITE
       ) 
       
     return self.lineheight
     
-  def MenuSelectEvent(self):
-    self.active = not self.active
-    self.active or self.callback(self.id, self.value)
-    
   def CharacterTypedEvent(self, character):
-    if self.active and character.isalnum() or character.isspace():
+    if character.isalnum() or character.isspace():
       self.value += character
+      self.callback(self.id, self.value)
     
   def KeyPressedEvent(self, key):
-    if self.active:
-      if key == KEY.BACK:
-        self.value = self.value[:len(self.value)-1]
-    
+    if key == KEY.BACK:
+      self.value = self.value[:len(self.value)-1]
+      self.callback(self.id, self.value)    

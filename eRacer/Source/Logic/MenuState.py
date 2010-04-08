@@ -69,6 +69,18 @@ class MenuState(State):
     if method: 
       game().sound.sound.PlaySoundFx(self.menuSel)
       method()
+      
+  def CharacterTypedEvent(self, character):
+    method = getattr(self.menu[self.selected], 'CharacterTypedEvent', None)
+    if method: 
+      game().sound.sound.PlaySoundFx(self.menuNav)
+      method(character)
+
+  def KeyPressedEvent(self, key):
+    method = getattr(self.menu[self.selected], 'KeyPressedEvent', None)
+    if method: 
+      game().sound.sound.PlaySoundFx(self.menuNav)
+      method(key)
 
   def Menu_Exit(self):
     game().event.QuitEvent()  
