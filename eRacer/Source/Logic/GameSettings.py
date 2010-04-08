@@ -25,6 +25,8 @@ class GameSettings(object):
   
   TEXTURE_NAMES = ['Blue', 'Red', 'Green', 'Yellow', 'Orange', 'Magenta', 'Black', 'Grey', 'Cyan', 'White']
   
+  MAX_AIS = 8
+  
   AI_NAMES = [
     "Arthur Dent", 
     "Ford Prefect", 
@@ -50,15 +52,10 @@ class GameSettings(object):
       if num < len(self.availableMappings):
         self.availablePlayerNums.append(num)
     
-    
-    
     self.freeTextureIndices = set()
-    self.trackIndex = 0
-    self.lapCountIndex = 1
     self.playersIndices = []
     self.debugMappings = []
     self.nPlayersIndex = 0
-    self.nAIs = 3
 
     self.availableTracks = []
     self.availableTrackNames = []
@@ -111,9 +108,9 @@ class GameSettings(object):
       playerId = len(self.playersIndices)
       
       player = Struct()
-      player.name = game().config.get_setting('PLAYER%dNAME'%(playerId+1))
+      player.name = game().config.get_setting('name', 'PLAYER%d'%(playerId+1))
       player.mappingIndex = playerId+1
-      player.textureIndex = playerId
+      player.textureIndex = int(game().config.get_setting('textureIndex', 'PLAYER%d'%(playerId+1)))
       
       self.playersIndices.append(player)
     
@@ -122,6 +119,41 @@ class GameSettings(object):
   nPlayersIndex = property(get_n_players_index, set_n_players_index)  
   
   def get_num_laps(self):
-    return self.LAP_COUNTS[self.lapCountIndex]
+    return self.LAP_COUNTS[self.nLapsIndex]
     
   nLaps = property(get_num_laps)
+
+  def get_num_laps_index(self):
+    return int(game().config.get_setting('nLapsIndex'))
+  
+  def set_num_laps_index(self,nLapsIndex):
+    game().config.set_setting('nLapsIndex',str(nLapsIndex))
+    
+  nLapsIndex = property(get_num_laps_index,set_num_laps_index)  
+
+  def get_track_index(self):
+    return int(game().config.get_setting('trackIndex'))
+  
+  def set_track_index(self,trackIndex):
+    game().config.set_setting('trackIndex',str(trackIndex))
+    
+  trackIndex = property(get_track_index,set_track_index)  
+
+  
+  
+  def get_n_ais(self):
+    return int(game().config.get_setting('nAIs'))
+  
+  def set_n_ais(self,nAIs):
+    game().config.set_setting('nAIs',str(nAIs))
+    
+  nAIs = property(get_n_ais,set_n_ais)  
+
+  
+  def set_player_name(self, id, name):
+    self.playersIndices[id].name = name 
+    game().config.set_setting('name', name,'PLAYER%d'%(id+1))
+    
+  def set_player_texture_index(self, id, textureIndex):
+    self.playersIndices[id].textureIndex = textureIndex 
+    game().config.set_setting('textureIndex', str(textureIndex),'PLAYER%d'%(id+1))  
