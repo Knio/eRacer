@@ -30,6 +30,8 @@ class MenuState(State):
     game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
     self.menu = []
     self.menuTop = 50
+
+    
     
   def Tick(self, time):
     State.Tick(self, time)
@@ -94,7 +96,6 @@ class MainMenuState(MenuState):
 
     logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
     self.view.Add(logo)
-    
     self.LoadMusic("Terran5.ogg")
     
     self.menu = [
@@ -142,19 +143,19 @@ class SetupGameMenuState(MenuState):
     
     
     aiPlayerOptions = []
-    for i in range(8):
+    for i in range(GameSettings.MAX_AIS+1):
       aiPlayerOptions.append((str(i),i))
     
     trackOptions = []
-    for i,track in enumerate(self.settings.availableTracks):
-      trackOptions.append((track,i))
+    for i,trackName in enumerate(self.settings.availableTrackNames):
+      trackOptions.append((trackName,i))
     
     self.menu = [
       ApplyMenuItem('Start', self.Menu_Start),
       ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
       SelectMenuItem('AI Players', self.Menu_AI_Players, aiPlayerOptions, self.settings.nAIs),
       SelectMenuItem('Track', self.Menu_Track, trackOptions, self.settings.trackIndex),
-      SelectMenuItem('Lap Count', self.Menu_Lap_Count, map(lambda x: (str(x[1]),x[0]) , enumerate(GameSettings.LAP_COUNTS)), self.settings.lapCountIndex),
+      SelectMenuItem('Lap Count', self.Menu_Lap_Count, map(lambda x: (str(x[1]),x[0]) , enumerate(GameSettings.LAP_COUNTS)), self.settings.nLapsIndex),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
     
@@ -169,7 +170,7 @@ class SetupGameMenuState(MenuState):
     self.settings.trackIndex = value[1]    
 
   def Menu_Lap_Count(self, value):
-    self.settings.lapCountIndex = value[1]    
+    self.settings.nLapsIndex = value[1]    
     
   def Menu_Setup_Players(self):
     game().PushState(SetupPlayersMenuState(self.settings))    
@@ -201,7 +202,7 @@ class SetupPlayersMenuState(MenuState):
     padding = 10
 
     for playerId,player in enumerate(self.settings.playersIndices):
-      self.menu.append(InputMenuItem('Name', self.Menu_Name, playerId, player.name))
+      self.menu.append(InputMenuItem('Name', self.settings.set_player_name, playerId, player.name))
       self.menu[-1].fontsize = fontsize
       self.menu[-1].lineheight = lineheight
     
@@ -216,8 +217,8 @@ class SetupPlayersMenuState(MenuState):
       
       textureOptions = []
 
-      for i,textureId in enumerate(GameSettings.TEXTURE_IDS):
-        textureOptions.append((GameSettings.TEXTURE_NAMES[i], playerId, i))
+      for i,textureName in enumerate(GameSettings.TEXTURE_NAMES):
+        textureOptions.append((textureName, playerId, i))
       
       self.menu.append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
       self.menu[-1].fontsize = fontsize
@@ -231,15 +232,12 @@ class SetupPlayersMenuState(MenuState):
     self.settings.nPlayersIndex = value[1]      
     self.UpdateMenu()
 
-  def Menu_Name(self, id, value):
-    self.settings.playersIndices[id].name = value 
-    game().config.set_setting('PLAYER%dNAME'%(id+1), value)
     
   def Menu_Controls(self, value):
     self.settings.playersIndices[value[1]].mappingIndex = value[2]
     
   def Menu_Color(self, value):
-    self.settings.playersIndices[value[1]].textureIndex = value[2]
+    self.settings.set_player_texture_index(value[1],value[2])
   
   
   def Menu_Back(self):
@@ -257,6 +255,8 @@ class PauseMenuState(MenuState):
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
     self.menuTop = 240
+    textbox = HudQuad("TextBox", "futureui1.png", 50,107,700,400, True)
+    self.view.Add(textbox)
     
   def Activate(self):
     print "activate pause!!!!"
@@ -289,8 +289,9 @@ class PauseMenuState(MenuState):
   def Tick(self, time):
     self.view.WriteString(
       "PAUSED",
-      "Sony Sketch EF", 40, Point3(300,100,0)
+      "Sony Sketch EF", 40, Point3(300,100,0), Vector3(1,0.5,0.25)
     )
+    #1, 0.5, 0.25
     MenuState.Tick(self, time)
     self.parent.Tick(time)
       

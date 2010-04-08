@@ -1,9 +1,17 @@
+NAME = 'Cyclone'
+
+
 # Track 2 by John
 
 from Core.Globals import *
+
+
+
 xScale = 0.5
 yScale = 0.6
 zScale = 0.5
+
+
 TRACK = [ 
   cpp.Frame(Point3(-1375*xScale,   0,   0), +X+Y+Z),
   cpp.Frame(Point3(-1375*xScale,-125*yScale, 500*zScale), +X-Z),

@@ -4,6 +4,7 @@ from Game.State     import State
 from GameEndMapping import GameEndMapping
 from MenuState      import PauseMenuState
 from Graphics.View  import View, HudView
+from HudQuad        import HudQuad
 
 class GameEndState(State):
   MAPPING = GameEndMapping
@@ -11,6 +12,8 @@ class GameEndState(State):
     State.__init__(self)    
     self.stats = stats
     self.view = HudView([self.scene])
+    textbox = HudQuad("TextBox", "futureui1.png", 50,107,700,400, True)
+    self.view.Add(textbox)
     
   def Tick(self, time):
     if not self.active:
@@ -20,7 +23,7 @@ class GameEndState(State):
     
     self.view.WriteString(
       "GAME OVER",
-      "Sony Sketch EF", 40, Point3(300,100,0)
+      "Sony Sketch EF", 40, Point3(300,100,0), Vector3(1,0.5,0.25)
     )
 
     le = 0

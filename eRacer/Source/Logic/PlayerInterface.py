@@ -69,6 +69,10 @@ class PlayerInterface(object):
 
 
     t = time.seconds*5
+
+    #TEXT BOX HACK
+    #self.textBox.SetSize( 0, 0)
+    #self.boostBar.SetSize( 700, 400)
     
     #Track Place HUD
     place = self.vehicle.finishPlace < 0 and self.vehicle.place or self.vehicle.finishPlace

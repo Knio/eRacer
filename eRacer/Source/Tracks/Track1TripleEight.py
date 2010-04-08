@@ -1,3 +1,5 @@
+NAME = 'Triple Eight'
+
 from Core.Globals import *
 
 SIZE = 400

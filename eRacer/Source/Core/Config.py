@@ -2,19 +2,31 @@ from Core.Globals import *
 import ConfigParser
 
 class Config(object):
+  CONSTANTS_FILE  = 'Config/Constants.cnf'
+  DEBUG_FILE      = 'Config/Debug.cnf'
+  GLOBAL_FILE     = 'Config/Settings.cnf'
+  USER_FILE       = 'User/Settings.cnf'
+  
+  
   def __init__(self):
-    self.changes = ConfigParser.ConfigParser()
     self.read()
 
   def read(self):
-    self.current = self.readFile(['Config/Global.cnf','Config/User.cnf'])
-    
+    constantsFiles = [self.CONSTANTS_FILE]
     if game().debug:
-      self.readFile('Config/Debug.cnf')
+      constantsFiles.append(self.DEDUG_FILE)
+    self.constants = self.readFile(constantsFiles)
+    self.parseConstants(self.constants)
+    self.settings = self.readFile([self.GLOBAL_FILE, self.USER_FILE])
+    self.user = self.readFile(self.USER_FILE)
+    
         
   def readFile(self, file):
     cp = ConfigParser.ConfigParser()
     cp.read(file)
+    return cp
+
+  def parseConstants(self, cp):
     for k, v in cp.items('CONSTS'):
       k = k.upper()
       try:
@@ -26,19 +38,19 @@ class Config(object):
         print 'Failed to set %s' % k
         import traceback
         traceback.print_exc()
-    return cp
+    
     
   def save(self):
-    with open('Config/User.cnf', 'wb') as file:
-      self.changes.write(file)
+    with open(self.USER_FILE, 'wb') as file:
+      self.user.write(file)
       
-  def set_setting(self, key, value):
-    if not self.changes.has_section('SETTINGS'):
-      self.changes.add_section('SETTINGS')
-    self.changes.set('SETTINGS', key, value)
-    self.current.set('SETTINGS', key, value)
+  def set_setting(self, key, value, section='GENERAL'):
+    if not self.user.has_section(section):
+      self.user.add_section(section)
+    self.user.set(section, key, value)
+    self.settings.set(section, key, value)
     
-  def get_setting(self, key):
-    return self.current.get('SETTINGS', key)
+  def get_setting(self, key, section='GENERAL'):
+    return self.settings.get(section, key)
     
          
