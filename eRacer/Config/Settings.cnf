@@ -1,0 +1,36 @@
+[GENERAL]
+
+player1name = Player 1
+player2name = Player 2
+player3name = Player 3
+player4name = Player 4
+nAIs = 2
+trackIndex = 0
+nLapsIndex = 1
+
+
+[PLAYER1]
+
+name = Player 1
+textureIndex = 0
+
+
+[PLAYER2]
+
+name = Player 2
+textureIndex = 1
+
+
+[PLAYER3]
+
+name = Player 3
+textureIndex = 2
+
+
+[PLAYER4]
+
+name = Player 4
+textureIndex = 3
+
+
+
