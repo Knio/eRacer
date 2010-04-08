@@ -145,11 +145,15 @@ class SetupGameMenuState(MenuState):
     for i in range(8):
       aiPlayerOptions.append((str(i),i))
     
+    trackOptions = []
+    for i,track in enumerate(self.settings.availableTracks):
+      trackOptions.append((track,i))
+    
     self.menu = [
       ApplyMenuItem('Start', self.Menu_Start),
       ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
       SelectMenuItem('AI Players', self.Menu_AI_Players, aiPlayerOptions, self.settings.nAIs),
-      SelectMenuItem('Track', self.Menu_Track, [('Triple Eight',0),('Cyclone',1)], self.settings.trackIndex),
+      SelectMenuItem('Track', self.Menu_Track, trackOptions, self.settings.trackIndex),
       SelectMenuItem('Lap Count', self.Menu_Lap_Count, map(lambda x: (str(x[1]),x[0]) , enumerate(GameSettings.LAP_COUNTS)), self.settings.lapCountIndex),
       ApplyMenuItem('Back', self.Menu_Back),
     ]

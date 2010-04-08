@@ -1,7 +1,6 @@
 from Core.Globals import *
 
-import Track1
-import Track2
+import Tracks
 
 class Track(Entity, cpp.Track):
   def __init__(self, name):
@@ -11,14 +10,9 @@ class Track(Entity, cpp.Track):
     self.graphics = []
     self.physics  = []
     
-    # HACK
-    track = None
-    # track = __import__(name)
-    if name == 'Track1':
-      track = Track1
-    if name == 'Track2':
-      track = Track2
-    # END HACK
+    # the fromlist must be non-empty for this to actually assign the whole package to track
+    # otherwise only Tracks will be stored in track     
+    track = __import__("Tracks."+name,fromlist='dummy')
     
     for i in track.TRACK:
       self.Add(i)

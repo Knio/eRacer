@@ -1,11 +1,15 @@
 from Core.Globals     import *
 from GameMapping      import *
 
+import pkgutil 
+ 
+import Tracks
+
+
+
 class GameSettings(object):
   PLAYER_NUMS = [1,2,3,4]
   
-  TRACKS = ['Track1', 'Track2']
-
   KEYBOARD_MAPPINGS = [
                         Keyboard1Mapping, 
                         Keyboard2Mapping, 
@@ -55,6 +59,14 @@ class GameSettings(object):
     self.debugMappings = []
     self.nPlayersIndex = 0
     self.nAIs = 3
+
+    self.availableTracks = []
+    
+    for importer, modname, ispkg in pkgutil.iter_modules(Tracks.__path__): 
+      self.availableTracks.append(modname)
+
+    print self.availableTracks
+    
     
   def ResetFreeTextures(self):
     self.freeTextureIndices = set(range(len(self.TEXTURE_IDS)))
@@ -69,7 +81,7 @@ class GameSettings(object):
     return self.TEXTURE_IDS[self.freeTextureIndices.pop()]
     
   def get_track(self):
-    return self.TRACKS[self.trackIndex]
+    return self.availableTracks[self.trackIndex]
   track = property(get_track)
 
   def get_players(self):
