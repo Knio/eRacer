@@ -96,7 +96,7 @@ class GameSettings(object):
       playerId = len(self.playersIndices)
       
       player = Struct()
-      player.name = game().config.cp.get('MENU', 'PLAYER%dNAME'%(playerId+1))
+      player.name = game().config.get_setting('PLAYER%dNAME'%(playerId+1))
       player.mappingIndex = playerId+1
       player.textureIndex = playerId
       

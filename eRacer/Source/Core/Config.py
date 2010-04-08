@@ -3,13 +3,14 @@ import ConfigParser
 
 class Config(object):
   def __init__(self):
-    self.cp = ConfigParser.ConfigParser()
+    self.changes = ConfigParser.ConfigParser()
     self.read()
 
   def read(self):
-    self.cp = self.readFile('Config/eRacer.cnf')
+    self.current = self.readFile(['Config/Global.cnf','Config/User.cnf'])
+    
     if game().debug:
-      self.readFile('Config/eRacer_debug.cnf')
+      self.readFile('Config/Debug.cnf')
         
   def readFile(self, file):
     cp = ConfigParser.ConfigParser()
@@ -28,8 +29,16 @@ class Config(object):
     return cp
     
   def save(self):
-    pass
+    with open('Config/User.cnf', 'wb') as file:
+      self.changes.write(file)
+      
+  def set_setting(self, key, value):
+    if not self.changes.has_section('SETTINGS'):
+      self.changes.add_section('SETTINGS')
+    self.changes.set('SETTINGS', key, value)
+    self.current.set('SETTINGS', key, value)
     
-    # with open('Config/eRacer.cnf', 'wb') as file:
-    #   self.cp.write(file)
-    #     
+  def get_setting(self, key):
+    return self.current.get('SETTINGS', key)
+    
+         

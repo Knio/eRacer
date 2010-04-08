@@ -31,3 +31,4 @@ eRacer/Source/SWIG/swig_wrap.cxx
 eRacer/.externalToolBuilders
 eRacer/profile.data
 eRacer/.pydevproject
+eRacer/Config/User.cnf
