@@ -206,9 +206,12 @@ class GameState(State):
     
     for mapping in self.settings.debugMappings:
       mappings.append(mapping(None))
-      
+        
     for i,player in enumerate(self.settings.players):
       mappings.append(player.mapping(self.interfaces[i]))
+      
+    if self.settings.nPlayers==1 and self.settings.players[0].mapping != Keyboard1Mapping:
+      mappings.append(Keyboard1Mapping(self.interfaces[0]))
       
     self.mapping = GameMapping(mappings)
     
