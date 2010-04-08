@@ -287,13 +287,13 @@ class PauseMenuState(MenuState):
     gamestate.load(gamestate.settings)
           
   def Tick(self, time):
+    self.parent.Tick(time)
     self.view.WriteString(
       "PAUSED",
       "Sony Sketch EF", 40, Point3(300,100,0), Vector3(1,0.5,0.25)
     )
     #1, 0.5, 0.25
     MenuState.Tick(self, time)
-    self.parent.Tick(time)
       
 from GameState  import GameState
 
