@@ -55,10 +55,10 @@ class GameSettings(object):
     self.freeTextureIndices = set()
     self.playersIndices = []
     self.debugMappings = []
-    self.nPlayersIndex = 0
 
     self.availableTracks = []
     self.availableTrackNames = []
+    self.update_players()
     
     for importer, modname, ispkg in pkgutil.iter_modules(Tracks.__path__): 
       self.availableTracks.append(modname)
@@ -91,20 +91,25 @@ class GameSettings(object):
   players = property(get_players)
   
   def get_n_players(self):
-    return len(self.playersIndices)
+    return self.PLAYER_NUMS[self.nPlayersIndex]
   
   nPlayers = property(get_n_players)    
   
   def get_n_players_index(self):
-    return self._nPlayersIndex
+    return int(game().config.get_setting('nPlayersIndex'))
     
   def set_n_players_index(self, nPlayersIndex):
-    self._nPlayersIndex = nPlayersIndex
+    game().config.set_setting('nPlayersIndex',str(nPlayersIndex))
     nPlayers = self.PLAYER_NUMS[nPlayersIndex]
     self.debugMappings = nPlayers > 1 and [] or [KeyboardDebugMapping, GamepadDebugMapping]
     
-    
-    while len(self.playersIndices) < nPlayers:
+    self.update_players()
+
+      
+  nPlayersIndex = property(get_n_players_index, set_n_players_index)  
+  
+  def update_players(self):
+    while len(self.playersIndices) < self.nPlayers:
       playerId = len(self.playersIndices)
       
       player = Struct()
@@ -118,9 +123,9 @@ class GameSettings(object):
       
       self.playersIndices.append(player)
     
-    while len(self.playersIndices) > nPlayers:
+    while len(self.playersIndices) > self.nPlayers:
       self.playersIndices.pop()
-  nPlayersIndex = property(get_n_players_index, set_n_players_index)  
+    
   
   def get_num_laps(self):
     return self.LAP_COUNTS[self.nLapsIndex]
