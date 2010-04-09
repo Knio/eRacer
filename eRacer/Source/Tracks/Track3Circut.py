@@ -2,13 +2,17 @@ NAME = 'Circut'
 
 from Core.Globals import *
 
-SIZE = 400
+SIZE = 600
 
 TRACK = [
-  cpp.Frame(Point3( -SIZE,  0,   00), X+Y),
-  cpp.Frame(Point3(     0,  0, SIZE), Y-Z),
-  cpp.Frame(Point3(  SIZE,  0,   00), -X+Y),
-  cpp.Frame(Point3(     0,  0,-SIZE), Y+Z)
+  cpp.Frame(Point3(  150,  0,   00), Y),
+  cpp.Frame(Point3(  150,  0,-1000), -X+Y+Z),
+  cpp.Frame(Point3( -150,  0,-1000), X+Y+Z),
+  cpp.Frame(Point3( -150,  0,   00), Y),
+  cpp.Frame(Point3(-SIZE,  0,   00), X+Y+Z),
+  cpp.Frame(Point3(-SIZE,  0, SIZE), X+Y-Z),
+  cpp.Frame(Point3( SIZE,  0, SIZE), -X+Y-Z),
+  cpp.Frame(Point3( SIZE,  0,   00), -X+Y+Z),
 ]
 
 PROFILE = [
