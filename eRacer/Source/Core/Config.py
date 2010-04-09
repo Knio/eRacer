@@ -1,11 +1,15 @@
 from Core.Globals import *
 import ConfigParser
 
+import os
+import os.path
+
 class Config(object):
   CONSTANTS_FILE  = 'Config/Constants.cnf'
   DEBUG_FILE      = 'Config/Debug.cnf'
   GLOBAL_FILE     = 'Config/Settings.cnf'
-  USER_FILE       = 'User/Settings.cnf'
+  USER_FOLDER     = 'User/'
+  USER_FILE       = USER_FOLDER+'Settings.cnf'
   
   
   def __init__(self):
@@ -14,7 +18,7 @@ class Config(object):
   def read(self):
     constantsFiles = [self.CONSTANTS_FILE]
     if game().debug:
-      constantsFiles.append(self.DEDUG_FILE)
+      constantsFiles.append(self.DEBUG_FILE)
     self.constants = self.readFile(constantsFiles)
     self.parseConstants(self.constants)
     self.settings = self.readFile([self.GLOBAL_FILE, self.USER_FILE])
@@ -41,6 +45,9 @@ class Config(object):
     
     
   def save(self):
+    if not os.path.exists(self.USER_FOLDER):
+      os.mkdir(self.USER_FOLDER)
+
     with open(self.USER_FILE, 'wb') as file:
       self.user.write(file)
       
