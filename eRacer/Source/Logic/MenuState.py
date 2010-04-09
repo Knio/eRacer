@@ -254,8 +254,8 @@ class PauseMenuState(MenuState):
       ApplyMenuItem('Main menu',self.Menu_Main_menu),
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
-    self.menuTop = 240
-    textbox = HudQuad("TextBox", "futureui1.png", 50,107,700,400, True)
+    self.menuTop = 190
+    textbox = HudQuad("TextBox", "futureui2.png", 50,110,750,420, False)
     self.view.Add(textbox)
     
   def Activate(self):
@@ -288,10 +288,10 @@ class PauseMenuState(MenuState):
           
   def Tick(self, time):
     self.parent.Tick(time)
-    self.view.WriteString(
-      "PAUSED",
-      "Sony Sketch EF", 40, Point3(300,100,0), Vector3(1,0.5,0.25)
-    )
+    # self.view.WriteString(
+    #   "PAUSED",
+    #   "Sony Sketch EF", 40, Point3(300,100,0), Vector3(1,0.5,0.25)
+    # )
     #1, 0.5, 0.25
     MenuState.Tick(self, time)
       
