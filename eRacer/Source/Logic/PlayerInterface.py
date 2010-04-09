@@ -28,7 +28,11 @@ class PlayerInterface(object):
     self.views.append(View(debugCam, viewport=self.viewport))
     
     self.hud      = HudView(viewport=self.viewport)
-    self.boostBar = self.AddHud(HudQuad("BoostBar", "FinishLine.png", 750, 200, 35, 350))
+    self.boostFuelMaxHeight = 291
+    self.boostFuelTop = 180
+    self.boostFuelBottom = self.boostFuelTop+self.boostFuelMaxHeight
+    self.boostBar = self.AddHud(HudQuad("BoostBarFuel", "BoostBarFuel.png", 758, self.boostFuelTop, 29, self.boostFuelMaxHeight))
+    self.AddHud(HudQuad("BoostBarFrame", "BoostBarFrame.png", 750, self.boostFuelTop-47, 44, 383))
     self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8, True))
     
     for vehicle in state.vehicleList:
@@ -87,9 +91,9 @@ class PlayerInterface(object):
     #Energy Bar HUD 750, 200, 35, 350
     boostPercent = self.vehicle.boostFuel/5.0
     self.boostBar.graphics.SetTextureCoordinates(0,1-boostPercent,  1,1-boostPercent, 1,1, 0,1 );
-    height = boostPercent * 350
-    self.boostBar.SetSize( 35, height)
-    self.boostBar.SetLeftTop( 750, 550-height );  
+    height = boostPercent * self.boostFuelMaxHeight
+    self.boostBar.SetSize( 29, height)
+    self.boostBar.SetLeftTop( 758, self.boostFuelBottom-height );  
 
     #Backwards HUD
     playerfacing = mul0(self.vehicle.transform, Z)
