@@ -81,10 +81,9 @@ class GameEndState(State):
       x = 100
       y += yd
     
-    
-    game().graphics.views.append(self.view)
     State.Tick(self, time)
     self.parent.Tick(time)
+    game().graphics.views.append(self.view)
     
   def LapEvent(self, vehicle, lap):
     self.parent.LapEvent(vehicle, lap)
