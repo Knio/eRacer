@@ -36,7 +36,6 @@ class HudView(View):
     if isinstance(obj, HudQuad):
       obj.aspectRatio = float(self.viewport[3])/self.viewport[2]
       obj.Update()
-      print obj, obj.aspectRatio
       obj = obj.graphics
     return View.AddRenderable(self, obj)    
   

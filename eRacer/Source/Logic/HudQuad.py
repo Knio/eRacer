@@ -13,9 +13,12 @@ class HudQuad(Quad):
     self.Update()
 
   def Update(self):
-    w = self.stretch and self.width or self.width * self.aspectRatio
+    # if we don't want stretch, we have to account for the 
+    # quotient of the actual aspect ratio and the assumed one (4:3).  
+    w = self.stretch and self.width or self.width * self.aspectRatio * (4./3.)
+    
     self.transform = Matrix(
-      Point3(self.left+self.width*.5, 600-self.top-self.height*.5, 0), 
+      Point3(self.left+w*.5, 600-self.top-self.height*.5, 0), 
       w, self.height, 1)
     self.graphics.SetTransform(self.transform)
     
