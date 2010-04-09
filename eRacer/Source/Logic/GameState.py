@@ -18,6 +18,7 @@ from Shadow     import Shadow
 from Meteor     import Meteor, MeteorManager
 from Quad       import Quad
 from HudQuad    import HudQuad
+from Ring       import Ring
 
 # AI stuff
 from AI.Behavior import PlayerBehavior, AIBehavior
@@ -103,7 +104,8 @@ class GameState(State):
       for i in xrange(64):
         frame = track.GetFrame(x+10*i)
         tx = Matrix(3.0, 3.0, 6.0) * Matrix(frame.position, frame.up, frame.fw)
-        self.Add(Model("Ring", 'Ring2.x', None, tx))
+        ring = Ring("Ring", "Ring2.x", "Ring2.x", tx)
+        self.Add(ring)
 
     self.track = self.Add(track)
       
@@ -157,6 +159,7 @@ class GameState(State):
       
   def AddVehicle(self, player = None):
     if player: print vars(player)
+    
     n = len(self.vehicleList)    
     x = (n % 3 - 1)*15
     z = ((n / 3))*-15
