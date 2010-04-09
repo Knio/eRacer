@@ -7,6 +7,7 @@ player4name = Player 4
 nAIs = 2
 trackIndex = 0
 nLapsIndex = 1
+nPlayersIndex = 0
 
 
 [PLAYER1]

@@ -196,6 +196,7 @@ class SetupPlayersMenuState(MenuState):
       humanPlayerOptions.append((str(num),i))   
 
     self.menu.append(SelectMenuItem('Human Players', self.Menu_Human_Players, humanPlayerOptions, self.settings.nPlayersIndex))
+    self.settings.update_players()
     
     fontsize = 24
     lineheight = 24
