@@ -31,8 +31,8 @@ class PlayerInterface(object):
     self.boostFuelMaxHeight = 291
     self.boostFuelTop = 200
     self.boostFuelBottom = self.boostFuelTop+self.boostFuelMaxHeight
-    self.boostBar = self.AddHud(HudQuad("BoostBarFuel", "BoostBarFuel.png", 758, self.boostFuelTop, 29, self.boostFuelMaxHeight))
-    self.AddHud(HudQuad("BoostBarFrame", "BoostBarFrame.png", 750, self.boostFuelTop-47, 44, 383))
+    self.boostBar = self.AddHud(HudQuad("BoostBarFuel", "BoostBarFuel.png", 758, self.boostFuelTop, 29, self.boostFuelMaxHeight,True))
+    self.AddHud(HudQuad("BoostBarFrame", "BoostBarFrame.png", 750, self.boostFuelTop-47, 44, 383,True))
     self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8, True))
     
     for vehicle in state.vehicleList:

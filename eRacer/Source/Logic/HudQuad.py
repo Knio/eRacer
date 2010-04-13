@@ -23,8 +23,8 @@ class HudQuad(Quad):
     self.graphics.SetTransform(self.transform)
     
   def SetCenter(self, x,y):
-    self.left = x - width/2.0
-    self.top  = y + height/2.0
+    self.left = x - self.width/2.0
+    self.top  = y - self.height/2.0
     self.Update()
 
   def SetLeftTop(self, left, top):

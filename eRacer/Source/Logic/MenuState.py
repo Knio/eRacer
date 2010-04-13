@@ -196,6 +196,7 @@ class SetupPlayersMenuState(MenuState):
       humanPlayerOptions.append((str(num),i))   
 
     self.menu.append(SelectMenuItem('Human Players', self.Menu_Human_Players, humanPlayerOptions, self.settings.nPlayersIndex))
+    self.settings.update_players()
     
     fontsize = 24
     lineheight = 24
@@ -255,8 +256,10 @@ class PauseMenuState(MenuState):
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
     self.menuTop = 190
-    textbox = HudQuad("TextBox", "futureui2.png", 50,110,750,420, False)
-    self.view.Add(textbox)
+    self.view.Add(HudQuad("TextBox", "futureui2-large.png", 20,110,760,420, False))
+    pause = HudQuad("PauseHeadline", "pause_glow.png", 300,110,110,30, False)
+    pause.SetCenter(350,125)
+    self.view.Add(pause)
     
   def Activate(self):
     print "activate pause!!!!"

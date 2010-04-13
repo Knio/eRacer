@@ -12,8 +12,11 @@ class GameEndState(State):
     State.__init__(self)    
     self.stats = stats
     self.view = HudView([self.scene])
-    textbox = HudQuad("TextBox", "futureui1.png", 50,107,700,400, True)
-    self.view.Add(textbox)
+    self.view.Add(HudQuad("TextBox", "futureui2-large.png", 20,110,760,420, False))
+    gameover = HudQuad("GameOverHeadline", "gameover_glow.png", 300,110,110,30, False)
+    gameover.SetCenter(350,125)
+    self.view.Add(gameover)
+
     
   def Tick(self, time):
     if not self.active:
@@ -21,11 +24,6 @@ class GameEndState(State):
       self.parent.Tick(time)
       return
     
-    self.view.WriteString(
-      "GAME OVER",
-      "Sony Sketch EF", 40, Point3(300,100,0), Vector3(1,0.5,0.25)
-    )
-
     le = 0
     for v, s in self.stats.items():
       le = max(le, len(s))
