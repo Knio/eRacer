@@ -105,8 +105,8 @@ class GameState(State):
       for i in xrange(64):
         frame = track.GetFrame(x+10*i)
         tx = Matrix(3.0, 3.0, 6.0) * Matrix(frame.position, frame.up, frame.fw)
-]       ring = Ring("Ring", "Ring1.x", "Ring1.x", tx)
-        self.Add(ring)]
+        ring = Ring("Ring", "Ring1.x", "Ring1.x", tx)
+        self.Add(ring)
     self.track = self.Add(track)
       
     
