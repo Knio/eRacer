@@ -1,4 +1,4 @@
-NAME = 'Circut'
+NAME = 'Circuit'
 
 from Core.Globals import *
 
