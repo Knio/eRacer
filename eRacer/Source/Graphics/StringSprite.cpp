@@ -24,7 +24,7 @@ void StringSprite::Draw(IDirect3DDevice9* device) const{
 		assert(NULL != string->m_pFont);
 		RECT area = {string->m_uiScreenX,string->m_uiScreenY,0,0};
 		string->m_pFont->DrawText( sprite, string->m_strTextBuffer.c_str(), -1, &area, DT_NOCLIP, string->m_color);
-
+		
 	}
 	sprite->End();
 }
