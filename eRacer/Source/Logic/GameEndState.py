@@ -1,5 +1,6 @@
 from Core.Globals import *
 
+from Core.Config    import Config
 from Game.State     import State
 from GameEndMapping import GameEndMapping
 from MenuState      import PauseMenuState
@@ -8,15 +9,66 @@ from HudQuad        import HudQuad
 
 class GameEndState(State):
   MAPPING = GameEndMapping
-  def __init__(self, stats):
+  def __init__(self, stats, parent):
     State.__init__(self)    
+    self.parent = parent
     self.stats = stats
     self.view = HudView([self.scene])
     self.view.Add(HudQuad("TextBox", "futureui2-large.png", 20,110,760,420, False))
     gameover = HudQuad("GameOverHeadline", "gameover_glow.png", 300,110,110,30, False)
     gameover.SetCenter(350,125)
     self.view.Add(gameover)
+    
+    
+    for v, s in self.stats.items():
+      print v.name, s
+    
+    
+    # write stats
+    with open(Config.USER_STATS, 'a') as f:
+      for stat in self.calcstats():
+        # i = [player, lap1, lap2, ..., total]
+        if stat.player.isAI: continue
+        f.write('%s\t%d\t%s\t%.4f\n' % (
+          parent.track.name,
+          parent.laps,
+          stat.player.name,
+          stat.total,
+          )
+        )
+        
+        best = min(stat.laps)
+        f.write('%s\t%d\t%s\t%.4f\n' % (
+          parent.track.name,
+          0,
+          stat.player.name,
+          best,
+          )
+        )
 
+  def calcstats(self):
+    laps = self.parent.laps
+    
+    stats = []
+    for v, s in self.stats.items():
+      s = list(s)
+      l = []
+      
+      for i in range(1,len(s)):
+        l.append(s[i]-s[i-1])
+
+      total = s[-1] - s[0]
+      while len(l) < laps:
+        l.append(99999)
+        total = 99999
+      
+      stat = Struct(player=v, laps=l, total=total)
+      print s
+      print stat.player.name, stat.laps, stat.total
+      stats.append(stat)
+    
+    stats.sort(key=lambda x:x.total)
+    return stats
     
   def Tick(self, time):
     if not self.active:
@@ -24,39 +76,18 @@ class GameEndState(State):
       self.parent.Tick(time)
       return
     
-    le = 0
-    for v, s in self.stats.items():
-      le = max(le, len(s))
-
-    stats = []
-    for v, s in self.stats.items():
-      s = list(s)
-      l = []
-      l.append(v)
-      
-      for i in range(1,len(s)):
-        l.append(s[i]-s[i-1])
-
-      while len(l) < le:
-        l.append(99999)
-        s[-1] = 99999
-      s = [0.] + s
-      
-      l.append(s[-1] - s[0])
-      stats.append(l)
+    stats = self.calcstats()
     
-    stats.sort(key=lambda x:x[-1])
-   
     font = "Sony Sketch EF"
     xd = 150
     yd = 30
     
-    laps = ''.join('Lap %s     ' % i for i in range(1, len(stats[0])-1))
+    laps = ''.join('Lap %s     ' % i for i in range(1, len(stats[0].laps)+1))
     x = 100
     y = 200
     self.view.WriteString("Name", font, 28, Point3(x,y,0))
     x += xd
-    for i in range(1, len(stats[0])-1):
+    for i in range(1, len(stats[0].laps)):
       self.view.WriteString("Lap %d" % i, font, 28, Point3(x,y,0))
       x += xd/2
     x += xd/2
@@ -64,17 +95,17 @@ class GameEndState(State):
     
     y += yd
     x = 100
-    for l in stats:
-      self.view.WriteString(l[0].name, font, 24, Point3(x,y,0))
+    for stat in stats:
+      self.view.WriteString(stat.player.name, font, 24, Point3(x,y,0))
       x += xd
-      for i in range(1, len(l)-1):
-        s = "%6.2f" % l[i]
-        if l[i] == 99999: s = '---'
+      for lap in stat.laps:
+        s = "%6.2f" % lap
+        if lap == 99999: s = '---'
         self.view.WriteString(s, font, 24, Point3(x,y,0))
         x += xd/2
       x += xd/2
-      s = "%6.2f" % l[-1]
-      if l[-1] == 99999: s = '---'
+      s = "%6.2f" % stat.total
+      if stat.total == 99999: s = '---'
       self.view.WriteString(s, font, 24, Point3(x,y,0))
       x = 100
       y += yd

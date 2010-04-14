@@ -10,6 +10,8 @@ class Config(object):
   GLOBAL_FILE     = 'Config/Settings.cnf'
   USER_FOLDER     = 'User/'
   USER_FILE       = USER_FOLDER+'Settings.cnf'
+  USER_STATS      = USER_FOLDER+'Statistics.cnf'
+  
   
   
   def __init__(self):

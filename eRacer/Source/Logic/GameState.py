@@ -271,7 +271,7 @@ class GameState(State):
         self.nPlayersRacing-=1
         if self.nPlayersRacing == 0:
           self.gameOver = True
-          game().PushState(GameEndState(self.stats))
+          game().PushState(GameEndState(self.stats, self))
         
       vehicle.Brake(1)
       vehicle.isShutoff = True

@@ -11,6 +11,7 @@ struct Constants
 	int WINDOWED;
 	int SCREEN_WIDTH;
 	int SCREEN_HEIGHT;
+	int DEBUG_FPS;
 	
 	// PhysX
 	float MAX_TIMESTEP;

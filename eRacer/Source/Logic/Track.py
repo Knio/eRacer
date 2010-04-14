@@ -6,13 +6,13 @@ class Track(Entity, cpp.Track):
   def __init__(self, name):
     Entity.__init__(self)
     cpp.Track.__init__(self)
-    
     self.graphics = []
     self.physics  = []
     
     # the fromlist must be non-empty for this to actually assign the whole package to track
     # otherwise only Tracks will be stored in track     
     track = __import__("Tracks."+name,fromlist='dummy')
+    self.name = track.NAME
     
     for i in track.TRACK:
       self.Add(i)
