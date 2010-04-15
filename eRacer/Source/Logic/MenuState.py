@@ -100,15 +100,16 @@ class MainMenuState(MenuState):
     
     self.menu = [
       ApplyMenuItem('New Game', self.Menu_New_Game),
+      ApplyMenuItem('High Scores', self.Menu_High_Scores),
       ApplyMenuItem('Exit', self.Menu_Exit)
     ]
     self.menuTop = 240
 
-        
-
+    
+  def Menu_High_Scores(self):
+    game().PushState(HighScoreState())
     
   def Menu_New_Game(self):
-    # game().PushState(GameState())
     game().PushState(SetupGameMenuState())
     
   def Tick(self, time):
@@ -298,5 +299,5 @@ class PauseMenuState(MenuState):
     #1, 0.5, 0.25
     MenuState.Tick(self, time)
       
-from GameState  import GameState
-
+from GameState      import GameState
+from HighScoreState import HighScoreState

@@ -306,26 +306,6 @@ void GraphicsLayer::ResetViewport(){
     SetViewport(0,0,width,height);
 }
 
-ID3DXSprite* GraphicsLayer::CreateSprite(float x, float y, float w){
-    float h = w*3/4.0f;
-
-    float wr = w/width;
-    float hr = h/height;
-    
-    //cout << "Creating sprite with dimensions "<< x << ", "<< y << ", " << w << ", " << h << endl;
-    
-    //cout << "Scale: " << wr << ", " << -hr << endl;
-    // cout << "Translate: " << x << ", " << 600-y << endl;
-    
-    // Matrix scale = CreateMatrix(wr, -hr, 1);
-    // Matrix translate = CreateMatrix(Point3(x,600-y,0));
-    // Matrix m = scale*translate;
-    
-    ID3DXSprite* result;
-    D3DXCreateSprite(m_pd3dDevice, &result);
-    // result->SetTransform(&m);
-    return result;
-}    
 
 void GraphicsLayer::PreRender(){
     
