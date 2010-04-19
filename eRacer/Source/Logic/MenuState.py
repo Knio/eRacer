@@ -30,6 +30,7 @@ class MenuState(State):
     game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
     self.menu = []
     self.menuTop = 50
+    self.menuLeft = 100
 
     
     
@@ -39,12 +40,12 @@ class MenuState(State):
     
     if not self.active:
       return
-      
-    position = Point3(100,self.menuTop,0)  
+    
+    y = self.menuTop  
 
     for i,m in enumerate(self.menu):
-      yOffset = m.draw(self.view,position, i == self.selected)
-      position.y += yOffset
+      yOffset = m.draw(self.view, self.menuLeft, y, i == self.selected)
+      y += yOffset
       
   def MenuUpEvent(self):
     game().sound.sound.PlaySoundFx(self.menuNav)
@@ -113,12 +114,12 @@ class MainMenuState(MenuState):
     game().PushState(SetupGameMenuState())
     
   def Tick(self, time):
-    p = Point3(500,350,0)
+    y = 350
     for i in ['Don Ha', 'John Stuart', 'Michael Blackadar', 'Tom Flanagan', 'Ole Rehmsen']:
       self.view.WriteString(
-        i, "Sony Sketch EF", 28, p
+        i, "Sony Sketch EF", 28, 500, y
       )
-      p = p + Point3(0, 30, 0)
+      y += 30
     
     MenuState.Tick(self, time)
     
@@ -292,11 +293,6 @@ class PauseMenuState(MenuState):
           
   def Tick(self, time):
     self.parent.Tick(time)
-    # self.view.WriteString(
-    #   "PAUSED",
-    #   "Sony Sketch EF", 40, Point3(300,100,0), Vector3(1,0.5,0.25)
-    # )
-    #1, 0.5, 0.25
     MenuState.Tick(self, time)
       
 from GameState      import GameState

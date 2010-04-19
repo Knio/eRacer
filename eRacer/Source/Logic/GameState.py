@@ -61,7 +61,7 @@ class LoadingState(State):
     State.Tick(self, time)
     game().graphics.graphics.WriteString(
       "Loading...", 
-      "Verdana", 32, Point3(300,220,0)
+      "Verdana", 32, 300, 220
     )    
 ##############################################
 

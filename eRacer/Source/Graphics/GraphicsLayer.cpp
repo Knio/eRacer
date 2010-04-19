@@ -362,9 +362,9 @@ void GraphicsLayer::PostRender(){
 	}
 }
 
-void GraphicsLayer::WriteString(const char* text, const char* family, int size, const Vector3 &pos, const Vector3 &color){
+void GraphicsLayer::WriteString(const char* text, const char* family, int size, long x, long y, const Vector3 &color){
     assert(NULL != stringSprite);
-    stringSprite->Write(text, family, size, pos, color);
+    stringSprite->Write(text, family, size, x, y, color);
 }
 
 

@@ -52,7 +52,8 @@ namespace Graphics {
 	StringRenderable FontManager::CreateStringRenderable(	const char* msg, 
 															const char* fontFamily, 
 															int fontSize, 
-															const Vector3 &pos, 
+															long x,
+															long y, 
 															const Vector3 &color,
 															ID3DXSprite* sprite)
 	{
@@ -86,8 +87,8 @@ namespace Graphics {
 		s.m_pFont 			= font->second;
 		s.m_strTextBuffer	= msg;
 		s.m_color 			= D3DXCOLOR(color.x, color.y, color.z, 1.0f);
-		s.m_uiScreenX = (unsigned int ) pos.x;
-		s.m_uiScreenY= (unsigned int) pos.y;
+		s.m_uiScreenX = x;
+		s.m_uiScreenY = y;
 		
 		return s;
 	}

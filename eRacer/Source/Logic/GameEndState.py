@@ -85,10 +85,10 @@ class GameEndState(State):
     laps = ''.join('Lap %s     ' % i for i in range(1, len(stats[0].laps)+1))
     x = 100
     y = 200
-    self.view.WriteString("Name", font, 28, Point3(x,y,0))
+    self.view.WriteString("Name", font, 28, x, y)
     x += xd
     for i in range(1, len(stats[0].laps)):
-      self.view.WriteString("Lap %d" % i, font, 28, Point3(x,y,0))
+      self.view.WriteString("Lap %d" % i, font, 28, x, y)
       x += xd/2
     x += xd/2
     self.view.WriteString("Total", font, 28, Point3(x,y,0))
@@ -96,17 +96,17 @@ class GameEndState(State):
     y += yd
     x = 100
     for stat in stats:
-      self.view.WriteString(stat.player.name, font, 24, Point3(x,y,0))
+      self.view.WriteString(stat.player.name, font, 24, x, y)
       x += xd
       for lap in stat.laps:
         s = "%6.2f" % lap
         if lap == 99999: s = '---'
-        self.view.WriteString(s, font, 24, Point3(x,y,0))
+        self.view.WriteString(s, font, 24, x, y)
         x += xd/2
       x += xd/2
       s = "%6.2f" % stat.total
       if stat.total == 99999: s = '---'
-      self.view.WriteString(s, font, 24, Point3(x,y,0))
+      self.view.WriteString(s, font, 24, x, y)
       x = 100
       y += yd
     

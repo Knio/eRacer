@@ -9,8 +9,8 @@ StringSprite::StringSprite()
 	D3DXCreateSprite(graphics->GetDevice(), &sprite);
 }
 
-void StringSprite::Write(const char* text, const char* family, int size, const Vector3 &pos, const Vector3 &color){
-	strings.push_back(FontManager::instance.CreateStringRenderable(text,family,size,pos,color,sprite));
+void StringSprite::Write(const char* text, const char* family, int size, long x, long y, const Vector3 &color){
+	strings.push_back(FontManager::instance.CreateStringRenderable(text, family, size, x, y, color, sprite));
 }
 
 void StringSprite::Draw(IDirect3DDevice9* device) const{

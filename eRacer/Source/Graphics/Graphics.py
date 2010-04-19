@@ -62,7 +62,7 @@ class Graphics(Module):
     self.views = []
     
     if CONSTS.DEBUG_FPS:
-      self.graphics.WriteString("%.2f FPS" % fps, "Verdana", 18, Point3(10,10,0))
+      self.graphics.WriteString("%.2f FPS" % fps, "Verdana", 18, 10, 10)
   
     self.graphics.PostRender()
     

@@ -80,9 +80,9 @@ class PlayerInterface(object):
     
     #Track Place HUD
     place = self.vehicle.finishPlace < 0 and self.vehicle.place or self.vehicle.finishPlace
-    self.hud.WriteString(ordinal(place), "Sony Sketch EF", 60, Point3(20, 5,0))
+    self.hud.WriteString(ordinal(place), "Sony Sketch EF", 60, 20, 5)
     if not self.vehicle.finishPlace < 0 and self.state.active:
-        self.hud.WriteString(ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 80, Point3(330, 350,0), Vector3(math.cos(t),math.sin(t),math.sin(t)))
+        self.hud.WriteString(ordinal(self.vehicle.finishPlace), "Sony Sketch EF", 80, 330, 350, Vector3(math.cos(t),math.sin(t),math.sin(t)))
     
   
     for vehicle in self.state.vehicleList:
@@ -104,16 +104,16 @@ class PlayerInterface(object):
     if self.vehicle.Backwards == True and self.vehicle.trackpos > self.vehicle.lasttrackpos and playerdirection > 0:
        self.vehicle.Backwards = False
     if self.vehicle.Backwards == True:
-       self.hud.WriteString( "WRONG WAY", "Sony Sketch EF", 50, Point3(300,200,0))
+       self.hud.WriteString( "WRONG WAY", "Sony Sketch EF", 50, 300, 200)
 
     #Lap counter
     if self.vehicle.lapcount or True: # ???
       playerLaps = min(self.vehicle.lapcount, self.state.laps)
       playerLaps = max(1, playerLaps);
       
-      self.hud.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, Point3(650, 0, 0))
-      self.hud.WriteString("/", "Sony Sketch EF", 80, Point3(690, 20, 0))
-      self.hud.WriteString("%d" % (self.state.laps), "Sony Sketch EF", 80, Point3(720, 30, 0))
+      self.hud.WriteString("%d" % (playerLaps), "Sony Sketch EF",96, 650, 0)
+      self.hud.WriteString("/", "Sony Sketch EF", 80, 690, 20)
+      self.hud.WriteString("%d" % (self.state.laps), "Sony Sketch EF", 80, 720, 30)
     
       l = list(self.state.stats.get(self.vehicle,[0.]))
       l.append(game().time.get_seconds())
@@ -124,8 +124,8 @@ class PlayerInterface(object):
         #if not i or self.vehicle.lapcount == 0: continue
         if i>self.state.laps: continue
         if self.vehicle.lapBugCount > 0 and not i == 0:
-          self.hud.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, Point3(650, y, 0))
-          self.hud.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, Point3(720, y, 0))
+          self.hud.WriteString("Lap %d:" % i, "Sony Sketch EF", 24, 650, y)
+          self.hud.WriteString("%05.2f"   % (t-l[i-1]), "Sony Sketch EF", 24, 720, y)
           y += 15    
   
     #Personal Endgamestuff

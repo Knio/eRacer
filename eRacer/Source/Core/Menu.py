@@ -7,9 +7,9 @@ class MenuItem(object):
     self.lineheight = 50
     self.fontfamily = "Sony Sketch EF"
     
-  def draw(self, view, position, selected):
+  def draw(self, view, x, y, selected):
     view.WriteString(
-      self.label, self.fontfamily, self.fontsize, position, selected and RED or WHITE
+      self.label, self.fontfamily, self.fontsize, x, y, selected and RED or WHITE
     ) 
       
     return self.lineheight 
@@ -38,10 +38,10 @@ class SelectMenuItem(MenuItem):
     self.index = (self.index+1)%len(self.options)
     self.callback(self.options[self.index])
     
-  def draw(self, view, position, selected):
-    MenuItem.draw(self, view, position, selected)
+  def draw(self, view, x, y, selected):
+    MenuItem.draw(self, view, x, y, selected)
     view.WriteString(
-      self.options[self.index][0], self.fontfamily, self.fontsize, position+Point3(300,0,0), WHITE
+      self.options[self.index][0], self.fontfamily, self.fontsize, x+300, y, WHITE
       ) 
       
     return self.lineheight
@@ -53,10 +53,10 @@ class InputMenuItem(MenuItem):
     self.value = default;
     self.id = id
 
-  def draw(self, view, position, selected):
-    MenuItem.draw(self, view, position, selected)
+  def draw(self, view, x, y, selected):
+    MenuItem.draw(self, view, x, y, selected)
     view.WriteString(
-      self.value, self.fontfamily, self.fontsize, position+Point3(300,0,0), selected and RED or WHITE
+      self.value, self.fontfamily, self.fontsize, x+300, y, selected and RED or WHITE
       ) 
       
     return self.lineheight

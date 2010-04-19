@@ -23,8 +23,8 @@ class StringRenderable
 public:
 	ID3DXFont* m_pFont;
 	string m_strTextBuffer;
-	unsigned int m_uiScreenX;
-	unsigned int m_uiScreenY;
+	long m_uiScreenX;
+	long m_uiScreenY;
 	D3DXCOLOR m_color;
 	ID3DXSprite* m_pTextSprite;
 
@@ -52,7 +52,8 @@ public:
 	StringRenderable CreateStringRenderable(	const char* msg, 
 																	const char* fontFamily, 
 																	int fontSize, 
-																	const Vector3 &pos, 
+																	long x,
+																	long y, 
 																	const Vector3 &color,
 																	ID3DXSprite* sprite);
 	void Shutdown();
