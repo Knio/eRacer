@@ -49,7 +49,10 @@ class Graphics(Module):
     # print int(fps / 60),  game().ticks % max(int(fps / 60), 1)
     if game().ticks % max(int(fps / 60), 1):
       # print 'skipping rendering'
+      for view in self.views:
+        view.Clear()
       self.views = []
+      self.graphics.ClearStrings();
       return
     
     # if game().ticks != 1:

@@ -74,6 +74,7 @@ public:
 	void PostRender();
 	
 	void WriteString(const char* text, const char* family, int size, long x, long y, const Vector3 &color = WHITE);
+	void ClearStrings();
 	
 	void Shutdown();
 	

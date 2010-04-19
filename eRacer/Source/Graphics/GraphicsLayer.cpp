@@ -367,6 +367,12 @@ void GraphicsLayer::WriteString(const char* text, const char* family, int size, 
     stringSprite->Write(text, family, size, x, y, color);
 }
 
+void GraphicsLayer::ClearStrings(){
+    stringSprite->Clear();
+    debugRenderable->Clear();
+}
+
+
 
 void GraphicsLayer::resetDevice(){
 	resetPresentationParameters();

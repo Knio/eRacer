@@ -24,6 +24,9 @@ class View(object):
     
     for i in self.renderables:
       i.Draw(d3d)
+      
+  def Clear(self):
+    pass
           
 class HudView(View):
   def __init__(self, renderables=None, viewport=None):
@@ -51,3 +54,7 @@ class HudView(View):
     
     self.stringSprite.Draw(d3d)  
     self.stringSprite.Clear()
+    
+  def Clear(self):
+    self.stringSprite.Clear()
+    
