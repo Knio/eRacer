@@ -86,6 +86,9 @@ void Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 	info.dwSize = sizeof(DIDEVICEINSTANCE);
 
 	m_pDevice->GetDeviceInfo(&info);
+
+	if(info.dwDevType == 66076) //some device it finds on my MacBook Pro
+		throw runtime_error("This is not a proper Gamepad!");
 	
 
 	assert(SUCCEEDED(m_pDevice->SetDataFormat(&c_dfDIJoystick2)));
