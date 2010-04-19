@@ -21,7 +21,7 @@ class HighScoreState(MenuState):
     self.menu = [
       ApplyMenuItem('Back', self.Menu_Back),
     ]
-
+    
     try:
       if os.path.exists(Config.USER_STATS):
         for line in open(Config.USER_STATS, 'r').readlines():
@@ -31,17 +31,18 @@ class HighScoreState(MenuState):
           tracknames[stat.track] = 1
           laps[stat.laps] = 1
         self.current = []
-        self.curTrack = len(tracknames.keys())>0 and tracknames.keys()[0] or None
-        self.curLaps = len(laps.keys()) and laps.keys()[0] or None
-        self.update()    
+        self.curTrack = len(tracknames.keys())  and tracknames.keys()[0]  or None
+        self.curLaps =  len(laps.keys())        and laps.keys()[0]
         self.menu.append(SelectMenuItem('Track', self.Menu_Track, [(i,) for i in tracknames], 0))
         self.menu.append(SelectMenuItem('Laps', self.Menu_Laps, [(i and str(i) or 'Best',i) for i in laps.keys()], 0))
         self.loaded = True
+        print self.curTrack, self.curLaps
+        self.update()
+        
         
     except:
       import traceback
       traceback.print_exc()
-                  
     
   def update(self):
     self.current = [i for i in self.stats if i.track==self.curTrack and i.laps==self.curLaps]
