@@ -53,17 +53,17 @@ class Config(object):
     if not os.path.exists(self.USER_FOLDER):
       os.mkdir(self.USER_FOLDER)
 
-    print "trying to save"
+    print "Saving user settings..."
     with open(self.USER_FILE, 'wb') as file:
-      print "worked"
       self.user.write(file)
+      print "...done."
       
   def set_setting(self, key, value, section='GENERAL'):
     if not self.user.has_section(section):
       self.user.add_section(section)
     self.user.set(section, key, value)
     self.settings.set(section, key, value)
-    print self.get_setting(key, section)
+    self.save()
 
     
   def get_setting(self, key, section='GENERAL'):
