@@ -3,7 +3,7 @@
 
 namespace Graphics {
 
-StringSprite::StringSprite(float l, float t, float w, float h)
+StringSprite::StringSprite()
 {
 	GraphicsLayer* graphics = GraphicsLayer::GetInstance();
 	D3DXCreateSprite(graphics->GetDevice(), &sprite);

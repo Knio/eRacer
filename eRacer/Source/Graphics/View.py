@@ -30,7 +30,7 @@ class HudView(View):
     self.viewport     = viewport    or (0, 0, game().graphics.width, game().graphics.height)
     self.camera       = OrthographicCamera(800,600)
     self.renderables  = renderables or []
-    self.stringSprite = cpp.StringSprite(*self.viewport)
+    self.stringSprite = cpp.StringSprite()
       
   def AddRenderable(self, obj):
     if isinstance(obj, HudQuad):

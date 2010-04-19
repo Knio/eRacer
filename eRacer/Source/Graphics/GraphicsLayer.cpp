@@ -151,7 +151,7 @@ int GraphicsLayer::Init( HWND hWnd )
     width   = desc.Width;
     height  = desc.Height;
     
-    stringSprite = new StringSprite(0.0f,0.0f,(float)width,(float)height);
+    stringSprite = new StringSprite();
 
     
     // create a new surface
