@@ -7,7 +7,6 @@ class Ring(Model):
     
     def physLoad(pMesh):
       if pMesh:
-        #self.physics = cpp.TriMesh()
-        #self.physics.Init(pMesh)
-        pass
+        self.physics = cpp.TriMesh()
+        self.physics.Init(pMesh)
     game().io.LoadMeshAsync(physLoad, pFilename, *args)
