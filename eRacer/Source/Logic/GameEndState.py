@@ -14,7 +14,7 @@ class GameEndState(State):
     self.parent = parent
     self.stats = stats
     self.view = HudView([self.scene])
-    self.view.Add(HudQuad("TextBox", "futureui2-large.png", 20,110,760,420, False))
+    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
     gameover = HudQuad("GameOverHeadline", "gameover_glow.png", 300,110,110,30, False)
     gameover.SetCenter(350,125)
     self.view.Add(gameover)

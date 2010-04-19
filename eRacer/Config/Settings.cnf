@@ -14,24 +14,28 @@ nPlayersIndex = 0
 
 name = Player 1
 textureIndex = 0
+mappingIndex = 0
 
 
 [PLAYER2]
 
 name = Player 2
 textureIndex = 1
+mappingIndex = 1
 
 
 [PLAYER3]
 
 name = Player 3
 textureIndex = 2
+mappingIndex = 2
 
 
 [PLAYER4]
 
 name = Player 4
 textureIndex = 3
+mappingIndex = 3
 
 
 

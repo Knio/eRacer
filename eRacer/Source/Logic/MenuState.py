@@ -226,10 +226,10 @@ class SetupPlayersMenuState(MenuState):
 
     
   def Menu_Controls(self, value):
-    self.settings.playersIndices[value[1]].mappingIndex = value[2]
+    self.settings.set_player_mapping_index(value[1], value[2])
     
   def Menu_Color(self, value):
-    self.settings.set_player_texture_index(value[1],value[2])
+    self.settings.set_player_texture_index(value[1], value[2])
   
   
   def Menu_Back(self):

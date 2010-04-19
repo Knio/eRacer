@@ -115,7 +115,7 @@ class GameSettings(object):
       player = Struct()
       player.name = game().config.get_setting('name', 'PLAYER%d'%(playerId+1))
 
-      player.mappingIndex = playerId
+      player.mappingIndex = int(game().config.get_setting('mappingIndex', 'PLAYER%d'%(playerId+1)))
       if player.mappingIndex>=len(self.availableMappings):
         player.mappingIndex = 0
 
@@ -166,3 +166,8 @@ class GameSettings(object):
   def set_player_texture_index(self, id, textureIndex):
     self.playersIndices[id].textureIndex = textureIndex 
     game().config.set_setting('textureIndex', str(textureIndex),'PLAYER%d'%(id+1))  
+
+  def set_player_mapping_index(self, id, mappingIndex):
+    self.playersIndices[id].mappingIndex = mappingIndex 
+    game().config.set_setting('mappingIndex', str(mappingIndex),'PLAYER%d'%(id+1))  
+    
