@@ -3,6 +3,7 @@ import random
 import time as _time
 
 from Core.Globals   import *
+from Core.Config    import Config
 from Game.State     import State
 
 from GameMapping    import *
@@ -145,6 +146,8 @@ class GameState(State):
       beam = Model('StealBeam%d'%i, 'boostStealBeam.x', None, IDENTITY)
       beam.active = False
       self.boostbeams.append(self.Add(beam))
+    
+    game().io.LoadTexture(Config.UI_TEXTURE)
     
     game().time.Zero()
     self.loaded = True

@@ -247,7 +247,7 @@ class PauseMenuState(MenuState):
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
     self.menuTop = 190
-    self.view.Add(HudQuad("TextBox", "futureui2-large.png", 20,110,760,420, False))
+    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
     pause = HudQuad("PauseHeadline", "pause_glow.png", 300,110,110,30, False)
     pause.SetCenter(350,125)
     self.view.Add(pause)
