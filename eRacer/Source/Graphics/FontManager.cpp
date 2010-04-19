@@ -62,7 +62,7 @@ namespace Graphics {
 		if ((font = cache.find(fontDesc)) == cache.end()) { //Cache Miss
 
 			ID3DXFont* newFont = NULL;
-			HRESULT hr = D3DXCreateFont( 	GraphicsLayer::GetInstance()->GetDevice(), 
+			HRESULT hr = D3DXCreateFont( 	GraphicsLayer::GetInstance().GetDevice(), 
 																		fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
 									 									OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
                                     fontFamily, &newFont );
@@ -71,7 +71,7 @@ namespace Graphics {
 			
 			if(E_OUTOFMEMORY == hr){
 				cout << "Ran out of memory for custom font" << endl;
-				HRESULT hr = D3DXCreateFont( 	GraphicsLayer::GetInstance()->GetDevice(), 
+				HRESULT hr = D3DXCreateFont( 	GraphicsLayer::GetInstance().GetDevice(), 
 																			fontSize, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET,
 							 												OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
                              					"Verdana", &newFont );

@@ -17,7 +17,7 @@ QuadNode::QuadNode(const string& name, const Matrix& transform)
   initialized(false)
 {
 	assert(SUCCEEDED(
-		GraphicsLayer::GetInstance()->GetDevice()->CreateVertexBuffer(
+		GraphicsLayer::GetInstance().GetDevice()->CreateVertexBuffer(
 			4 * sizeof(Vertex),   
 			D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
 			D3DFVF_XYZ | D3DFVF_TEX1,
@@ -102,20 +102,21 @@ void QuadNode::Draw(IDirect3DDevice9* device) const{
 	device->SetStreamSource(0, vertexBuffer_, 0, sizeof(Vertex));
 	device->SetFVF(D3DFVF_XYZ | D3DFVF_TEX1);
 
-    GraphicsLayer::GetInstance()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
-	//m_pEffect->SetTexture( "g_MeshTexture", geometry->Textures()[i] );
+	//FIXME Should not be accessed directly
+	ID3DXEffect* effect = GraphicsLayer::GetInstance().m_pEffect;
+    effect->SetMatrix( "g_WorldMatrix", &transform_);
 
-	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->SetTechnique( "RenderSceneWithTextureFixedLight" )));
+	assert(SUCCEEDED(effect->SetTechnique( "RenderSceneWithTextureFixedLight" )));
 	UINT cPasses = 1;
-	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->Begin( &cPasses, 0 )));
+	assert(SUCCEEDED(effect->Begin( &cPasses, 0 )));
 	for(UINT iPass = 0; iPass < cPasses; iPass++ ){
-		GraphicsLayer::GetInstance()->m_pEffect->BeginPass( iPass ) ;
+		effect->BeginPass( iPass ) ;
 		device->SetTexture (0, texture_);
 
 		device->DrawPrimitive(D3DPT_TRIANGLEFAN, 0, 2);
-		assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->EndPass()));
+		assert(SUCCEEDED(effect->EndPass()));
 	}
-	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->End()));
+	assert(SUCCEEDED(effect->End()));
 
 }
 

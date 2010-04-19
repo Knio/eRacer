@@ -11,8 +11,8 @@ float random(float _min=0, float _max=1)
 
 Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
 {   
-	GraphicsLayer*g = GraphicsLayer::GetInstance();
-	assert(SUCCEEDED(g->GetDevice()->CreateVertexBuffer(
+	GraphicsLayer& g = GraphicsLayer::GetInstance();
+	assert(SUCCEEDED(g.GetDevice()->CreateVertexBuffer(
     2 * N * sizeof(Star),   
     0, //D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
     D3DFVF_XYZ | D3DFVF_DIFFUSE,
@@ -50,7 +50,7 @@ Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
   length = 1;
   for (int i=0;i<32;i++) view[i] = IDENTITY;
   
-  effect = GraphicsLayer::GetInstance()->GetEffect("Starfield.fx");
+  effect = g.GetEffect("Starfield.fx");
   effect->SetTechnique("Starfield");
   
 }
@@ -103,7 +103,7 @@ void Starfield::Draw(IDirect3DDevice9* dev) const
   
   for (int i=0;i<length;i++)
   {
-    effect->SetMatrix("PMatrix",  &GraphicsLayer::GetInstance()->GetCamera()->GetProjectionMatrix());
+    effect->SetMatrix("PMatrix",  &GraphicsLayer::GetInstance().GetCamera()->GetProjectionMatrix());
     effect->SetMatrix("V1Matrix", &view[(curview-i+32) % 32]);
     effect->SetMatrix("V2Matrix", &view[(curview-i+31) % 32]);
     effect->SetFloat ("SIZE",     SIZE);

@@ -38,8 +38,6 @@ public:
 	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
 
 private:
-	static GraphicsLayer *m_pGlobalGLayer;
-
 	Camera *camera;
 	
 	IDirect3DSurface9* screen;
@@ -84,15 +82,16 @@ public:
 			m_pd3dDevice->SetTexture(0, oldtex[id]=tex);
 	}
 
-	static GraphicsLayer *GetInstance()
+	static GraphicsLayer& GetInstance()
 	{
-		if (m_pGlobalGLayer == NULL)
-			m_pGlobalGLayer = new GraphicsLayer();
-		return m_pGlobalGLayer;
+		static GraphicsLayer instance;
+		return instance;
 	}
 
 private:
-	GraphicsLayer();	//Constructor, Singleton 
+	//Singleton: make sure default/copy constructor are not auto generated
+	GraphicsLayer();	 
+	GraphicsLayer(const GraphicsLayer&){ assert(false); }
 
 	void resetPresentationParameters();
 	void resetDevice();

@@ -51,7 +51,7 @@ void Scene::GetVisibleRenderables(const Camera& camera, vector<const Renderable*
 
 void Scene::Draw(IDirect3DDevice9* m_pd3dDevice) const
 {
-	Camera* cam = GraphicsLayer::GetInstance()->GetCamera();
+	Camera* cam = GraphicsLayer::GetInstance().GetCamera();
 	vector<const Renderable*> renderables;
 	GetVisibleRenderables(*cam, renderables);
 	

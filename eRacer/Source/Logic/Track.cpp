@@ -162,7 +162,7 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
       (framesPerMesh+1)*D,        // DWORD NumVertices,
       0,                          // DWORD Options,
       Vertex_Format,              // DWORD FVF,
-      Graphics::GraphicsLayer::GetInstance()->GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
+      Graphics::GraphicsLayer::GetInstance().GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
       &mesh                       // LPD3DXMESH * ppMesh
     );
     

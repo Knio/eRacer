@@ -15,8 +15,6 @@ using namespace std;
 
 namespace Graphics {
 
-GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
-
 GraphicsLayer::GraphicsLayer()
   : debugRenderable(NULL),
 	m_pEffect(NULL),
@@ -32,10 +30,6 @@ GraphicsLayer::GraphicsLayer()
 
 GraphicsLayer::~GraphicsLayer()
 {
-    if (NULL != m_pGlobalGLayer) {
-        delete m_pGlobalGLayer;
-        m_pGlobalGLayer = NULL;
-    }
 }
 
 void GraphicsLayer::SetCamera(Camera& cam)

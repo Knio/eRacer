@@ -5,8 +5,8 @@ namespace Graphics {
 
 StringSprite::StringSprite()
 {
-	GraphicsLayer* graphics = GraphicsLayer::GetInstance();
-	D3DXCreateSprite(graphics->GetDevice(), &sprite);
+	GraphicsLayer& graphics = GraphicsLayer::GetInstance();
+	D3DXCreateSprite(graphics.GetDevice(), &sprite);
 }
 
 void StringSprite::Write(const char* text, const char* family, int size, long x, long y, const Vector3 &color){
@@ -16,8 +16,8 @@ void StringSprite::Write(const char* text, const char* family, int size, long x,
 void StringSprite::Draw(IDirect3DDevice9* device) const{
 	//sort(strings.begin(), strings.end());
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
-	GraphicsLayer::GetInstance()->ResetViewport();
-  assert(SUCCEEDED(device->SetRenderState( D3DRS_ZENABLE, FALSE )));
+	GraphicsLayer::GetInstance().ResetViewport();
+	assert(SUCCEEDED(device->SetRenderState( D3DRS_ZENABLE, FALSE )));
 
 
 	sprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);

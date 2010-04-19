@@ -43,25 +43,23 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
   // set the transform
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &transform_);
 
-    GraphicsLayer::GetInstance()->m_pEffect->SetMatrix( "g_WorldMatrix", &transform_);
-	//m_pEffect->SetTexture( "g_MeshTexture", geometry->Textures()[i] );
+	//FIXME Should not be accessed directly
+	ID3DXEffect* effect = GraphicsLayer::GetInstance().m_pEffect;
 
-	
-	
-	//D3DXCOLOR colorMtrlTint( 1.0f, 1.0f, 1.0f, 0.75f );
-	//mesh_->m_colorMtrlTint = D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f );
-	GraphicsLayer::GetInstance()->m_pEffect->SetValue( "g_ColorTint", &mesh_->m_colorMtrlTint, sizeof( D3DXCOLOR ) );
+	effect->SetMatrix( "g_WorldMatrix", &transform_);
 
-	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->SetTechnique( "RenderSceneWithTextureDefault" )));
+	effect->SetValue( "g_ColorTint", &mesh_->m_colorMtrlTint, sizeof( D3DXCOLOR ) );
+
+	assert(SUCCEEDED(effect->SetTechnique( "RenderSceneWithTextureDefault" )));
 	UINT cPasses = 1;
-	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->Begin( &cPasses, 0 )));
+	assert(SUCCEEDED(effect->Begin( &cPasses, 0 )));
 	for(UINT iPass = 0; iPass < cPasses; iPass++ )
 	{
-			GraphicsLayer::GetInstance()->m_pEffect->BeginPass( iPass ) ;
+			effect->BeginPass( iPass ) ;
 			mesh_->Draw(device);
-			assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->EndPass()));
+			assert(SUCCEEDED(effect->EndPass()));
 	}
-	assert(SUCCEEDED(GraphicsLayer::GetInstance()->m_pEffect->End()));
+	assert(SUCCEEDED(effect->End()));
 
 	if(NULL != boundsMesh_){
 		Matrix t = CreateMatrix(worldBounds_.center);

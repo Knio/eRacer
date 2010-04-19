@@ -7,7 +7,7 @@ namespace Graphics {
 
 DebugRenderable::DebugRenderable() : nLines(0), nTriangles(0)
 {
-  assert(SUCCEEDED(GraphicsLayer::GetInstance()->GetDevice()->CreateVertexBuffer(
+  assert(SUCCEEDED(GraphicsLayer::GetInstance().GetDevice()->CreateVertexBuffer(
     MAX_OBJ * sizeof(Line),
     D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
     D3DFVF_XYZ | D3DFVF_DIFFUSE,
@@ -16,7 +16,7 @@ DebugRenderable::DebugRenderable() : nLines(0), nTriangles(0)
     NULL
   )));
 
-  assert(SUCCEEDED(GraphicsLayer::GetInstance()->GetDevice()->CreateVertexBuffer(
+  assert(SUCCEEDED(GraphicsLayer::GetInstance().GetDevice()->CreateVertexBuffer(
     MAX_OBJ * sizeof(Triangle),
     D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
     D3DFVF_XYZ | D3DFVF_DIFFUSE,
