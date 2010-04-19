@@ -82,6 +82,12 @@ void Gamepad::Init(HWND hWnd, IDirectInput8* directInput)
 	if (m_pDevice == NULL)
 		throw runtime_error("Could find any gamepads!");
 
+	DIDEVICEINSTANCE info;
+	info.dwSize = sizeof(DIDEVICEINSTANCE);
+
+	m_pDevice->GetDeviceInfo(&info);
+	
+
 	assert(SUCCEEDED(m_pDevice->SetDataFormat(&c_dfDIJoystick2)));
 
 	assert(SUCCEEDED(m_pDevice->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_BACKGROUND)));
