@@ -17,6 +17,8 @@ void StringSprite::Draw(IDirect3DDevice9* device) const{
 	//sort(strings.begin(), strings.end());
 	device->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY);
 	GraphicsLayer::GetInstance()->ResetViewport();
+  assert(SUCCEEDED(device->SetRenderState( D3DRS_ZENABLE, FALSE )));
+
 
 	sprite->Begin( D3DXSPRITE_ALPHABLEND | D3DXSPRITE_SORT_TEXTURE);
 	for (vector<StringRenderable>::const_iterator string = strings.begin();
@@ -27,6 +29,8 @@ void StringSprite::Draw(IDirect3DDevice9* device) const{
 		
 	}
 	sprite->End();
+
+  assert(SUCCEEDED(device->SetRenderState( D3DRS_ZENABLE, TRUE )));
 }
 
 void StringSprite::Clear(){

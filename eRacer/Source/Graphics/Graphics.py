@@ -57,7 +57,7 @@ class Graphics(Module):
       
     
     self.graphics.PreRender()
-        
+    
     for view in self.views:
       view.Draw()
     self.views = []

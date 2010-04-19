@@ -31,6 +31,7 @@ class HudView(View):
     self.camera       = OrthographicCamera(800,600)
     self.renderables  = renderables or []
     self.stringSprite = cpp.StringSprite()
+    self.name = 'unnamed'
       
   def AddRenderable(self, obj):
     if isinstance(obj, HudQuad):

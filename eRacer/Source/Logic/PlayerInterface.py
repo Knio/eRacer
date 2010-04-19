@@ -29,6 +29,7 @@ class PlayerInterface(object):
     self.views.append(View(debugCam, viewport=self.viewport))
     
     self.hud      = HudView(viewport=self.viewport)
+    self.hud.name = 'PI HudView'
     self.boostFuelMaxHeight = 291
     self.boostFuelTop = 200
     self.boostFuelBottom = self.boostFuelTop+self.boostFuelMaxHeight

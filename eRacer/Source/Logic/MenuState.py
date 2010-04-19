@@ -133,17 +133,6 @@ class SetupGameMenuState(MenuState):
     
     self.settings = GameSettings()
     
-    # image1 = Quad(self._view,"track1.png")
-    # image1.scale(600,235,1)
-    # image1.set_translation(Point3(400,450,0))
-    # game().logic.Add(image1)
-    
-    # image2 = Quad(self._view,"track2.png")
-    # image2.scale(600,235,1)
-    # image2.set_translation(Point3(400,450,0))
-    # game().logic.Add(image1)
-    
-    
     aiPlayerOptions = []
     for i in range(GameSettings.MAX_AIS+1):
       aiPlayerOptions.append((str(i),i))
@@ -262,6 +251,7 @@ class PauseMenuState(MenuState):
     pause = HudQuad("PauseHeadline", "pause_glow.png", 300,110,110,30, False)
     pause.SetCenter(350,125)
     self.view.Add(pause)
+    self.view.name = 'Pause HudView'
     
   def Activate(self):
     print "activate pause!!!!"
