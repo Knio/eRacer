@@ -20,9 +20,6 @@ class GameEndState(State):
     self.view.Add(gameover)
     
     
-    for v, s in self.stats.items():
-      print v.name, s
-    
     
     # write stats
     with open(Config.USER_STATS, 'a') as f:
@@ -63,8 +60,7 @@ class GameEndState(State):
         total = 99999
       
       stat = Struct(player=v, laps=l, total=total)
-      print s
-      print stat.player.name, stat.laps, stat.total
+
       stats.append(stat)
     
     stats.sort(key=lambda x:x.total)
@@ -91,7 +87,7 @@ class GameEndState(State):
       self.view.WriteString("Lap %d" % i, font, 28, x, y)
       x += xd/2
     x += xd/2
-    self.view.WriteString("Total", font, 28, Point3(x,y,0))
+    self.view.WriteString("Total", font, 28, x,y)
     
     y += yd
     x = 100

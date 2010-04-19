@@ -259,7 +259,6 @@ class GameState(State):
     State.Tick(self, time)
       
   def LapEvent(self, vehicle, lap):
-    print "Lap Event %d" % (lap) 
     #len(self.stats[vehicle])
     if vehicle.lapBugCount < lap:
       self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
