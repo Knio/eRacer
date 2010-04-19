@@ -42,7 +42,7 @@ class GameSettings(object):
   LAP_COUNTS = range(1,6)
 
   def __init__(self):
-    self.availableMappings = [None]
+    self.availableMappings = []
     self.availableMappings.extend(self.GAMEPAD_MAPPINGS[:game().input.GetNumGamepads()])
     if game().input.HasKeyboard():
       self.availableMappings.extend(self.KEYBOARD_MAPPINGS)
@@ -115,7 +115,7 @@ class GameSettings(object):
       player = Struct()
       player.name = game().config.get_setting('name', 'PLAYER%d'%(playerId+1))
 
-      player.mappingIndex = playerId+1
+      player.mappingIndex = playerId
       if player.mappingIndex>=len(self.availableMappings):
         player.mappingIndex = 0
 
