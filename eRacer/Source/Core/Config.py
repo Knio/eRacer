@@ -12,7 +12,8 @@ class Config(object):
   USER_FILE       = USER_FOLDER+'Settings.cnf'
   USER_STATS      = USER_FOLDER+'Statistics.cnf'
   
-  
+  FONT = 'Sony Sketch EF'
+  DEBUG_FONT = 'Verdana'  
   
   def __init__(self):
     self.read()

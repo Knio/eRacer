@@ -1,11 +1,12 @@
 from Core.Globals     import *
+from Core.Config      import Config
 
 class MenuItem(object):
   def __init__(self, label):
     self.label = label
     self.fontsize = 32
     self.lineheight = 50
-    self.fontfamily = "Sony Sketch EF"
+    self.fontfamily = Config.FONT
     
   def draw(self, view, x, y, selected):
     view.WriteString(

@@ -117,7 +117,7 @@ class MainMenuState(MenuState):
     y = 350
     for i in ['Don Ha', 'John Stuart', 'Michael Blackadar', 'Tom Flanagan', 'Ole Rehmsen']:
       self.view.WriteString(
-        i, "Sony Sketch EF", 28, 500, y
+        i, Config.FONT, 28, 500, y
       )
       y += 30
     

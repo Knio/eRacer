@@ -1,4 +1,5 @@
 from Core.Globals   import *
+from Core.Config    import Config
 from Window         import Window
 from View           import View
 
@@ -62,7 +63,7 @@ class Graphics(Module):
     self.views = []
     
     if CONSTS.DEBUG_FPS:
-      self.graphics.WriteString("%.2f FPS" % fps, "Verdana", 18, 10, 10)
+      self.graphics.WriteString("%.2f FPS" % fps, Config.DEBUG_FONT, 18, 10, 10)
   
     self.graphics.PostRender()
     

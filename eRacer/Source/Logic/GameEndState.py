@@ -78,7 +78,7 @@ class GameEndState(State):
     
     stats = self.calcstats()
     
-    font = "Sony Sketch EF"
+    font = Config.FONT
     xd = 150
     yd = 30
     

@@ -54,17 +54,17 @@ class HighScoreState(MenuState):
     
     if self.loaded:
       header = self.curLaps and 'Total Time' or 'Best Lap'
-      self.view.WriteString('Player', 'Sony Sketch EF', 28, 100, y)
-      self.view.WriteString(header,   'Sony Sketch EF', 28, 500, y)
+      self.view.WriteString('Player', Config.FONT, 28, 100, y)
+      self.view.WriteString(header,   Config.FONT, 28, 500, y)
       y += 40
       
       for i, stat in enumerate(self.current[:20]):
-        self.view.WriteString(str(i+1),           'Sony Sketch EF', 22, 60, y)
-        self.view.WriteString(stat.name,          'Sony Sketch EF', 22, 100, y)
-        self.view.WriteString('%.2f' % stat.time, 'Sony Sketch EF', 22, 500, y)
+        self.view.WriteString(str(i+1),           Config.FONT, 22, 60, y)
+        self.view.WriteString(stat.name,          Config.FONT, 22, 100, y)
+        self.view.WriteString('%.2f' % stat.time, Config.FONT, 22, 500, y)
         y += 30
     else:
-      self.view.WriteString('Could not load high score file - have you played yet?', 'Sony Sketch EF', 28, 100, y)
+      self.view.WriteString('Could not load high score file - have you played yet?', Config.FONT, 28, 100, y)
     
     
   def Menu_Back(self):
