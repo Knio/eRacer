@@ -105,6 +105,8 @@ class GamepadMapping(VehicleMapping):
         return self.target.vehicle.behavior.PlayerBrakeEvent(True)
       elif button == cpp.BUTTON_Y:
         return self.target.CameraChangedEvent()
+      elif button == cpp.BUTTON_X:
+        return self.target.vehicle.behavior.RespawnCarEvent()
 
   def GamepadButtonReleasedEvent(self, gamepadId, button):
     if gamepadId == self.gamepadId:
