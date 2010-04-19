@@ -3,6 +3,8 @@
 #include "Core/Time.h"
 #include "Math.h"
 #include "Game/Game.h"
+#include "Core/Event.h"
+
 
 
 #include "Core/Consts.h"
@@ -15,12 +17,16 @@ namespace Graphics {
 
 GraphicsLayer* GraphicsLayer::m_pGlobalGLayer = NULL;
 
-
-
-
-
 GraphicsLayer::GraphicsLayer()
- : stringSprite(NULL)
+  : debugRenderable(NULL),
+	m_pEffect(NULL),
+	camera(NULL),
+	screen(NULL),
+	msaasurf(NULL),
+	depthsurf(NULL),
+	m_pD3D(NULL),
+	m_pd3dDevice(NULL),
+	stringSprite(NULL)
 {
 }
 
@@ -151,36 +157,28 @@ int GraphicsLayer::Init( HWND hWnd )
     width   = desc.Width;
     height  = desc.Height;
     
-    stringSprite = new StringSprite();
-
-    
-    // create a new surface
-    // http://www.borgsoft.de/renderToSurface.html
-    assert(SUCCEEDED(m_pd3dDevice->CreateRenderTarget(
-        desc.Width, desc.Height,
-        D3DFMT_A8R8G8B8,
-        D3DMULTISAMPLE_4_SAMPLES, 0,
-        false,
-        &msaasurf,
-        NULL
-    )));
-    
-    // create a depth buffer to go with it
-    assert(SUCCEEDED(m_pd3dDevice->CreateDepthStencilSurface(
-        desc.Width, desc.Height,
-        D3DFMT_D16,
-        D3DMULTISAMPLE_4_SAMPLES, 0,
-        TRUE,
-        &depthsurf,
-        NULL
-    )));
-    D3DMATERIAL9 m = DefaultMaterial();
+	RestoreDeviceObjects();
+	
+	D3DMATERIAL9 m = DefaultMaterial();
     m_pd3dDevice->SetMaterial(&m);
     
     
+    stringSprite = new StringSprite();
     debugRenderable = new DebugRenderable();
     
     return S_OK;
+}
+
+void GraphicsLayer::Shutdown()
+{
+	SAFE_DELETE(debugRenderable);
+	SAFE_RELEASE(m_pEffect);
+	SAFE_RELEASE(screen);
+	SAFE_RELEASE(msaasurf);
+	SAFE_RELEASE(depthsurf);
+	SAFE_RELEASE(m_pd3dDevice);
+	SAFE_RELEASE(m_pD3D);
+	SAFE_DELETE(stringSprite);
 }
 
 void GraphicsLayer::resetPresentationParameters(){
@@ -198,28 +196,6 @@ void GraphicsLayer::resetPresentationParameters(){
     m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
     m_presentationParameters.hDeviceWindow = Game::GetInstance()->hwnd;
     
-    
-    // //The displayDevice is used to retrieve the device name
-    // DISPLAY_DEVICE displayDevice;
-    // displayDevice.cb = sizeof(DISPLAY_DEVICE);
-    // WCHAR strDeviceName[256] = {0};
-    
-    // assert(EnumDisplayDevices(0, 0, &displayDevice, 0));
-    
-    // //Making sure we have the correct device.
-    // if (displayDevice.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP)
-    // {
-    //     StringCchCopy(strDeviceName, 256, displayDevice.DeviceName);
-        
-    //     //devMode retrieve monitor settings
-    //     DEVMODE devMode;
-    //     devMode.dmSize = sizeof(DEVMODE);
-        
-    //     success = EnumDisplaySettings(strDeviceName, ENUM_REGISTRY_SETTINGS, &devMode);
-        
-    //     // float fDesktopAspectRatio = devMode.dmPelsWidth / (float)devMode.dmPelsHeight;
-    // }
-    
     D3DDISPLAYMODE mode;
     for (UINT i=0; i<m_pD3D->GetAdapterModeCount(0, D3DFMT_R5G6B5); i++)
     { 
@@ -230,10 +206,7 @@ void GraphicsLayer::resetPresentationParameters(){
             &mode
         )));
         // printf("%4dx%4dx%2d\n", mode.Width, mode.Height, mode.RefreshRate);
-
-        
     }
-
     
     if(CONSTS.WINDOWED)
     {
@@ -255,38 +228,7 @@ void GraphicsLayer::resetPresentationParameters(){
     
 }
 
-D3DMATERIAL9 GraphicsLayer::DefaultMaterial()
-{
-    //set a default material so that even stuff without material or shaders renders
-    D3DMATERIAL9 material;
 
-    // Set the RGBA for diffuse reflection.
-    material.Diffuse.r = 1.0f;
-    material.Diffuse.g = 1.0f;
-    material.Diffuse.b = 1.0f;
-    material.Diffuse.a = 1.0f;
-    
-    // Set the RGBA for ambient reflection.
-    material.Ambient.r = 1.0f;
-    material.Ambient.g = 1.0f;
-    material.Ambient.b = 1.0f;
-    material.Ambient.a = 1.0f;
-    
-    // Set the color and sharpness of specular highlights.
-    material.Specular.r = 1.0f;
-    material.Specular.g = 1.0f;
-    material.Specular.b = 1.0f;
-    material.Specular.a = 1.0f;
-    material.Power = 50.0f;
-    
-    // Set the RGBA for emissive color.
-    material.Emissive.r = 0.0f;
-    material.Emissive.g = 0.0f;
-    material.Emissive.b = 0.0f;
-    material.Emissive.a = 0.0f;
-    
-    return material;
-}
 
 
 void GraphicsLayer::SetViewport(int x, int y, int w, int h)
@@ -347,6 +289,9 @@ void GraphicsLayer::PostRender(){
 	HRESULT r = m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
 
 	switch(r){
+	case D3DERR_DEVICELOST:
+		WaitForDevice();
+		break;
 	case D3DERR_DRIVERINTERNALERROR:
 		printf("driver internal error - trying to reset presentation parameters\n");
 		resetDevice();
@@ -372,10 +317,57 @@ void GraphicsLayer::ClearStrings(){
     debugRenderable->Clear();
 }
 
+void GraphicsLayer::InvalidateDeviceObjects(){
+	SAFE_RELEASE(msaasurf);
+	SAFE_RELEASE(depthsurf);
+}
 
+void GraphicsLayer::RestoreDeviceObjects(){
+    // create a new surface
+    // http://www.borgsoft.de/renderToSurface.html
+    assert(SUCCEEDED(m_pd3dDevice->CreateRenderTarget(
+        width, height,
+        D3DFMT_A8R8G8B8,
+        D3DMULTISAMPLE_4_SAMPLES, 0,
+        false,
+        &msaasurf,
+        NULL
+    )));
+    
+    // create a depth buffer to go with it
+    assert(SUCCEEDED(m_pd3dDevice->CreateDepthStencilSurface(
+        width, height,
+        D3DFMT_D16,
+        D3DMULTISAMPLE_4_SAMPLES, 0,
+        TRUE,
+        &depthsurf,
+        NULL
+    )));
+
+}
+
+
+void GraphicsLayer::WaitForDevice(){
+	cout << "Direct3D Device lost - waiting for restore." << endl;
+	InvalidateDeviceObjects();
+	do {
+		MSG msg;
+		if(GetMessage(&msg, NULL,0,0))
+			DispatchMessage(&msg);
+		else
+		{
+			EVENT(QuitEvent());
+			return;
+		}
+	} while( m_pd3dDevice->TestCooperativeLevel() != D3DERR_DEVICENOTRESET );
+	cout << "Restored. Direct3D Device needs to reset." << endl;
+	resetDevice();
+	RestoreDeviceObjects();
+	cout << "Direct3D Device has been reset." <<endl;
+}
 
 void GraphicsLayer::resetDevice(){
-	resetPresentationParameters();
+	//resetPresentationParameters();
 	HRESULT r = m_pd3dDevice->Reset(&m_presentationParameters);
 
 	switch(r){
@@ -394,25 +386,37 @@ void GraphicsLayer::resetDevice(){
 	}
 }
 
-void GraphicsLayer::Shutdown()
+
+D3DMATERIAL9 GraphicsLayer::DefaultMaterial()
 {
-    if(NULL != stringSprite)
-        delete stringSprite;
-    stringSprite = NULL;
+    //set a default material so that even stuff without material or shaders renders
+    D3DMATERIAL9 material;
+
+    // Set the RGBA for diffuse reflection.
+    material.Diffuse.r = 1.0f;
+    material.Diffuse.g = 1.0f;
+    material.Diffuse.b = 1.0f;
+    material.Diffuse.a = 1.0f;
     
-    if( NULL != m_pEffect)
-        m_pEffect->Release();
-    m_pEffect = NULL;
-
-    //Release the Devce
-    if( NULL != m_pd3dDevice )
-        m_pd3dDevice->Release();
-    m_pd3dDevice = NULL;
-
-    if( NULL != m_pD3D)
-        m_pD3D->Release();
-    m_pD3D = NULL;
-
+    // Set the RGBA for ambient reflection.
+    material.Ambient.r = 1.0f;
+    material.Ambient.g = 1.0f;
+    material.Ambient.b = 1.0f;
+    material.Ambient.a = 1.0f;
+    
+    // Set the color and sharpness of specular highlights.
+    material.Specular.r = 1.0f;
+    material.Specular.g = 1.0f;
+    material.Specular.b = 1.0f;
+    material.Specular.a = 1.0f;
+    material.Power = 50.0f;
+    
+    // Set the RGBA for emissive color.
+    material.Emissive.r = 0.0f;
+    material.Emissive.g = 0.0f;
+    material.Emissive.b = 0.0f;
+    material.Emissive.a = 0.0f;
+    
+    return material;
 }
-
 }

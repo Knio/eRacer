@@ -63,8 +63,9 @@ if __name__ == '__main__':
       import cProfile
       import pstats
     else:
-      raise Exception('Invaid command line argument "%s"' % p)
-  
+      print 'Invalid command line argument "%s"' % p
+      print 'Usage: run.py [--debug | --release | --profile]'
+      sys.exit()  
   
   # paths to code
   sys.path.append(os.path.join(sys.path[0], 'Source'))

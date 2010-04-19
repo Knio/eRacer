@@ -19,6 +19,10 @@
 
 #include "DebugRenderable.h"
 
+#define SAFE_RELEASE(p) { if(NULL != (p)) { (p)->Release(); (p)=NULL; } }
+#define SAFE_DELETE(p)	{ if(NULL != (p)) { delete (p); (p)=NULL; } }
+
+
 namespace Graphics {
 
 
@@ -27,19 +31,15 @@ namespace Graphics {
  */
 class GraphicsLayer
 {
+public:
+	int width, height;
+	
+	DebugRenderable* debugRenderable;
+	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
 
 private:
 	static GraphicsLayer *m_pGlobalGLayer;
 
-	LPDIRECT3D9						m_pD3D;				//Used to create the D3DDevice
-	IDirect3DDevice9*   	m_pd3dDevice;	//Our rendering device
-	D3DPRESENT_PARAMETERS m_presentationParameters;
-	StringSprite* stringSprite;
-
-	void resetPresentationParameters();
-	void resetDevice();
-protected:
-	GraphicsLayer();	//Constructor, Singleton 
 	Camera *camera;
 	
 	IDirect3DSurface9* screen;
@@ -47,36 +47,34 @@ protected:
 	IDirect3DSurface9* depthsurf;
 	std::map<std::string, ID3DXEffect*> effects;
 
-public:
-	int width, height;
-	
-	DebugRenderable* debugRenderable;
-	ID3DXEffect* m_pEffect;       // Temporary Variable Only!! Please do not use!
-	D3DMATERIAL9 DefaultMaterial(); // also a hack
-	
-	ID3DXEffect* GraphicsLayer::GetEffect(char* file);
-	
-	void 		SetCamera(Camera& camera);
-	Camera* GetCamera() { return camera; }
+	LPDIRECT3D9						m_pD3D;				//Used to create the D3DDevice
+	IDirect3DDevice9*   	m_pd3dDevice;	//Our rendering device
+	D3DPRESENT_PARAMETERS m_presentationParameters;
+	StringSprite* stringSprite;
 
-	// ID3DXSprite* CreateSprite(float x, float y, float w);	
-	
-	void SetViewport(int x, int y, int w, int h);
-	void ResetViewport();
+public:
 
 	IDirect3DDevice9* GetDevice() const { return m_pd3dDevice; }
 	
-	~GraphicsLayer();	//Destructor
+	~GraphicsLayer();
 	int Init( HWND hWnd );
+	void Shutdown();
 
-	
 	void PreRender();
 	void PostRender();
 	
 	void WriteString(const char* text, const char* family, int size, long x, long y, const Vector3 &color = WHITE);
 	void ClearStrings();
 	
-	void Shutdown();
+	D3DMATERIAL9 DefaultMaterial(); // also a hack
+	
+	ID3DXEffect* GetEffect(char* file);
+	
+	void SetCamera(Camera& camera);
+	Camera* GetCamera() { return camera; }
+	
+	void SetViewport(int x, int y, int w, int h);
+	void ResetViewport();
 	
 	
 	void SetTexture(UINT id, IDirect3DTexture9* tex)
@@ -88,10 +86,19 @@ public:
 
 	static GraphicsLayer *GetInstance()
 	{
-		if (m_pGlobalGLayer == NULL)	m_pGlobalGLayer = new GraphicsLayer;
+		if (m_pGlobalGLayer == NULL)
+			m_pGlobalGLayer = new GraphicsLayer();
 		return m_pGlobalGLayer;
 	}
 
+private:
+	GraphicsLayer();	//Constructor, Singleton 
+
+	void resetPresentationParameters();
+	void resetDevice();
+	void InvalidateDeviceObjects();
+	void RestoreDeviceObjects();
+	void WaitForDevice();
 };
 
 }
