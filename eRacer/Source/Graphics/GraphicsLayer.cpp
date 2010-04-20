@@ -190,7 +190,7 @@ void GraphicsLayer::resetPresentationParameters(){
     m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
     m_presentationParameters.hDeviceWindow = Game::GetInstance()->hwnd;
     
-    D3DDISPLAYMODE mode;
+    D3DDISPLAYMODE mode, bestMode; //bestMode will be 59hz or 60hz, either will do
     for (UINT i=0; i<m_pD3D->GetAdapterModeCount(0, D3DFMT_R5G6B5); i++)
     { 
         assert(SUCCEEDED(m_pD3D->EnumAdapterModes(
@@ -199,6 +199,9 @@ void GraphicsLayer::resetPresentationParameters(){
             i,
             &mode
         )));
+		if(mode.RefreshRate == 59 || mode.RefreshRate == 60){
+			bestMode = mode;
+		}
         // printf("%4dx%4dx%2d\n", mode.Width, mode.Height, mode.RefreshRate);
     }
     
@@ -211,10 +214,10 @@ void GraphicsLayer::resetPresentationParameters(){
     }
     else
     {
-        m_presentationParameters.BackBufferWidth    = mode.Width;
-        m_presentationParameters.BackBufferHeight   = mode.Height;
-        m_presentationParameters.FullScreen_RefreshRateInHz = mode.RefreshRate;
-        m_presentationParameters.BackBufferFormat   = mode.Format;
+        m_presentationParameters.BackBufferWidth    = bestMode.Width;
+        m_presentationParameters.BackBufferHeight   = bestMode.Height;
+        m_presentationParameters.FullScreen_RefreshRateInHz = bestMode.RefreshRate;
+        m_presentationParameters.BackBufferFormat   = bestMode.Format;
         SetWindowLong(Game::GetInstance()->hwnd, GWL_STYLE, WS_POPUPWINDOW);
         SetWindowPos(Game::GetInstance()->hwnd, HWND_TOP, 0, 0, 0, 0,
             SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
