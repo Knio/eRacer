@@ -14,9 +14,9 @@ Starfield::Starfield(int n, float s) : N(n), SIZE(s), vb(NULL), stars(NULL)
 	GraphicsLayer& g = GraphicsLayer::GetInstance();
 	assert(SUCCEEDED(g.GetDevice()->CreateVertexBuffer(
     2 * N * sizeof(Star),   
-    0, //D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+    0, 
     D3DFVF_XYZ | D3DFVF_DIFFUSE,
-    D3DPOOL_DEFAULT,
+    D3DPOOL_MANAGED,
     &vb,
     NULL
   )));
