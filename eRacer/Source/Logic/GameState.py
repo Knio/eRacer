@@ -280,6 +280,9 @@ class GameState(State):
     self.meteorManager.Tick(time)
     
     State.Tick(self, time)
+    
+    
+    
       
   def LapEvent(self, vehicle, lap):
     #len(self.stats[vehicle])

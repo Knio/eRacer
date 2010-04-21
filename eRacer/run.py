@@ -2,16 +2,8 @@ import os
 import sys
 import time
 
-
-
-
-
 debug   = True
 profile = False
-
-
-
-
 
 def run():
   m = None
