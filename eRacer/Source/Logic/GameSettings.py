@@ -3,7 +3,7 @@ from GameMapping      import *
 
 import pkgutil 
  
-import Tracks
+from Track import Track
 
 
 
@@ -56,18 +56,11 @@ class GameSettings(object):
     self.playersIndices = []
     self.debugMappings = []
 
-    self.availableTracks = []
-    self.availableTrackNames = []
+    self.availableTracks      = Track.tracks.values()
+    self.availableTrackNames  = [i.NAME for i in self.availableTracks]
     self.update_players()
     
-    for importer, modname, ispkg in pkgutil.iter_modules(Tracks.__path__): 
-      self.availableTracks.append(modname)
-      track = __import__("Tracks."+modname,fromlist=['NAME'])
-      self.availableTrackNames.append(hasattr(track,'NAME') and track.NAME or modname)
-      
-        
-    
-    
+
   def ResetFreeTextures(self):
     self.freeTextureIndices = set(range(len(self.TEXTURE_IDS)))
     for player in self.playersIndices:

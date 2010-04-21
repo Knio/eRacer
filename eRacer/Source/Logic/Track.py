@@ -1,8 +1,11 @@
 from Core.Globals import *
 
-import Tracks
+import imp
+import pkgutil
 
 class Track(Entity, cpp.Track):
+  PATH = "Source/Tracks/"  
+  tracks = {}
   def __init__(self, name):
     Entity.__init__(self)
     cpp.Track.__init__(self)
@@ -11,7 +14,7 @@ class Track(Entity, cpp.Track):
     
     # the fromlist must be non-empty for this to actually assign the whole package to track
     # otherwise only Tracks will be stored in track     
-    track = __import__("Tracks."+name,fromlist='dummy')
+    track = Track.tracks[name]
     self.name = track.NAME
     
     for i in track.TRACK:
@@ -58,3 +61,10 @@ class Track(Entity, cpp.Track):
       g.Release()
     for p in self.physics:
       p.Release()
+
+
+        
+for importer, modname, ispkg in pkgutil.iter_modules([Track.PATH]): 
+  track = imp.load_module(modname, *imp.find_module(modname, [Track.PATH]))
+  track.NAME = getattr(track, 'NAME', modname)
+  Track.tracks[modname] = track
