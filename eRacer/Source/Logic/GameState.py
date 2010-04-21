@@ -182,7 +182,7 @@ class GameState(State):
       PlayerBehavior(vehicle)
       vehicle.Backwards = False #???
     else:
-      AIBehavior(vehicle, self.track)
+      AIBehavior(vehicle, self.track, self)
     
     return vehicle                
       
