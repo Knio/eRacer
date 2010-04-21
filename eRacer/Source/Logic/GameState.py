@@ -249,7 +249,9 @@ class GameState(State):
       interface.Tick(time)
       game().graphics.views.append(interface.view)
       game().graphics.views.append(interface.hud)
+      
 
+    self.handleBoostStealing(float(time.game_delta)/time.RESOLUTION)
     
     if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL:
       self.lastMeteorTime += time.game_delta
@@ -298,6 +300,46 @@ class GameState(State):
     obstacle = self.entities[obstacleId]
     vehicle.obstacles.append(obstacle)
     
+  def handleBoostStealing(self, delta):
+    stealAmount = CONSTS.STEALING_SPEED*delta
+    if stealAmount < 0.0001:
+      #print "must be paused, no boost"
+      return
+    for i in range(0, len(self.vehicleList)-1):
+      a = self.vehicleList[i]
+      for j in range(i+1, len(self.vehicleList)):
+        b = self.vehicleList[j]
+        fromAtoB = b.physics.GetPosition() - a.physics.GetPosition()
+        #print "checking pair:", i, j, "dist:", length(fromAtoB)
+        if(length(fromAtoB) < CONSTS.MAX_STEALING_DISTANCE):
+          #possible stealing for one of the cars
+          atx = a.physics.GetTransform()
+          aForward = mul0(atx, Z)
+          dotVec = dot(normalized(aForward), normalized(fromAtoB))
+          if(dotVec > 0):
+            #a is behind, check if b is in field of view
+            if(dotVec > 0.3 and b.boostFuel > stealAmount and a.boostFuel + stealAmount < 5):
+              #a can steal from b
+              #print i, "stealing from", j
+              a.boostFuel += stealAmount
+              b.boostFuel -= stealAmount
+              beamTransform = Matrix(0.2, 0.2, length(fromAtoB)) * Matrix(a.physics.GetPosition(), Y, fromAtoB)
+              game().event.BoostStealEvent(a, b, beamTransform)  
+          else:
+            #b is behind, check if a is in field of view
+            btx = b.physics.GetTransform()
+            bForward = mul0(btx, Z)
+            fromBtoA = a.physics.GetPosition() - b.physics.GetPosition()
+            dotVec = dot(normalized(bForward), normalized(fromBtoA))
+            if(dotVec > 0.3 and a.boostFuel > stealAmount and b.boostFuel + stealAmount < 5):
+              #b can steal from a
+
+              #print j, "stealing from", i
+              b.boostFuel += stealAmount
+              a.boostFuel -= stealAmount
+              beamTransform = Matrix(0.2, 0.2, length(fromBtoA)) * Matrix(b.physics.GetPosition(), Y, fromBtoA)
+              game().event.BoostStealEvent(b, a, beamTransform)
+            
   def Release(self):
     self.loaded = False
     self.meteorManager.Release()

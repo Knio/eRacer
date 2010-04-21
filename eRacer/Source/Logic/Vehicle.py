@@ -92,42 +92,7 @@ class Vehicle(Model):
 
     game().sound.sound.LoadSoundFx("EngineSound.wav", self.sound)
 
-    game().event.Register(self.ReloadedConstsEvent)
-
-
-  def BoostStealing(self, delta_s):
-    
-    stealingBeams = self.stealingBeams
-    self.stealingBeams = {}
-    
-    for obstacle in self.obstacles:
-      if isinstance(obstacle, Vehicle):
-        obstaclePosition = mul1(obstacle.transform, ORIGIN)
-        stealerPosition = mul1(self.transform, self.tip)
-        vector = obstaclePosition-stealerPosition
-        distance = length(vector)
-        
-        if(distance < CONSTS.MAX_STEALING_DISTANCE):
-          stealerDirection = mul0(self.transform,Z)
-          
-          #to the front?
-          if dot(vector, stealerDirection) > 0.6:
-            pos = stealerPosition
-            up = Vector3(0,1,0)
-            fw = Vector3(0,0,1) #stealerDirection
-            beamTransform = Matrix(0.2, 0.2, distance) * Matrix(pos, up, vector)
-            # TODO: I think every car should only be able to steal from 2 or 3 other cars at a time
-            # this would allow us to store a fixed number of models for the beam and only make them 
-            # (in)visible/ change position
-            
-            
-            if obstacle.boostFuel >=CONSTS.STEALING_SPEED*delta_s:
-              self.boostFuel += CONSTS.STEALING_SPEED*delta_s
-              obstacle.boostFuel -= CONSTS.STEALING_SPEED*delta_s
-
-              game().event.BoostStealEvent(self, obstacle, beamTransform)   
-    
-    
+    game().event.Register(self.ReloadedConstsEvent)    
 
   # control events
   def Brake(self, brake):
@@ -160,8 +125,6 @@ class Vehicle(Model):
       return
     
     delta = float(time.game_delta) / time.RESOLUTION
-
-    self.BoostStealing(delta)
     
     phys  = self.physics
     tx    = phys.GetTransform()
