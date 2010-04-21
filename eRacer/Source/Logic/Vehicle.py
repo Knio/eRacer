@@ -111,11 +111,11 @@ class Vehicle(Model):
           stealerDirection = mul0(self.transform,Z)
           
           #to the front?
-          if dot(vector, stealerDirection) > 0:
+          if dot(vector, stealerDirection) > 0.6:
             pos = stealerPosition
             up = Vector3(0,1,0)
             fw = Vector3(0,0,1) #stealerDirection
-            beamTransform = Matrix(0.1, 0.1, distance) * Matrix(pos, up, vector)
+            beamTransform = Matrix(0.2, 0.2, distance) * Matrix(pos, up, vector)
             # TODO: I think every car should only be able to steal from 2 or 3 other cars at a time
             # this would allow us to store a fixed number of models for the beam and only make them 
             # (in)visible/ change position

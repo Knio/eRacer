@@ -32,7 +32,7 @@ bool IO::_LoadMesh(const char* file, CachedMesh& mesh)
 	
 	HRESULT r = D3DXLoadMeshFromX(
 		file, 
-		0,
+		D3DXMESH_MANAGED,
 		d3dd,
 		NULL,
 		&materialsbuffer, 

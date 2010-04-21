@@ -9,9 +9,9 @@ DebugRenderable::DebugRenderable() : nLines(0), nTriangles(0)
 {
   assert(SUCCEEDED(GraphicsLayer::GetInstance().GetDevice()->CreateVertexBuffer(
     MAX_OBJ * sizeof(Line),
-    D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+    0,
     D3DFVF_XYZ | D3DFVF_DIFFUSE,
-    D3DPOOL_DEFAULT,
+    D3DPOOL_MANAGED,
     &lines,
     NULL
   )));
@@ -20,7 +20,7 @@ DebugRenderable::DebugRenderable() : nLines(0), nTriangles(0)
     MAX_OBJ * sizeof(Triangle),
     D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
     D3DFVF_XYZ | D3DFVF_DIFFUSE,
-    D3DPOOL_DEFAULT,
+    D3DPOOL_MANAGED,
     &triangles,
     NULL
   )));
