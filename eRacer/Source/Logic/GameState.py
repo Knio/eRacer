@@ -178,7 +178,7 @@ class GameState(State):
       b.active = True
       b.graphics.visible = True
       b.transform = tx
-      b.graphics.m_texOffset.v = game().time.seconds * -0.1
+      b.graphics.m_texOffset.v = game().time.seconds * -0.5
       return
       
   def AddVehicle(self, player = None):
