@@ -28,7 +28,7 @@ class Graphics(Module):
     self.views = []
     self.scene  = None
     self.camera = None
-
+    self.force  = False
 
   def Init(self):
     Module.Init(self)
@@ -42,12 +42,9 @@ class Graphics(Module):
     
     
     fps = time.Fps()
-    # if not game().ticks % 20: 
-    #   self.window.SetTitle("eRacerX - %.2f FPS" % fps) # somehow this is really slow! go windows
        
     # alternately skip this frame so that physx gets more sim time
-    # print int(fps / 60),  game().ticks % max(int(fps / 60), 1)
-    if game().ticks % max(int(fps / 60), 1):
+    if not self.force and game().ticks % max(int(fps / 60), 1):
       # print 'skipping rendering'
       for view in self.views:
         view.Clear()
@@ -57,7 +54,6 @@ class Graphics(Module):
     
     # if game().ticks != 1:
       # self.graphics.PostRender()
-      
     
     self.graphics.PreRender()
     
@@ -69,6 +65,7 @@ class Graphics(Module):
       self.graphics.WriteString("%.2f FPS" % fps, Config.DEBUG_FONT, 18, 10, 10)
   
     self.graphics.PostRender()
+    self.force = False
     
   
   def Quit(self):

@@ -26,7 +26,7 @@ from AI.Behavior import PlayerBehavior, AIBehavior
 from AI.Raceline import Raceline
 
 # View stuff
-from Graphics.View    import View
+from Graphics.View    import View, HudView
 from Graphics.SkyBox  import SkyBox
     
 
@@ -66,6 +66,26 @@ class LoadingState(State):
     )    
 ##############################################
 
+class LoadScreenState(State):
+  
+  def __init__(self, settings):
+    State.__init__(self)
+    self.view = HudView([self.scene])
+    logo = HudQuad("Splash","flower.jpg", 30, 35, 450, 449)
+    self.view.Add(logo)
+    self.settings = settings
+
+    self.isLoaded = False
+    
+  def Tick(self, time):
+    State.Tick(self, time)
+    if not self.isLoaded:
+      game().graphics.views.append(self.view)
+      game().graphics.force = True
+      self.isLoaded = True
+    else:
+      game().PopState()
+      game().PushState(GameState(self.settings))
 
 class GameState(State):
   def __init__(self, settings):
@@ -158,6 +178,7 @@ class GameState(State):
       b.active = True
       b.graphics.visible = True
       b.transform = tx
+      b.graphics.m_texOffset.v = game().time.seconds * -0.5
       return
       
   def AddVehicle(self, player = None):
@@ -262,6 +283,9 @@ class GameState(State):
     self.meteorManager.Tick(time)
     
     State.Tick(self, time)
+    
+    
+    
       
   def LapEvent(self, vehicle, lap):
     #len(self.stats[vehicle])

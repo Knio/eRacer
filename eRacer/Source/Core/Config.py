@@ -63,10 +63,7 @@ class Config(object):
       self.user.add_section(section)
     self.user.set(section, key, value)
     self.settings.set(section, key, value)
-    print self.get_setting(key, section)
-
     
   def get_setting(self, key, section='GENERAL'):
     return self.settings.get(section, key)
     
-         

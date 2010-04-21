@@ -122,33 +122,6 @@ class MainMenuState(MenuState):
     
     MenuState.Tick(self, time)
 
-class LoadScreenState(State):
-  
-  def __init__(self, settings):
-    State.__init__(self)
-    self.view = HudView([self.scene])
-    logo = HudQuad("Splash","flower.jpg", 30, 35, 450, 449)
-    self.view.Add(logo)
-    self.settings = settings
-
-    self.isLoaded = False
-    self.prevTime = -1
-    self.ElapsedTime = 0
-    
-  def Tick(self, time):
-    State.Tick(self, time)
-    game().graphics.views.append(self.view)
-    
-    if self.prevTime == -1:
-      self.prevTime = time.seconds
-    delta = time.seconds - self.prevTime
-    self.prevTime = time.seconds
-    self.ElapsedTime = self.ElapsedTime + delta
-
-    if self.ElapsedTime > 1:
-      game().PopState()
-      game().PushState(GameState(self.settings))
-
 
     
 class SetupGameMenuState(MenuState):
@@ -313,5 +286,5 @@ class PauseMenuState(MenuState):
     self.parent.Tick(time)
     MenuState.Tick(self, time)
       
-from GameState      import GameState
+from GameState      import GameState, LoadScreenState
 from HighScoreState import HighScoreState

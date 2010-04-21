@@ -16,6 +16,7 @@ const float4 g_ColorTint;
 const float4x4 g_ProjectionMatrix;
 const float4x4 g_ViewMatrix;
 const float4x4 g_WorldMatrix;
+const float2 g_TexOffset;
 
 
 //--------------------------------------------------------------------------------------
@@ -76,7 +77,7 @@ VS_OUTPUT RenderSceneVS( float4 vPos : POSITION,
     
     // Just copy the texture coordinate through
     if( bTexture ) 
-        Output.TextureUV = vTexCoord0; 
+        Output.TextureUV = vTexCoord0 + g_TexOffset; 
     else
         Output.TextureUV = 0; 
     
@@ -106,7 +107,7 @@ VS_OUTPUT RenderSceneFixedVS( float4 vPos : POSITION,
     
     // Just copy the texture coordinate through
     if( bTexture ) 
-        Output.TextureUV = vTexCoord0; 
+        Output.TextureUV = vTexCoord0 + g_TexOffset; 
     else
         Output.TextureUV = 0; 
     
