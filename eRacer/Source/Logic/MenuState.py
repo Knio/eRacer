@@ -7,8 +7,7 @@ from Quad             import Quad
 from HudQuad          import HudQuad
 from MenuMapping      import *
 from Graphics.View    import View, HudView
-from GameSettings     import GameSettings  
-
+from GameSettings     import GameSettings
 
 class MenuState(State):
   def __init__(self):
@@ -122,7 +121,41 @@ class MainMenuState(MenuState):
       y += 30
     
     MenuState.Tick(self, time)
+
+class LoadScreenState(MenuState):
+  MAPPING = MainMenuMapping
+  
+  def __init__(self, settings):
+    MenuState.__init__(self)
+
+    logo = HudQuad("Splash","flower.jpg", 30, 35, 450, 449)
+    self.view.Add(logo)
+    self.settings = settings
     
+    self.menu = [
+      ApplyMenuItem('Exit', self.Menu_Back)
+    ]
+    self.menuTop = 240
+
+    self.isLoaded = False
+    self.prevTime = -1
+    self.ElapsedTime = 0
+
+  def Menu_Back(self):
+    game().PopState()
+    
+  def Tick(self, time):
+    if self.prevTime == -1:
+      self.prevTime = time.seconds
+    delta = time.seconds - self.prevTime
+    self.prevTime = time.seconds
+    self.ElapsedTime = self.ElapsedTime + delta
+    MenuState.Tick(self, time)
+    if self.ElapsedTime > 1:
+      game().PopState()
+      game().PushState(GameState(self.settings))
+
+
     
 class SetupGameMenuState(MenuState):
   MAPPING = MainMenuMapping
@@ -152,7 +185,8 @@ class SetupGameMenuState(MenuState):
     
   def Menu_Start(self):
     self.parent.PauseMusic()
-    game().PushState(GameState(self.settings))
+    game().PushState(LoadScreenState(self.settings))
+    #game().PushState(GameState(self.settings))
         
   def Menu_AI_Players(self, value):
     self.settings.nAIs = value[1]
