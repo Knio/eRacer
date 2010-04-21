@@ -19,9 +19,9 @@ QuadNode::QuadNode(const string& name, const Matrix& transform)
 	assert(SUCCEEDED(
 		GraphicsLayer::GetInstance().GetDevice()->CreateVertexBuffer(
 			4 * sizeof(Vertex),   
-			D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+			0,
 			D3DFVF_XYZ | D3DFVF_TEX1,
-			D3DPOOL_DEFAULT,
+			D3DPOOL_MANAGED,
 			&vertexBuffer_,
 			NULL)
 		));

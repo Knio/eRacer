@@ -158,14 +158,14 @@ int GraphicsLayer::Init( HWND hWnd )
     
     
     stringSprite = new StringSprite();
-    debugRenderable = new DebugRenderable();
+    //debugRenderable = new DebugRenderable();
     
     return S_OK;
 }
 
 void GraphicsLayer::Shutdown()
 {
-	SAFE_DELETE(debugRenderable);
+	//SAFE_DELETE(debugRenderable);
 	SAFE_RELEASE(m_pEffect);
 	SAFE_RELEASE(screen);
 	SAFE_RELEASE(msaasurf);
@@ -266,8 +266,8 @@ void GraphicsLayer::PostRender(){
 	stringSprite->Draw(m_pd3dDevice);
     stringSprite->Clear();
     // draw debug
-    debugRenderable->Draw(m_pd3dDevice);
-    debugRenderable->Clear();
+    //debugRenderable->Draw(m_pd3dDevice);
+    //debugRenderable->Clear();
         
     // do postprocessing here
     
@@ -311,10 +311,11 @@ void GraphicsLayer::WriteString(const char* text, const char* family, int size, 
 
 void GraphicsLayer::ClearStrings(){
     stringSprite->Clear();
-    debugRenderable->Clear();
+    //debugRenderable->Clear();
 }
 
 void GraphicsLayer::InvalidateDeviceObjects(){
+    SAFE_RELEASE(screen);
 	SAFE_RELEASE(msaasurf);
 	SAFE_RELEASE(depthsurf);
 }
@@ -322,25 +323,29 @@ void GraphicsLayer::InvalidateDeviceObjects(){
 void GraphicsLayer::RestoreDeviceObjects(){
     // create a new surface
     // http://www.borgsoft.de/renderToSurface.html
-    assert(SUCCEEDED(m_pd3dDevice->CreateRenderTarget(
+    cout << width << height << endl;
+    HRESULT r = m_pd3dDevice->CreateRenderTarget(
         width, height,
         D3DFMT_A8R8G8B8,
         D3DMULTISAMPLE_4_SAMPLES, 0,
         false,
         &msaasurf,
         NULL
-    )));
+    );
+    cout << r << endl;
+    assert(SUCCEEDED(r));
     
     // create a depth buffer to go with it
-    assert(SUCCEEDED(m_pd3dDevice->CreateDepthStencilSurface(
+    r = m_pd3dDevice->CreateDepthStencilSurface(
         width, height,
         D3DFMT_D16,
         D3DMULTISAMPLE_4_SAMPLES, 0,
         TRUE,
         &depthsurf,
         NULL
-    )));
-
+    );
+    
+    assert(SUCCEEDED(r));
 }
 
 
@@ -364,7 +369,7 @@ void GraphicsLayer::WaitForDevice(){
 }
 
 void GraphicsLayer::resetDevice(){
-	//resetPresentationParameters();
+	resetPresentationParameters();
 	HRESULT r = m_pd3dDevice->Reset(&m_presentationParameters);
 
 	switch(r){
@@ -380,6 +385,9 @@ void GraphicsLayer::resetDevice(){
 	case D3DERR_OUTOFVIDEOMEMORY:
 		printf("Fatal error: Out of video memory\n");
 		throw runtime_error("Fatal error: Out of video memory.");
+    default:
+        cout << "Encountered logic error: "<< r << endl;
+        assert(SUCCEEDED(r));    
 	}
 }
 

@@ -43,9 +43,9 @@ inline void CoordinateCross::Draw(LPDIRECT3DDEVICE9 device) const {
 inline CoordinateCross::CoordinateCross(){
 	assert(SUCCEEDED(GraphicsLayer::GetInstance().GetDevice()->CreateVertexBuffer(
     6 * sizeof(Vertex),   
-    D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+    0,
     D3DFVF_XYZ | D3DFVF_DIFFUSE,
-    D3DPOOL_DEFAULT,
+    D3DPOOL_MANAGED,
     &vertexBuffer_,
     NULL
 	)));
