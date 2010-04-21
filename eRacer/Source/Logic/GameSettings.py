@@ -58,11 +58,7 @@ class GameSettings(object):
 
     self.availableTracks      = Track.tracks.values()
     self.availableTrackNames  = [i.NAME for i in self.availableTracks]
-    
-    print self.availableTracks
-    print self.availableTrackNames
-    
-    
+        
     self.update_players()
     
 

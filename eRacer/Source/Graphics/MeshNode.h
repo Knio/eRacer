@@ -25,11 +25,13 @@ namespace Graphics {
  * 
  * @see Mesh
  */
+ 
+ 
 class MeshNode : public RenderableNode
 {
 public:
 	D3DXCOLOR m_colorMtrlTint;
-	float m_texOffset[2];
+	Vector2 m_texOffset;
 	/**
 	 * @brief Constructor. 
 	 *

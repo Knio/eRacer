@@ -166,7 +166,6 @@ class SetupGameMenuState(MenuState):
     
     trackOptions = []
     for i,trackName in enumerate(self.settings.availableTrackNames):
-      print i, trackName
       trackOptions.append((trackName,i))
     
     self.menu = [

@@ -65,7 +65,6 @@ class Track(Entity, cpp.Track):
 
         
 for importer, modname, ispkg in pkgutil.iter_modules([Track.PATH]):
-  print modname
   track = imp.load_module(modname, *imp.find_module(modname, [Track.PATH]))
   track.NAME = getattr(track, 'NAME', modname)
   Track.tracks[modname] = track
