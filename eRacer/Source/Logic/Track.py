@@ -6,7 +6,7 @@ import pkgutil
 class Track(Entity, cpp.Track):
   PATH = "Source/Tracks/"  
   tracks = {}
-  def __init__(self, name):
+  def __init__(self, track):
     Entity.__init__(self)
     cpp.Track.__init__(self)
     self.graphics = []
@@ -14,7 +14,7 @@ class Track(Entity, cpp.Track):
     
     # the fromlist must be non-empty for this to actually assign the whole package to track
     # otherwise only Tracks will be stored in track     
-    track = Track.tracks[name]
+    
     self.name = track.NAME
     
     for i in track.TRACK:
@@ -64,7 +64,8 @@ class Track(Entity, cpp.Track):
 
 
         
-for importer, modname, ispkg in pkgutil.iter_modules([Track.PATH]): 
+for importer, modname, ispkg in pkgutil.iter_modules([Track.PATH]):
+  print modname
   track = imp.load_module(modname, *imp.find_module(modname, [Track.PATH]))
   track.NAME = getattr(track, 'NAME', modname)
   Track.tracks[modname] = track

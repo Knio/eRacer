@@ -58,6 +58,11 @@ class GameSettings(object):
 
     self.availableTracks      = Track.tracks.values()
     self.availableTrackNames  = [i.NAME for i in self.availableTracks]
+    
+    print self.availableTracks
+    print self.availableTrackNames
+    
+    
     self.update_players()
     
 
@@ -134,7 +139,7 @@ class GameSettings(object):
   nLapsIndex = property(get_num_laps_index,set_num_laps_index)  
 
   def get_track_index(self):
-    return int(game().config.get_setting('trackIndex'))
+    return int(game().config.get_setting('trackIndex')) % len(self.availableTracks)
   
   def set_track_index(self,trackIndex):
     game().config.set_setting('trackIndex',str(trackIndex))

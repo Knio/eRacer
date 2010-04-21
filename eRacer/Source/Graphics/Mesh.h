@@ -34,7 +34,7 @@ namespace Graphics{
 class Mesh : public Renderable {
 public:
 	D3DXCOLOR m_colorMtrlTint;
-
+	float m_texOffset[2];
 	/**
 	 * @brief Constructor. Setup a mesh in uninitialized state.
 	 */
