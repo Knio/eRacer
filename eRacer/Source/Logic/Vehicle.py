@@ -111,7 +111,7 @@ class Vehicle(Model):
       dist = game().physics.physics.Raycast(mul1(tx, ORIGIN), mul0(tx, -Y), normal)
       if dist < 3.0 and self.boosting == 0:
         self.boostFuel = self.boostFuel - 0.5
-        pushForce = normalized(Vector3(0,1,1)) * 280000 
+        pushForce = normalized(Vector3(0,1,1)) * 290000 
         self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
       self.boosting = 1
     else:
