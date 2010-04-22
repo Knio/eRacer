@@ -99,7 +99,7 @@ class GameState(State):
    
     self.laps   = self.settings.nLaps
     self.stats  = {}
-    self.countdown = 5
+    self.countdown = 4
     self.gameStarted = False
     self.gameOver = False
  
@@ -159,7 +159,7 @@ class GameState(State):
 
     self.music.volume = 20
     self.LoadMusic(track.music)
-    #self.LoadMusic("Adventure.mp3")
+    self.PauseMusic
         
     self.boostbeams = []
     for i in xrange(16):
@@ -200,6 +200,7 @@ class GameState(State):
     self.Add(Shadow(vehicle))
     self.vehicleList.append(vehicle)
     vehicle.isShutoff = True
+    vehicle.Brake(1)
     if player:
       PlayerBehavior(vehicle)
       vehicle.Backwards = False #???
@@ -253,6 +254,8 @@ class GameState(State):
       self.gameStarted = True
       for vehicle in self.vehicleList:
         vehicle.isShutoff = False
+        vehicle.Brake(0)
+      self.UnpauseMusic
 
     for b in self.boostbeams:
       b.active = False

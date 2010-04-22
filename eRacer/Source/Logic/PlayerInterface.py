@@ -73,6 +73,15 @@ class PlayerInterface(object):
     for i in self.starfields:
       i.length = int(self.starlen)
 
+    countdown = math.ceil(self.state.countdown)
+    if countdown == 3:
+      self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,0,0))
+    if countdown == 2:
+      self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,1,0))
+    if countdown == 1:
+      self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,1,0))
+    if countdown <= 0 and countdown >= -2:
+      self.hud.WriteString( "GO!", Config.FONT, 150, 300, 200, Vector3(0,1,0))
 
     t = time.seconds*5
 
