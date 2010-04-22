@@ -20,7 +20,8 @@ class GameEndState(State):
     self.view.Add(gameover)
     
     
-    
+    if not os.path.isdir(os.path.dirname(Config.USER_STATS)):
+      os.mkdir(os.path.dirname(Config.USER_STATS))
     # write stats
     with open(Config.USER_STATS, 'a') as f:
       for stat in self.calcstats():
