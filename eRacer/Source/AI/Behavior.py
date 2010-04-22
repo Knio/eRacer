@@ -137,17 +137,17 @@ class AIBehavior(Behavior):
       if(distAhead > 1000):
         dodgeMode = True
         #print "way ahead, slow to 0.2"
-        self.parent.Accelerate(0.2)
+        self.parent.Accelerate(0.6)
         self.parent.Boost(False)
       elif(distAhead > 500):
         dodgeMode = True
         #print "pretty far ahead, slow to 0.5"
-        self.parent.Accelerate(0.5)
+        self.parent.Accelerate(0.75)
         self.parent.Boost(False)
       elif(distAhead > 200):
         dodgeMode = True
         #print "a little ahead, slow down to 0.8"
-        self.parent.Accelerate(0.5)
+        self.parent.Accelerate(0.9)
         self.parent.Boost(False)
       else:
         self.parent.Accelerate(1.0)

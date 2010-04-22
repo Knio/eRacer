@@ -99,7 +99,8 @@ class GameState(State):
    
     self.laps   = self.settings.nLaps
     self.stats  = {}
- 
+    self.countdown = 5
+    self.gameStarted = False
     self.gameOver = False
  
     self.nPlayersRacing = self.settings.nPlayers
@@ -198,6 +199,7 @@ class GameState(State):
     vehicle.isAI = player==None
     self.Add(Shadow(vehicle))
     self.vehicleList.append(vehicle)
+    vehicle.isShutoff = True
     if player:
       PlayerBehavior(vehicle)
       vehicle.Backwards = False #???
@@ -245,7 +247,13 @@ class GameState(State):
   
   
   def Tick(self, time):
-    
+    delta = float(time.game_delta) / time.RESOLUTION
+    self.countdown = self.countdown - delta
+    if self.gameStarted == False and self.countdown <=0:
+      self.gameStarted = True
+      for vehicle in self.vehicleList:
+        vehicle.isShutoff = False
+
     for b in self.boostbeams:
       b.active = False
       b.graphics.visible = False
@@ -258,7 +266,6 @@ class GameState(State):
     
     _time.sleep(CONSTS.SLEEP_TIME)
     
-
     self.vehicleList.sort(key = lambda vehicle:vehicle.trackpos, reverse=True)
     
     for place,vehicle in enumerate(self.vehicleList):

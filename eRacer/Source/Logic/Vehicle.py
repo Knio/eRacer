@@ -106,7 +106,7 @@ class Vehicle(Model):
   
   def Boost(self, boostState):
     tx = self.physics.GetTransform()
-    if boostState == True and self.boostFuel > 0.5:
+    if boostState == True and self.boostFuel > 0.5 and self.isShutoff == False:
       normal = Vector3(0, 0, 0)
       dist = game().physics.physics.Raycast(mul1(tx, ORIGIN), mul0(tx, -Y), normal)
       if dist < 3.0 and self.boosting == 0:
@@ -124,6 +124,9 @@ class Vehicle(Model):
       game().sound.sound.UpdateSoundFx(self.sound)
       return
     
+    if self.isShutoff == True:
+      self.acceleration = 0
+      
     delta = float(time.game_delta) / time.RESOLUTION
     
     phys  = self.physics
@@ -150,7 +153,7 @@ class Vehicle(Model):
         game().event.LapEvent(self, lapcount)
     self.lapcount = lapcount
   
-    if self.behavior: 
+    if self.behavior and self.isShutoff == False: 
       self.behavior.Tick(time)
     
     # remove obstacles - they are not needed any more
@@ -162,7 +165,6 @@ class Vehicle(Model):
     
     alphaa = math.pow(self.REV_ALPHA,  delta)
     alphat = math.pow(self.TURN_ALPHA, delta)
-    
     self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.throttle
     self.turning      = (alphat)*self.turning      + (1-alphat)*self.steerPos
 
@@ -200,8 +202,6 @@ class Vehicle(Model):
     
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
-    
-
     
     self.sound.pitch = max(50000, int(50000 * length(vel) / 60.0))
     if self.crashtime > 0:
@@ -321,6 +321,8 @@ class Vehicle(Model):
     
         
   def resetCar(self):
+    if self.isShutoff:
+      return
     print 'Reset Car'
     phys  = self.physics
     self.resetFrame.position = self.resetFrame.position + self.resetFrame.up * 3.0
