@@ -5,7 +5,7 @@ NAME = 'Cyclone'
 
 from Core.Globals import *
 
-
+MUSIC = 'Adventure.mp3'
 
 xScale = 0.5
 yScale = 0.6

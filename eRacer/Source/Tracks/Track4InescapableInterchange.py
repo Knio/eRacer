@@ -3,6 +3,7 @@ NAME = 'Inescapable Interchange'
 from Core.Globals import *
 
 SIZE = 400
+MUSIC = 'Adventure.mp3'
 
 TRACK = [
   cpp.Frame(Point3( -SIZE, 50,  100), Y),

@@ -155,11 +155,10 @@ class GameState(State):
       self.meteorManager.spawnRandom()
     
     self.lastMeteorTime = 0
-    
-    # self.LoadMusic("Adventure.mp3")
 
     self.music.volume = 20
-    self.LoadMusic("Adventure.mp3")
+    self.LoadMusic(track.music)
+    #self.LoadMusic("Adventure.mp3")
         
     self.boostbeams = []
     for i in xrange(16):

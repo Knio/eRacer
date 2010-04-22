@@ -3,6 +3,7 @@ NAME = 'Circuit'
 from Core.Globals import *
 
 SIZE = 600
+MUSIC = 'Adventure.mp3'
 
 TRACK = [
   cpp.Frame(Point3(  150,  0,   00), Y),
