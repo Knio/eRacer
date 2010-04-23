@@ -82,7 +82,6 @@ class GameState(State):
  
 
   def load(self, settings):
-    game().sound.sound.StopSounds()
     self.settings = settings
    
     self.laps   = self.settings.nLaps
