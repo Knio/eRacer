@@ -56,7 +56,7 @@ class LoadScreenState(State):
       self.mappingCoords.append((w/2,h/2,w/2,h/2))
     
     for i,player in enumerate(settings.players):
-      self.mappingQuads.append(HudQuad("%sMapping" % player.name,"gamepad_mapping.png", *self.mappingCoords[i]))
+      self.mappingQuads.append(HudQuad("%sMapping" % player.name,player.mapping.IMAGE, *self.mappingCoords[i]))
       
     for quad in self.mappingQuads:
       self.view.Add(quad)
