@@ -69,6 +69,8 @@ public:
 	 */
 	void Init(Mesh* mesh);
 
+	void setTint(Vector4 tint);
+
 	bool initialized;
 protected:
 
