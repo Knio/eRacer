@@ -121,7 +121,7 @@ void SoundLayer::PlaySoundFx(SoundFx* samp)
 
 int SoundLayer::Init()
 {
-	char* str;
+	/*char* str;
 	if(!FSOUND_SetOutput(FSOUND_OUTPUT_DSOUND))
 		str = FMOD_ErrorString(FSOUND_GetError());
 	if(!FSOUND_SetDriver(0))
@@ -130,12 +130,12 @@ int SoundLayer::Init()
 		str = FMOD_ErrorString(FSOUND_GetError());
 
 	if (FSOUND_GetVersion() < FMOD_VERSION)
-		return -1; //Outdated DLL
+		return -1; //Outdated DLL*/
 
 	unsigned int flags = 0;
-	flags |= FSOUND_INIT_DSOUND_DEFERRED;
+	/*flags |= FSOUND_INIT_DSOUND_DEFERRED;
 	flags |= FSOUND_INIT_DONTLATENCYADJUST;
-	flags |= FSOUND_INIT_STREAM_FROM_MAIN_THREAD;
+	flags |= FSOUND_INIT_STREAM_FROM_MAIN_THREAD;*/
 
 	if (!FSOUND_Init(44100, 32, flags))
     {
