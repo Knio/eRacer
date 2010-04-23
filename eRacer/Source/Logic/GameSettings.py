@@ -49,7 +49,7 @@ class GameSettings(object):
     
     self.availablePlayerNums = []
     for num in self.PLAYER_NUMS:
-      if num < len(self.availableMappings) or game().debug:
+      if num <= len(self.availableMappings) or game().debug:
         self.availablePlayerNums.append(num)
     
     self.freeTextureIndices = set()
@@ -58,7 +58,9 @@ class GameSettings(object):
 
     self.availableTracks      = Track.tracks.values()
     self.availableTrackNames  = [i.NAME for i in self.availableTracks]
-        
+    
+    self.nPlayersIndex = min(len(self.availableMappings)-1, self.nPlayersIndex)
+    
     self.update_players()
     
 
