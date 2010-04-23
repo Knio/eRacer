@@ -43,20 +43,30 @@ class LoadScreenState(State):
     h = 600
 
     self.mappingCoords = []
+    self.nameStringCoords = []
     
     if nPlayers==1:
       self.mappingCoords.append((0,0,w,h))
+      self.nameStringCoords.append((20,20))
     elif nPlayers==2:
       self.mappingCoords.append((w/4,0,w/2,h/2))
       self.mappingCoords.append((w/4,h/2,w/2,h/2))
+      self.nameStringCoords.append((20,20))
+      self.nameStringCoords.append((20,h/2+20))
     elif nPlayers>2:
       self.mappingCoords.append((0,0,w/2,h/2))
       self.mappingCoords.append((w/2,0,w/2,h/2))
       self.mappingCoords.append((0,h/2,w/2,h/2))
       self.mappingCoords.append((w/2,h/2,w/2,h/2))
+      self.nameStringCoords.append((20,     20))
+      self.nameStringCoords.append((w/2+20, 20))
+      self.nameStringCoords.append((20,     h/2+20))
+      self.nameStringCoords.append((w/2+20, h/2+20))
     
+    self.names = []
     for i,player in enumerate(settings.players):
       self.mappingQuads.append(HudQuad("%sMapping" % player.name,player.mapping.IMAGE, *self.mappingCoords[i]))
+      self.names.append(player.name)
       
     for quad in self.mappingQuads:
       self.view.Add(quad)
@@ -70,6 +80,11 @@ class LoadScreenState(State):
       game().graphics.views.append(self.view)
       game().graphics.force = True
       self.isLoaded = True
+      self.view.WriteString('Loading...',Config.FONT, 60, 270,250)
+      for i in range(self.settings.nPlayers):
+        self.view.WriteString(self.names[i], Config.FONT, 30, *self.nameStringCoords[i])
+
+
     else:
       game().PopState()
       game().PushState(GameState(self.settings))
