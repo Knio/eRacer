@@ -14,6 +14,7 @@ class State(cpp.State):
     self.music.is3D     = False
     self.music.isPaused = False
     self.music.volume   = 24
+    self.music.priority = 255
     
   def Add(self, obj, scene=True):
     self.entities[obj.id] = obj

@@ -199,6 +199,7 @@ class GameState(State):
     vehicle.isShutoff = True
     vehicle.Brake(1)
     if player:
+      vehicle.sound.priority = 200
       PlayerBehavior(vehicle)
       vehicle.Backwards = False #???
     else:
@@ -245,6 +246,7 @@ class GameState(State):
   
   
   def Tick(self, time):
+    print game().sound.sound.mydebug()
     delta = float(time.game_delta) / time.RESOLUTION
     self.countdown = self.countdown - delta
     if self.gameStarted == False:
