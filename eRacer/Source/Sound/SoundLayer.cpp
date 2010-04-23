@@ -94,6 +94,11 @@ void SoundLayer::UpdateSoundFx(SoundFx* samp)
 	FSOUND_SetPaused(samp->channel, pause);
 }
 
+void SoundLayer::StopSounds()
+{
+	FSOUND_StopSound(FSOUND_ALL);
+}
+
 void SoundLayer::PlaySoundFx(SoundFx* samp)
 {
 	if (NULL == samp->soundsample)
@@ -116,13 +121,13 @@ void SoundLayer::PlaySoundFx(SoundFx* samp)
 
 int SoundLayer::Init()
 {
-	/*char* str;
+	char* str;
 	if(!FSOUND_SetOutput(FSOUND_OUTPUT_DSOUND))
 		str = FMOD_ErrorString(FSOUND_GetError());
 	if(!FSOUND_SetDriver(0))
 		str = FMOD_ErrorString(FSOUND_GetError());
 	if(!FSOUND_SetMixer(FSOUND_MIXER_AUTODETECT));
-		str = FMOD_ErrorString(FSOUND_GetError());*/
+		str = FMOD_ErrorString(FSOUND_GetError());
 
 	if (FSOUND_GetVersion() < FMOD_VERSION)
 		return -1; //Outdated DLL

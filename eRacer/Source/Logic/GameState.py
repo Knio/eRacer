@@ -95,6 +95,7 @@ class GameState(State):
  
 
   def load(self, settings):
+    game().sound.sound.StopSounds()
     self.settings = settings
    
     self.laps   = self.settings.nLaps
@@ -157,7 +158,7 @@ class GameState(State):
       self.meteorManager.spawnRandom()
     
     self.lastMeteorTime = 0
-
+    
     self.countFx = cpp.SoundFx();
     self.countFx.isLooping  = False
     self.countFx.is3D     = False
