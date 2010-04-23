@@ -2,10 +2,11 @@ from Core.Globals import *
 from Mapping      import Mapping, E
 
 class VehicleMapping(Mapping):
-    def __init__(self,target):
-        self.target = target
+  def __init__(self,target):
+      self.target = target
         
 class Keyboard1Mapping(VehicleMapping):
+  IMAGE = 'Keyboard1Mapping.png'
   def __init__(self,target):
         VehicleMapping.__init__(self,target)
   
@@ -30,6 +31,7 @@ class Keyboard1Mapping(VehicleMapping):
     elif key == KEY.SPACE: return self.target.vehicle.behavior.PlayerBoostEvent      (False)
         
 class Keyboard2Mapping(VehicleMapping):
+  IMAGE = 'Keyboard2Mapping.png'
   def __init__(self,target):
     VehicleMapping.__init__(self,target)
         
@@ -83,6 +85,7 @@ class KeyboardDebugMapping(VehicleMapping):
       
 
 class GamepadMapping(VehicleMapping):
+  IMAGE = 'GamepadMapping.png'
   def __init__(self, gamepadId, target):
     VehicleMapping.__init__(self,target)
     self.gamepadId = gamepadId
