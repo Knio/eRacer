@@ -95,6 +95,7 @@ class GameState(State):
  
 
   def load(self, settings):
+    game().sound.sound.StopSounds()
     self.settings = settings
    
     self.laps   = self.settings.nLaps
@@ -157,7 +158,7 @@ class GameState(State):
       self.meteorManager.spawnRandom()
     
     self.lastMeteorTime = 0
-
+    
     self.countFx = cpp.SoundFx();
     self.countFx.isLooping  = False
     self.countFx.is3D     = False
@@ -278,6 +279,8 @@ class GameState(State):
       for vehicle in self.vehicleList:
         vehicle.isShutoff = False
         vehicle.Brake(0)
+        self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+        
 
     for b in self.boostbeams:
       b.active = False
@@ -316,13 +319,12 @@ class GameState(State):
     State.Tick(self, time)
     
     
-    
-      
   def LapEvent(self, vehicle, lap):
-    #len(self.stats[vehicle])
     if vehicle.lapBugCount < lap:
-      self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
       vehicle.lapBugCount+=1
+      if lap != 1:
+        self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+      
     
     if lap == self.laps+1:
       vehicle.finishPlace = vehicle.place
@@ -360,7 +362,7 @@ class GameState(State):
     if stealAmount < 0.0001:
       #print "must be paused, no boost"
       return
-    for i in range(0, len(self.vehicleList)-1):
+    for i in range(len(self.vehicleList)-1):
       a = self.vehicleList[i]
       for j in range(i+1, len(self.vehicleList)):
         b = self.vehicleList[j]

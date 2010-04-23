@@ -94,6 +94,11 @@ void SoundLayer::UpdateSoundFx(SoundFx* samp)
 	FSOUND_SetPaused(samp->channel, pause);
 }
 
+void SoundLayer::StopSounds()
+{
+	FSOUND_StopSound(FSOUND_ALL);
+}
+
 void SoundLayer::PlaySoundFx(SoundFx* samp)
 {
 	if (NULL == samp->soundsample)
@@ -116,18 +121,23 @@ void SoundLayer::PlaySoundFx(SoundFx* samp)
 
 int SoundLayer::Init()
 {
-	/*char* str;
+	char* str;
 	if(!FSOUND_SetOutput(FSOUND_OUTPUT_DSOUND))
 		str = FMOD_ErrorString(FSOUND_GetError());
 	if(!FSOUND_SetDriver(0))
 		str = FMOD_ErrorString(FSOUND_GetError());
 	if(!FSOUND_SetMixer(FSOUND_MIXER_AUTODETECT));
-		str = FMOD_ErrorString(FSOUND_GetError());*/
+		str = FMOD_ErrorString(FSOUND_GetError());
 
 	if (FSOUND_GetVersion() < FMOD_VERSION)
 		return -1; //Outdated DLL
 
-	if (!FSOUND_Init(44100, 32, 0))
+	unsigned int flags = 0;
+	flags |= FSOUND_INIT_DSOUND_DEFERRED;
+	flags |= FSOUND_INIT_DONTLATENCYADJUST;
+	flags |= FSOUND_INIT_STREAM_FROM_MAIN_THREAD;
+
+	if (!FSOUND_Init(44100, 32, flags))
     {
 		return -1; //Failed to Initialize
         printf("%s\n", FMOD_ErrorString(FSOUND_GetError()));
