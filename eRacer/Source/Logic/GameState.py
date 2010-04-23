@@ -30,49 +30,32 @@ from Graphics.View    import View, HudView
 from Graphics.SkyBox  import SkyBox
     
 
-    # TODO
-    # can we render a fake loading screen here until the real one works?
-
-# TODO
-# need a lock so that loading of IO does not happen
-# inside BegineScene()/EndScene() pairs, or else the 
-# driver will freak out
-class LoadingState(State):
-  def __init__(self, func):
-    State.__init__(self)    
-    def load():
-      # do loading function
-      func()
-      # wait for all asyncronous loads to finish
-      game().io.LoadAsyncEvent(self.Loaded)
-    
-    self.thread = threading.Thread(target=load)
-    self.thread.start()
-    
-  def Activate(self):
-    game().simspeed = 0.
-  
-  def Deactivate(self):
-    game().simspeed = 1.    
-    
-  def Loaded(self, none):
-    game().PopState()
-    
-  def Tick(self, time):
-    State.Tick(self, time)
-    game().graphics.graphics.WriteString(
-      "Loading...", 
-      "Verdana", 32, 300, 220
-    )    
-##############################################
-
 class LoadScreenState(State):
   
   def __init__(self, settings):
     State.__init__(self)
     self.view = HudView([self.scene])
-    logo = HudQuad("Splash","flower.jpg", 30, 35, 450, 449)
-    self.view.Add(logo)
+    
+    
+    self.mappingQuads = []
+    nPlayers = settings.nPlayers
+    w = 800
+    h = 600
+    
+    if nPlayers==1:
+      self.mappingQuads.append(HudQuad("Player1Mapping","gamepad_mapping.png", 0, 0, w, h))
+    elif nPlayers==2:
+      self.mappingQuads.append(HudQuad("Player1Mapping","gamepad_mapping.png", w/4, 0, w/2, h/2))
+      self.mappingQuads.append(HudQuad("Player2Mapping","gamepad_mapping.png", w/4, h/2, w/2, h/2))
+    elif nPlayers>2:
+      self.mappingQuads.append(HudQuad("Player1Mapping","gamepad_mapping.png", 0, 0, w/2, h/2))
+      self.mappingQuads.append(HudQuad("Player2Mapping","gamepad_mapping.png", w/2, 0, w/2, h/2))
+      self.mappingQuads.append(HudQuad("Player3Mapping","gamepad_mapping.png", 0, h/2, w/2, h/2))
+      self.mappingQuads.append(HudQuad("Player4Mapping","gamepad_mapping.png", w/2, h/2, w/2, h/2))
+    
+    # for player in self.settings.players:
+    for quad in self.mappingQuads:
+      self.view.Add(quad)
     self.settings = settings
 
     self.isLoaded = False
@@ -95,7 +78,6 @@ class GameState(State):
  
 
   def load(self, settings):
-    game().sound.sound.StopSounds()
     self.settings = settings
    
     self.laps   = self.settings.nLaps
@@ -305,8 +287,9 @@ class GameState(State):
       game().graphics.views.append(interface.view)
       game().graphics.views.append(interface.hud)
       
-
-    self.handleBoostStealing(float(time.game_delta)/time.RESOLUTION)
+    if self.gameStarted:
+      self.handleBoostStealing(float(time.game_delta)/time.RESOLUTION)
+    
     if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL and self.gameStarted:
       self.lastMeteorTime += time.game_delta
       if self.lastMeteorTime > CONSTS.AIMED_METEOR_INTERVAL*time.RESOLUTION:
