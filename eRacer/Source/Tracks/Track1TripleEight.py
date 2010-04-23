@@ -3,7 +3,7 @@ NAME = 'Triple Eight'
 from Core.Globals import *
 
 SIZE = 400
-MUSIC = 'Adventure.mp3'
+MUSIC = 'e15_12.mp3'
 
 TRACK = [
   cpp.Frame(Point3( -SIZE,  0,   00), Y),  

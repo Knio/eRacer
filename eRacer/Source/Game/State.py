@@ -13,7 +13,7 @@ class State(cpp.State):
     self.music.looping  = True
     self.music.is3D     = False
     self.music.isPaused = False
-    self.music.volume   = 24
+    self.music.volume   = 255
     self.music.priority = 255
     
   def Add(self, obj, scene=True):

@@ -3,7 +3,7 @@ from Core.Globals import *
 class Ring(Model):
   def __init__(self, name, gFilename, pFilename, tx=IDENTITY, *args):
     Model.__init__(self, name, gFilename, None, tx, *args)
-
+    self.graphics.setTint(Vector4(1.0,1.0,1.0,1.0))
     #physics model is disabled currently because it slows the game down too much
     def physLoad(pMesh):
       if pMesh:

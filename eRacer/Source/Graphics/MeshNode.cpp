@@ -27,6 +27,10 @@ MeshNode::MeshNode(const string& name, const Matrix& tx)
 		m_texOffset.v = 0;
 }
 
+void MeshNode::setTint(Vector4 tint)
+{
+	m_colorMtrlTint = D3DXCOLOR( tint.x, tint.y, tint.z, tint.w );
+}
 
 MeshNode::~MeshNode(){
 	if(initialized)
