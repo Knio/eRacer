@@ -161,7 +161,7 @@ class SetupGameMenuState(MenuState):
       self.view.Remove(self.trackQuad.graphics)
       self.view.Remove(self.ui.graphics)
     
-    self.trackQuad = HudQuad("TextBox", 'Trackbg-%s.png' % self.settings.track.__name__, 0, 0, 800, 600)
+    self.trackQuad = HudQuad("TextBox", 'Trackbg-%s.png' % self.settings.track.__name__, 0, 0, 800, 600, True)
     self.view.Add(self.trackQuad)
     self.view.Add(self.ui) # must be after the bg
     
@@ -232,6 +232,7 @@ class SetupPlayersMenuState(MenuState):
       humanPlayerOptions.append((str(num),i))   
 
     self.mmenu.append(SelectMenuItem('Human Players', self.Menu_Human_Players, humanPlayerOptions, self.settings.nPlayersIndex))
+    self.mmenu.append(ApplyMenuItem('Done', self.Menu_Back))
     self.settings.update_players()
     
     fontsize = 24
@@ -257,18 +258,18 @@ class SetupPlayersMenuState(MenuState):
       for i,textureName in enumerate(GameSettings.TEXTURE_NAMES):
         textureOptions.append((textureName, playerId, i))
       
-      self.pmenu.append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
+      self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight + padding
     
-    self.mmenu.append(ApplyMenuItem('Done', self.Menu_Back))
 
     # copy all elements linearly for input logic
-    self.menu = self.mmenu \
-      + self.pmenu[0] \
-      + self.pmenu[1] \
-      + self.pmenu[2] \
-      + self.pmenu[3] \
+    self.menu = self.mmenu[:1] \
+      + self.pmenu[0]  \
+      + self.pmenu[1]  \
+      + self.pmenu[2]  \
+      + self.pmenu[3]  \
+      + self.mmenu[1:] \
     
     
 
