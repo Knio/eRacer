@@ -307,8 +307,7 @@ class GameState(State):
       
 
     self.handleBoostStealing(float(time.game_delta)/time.RESOLUTION)
-    
-    if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL:
+    if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL and self.gameStarted:
       self.lastMeteorTime += time.game_delta
       if self.lastMeteorTime > CONSTS.AIMED_METEOR_INTERVAL*time.RESOLUTION:
         self.lastMeteorTime = 0
