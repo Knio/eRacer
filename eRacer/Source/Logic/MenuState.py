@@ -18,18 +18,18 @@ class MenuState(State):
     
     self.view = HudView([self.scene])
 
-    if self.menuNav == None:
-      self.menuNav = cpp.SoundFx();
-      self.menuNav.isLooping  = False
-      self.menuNav.is3D     = False
-      self.menuNav.isPaused = True
+    if MenuState.menuNav == None:
+      MenuState.menuNav = cpp.SoundFx();
+      MenuState.menuNav.isLooping  = False
+      MenuState.menuNav.is3D     = False
+      MenuState.menuNav.isPaused = True
       game().sound.sound.LoadSoundFx("MenuNav.wav", self.menuNav)
 
-    if self.menuSel == None:
-      self.menuSel = cpp.SoundFx();
-      self.menuSel.isLooping  = False
-      self.menuSel.is3D     = False
-      self.menuSel.isPaused = True
+    if MenuState.menuSel == None:
+      MenuState.menuSel = cpp.SoundFx();
+      MenuState.menuSel.isLooping  = False
+      MenuState.menuSel.is3D     = False
+      MenuState.menuSel.isPaused = True
       game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
 
     self.menu = []

@@ -31,8 +31,8 @@ SoundLayer::~SoundLayer()
 
 int SoundLayer::mydebug()
 {
-	//return FSOUND_GetChannelsPlaying();
-	return FSOUND_GetCPUUsage();
+	return FSOUND_GetChannelsPlaying();
+	// return FSOUND_GetCPUUsage();
 	//return FSOUND_GetMixer();
 }
 
@@ -147,10 +147,10 @@ int SoundLayer::Init()
 
 	FSOUND_SetMaxHardwareChannels(0);
 	FSOUND_SetMinHardwareChannels(0);
-	FSOUND_SetMixer(FSOUND_MIXER_QUALITY_FPU);
-	//FSOUND_SetMixer(FSOUND_MIXER_MAX);
-	//FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP5);
-	//FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP6);
+	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_FPU);
+	// FSOUND_SetMixer(FSOUND_MIXER_MAX);
+	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP5);
+	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP6);
 
 	if (!FSOUND_Init(44100, 32, flags))
     {
