@@ -2,6 +2,7 @@ from Core.Globals     import *
 from Core.Menu        import *
 from Core.Config      import Config
 from MenuState        import MenuState
+from HudQuad          import HudQuad
 from MenuMapping      import *
 import os
 import os.path
@@ -11,7 +12,7 @@ class HighScoreState(MenuState):
   MAPPING = MainMenuMapping
   def __init__(self):
     MenuState.__init__(self)
-
+    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
     tracknames = {}
     laps = {}
 

@@ -74,33 +74,8 @@ class GameSettings(object):
     
     return self.TEXTURE_IDS[self.freeTextureIndices.pop()]
     
-  def get_track(self):
-    return self.availableTracks[self.trackIndex]
-  track = property(get_track)
-
-  def get_players(self):
-    return [Struct(name = player.name, 
-                   mapping=self.availableMappings[player.mappingIndex], 
-                   textureId=self.TEXTURE_IDS[player.textureIndex]) for player in self.playersIndices]
-  players = property(get_players)
-  
-  def get_n_players(self):
-    return self.PLAYER_NUMS[self.nPlayersIndex]
-  
-  nPlayers = property(get_n_players)    
-  
-  def get_n_players_index(self):
-    return int(game().config.get_setting('nPlayersIndex'))
-    
-  def set_n_players_index(self, nPlayersIndex):
-    game().config.set_setting('nPlayersIndex',str(nPlayersIndex))
-    nPlayers = self.PLAYER_NUMS[nPlayersIndex]
-    self.debugMappings = nPlayers > 1 and [] or [KeyboardDebugMapping, GamepadDebugMapping]
-    
-    self.update_players()
 
       
-  nPlayersIndex = property(get_n_players_index, set_n_players_index)  
   
   def update_players(self):
     while len(self.playersIndices) < self.nPlayers:
@@ -120,18 +95,39 @@ class GameSettings(object):
     while len(self.playersIndices) > self.nPlayers:
       self.playersIndices.pop()
     
+  def get_track(self):
+    return self.availableTracks[self.trackIndex]
+  track = property(get_track)
+
+  def get_players(self):
+    return [Struct(name = player.name, 
+                   mapping=self.availableMappings[player.mappingIndex], 
+                   textureId=self.TEXTURE_IDS[player.textureIndex]) for player in self.playersIndices]
+  players = property(get_players)
+  
+  def get_n_players(self):
+    return self.PLAYER_NUMS[self.nPlayersIndex]
+  nPlayers = property(get_n_players)    
+  
+  def get_n_players_index(self):
+    return int(game().config.get_setting('nPlayersIndex'))
+    
+  def set_n_players_index(self, nPlayersIndex):
+    game().config.set_setting('nPlayersIndex',str(nPlayersIndex))
+    nPlayers = self.PLAYER_NUMS[nPlayersIndex]
+    self.debugMappings = nPlayers > 1 and [] or [KeyboardDebugMapping, GamepadDebugMapping]
+    self.update_players()
+  nPlayersIndex = property(get_n_players_index, set_n_players_index)  
   
   def get_num_laps(self):
     return self.LAP_COUNTS[self.nLapsIndex]
-    
   nLaps = property(get_num_laps)
 
   def get_num_laps_index(self):
     return int(game().config.get_setting('nLapsIndex'))
-  
+    
   def set_num_laps_index(self,nLapsIndex):
     game().config.set_setting('nLapsIndex',str(nLapsIndex))
-    
   nLapsIndex = property(get_num_laps_index,set_num_laps_index)  
 
   def get_track_index(self):
@@ -139,17 +135,13 @@ class GameSettings(object):
   
   def set_track_index(self,trackIndex):
     game().config.set_setting('trackIndex',str(trackIndex))
-    
   trackIndex = property(get_track_index,set_track_index)  
 
-  
-  
   def get_n_ais(self):
     return int(game().config.get_setting('nAIs'))
   
   def set_n_ais(self,nAIs):
     game().config.set_setting('nAIs',str(nAIs))
-    
   nAIs = property(get_n_ais,set_n_ais)  
 
   
