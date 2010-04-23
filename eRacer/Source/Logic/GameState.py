@@ -165,6 +165,7 @@ class GameState(State):
     for i in xrange(16):
       beam = Model('StealBeam%d'%i, 'boostStealBeam.x', None, IDENTITY)
       beam.active = False
+      beam.graphics.m_texOffset.v = random.random()
       self.boostbeams.append(self.Add(beam))
     
     game().io.LoadTexture(Config.UI_TEXTURE)
@@ -178,7 +179,7 @@ class GameState(State):
       b.active = True
       b.graphics.visible = True
       b.transform = tx
-      b.graphics.m_texOffset.v = game().time.seconds * -0.5
+      b.graphics.m_texOffset.v += game().time.game_delta * -0.5 / game().time.RESOLUTION
       return
       
   def AddVehicle(self, player = None):
@@ -342,40 +343,30 @@ class GameState(State):
       a = self.vehicleList[i]
       for j in range(i+1, len(self.vehicleList)):
         b = self.vehicleList[j]
-        fromAtoB = b.physics.GetPosition() - a.physics.GetPosition()
-        #print "checking pair:", i, j, "dist:", length(fromAtoB)
-        if(length(fromAtoB) < CONSTS.MAX_STEALING_DISTANCE):
-          #possible stealing for one of the cars
-          atx = a.physics.GetTransform()
-          aForward = mul0(atx, Z)
-          dotVec = dot(normalized(aForward), normalized(fromAtoB))
-          if(dotVec > 0):
-            #a is behind, check if b is in field of view
-            if(dotVec > 0.5):
-              #a can steal from b
-              #print i, "stealing from", j
-              beamTransform = Matrix(0.2, 0.2, length(fromAtoB)) * Matrix(a.physics.GetPosition(), Y, fromAtoB)
-              game().event.BoostStealEvent(a, b, beamTransform)  
-              if(b.boostFuel > stealAmount and a.boostFuel + stealAmount < 5):
-                #actually take boost
-                a.boostFuel += stealAmount
-                b.boostFuel -= stealAmount
-          else:
-            #b is behind, check if a is in field of view
-            btx = b.physics.GetTransform()
-            bForward = mul0(btx, Z)
-            fromBtoA = a.physics.GetPosition() - b.physics.GetPosition()
-            dotVec = dot(normalized(bForward), normalized(fromBtoA))
-            if(dotVec > 0.5):
-              #b can steal from a
-              #print j, "stealing from", i
-              beamTransform = Matrix(0.2, 0.2, length(fromBtoA)) * Matrix(b.physics.GetPosition(), Y, fromBtoA)
-              game().event.BoostStealEvent(b, a, beamTransform)
-              if(a.boostFuel > stealAmount and b.boostFuel + stealAmount < 5):
-                #actually take boost
-                b.boostFuel += stealAmount
-                a.boostFuel -= stealAmount
+        ap = a.physics.GetPosition()
+        bp = b.physics.GetPosition()
+        
+        if length(ap-bp) > CONSTS.MAX_STEALING_DISTANCE: continue
+        #possible stealing for one of the cars
+        
+        atx = a.physics.GetTransform()
+        btx = b.physics.GetTransform()
+        
+        def steal(stealer, stealee, vec):
+          
+          size = 0.2
+          if stealee.boostFuel > stealAmount and stealer.boostFuel + stealAmount < 5:
+            #actually take boost
+            stealer.boostFuel += stealAmount
+            stealee.boostFuel -= stealAmount
+            size = 1.0
             
+          beamTransform = Matrix(size, size, length(vec)) * Matrix(stealer.physics.GetPosition(), Y, vec)
+          game().event.BoostStealEvent(stealer, stealee, beamTransform)  
+          
+        if dot(mul0(atx, Z), normalized(bp-ap)) > 0.5:  steal(a, b, bp-ap)
+        if dot(mul0(btx, Z), normalized(ap-bp)) > 0.5:  steal(b, a, ap-bp)
+                    
   def Release(self):
     self.loaded = False
     self.meteorManager.Release()
