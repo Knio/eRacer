@@ -127,7 +127,12 @@ int SoundLayer::Init()
 	if (FSOUND_GetVersion() < FMOD_VERSION)
 		return -1; //Outdated DLL
 
-	if (!FSOUND_Init(44100, 32, 0))
+	unsigned int flags = 0;
+	flags |= FSOUND_INIT_DSOUND_DEFERRED;
+	flags |= FSOUND_INIT_DONTLATENCYADJUST;
+	flags |= FSOUND_INIT_STREAM_FROM_MAIN_THREAD;
+
+	if (!FSOUND_Init(44100, 32, flags))
     {
 		return -1; //Failed to Initialize
         printf("%s\n", FMOD_ErrorString(FSOUND_GetError()));
