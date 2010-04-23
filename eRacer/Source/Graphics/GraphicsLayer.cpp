@@ -323,7 +323,6 @@ void GraphicsLayer::InvalidateDeviceObjects(){
 void GraphicsLayer::RestoreDeviceObjects(){
     // create a new surface
     // http://www.borgsoft.de/renderToSurface.html
-    cout << width << height << endl;
     HRESULT r = m_pd3dDevice->CreateRenderTarget(
         width, height,
         D3DFMT_A8R8G8B8,
@@ -332,7 +331,6 @@ void GraphicsLayer::RestoreDeviceObjects(){
         &msaasurf,
         NULL
     );
-    cout << r << endl;
     assert(SUCCEEDED(r));
     
     // create a depth buffer to go with it

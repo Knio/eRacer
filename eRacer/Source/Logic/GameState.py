@@ -159,7 +159,7 @@ class GameState(State):
 
     self.music.volume = 20
     self.LoadMusic(track.music)
-    self.PauseMusic
+    self.PauseMusic()
         
     self.boostbeams = []
     for i in xrange(16):
@@ -251,11 +251,11 @@ class GameState(State):
     delta = float(time.game_delta) / time.RESOLUTION
     self.countdown = self.countdown - delta
     if self.gameStarted == False and self.countdown <=0:
+      self.UnpauseMusic()
       self.gameStarted = True
       for vehicle in self.vehicleList:
         vehicle.isShutoff = False
         vehicle.Brake(0)
-      self.UnpauseMusic
 
     for b in self.boostbeams:
       b.active = False
@@ -351,27 +351,30 @@ class GameState(State):
           dotVec = dot(normalized(aForward), normalized(fromAtoB))
           if(dotVec > 0):
             #a is behind, check if b is in field of view
-            if(dotVec > 0.3 and b.boostFuel > stealAmount and a.boostFuel + stealAmount < 5):
+            if(dotVec > 0.5):
               #a can steal from b
               #print i, "stealing from", j
-              a.boostFuel += stealAmount
-              b.boostFuel -= stealAmount
               beamTransform = Matrix(0.2, 0.2, length(fromAtoB)) * Matrix(a.physics.GetPosition(), Y, fromAtoB)
               game().event.BoostStealEvent(a, b, beamTransform)  
+              if(b.boostFuel > stealAmount and a.boostFuel + stealAmount < 5):
+                #actually take boost
+                a.boostFuel += stealAmount
+                b.boostFuel -= stealAmount
           else:
             #b is behind, check if a is in field of view
             btx = b.physics.GetTransform()
             bForward = mul0(btx, Z)
             fromBtoA = a.physics.GetPosition() - b.physics.GetPosition()
             dotVec = dot(normalized(bForward), normalized(fromBtoA))
-            if(dotVec > 0.3 and a.boostFuel > stealAmount and b.boostFuel + stealAmount < 5):
+            if(dotVec > 0.5):
               #b can steal from a
-
               #print j, "stealing from", i
-              b.boostFuel += stealAmount
-              a.boostFuel -= stealAmount
               beamTransform = Matrix(0.2, 0.2, length(fromBtoA)) * Matrix(b.physics.GetPosition(), Y, fromBtoA)
               game().event.BoostStealEvent(b, a, beamTransform)
+              if(a.boostFuel > stealAmount and b.boostFuel + stealAmount < 5):
+                #actually take boost
+                b.boostFuel += stealAmount
+                a.boostFuel -= stealAmount
             
   def Release(self):
     self.loaded = False

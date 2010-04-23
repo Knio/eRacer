@@ -54,7 +54,6 @@ class State(cpp.State):
     game().sound.sound.LoadSoundFx(filename, self.music)
     
   def PauseMusic(self):
-    print "Got here!"
     self.music.isPaused = True
     game().sound.sound.UpdateSoundFx(self.music)
 
