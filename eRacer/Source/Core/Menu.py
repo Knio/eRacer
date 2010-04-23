@@ -29,7 +29,10 @@ class SelectMenuItem(MenuItem):
     MenuItem.__init__(self,label)
     self.callback = callback
     self.options = options
-    self.index = default < len(options) and default or 0;
+    if default < len(options):
+      self.index = default
+    else:
+      self.index = len(options)-1
 
   def MenuLeftEvent(self):
     self.index = (self.index-1)%len(self.options)
