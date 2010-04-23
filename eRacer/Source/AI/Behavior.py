@@ -1,5 +1,5 @@
 from Core.Globals import *
-
+import random
 
 class Behavior(object):
   def __init__(self, parent):
@@ -89,11 +89,28 @@ class AIBehavior(Behavior):
      # print "closest", closestDist
       if dodgeMode:
         #print "must dodge"
-        if distFromCentre > 0: 
+        #print "distfromcen:", distFromCentre
+        centreRad = 5.0
+        
+        if distFromCentre > centreRad: 
         #we are on the right side, so it would be better to go left ot the centre
           self.parent.Turn(-1)
-        else:
+          #print "right side, dodge left"
+        elif distFromCentre < -centreRad:
           self.parent.Turn(1)
+          #print "left side, dodge right"
+        else:
+          #in middle
+          rand = random.random()
+          turnPoint = 0.5 + distFromCentre/(centreRad*2)
+          if rand < turnPoint:
+            #print "centre, dodge left"
+            self.parent.Turn(-1)
+          else:
+            #print "centre, dodge right"
+            self.parent.Turn(1)
+
+            
       else:
         #print "nothing to dodge"
         #if here, we can drive normally trying to follow the track
