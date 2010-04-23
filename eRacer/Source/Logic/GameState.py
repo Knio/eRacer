@@ -116,8 +116,8 @@ class GameState(State):
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
-    startFrame = track.GetFrame(0.0)
-    
+    startFrame = track.GetFrame(0.0)\
+       
     finishLineTransform = Matrix(40, 8, 1) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.fw, -startFrame.up)
     self.Add(Quad('FinishLine','FinishLine2.png',finishLineTransform))
     finishLineTransform = Matrix(6.35, 4.0, 4.0) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.up, startFrame.fw)
@@ -159,7 +159,7 @@ class GameState(State):
 
     self.music.volume = 20
     self.LoadMusic(track.music)
-    self.PauseMusic
+    self.PauseMusic()
         
     self.boostbeams = []
     for i in xrange(16):
@@ -252,11 +252,11 @@ class GameState(State):
     delta = float(time.game_delta) / time.RESOLUTION
     self.countdown = self.countdown - delta
     if self.gameStarted == False and self.countdown <=0:
+      self.UnpauseMusic()
       self.gameStarted = True
       for vehicle in self.vehicleList:
         vehicle.isShutoff = False
         vehicle.Brake(0)
-      self.UnpauseMusic
 
     for b in self.boostbeams:
       b.active = False
