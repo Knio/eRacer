@@ -161,7 +161,7 @@ class SetupGameMenuState(MenuState):
       self.view.Remove(self.trackQuad.graphics)
       self.view.Remove(self.ui.graphics)
     
-    self.trackQuad = HudQuad("TextBox", 'Trackbg-%s.png' % self.settings.track.__name__, 0, 0, 800, 600)
+    self.trackQuad = HudQuad("TextBox", 'Trackbg-%s.png' % self.settings.track.__name__, 0, 0, 800, 600, True)
     self.view.Add(self.trackQuad)
     self.view.Add(self.ui) # must be after the bg
     
