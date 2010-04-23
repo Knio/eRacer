@@ -93,7 +93,7 @@ class PlayerInterface(object):
     place = self.vehicle.finishPlace < 0 and self.vehicle.place or self.vehicle.finishPlace
     self.hud.WriteString(ordinal(place), Config.FONT, 60, 20, 5)
     if not self.vehicle.finishPlace < 0 and self.state.active:
-        self.hud.WriteString(ordinal(self.vehicle.finishPlace), Config.FONT, 80, 330, 350, Vector3(math.cos(t),math.sin(t),math.sin(t)))
+      self.hud.WriteString(ordinal(self.vehicle.finishPlace), Config.FONT, 256, 330, 350, Vector3(math.cos(t),math.sin(t),math.sin(t)))
     
   
     for vehicle in self.state.vehicleList:

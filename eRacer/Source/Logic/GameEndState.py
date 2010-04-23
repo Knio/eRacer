@@ -84,8 +84,8 @@ class GameEndState(State):
     y = 200
     self.view.WriteString("Name", font, 28, x, y)
     x += xd
-    for i in range(1, len(stats[0].laps)):
-      self.view.WriteString("Lap %d" % i, font, 28, x, y)
+    for i in range(0, len(stats[0].laps)):
+      self.view.WriteString("Lap %d" % (i+1), font, 28, x, y)
       x += xd/2
     x += xd/2
     self.view.WriteString("Total", font, 28, x,y)
