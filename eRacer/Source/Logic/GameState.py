@@ -218,6 +218,7 @@ class GameState(State):
     vehicle.isShutoff = True
     vehicle.Brake(1)
     if player:
+      vehicle.sound.priority = 200
       PlayerBehavior(vehicle)
       vehicle.Backwards = False #???
     else:
@@ -306,11 +307,10 @@ class GameState(State):
       game().graphics.views.append(interface.view)
       game().graphics.views.append(interface.hud)
       
-
     if self.gameStarted:
       self.handleBoostStealing(float(time.game_delta)/time.RESOLUTION)
     
-    if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL:
+    if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL and self.gameStarted:
       self.lastMeteorTime += time.game_delta
       if self.lastMeteorTime > CONSTS.AIMED_METEOR_INTERVAL*time.RESOLUTION:
         self.lastMeteorTime = 0

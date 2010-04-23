@@ -10,27 +10,32 @@ from Graphics.View    import View, HudView
 from GameSettings     import GameSettings
 
 class MenuState(State):
+  menuNav = None;
+  menuSel = None
   def __init__(self):
     State.__init__(self)
     self.selected = 0
     
     self.view = HudView([self.scene])
 
-    self.menuNav = cpp.SoundFx();
-    self.menuNav.isLooping  = False
-    self.menuNav.is3D     = False
-    self.menuNav.isPaused = True
-    game().sound.sound.LoadSoundFx("MenuNav.wav", self.menuNav)
+    if MenuState.menuNav == None:
+      MenuState.menuNav = cpp.SoundFx();
+      MenuState.menuNav.isLooping  = False
+      MenuState.menuNav.is3D     = False
+      MenuState.menuNav.isPaused = True
+      game().sound.sound.LoadSoundFx("MenuNav.wav", self.menuNav)
 
-    self.menuSel = cpp.SoundFx();
-    self.menuSel.isLooping  = False
-    self.menuSel.is3D     = False
-    self.menuSel.isPaused = True
-    game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
+    if MenuState.menuSel == None:
+      MenuState.menuSel = cpp.SoundFx();
+      MenuState.menuSel.isLooping  = False
+      MenuState.menuSel.is3D     = False
+      MenuState.menuSel.isPaused = True
+      game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
+
     self.menu = []
     self.menuTop = 50
     self.menuLeft = 100
-
+  
   def Tick(self, time):
     State.Tick(self, time)
     game().graphics.views.append(self.view)
@@ -91,7 +96,6 @@ class MainMenuState(MenuState):
   
   def __init__(self):
     MenuState.__init__(self)
-    print "This was called----------------------------"
     logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
     self.view.Add(logo)
     # self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))

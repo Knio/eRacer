@@ -29,6 +29,12 @@ SoundLayer::~SoundLayer()
 	}
 }
 
+int SoundLayer::mydebug()
+{
+	return FSOUND_GetChannelsPlaying();
+	// return FSOUND_GetCPUUsage();
+	//return FSOUND_GetMixer();
+}
 
 void SoundLayer::LoadSoundFx(const string& filename, SoundFx* samp)
 {
@@ -60,6 +66,7 @@ void SoundLayer::LoadSoundFx(const string& filename, SoundFx* samp)
 	
 	FSOUND_SetFrequency(samp->channel, samp->pitch);
 	FSOUND_SetVolume(samp->channel, samp->volume);
+	FSOUND_SetPriority(samp->channel, samp->priority);
 
 	if (samp->is3D) {
 		FSOUND_3D_SetMinMaxDistance(samp->channel, samp->minDist, samp->maxDist);
@@ -77,6 +84,7 @@ void SoundLayer::UpdateSoundFx(SoundFx* samp)
 
 	FSOUND_SetFrequency(samp->channel, samp->pitch);
 	FSOUND_SetVolume(samp->channel, samp->volume);
+	FSOUND_SetPriority(samp->channel, samp->priority);
 
 	if (samp->is3D) {
 		FSOUND_Sample_SetMinMaxDistance(samp->soundsample, samp->minDist, samp->maxDist);
@@ -136,6 +144,13 @@ int SoundLayer::Init()
 	/*flags |= FSOUND_INIT_DSOUND_DEFERRED;
 	flags |= FSOUND_INIT_DONTLATENCYADJUST;
 	flags |= FSOUND_INIT_STREAM_FROM_MAIN_THREAD;*/
+
+	FSOUND_SetMaxHardwareChannels(0);
+	FSOUND_SetMinHardwareChannels(0);
+	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_FPU);
+	// FSOUND_SetMixer(FSOUND_MIXER_MAX);
+	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP5);
+	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP6);
 
 	if (!FSOUND_Init(44100, 32, flags))
     {

@@ -84,6 +84,7 @@ class Vehicle(Model):
     self.sound.isPaused = True
     self.sound.volume   = 128
     self.sound.minDist  = 50
+    self.sound.priority = 5
     
     self.obstacles = []
     self.stealingBeams = {}
