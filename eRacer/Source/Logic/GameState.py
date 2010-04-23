@@ -41,19 +41,23 @@ class LoadScreenState(State):
     nPlayers = settings.nPlayers
     w = 800
     h = 600
+
+    self.mappingCoords = []
     
     if nPlayers==1:
-      self.mappingQuads.append(HudQuad("Player1Mapping","gamepad_mapping.png", 0, 0, w, h))
+      self.mappingCoords.append((0,0,w,h))
     elif nPlayers==2:
-      self.mappingQuads.append(HudQuad("Player1Mapping","gamepad_mapping.png", w/4, 0, w/2, h/2))
-      self.mappingQuads.append(HudQuad("Player2Mapping","gamepad_mapping.png", w/4, h/2, w/2, h/2))
+      self.mappingCoords.append((w/4,0,w/2,h/2))
+      self.mappingCoords.append((w/4,h/2,w/2,h/2))
     elif nPlayers>2:
-      self.mappingQuads.append(HudQuad("Player1Mapping","gamepad_mapping.png", 0, 0, w/2, h/2))
-      self.mappingQuads.append(HudQuad("Player2Mapping","gamepad_mapping.png", w/2, 0, w/2, h/2))
-      self.mappingQuads.append(HudQuad("Player3Mapping","gamepad_mapping.png", 0, h/2, w/2, h/2))
-      self.mappingQuads.append(HudQuad("Player4Mapping","gamepad_mapping.png", w/2, h/2, w/2, h/2))
+      self.mappingCoords.append((0,0,w/2,h/2))
+      self.mappingCoords.append((w/2,0,w/2,h/2))
+      self.mappingCoords.append((0,h/2,w/2,h/2))
+      self.mappingCoords.append((w/2,h/2,w/2,h/2))
     
-    # for player in self.settings.players:
+    for i,player in enumerate(settings.players):
+      self.mappingQuads.append(HudQuad("%sMapping" % player.name,"gamepad_mapping.png", *self.mappingCoords[i]))
+      
     for quad in self.mappingQuads:
       self.view.Add(quad)
     self.settings = settings
