@@ -289,7 +289,8 @@ class GameState(State):
       game().graphics.views.append(interface.hud)
       
 
-    self.handleBoostStealing(float(time.game_delta)/time.RESOLUTION)
+    if self.gameStarted:
+      self.handleBoostStealing(float(time.game_delta)/time.RESOLUTION)
     
     if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL:
       self.lastMeteorTime += time.game_delta

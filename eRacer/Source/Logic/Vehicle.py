@@ -32,8 +32,6 @@ class Vehicle(Model):
     self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
-    print 'SPRING_K', self.SPRING_K
-    print 'DAMPING',  self.DAMPING
     
   def __init__(self, name, track, tx, modelnum=1):
     self.ReloadedConstsEvent()
