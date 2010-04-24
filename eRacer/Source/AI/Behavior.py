@@ -120,9 +120,9 @@ class AIBehavior(Behavior):
         turnSize = min(1.0, length(turnProj) * turnScale)
         if turnSize < 0.05:
           turnSize = 0
-        costheta = dot(turnProj, bodyRight) / length(turnProj)
+        costheta = dot(turnProj, bodyRight) / max(length(turnProj), 0.00001)
         fwProj = projectOnto(nowFrame.fw, bodyUp)#check if we are driving into the walls
-        fwCosth = dot(fwProj, bodyRight) / length(fwProj)
+        fwCosth = dot(fwProj, bodyRight) / max(length(fwProj), 0.00001)
         #print distFromCentre
        # print "fwcost", fwCosth
         if 0.999 < costheta < 1.001:#right turn
@@ -170,13 +170,13 @@ class AIBehavior(Behavior):
         self.parent.Accelerate(1.0)
       #basic boost code: we don't need to turn off boost until the turn becomes large
       #print turnSize
-      distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 50.0)
-      if turnSize < 0.05 and self.parent.boostFuel > 1.0 and not dodgeMode:
+      distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 20.0)
+      if turnSize < 0.05 and self.parent.boostFuel > 2.0 and not dodgeMode:
         if distAhead < self.line.maxX and distAhead > self.line.minX:
         #make sure we won't jump off the edge
           #print "boost"
           self.parent.Boost(True)
-      if turnSize > 0.5:
+      if turnSize > 0.8:
         #print "boost off"
         self.parent.Boost(False)
         
@@ -192,7 +192,7 @@ class AIBehavior(Behavior):
       #print "stuck, maybe reset"
       self.parent.Accelerate(-1.0)
       self.parent.Turn(0)
-      self.ResetChecker(delta+0.1, nowFrame)
+      self.ResetChecker(delta+0.5, nowFrame)
       if not self.objectInFront(8.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE
