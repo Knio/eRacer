@@ -73,6 +73,15 @@ class PlayerInterface(object):
     for i in self.starfields:
       i.length = int(self.starlen)
 
+    countdown = math.ceil(self.state.countdown)
+    if countdown == 3:
+      self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,0,0))
+    if countdown == 2:
+      self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,1,0))
+    if countdown == 1:
+      self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,1,0))
+    if countdown <= 0 and countdown >= -2:
+      self.hud.WriteString( "GO!", Config.FONT, 150, 300, 200, Vector3(0,1,0))
 
     t = time.seconds*5
 
@@ -84,7 +93,7 @@ class PlayerInterface(object):
     place = self.vehicle.finishPlace < 0 and self.vehicle.place or self.vehicle.finishPlace
     self.hud.WriteString(ordinal(place), Config.FONT, 60, 20, 5)
     if not self.vehicle.finishPlace < 0 and self.state.active:
-        self.hud.WriteString(ordinal(self.vehicle.finishPlace), Config.FONT, 80, 330, 350, Vector3(math.cos(t),math.sin(t),math.sin(t)))
+      self.hud.WriteString(ordinal(self.vehicle.finishPlace), Config.FONT, 256, 330, 350, Vector3(math.cos(t),math.sin(t),math.sin(t)))
     
   
     for vehicle in self.state.vehicleList:

@@ -2,10 +2,11 @@ from Core.Globals import *
 from Mapping      import Mapping, E
 
 class VehicleMapping(Mapping):
-    def __init__(self,target):
-        self.target = target
+  def __init__(self,target):
+      self.target = target
         
 class Keyboard1Mapping(VehicleMapping):
+  IMAGE = 'Keyboard1Mapping.png'
   def __init__(self,target):
         VehicleMapping.__init__(self,target)
   
@@ -16,8 +17,8 @@ class Keyboard1Mapping(VehicleMapping):
     elif key == KEY.A:      return self.target.vehicle.behavior.PlayerTurnEvent        (-1.0)
     elif key == KEY.D:      return self.target.vehicle.behavior.PlayerTurnEvent        (+1.0)
     elif key == KEY.SPACE:  return self.target.vehicle.behavior.PlayerBoostEvent       (True)
-    elif key == KEY.C:      return self.target.CameraChangedEvent               (    )
-    elif key == KEY.ESCAPE: return E.PauseEvent                       (    )
+    elif key == KEY.C:      return self.target.CameraChangedEvent                      (    )
+    elif key == KEY.ESCAPE: return E.PauseEvent                                        (    )
     elif key == KEY.T:      return self.target.vehicle.behavior.RespawnCarEvent        (    )
     elif key == KEY.F5:     return self.target.DebugCameraToggle()
     
@@ -27,9 +28,10 @@ class Keyboard1Mapping(VehicleMapping):
     elif key == KEY.LSHIFT:return self.target.vehicle.behavior.PlayerBrakeEvent      (False)
     elif key == KEY.A:     return self.target.vehicle.behavior.PlayerTurnEvent       ( 0)
     elif key == KEY.D:     return self.target.vehicle.behavior.PlayerTurnEvent       ( 0)
-    elif key == KEY.SPACE: return self.target.vehicle.behavior.PlayerBoostEvent     (False)
+    elif key == KEY.SPACE: return self.target.vehicle.behavior.PlayerBoostEvent      (False)
         
 class Keyboard2Mapping(VehicleMapping):
+  IMAGE = 'Keyboard2Mapping.png'
   def __init__(self,target):
     VehicleMapping.__init__(self,target)
         
@@ -40,8 +42,8 @@ class Keyboard2Mapping(VehicleMapping):
     elif key == KEY.LEFT:       return self.target.vehicle.behavior.PlayerTurnEvent        (-1.0)
     elif key == KEY.RIGHT:      return self.target.vehicle.behavior.PlayerTurnEvent        (+1.0)
     elif key == KEY.NUMPAD0:    return self.target.vehicle.behavior.PlayerBoostEvent       (True)
-    elif key == KEY.DECIMAL:    return self.target.CameraChangedEvent               (    )
-    elif key == KEY.PAUSE:      return E.PauseEvent                       (    )
+    elif key == KEY.DECIMAL:    return self.target.CameraChangedEvent                      (    )
+    elif key == KEY.PAUSE:      return E.PauseEvent                                        (    )
     elif key == KEY.RSHIFT:     return self.target.vehicle.behavior.RespawnCarEvent        (    )
     
     
@@ -51,7 +53,7 @@ class Keyboard2Mapping(VehicleMapping):
     elif key == KEY.RCONTROL:   return self.target.vehicle.behavior.PlayerBrakeEvent      (False)
     elif key == KEY.LEFT:       return self.target.vehicle.behavior.PlayerTurnEvent       ( 0)
     elif key == KEY.RIGHT:      return self.target.vehicle.behavior.PlayerTurnEvent       ( 0)
-    elif key == KEY.NUMPAD0:    return self.target.vehicle.behavior.PlayerBoostEvent     (False)
+    elif key == KEY.NUMPAD0:    return self.target.vehicle.behavior.PlayerBoostEvent      (False)
 
 class KeyboardDebugMapping(VehicleMapping):
   def __init__(self,target):
@@ -83,6 +85,7 @@ class KeyboardDebugMapping(VehicleMapping):
       
 
 class GamepadMapping(VehicleMapping):
+  IMAGE = 'GamepadMapping.png'
   def __init__(self, gamepadId, target):
     VehicleMapping.__init__(self,target)
     self.gamepadId = gamepadId

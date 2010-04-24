@@ -2,25 +2,17 @@ import os
 import sys
 import time
 
-
-
-
-
 debug   = True
 profile = False
-
-
-
-
 
 def run():
   m = None
   try:
     from Core import Globals
     from Main import Main
-    from Logic.MenuState import MainMenuState
-    from Logic.GameState import GameState
-    
+    from Logic.MenuState      import MainMenuState
+    from Logic.GameState      import GameState
+    from Logic.GameSettings  import GameSettings
         
     if debug:
       import gc
@@ -30,7 +22,8 @@ def run():
     
     if profile:
       m.Init()
-      m.PushState(GameState('Track1'))
+      settings = GameSettings()
+      m.PushState(GameState(settings))
       cProfile.runctx('m.Run(5000)', globals(), locals(), 'profile.data')
       stats = pstats.Stats('profile.data')
       stats.sort_stats('cumulative') 

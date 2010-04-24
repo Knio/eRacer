@@ -1,5 +1,5 @@
 from Core.Globals import *
-
+import random
 
 class Behavior(object):
   def __init__(self, parent):
@@ -35,14 +35,15 @@ class PlayerBehavior(Behavior):
     self.parent.resetCar()
 
 class AIBehavior(Behavior):
-  def __init__(self, parent, track, arrow=None):
+  def __init__(self, parent, track, gameState, arrow=None):
     Behavior.__init__(self,parent)
+    self.gameState = gameState
     self.line = track
     self.arrow = arrow
     self.startDist = 0.0 # the distance around the track at the last check
-    self.resetDist = 50.0 # if travelled less than this in interval, reset
-    self.resetCheckTime = 5.0 # how often to check if we should reset
-    self.resetCounter = -5.0 # don't check for the first 2 seconds
+    self.resetDist = 20.0 # if travelled less than this in interval, reset
+    self.resetCheckTime = 2.0 # how often to check if we should reset
+    self.resetCounter = -5.0 # don't check for the first 5 seconds
     
     self.curState = AIState.DRIVE
   
@@ -68,6 +69,7 @@ class AIBehavior(Behavior):
       self.arrow.transform = Matrix(frame2.position)
       
     if self.curState == AIState.DRIVE:
+      turnSize = 0.0
       #first check for obstacles and see if we must avoid them.
       dodgeMode = False
       closestDist = 99999
@@ -87,11 +89,28 @@ class AIBehavior(Behavior):
      # print "closest", closestDist
       if dodgeMode:
         #print "must dodge"
-        if distFromCentre > 0: 
+        #print "distfromcen:", distFromCentre
+        centreRad = 5.0
+        
+        if distFromCentre > centreRad: 
         #we are on the right side, so it would be better to go left ot the centre
-          self.parent.Turn(-1)
+          self.parent.Turn(-0.7)
+          #print "right side, dodge left"
+        elif distFromCentre < -centreRad:
+          self.parent.Turn(0.7)
+          #print "left side, dodge right"
         else:
-          self.parent.Turn(1)
+          #in middle
+          rand = random.random()
+          turnPoint = 0.5 + distFromCentre/(centreRad*2)
+          if rand < turnPoint:
+            #print "centre, dodge left"
+            self.parent.Turn(-0.7)
+          else:
+            #print "centre, dodge right"
+            self.parent.Turn(0.7)
+
+            
       else:
         #print "nothing to dodge"
         #if here, we can drive normally trying to follow the track
@@ -101,9 +120,9 @@ class AIBehavior(Behavior):
         turnSize = min(1.0, length(turnProj) * turnScale)
         if turnSize < 0.05:
           turnSize = 0
-        costheta = dot(turnProj, bodyRight) / length(turnProj)
+        costheta = dot(turnProj, bodyRight) / max(length(turnProj), 0.00001)
         fwProj = projectOnto(nowFrame.fw, bodyUp)#check if we are driving into the walls
-        fwCosth = dot(fwProj, bodyRight) / length(fwProj)
+        fwCosth = dot(fwProj, bodyRight) / max(length(fwProj), 0.00001)
         #print distFromCentre
        # print "fwcost", fwCosth
         if 0.999 < costheta < 1.001:#right turn
@@ -123,32 +142,57 @@ class AIBehavior(Behavior):
         cappedTurn = min(max(turnSize, -1.0), 1.0)
         #print cappedTurn
         self.parent.Turn(cappedTurn)
-        #basic boost code: we don't need to turn off boost until the turn becomes large
-        #print turnSize
-        distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 50.0)
-        if turnSize < 0.1 and self.parent.boostFuel > 2 and not dodgeMode:
-          if distAhead < self.line.maxX and distAhead > self.line.minX:
-          #make sure we won't jump off the edge
-            #print "boost"
-            self.parent.Boost(True)
-          else:
-             #print "1st check passed, no boost though"
-             pass
-        if turnSize > 0.5:
-          #print "boost off"
-          self.parent.Boost(False)
-      self.parent.Accelerate(1.0)
+
+      worstPlayerPos = self.parent.frame.dist
+     # print "my pos:", self.parent.frame.dist
+      for vehicle in self.gameState.playerVehicles:
+        #print "players dist:", vehicle.frame.dist
+        if worstPlayerPos > vehicle.frame.dist:
+          worstPlayerPos = vehicle.frame.dist
+      distAhead = self.parent.frame.dist - worstPlayerPos
+      #print "dist ahead last player:", distAhead
+      if(distAhead > 1000):
+        dodgeMode = True
+        #print "way ahead, slow to 0.2"
+        self.parent.Accelerate(0.5)
+        self.parent.Boost(False)
+      elif(distAhead > 500):
+        dodgeMode = True
+        #print "pretty far ahead, slow to 0.5"
+        self.parent.Accelerate(0.7)
+        self.parent.Boost(False)
+      elif(distAhead > 200):
+        dodgeMode = True
+        #print "a little ahead, slow down to 0.8"
+        self.parent.Accelerate(0.9)
+        self.parent.Boost(False)
+      else:
+        self.parent.Accelerate(1.0)
+      #basic boost code: we don't need to turn off boost until the turn becomes large
+      #print turnSize
+      distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 20.0)
+      if turnSize < 0.05 and self.parent.boostFuel > 2.0 and not dodgeMode:
+        if distAhead < self.line.maxX and distAhead > self.line.minX:
+        #make sure we won't jump off the edge
+          #print "boost"
+          self.parent.Boost(True)
+      if turnSize > 0.8:
+        #print "boost off"
+        self.parent.Boost(False)
+        
       self.ResetChecker(delta, nowFrame)
 
       #now change state if needed
-      if self.parent.physics.GetSpeed() < 1.0 and self.objectInFront(1.0, tx):
+      if self.parent.physics.GetSpeed() < 5.0 and self.objectInFront(2.0, tx) and self.resetCounter > 0:
+        #only say we are stuck if we are passed the start
         #object close in front has almost stopped us
         self.curState = AIState.STUCK
        
     if self.curState == AIState.STUCK:
+      #print "stuck, maybe reset"
       self.parent.Accelerate(-1.0)
       self.parent.Turn(0)
-      self.ResetChecker(delta, nowFrame)
+      self.ResetChecker(delta+0.5, nowFrame)
       if not self.objectInFront(8.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE
@@ -202,6 +246,7 @@ class AIBehavior(Behavior):
     if(self.resetCounter > self.resetCheckTime):
       distTravelled = nowFrame.dist - self.startDist
       #print "travelled" , distTravelled
+      
       if(distTravelled < self.resetDist):
         #print "must reset, we didn't travel far"
         self.parent.resetCar()

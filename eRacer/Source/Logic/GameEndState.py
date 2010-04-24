@@ -14,13 +14,14 @@ class GameEndState(State):
     self.parent = parent
     self.stats = stats
     self.view = HudView([self.scene])
-    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
-    gameover = HudQuad("GameOverHeadline", "gameover_glow.png", 300,110,110,30, False)
+    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20, 110, 760, 420))
+    gameover = HudQuad("GameOverHeadline", "gameover_glow.png", 300, 110, 190, 30)
     gameover.SetCenter(350,125)
     self.view.Add(gameover)
     
     
-    
+    if not os.path.isdir(os.path.dirname(Config.USER_STATS)):
+      os.mkdir(os.path.dirname(Config.USER_STATS))
     # write stats
     with open(Config.USER_STATS, 'a') as f:
       for stat in self.calcstats():
@@ -83,8 +84,8 @@ class GameEndState(State):
     y = 200
     self.view.WriteString("Name", font, 28, x, y)
     x += xd
-    for i in range(1, len(stats[0].laps)):
-      self.view.WriteString("Lap %d" % i, font, 28, x, y)
+    for i in range(0, len(stats[0].laps)):
+      self.view.WriteString("Lap %d" % (i+1), font, 28, x, y)
       x += xd/2
     x += xd/2
     self.view.WriteString("Total", font, 28, x,y)

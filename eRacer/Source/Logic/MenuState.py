@@ -7,33 +7,35 @@ from Quad             import Quad
 from HudQuad          import HudQuad
 from MenuMapping      import *
 from Graphics.View    import View, HudView
-from GameSettings     import GameSettings  
-
+from GameSettings     import GameSettings
 
 class MenuState(State):
+  menuNav = None;
+  menuSel = None
   def __init__(self):
     State.__init__(self)
     self.selected = 0
     
     self.view = HudView([self.scene])
 
-    self.menuNav = cpp.SoundFx();
-    self.menuNav.isLooping  = False
-    self.menuNav.is3D     = False
-    self.menuNav.isPaused = True
-    game().sound.sound.LoadSoundFx("MenuNav.wav", self.menuNav)
+    if MenuState.menuNav == None:
+      MenuState.menuNav = cpp.SoundFx();
+      MenuState.menuNav.isLooping  = False
+      MenuState.menuNav.is3D     = False
+      MenuState.menuNav.isPaused = True
+      game().sound.sound.LoadSoundFx("MenuNav.wav", self.menuNav)
 
-    self.menuSel = cpp.SoundFx();
-    self.menuSel.isLooping  = False
-    self.menuSel.is3D     = False
-    self.menuSel.isPaused = True
-    game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
+    if MenuState.menuSel == None:
+      MenuState.menuSel = cpp.SoundFx();
+      MenuState.menuSel.isLooping  = False
+      MenuState.menuSel.is3D     = False
+      MenuState.menuSel.isPaused = True
+      game().sound.sound.LoadSoundFx("MenuSelect.wav", self.menuSel)
+
     self.menu = []
     self.menuTop = 50
     self.menuLeft = 100
-
-    
-    
+  
   def Tick(self, time):
     State.Tick(self, time)
     game().graphics.views.append(self.view)
@@ -94,9 +96,9 @@ class MainMenuState(MenuState):
   
   def __init__(self):
     MenuState.__init__(self)
-
     logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
     self.view.Add(logo)
+    # self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
     self.LoadMusic("Terran5.ogg")
     
     self.menu = [
@@ -120,9 +122,10 @@ class MainMenuState(MenuState):
         i, Config.FONT, 28, 500, y
       )
       y += 30
-    
+    self.UnpauseMusic()
     MenuState.Tick(self, time)
-    
+
+
     
 class SetupGameMenuState(MenuState):
   MAPPING = MainMenuMapping
@@ -131,6 +134,9 @@ class SetupGameMenuState(MenuState):
   def __init__(self):
     MenuState.__init__(self)
     
+    self.menuTop = 170
+    self.ui = HudQuad("TextBox", Config.UI_TEXTURE, 20, 110, 760, 420)
+    self.view.Add(self.ui)
     self.settings = GameSettings()
     
     aiPlayerOptions = []
@@ -142,23 +148,36 @@ class SetupGameMenuState(MenuState):
       trackOptions.append((trackName,i))
     
     self.menu = [
-      ApplyMenuItem('Start', self.Menu_Start),
-      ApplyMenuItem('Setup Players', self.Menu_Setup_Players),
+      ApplyMenuItem('Start', self.Menu_Start, 36),
+      ApplyMenuItem('Setup Players...', self.Menu_Setup_Players),
       SelectMenuItem('AI Players', self.Menu_AI_Players, aiPlayerOptions, self.settings.nAIs),
       SelectMenuItem('Track', self.Menu_Track, trackOptions, self.settings.trackIndex),
       SelectMenuItem('Lap Count', self.Menu_Lap_Count, map(lambda x: (str(x[1]),x[0]) , enumerate(GameSettings.LAP_COUNTS)), self.settings.nLapsIndex),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
+    self.trackQuad = None
+    self.updateBackground()
+    
+  def updateBackground(self):
+    if self.trackQuad:
+      self.view.Remove(self.trackQuad.graphics)
+      self.view.Remove(self.ui.graphics)
+    
+    self.trackQuad = HudQuad("TextBox", 'Trackbg-%s.png' % self.settings.track.__name__, 0, 0, 800, 600, True)
+    self.view.Add(self.trackQuad)
+    self.view.Add(self.ui) # must be after the bg
     
   def Menu_Start(self):
     self.parent.PauseMusic()
-    game().PushState(GameState(self.settings))
+    game().PushState(LoadScreenState(self.settings))
+    #game().PushState(GameState(self.settings))
         
   def Menu_AI_Players(self, value):
     self.settings.nAIs = value[1]
     
   def Menu_Track(self, value):
-    self.settings.trackIndex = value[1]    
+    self.settings.trackIndex = value[1]
+    self.updateBackground()
 
   def Menu_Lap_Count(self, value):
     self.settings.nLapsIndex = value[1]    
@@ -175,18 +194,47 @@ class SetupPlayersMenuState(MenuState):
   def __init__(self, settings):
     MenuState.__init__(self)  
     
+    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20, 110, 760, 420))
+    
     self.settings = settings
    
     self.UpdateMenu()    
 
+  def Tick(self, time):
+    State.Tick(self, time)
+    game().graphics.views.append(self.view)
+    
+    if not self.active:
+      return
+    
+    quadrants = [
+      (100, 240),
+      (400, 240), 
+      (100, 340), 
+      (400, 340)
+    ]
+
+    for (x,y), menu in zip(quadrants,self.pmenu):
+      for i,m in enumerate(menu):
+        yOffset = m.draw(self.view, x, y, m is self.menu[self.selected], width=100)
+        y += yOffset
+    
+    y = 170
+    for i,m in enumerate(self.mmenu):
+      m.draw(self.view, self.menuLeft, y, m is self.menu[self.selected])
+      y += 250
+
   def UpdateMenu(self):
-    self.menu = []
+    self.menu  = []
+    self.mmenu = []
+    self.pmenu = [[],[],[],[]]
 
     humanPlayerOptions = []
     for i,num in enumerate(self.settings.availablePlayerNums):
       humanPlayerOptions.append((str(num),i))   
 
-    self.menu.append(SelectMenuItem('Human Players', self.Menu_Human_Players, humanPlayerOptions, self.settings.nPlayersIndex))
+    self.mmenu.append(SelectMenuItem('Human Players', self.Menu_Human_Players, humanPlayerOptions, self.settings.nPlayersIndex))
+    self.mmenu.append(ApplyMenuItem('Done', self.Menu_Back))
     self.settings.update_players()
     
     fontsize = 24
@@ -194,30 +242,37 @@ class SetupPlayersMenuState(MenuState):
     padding = 10
 
     for playerId,player in enumerate(self.settings.playersIndices):
-      self.menu.append(InputMenuItem('Name', self.settings.set_player_name, playerId, player.name))
-      self.menu[-1].fontsize = fontsize
-      self.menu[-1].lineheight = lineheight
+      self.pmenu[playerId].append(InputMenuItem('Name', self.settings.set_player_name, playerId, player.name))
+      self.pmenu[playerId][-1].fontsize = fontsize
+      self.pmenu[playerId][-1].lineheight = lineheight
     
       mappingOptions = []
       for i,mapping in enumerate(self.settings.availableMappings):
         s = mapping and mapping.__name__.replace('Mapping','') or 'None'
         mappingOptions.append((s,playerId,i))   
     
-      self.menu.append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex))
-      self.menu[-1].fontsize = fontsize
-      self.menu[-1].lineheight = lineheight
+      self.pmenu[playerId].append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex))
+      self.pmenu[playerId][-1].fontsize = fontsize
+      self.pmenu[playerId][-1].lineheight = lineheight
       
       textureOptions = []
 
       for i,textureName in enumerate(GameSettings.TEXTURE_NAMES):
         textureOptions.append((textureName, playerId, i))
       
-      self.menu.append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
-      self.menu[-1].fontsize = fontsize
-      self.menu[-1].lineheight = lineheight + padding
-
+      self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
+      self.pmenu[playerId][-1].fontsize = fontsize
+      self.pmenu[playerId][-1].lineheight = lineheight + padding
     
-    self.menu.append(ApplyMenuItem('Back', self.Menu_Back))
+
+    # copy all elements linearly for input logic
+    self.menu = self.mmenu[:1] \
+      + self.pmenu[0]  \
+      + self.pmenu[1]  \
+      + self.pmenu[2]  \
+      + self.pmenu[3]  \
+      + self.mmenu[1:] \
+    
     
 
   def Menu_Human_Players(self, value):
@@ -247,8 +302,8 @@ class PauseMenuState(MenuState):
       ApplyMenuItem('Exit',self.Menu_Exit),
     ]
     self.menuTop = 190
-    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
-    pause = HudQuad("PauseHeadline", "pause_glow.png", 300,110,110,30, False)
+    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20, 110, 760, 420))
+    pause = HudQuad("PauseHeadline", "pause_glow.png", 300, 110, 110, 30)
     pause.SetCenter(350,125)
     self.view.Add(pause)
     self.view.name = 'Pause HudView'
@@ -285,5 +340,5 @@ class PauseMenuState(MenuState):
     self.parent.Tick(time)
     MenuState.Tick(self, time)
       
-from GameState      import GameState
+from GameState      import GameState, LoadScreenState
 from HighScoreState import HighScoreState

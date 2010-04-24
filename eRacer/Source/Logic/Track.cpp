@@ -160,7 +160,7 @@ void Track::CreateMesh(const vector<TrackVertex>& profile, std::vector<ID3DXMesh
     HRESULT r = D3DXCreateMeshFVF(
       framesPerMesh*(D-1)*2,      // DWORD NumFaces,
       (framesPerMesh+1)*D,        // DWORD NumVertices,
-      0,                          // DWORD Options,
+      D3DXMESH_MANAGED,           // DWORD Options,
       Vertex_Format,              // DWORD FVF,
       Graphics::GraphicsLayer::GetInstance().GetDevice(),         // LPDIRECT3DDEVICE9 pD3DDevice,
       &mesh                       // LPD3DXMESH * ppMesh

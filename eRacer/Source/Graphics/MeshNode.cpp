@@ -22,9 +22,15 @@ MeshNode::MeshNode(const string& name, const Matrix& tx)
 	  mesh_(NULL),
 	  boundsMesh_(NULL)
 {
-	
+		m_colorMtrlTint = D3DXCOLOR( 1.0f, 1.0f, 1.0f, 1.0f );
+		m_texOffset.u = 0;
+		m_texOffset.v = 0;
 }
 
+void MeshNode::setTint(Vector4 tint)
+{
+	m_colorMtrlTint = D3DXCOLOR( tint.x, tint.y, tint.z, tint.w );
+}
 
 MeshNode::~MeshNode(){
 	if(initialized)
@@ -48,7 +54,8 @@ void MeshNode::Draw(IDirect3DDevice9* device) const{
 
 	effect->SetMatrix( "g_WorldMatrix", &transform_);
 
-	effect->SetValue( "g_ColorTint", &mesh_->m_colorMtrlTint, sizeof( D3DXCOLOR ) );
+	effect->SetValue( "g_ColorTint", &m_colorMtrlTint, sizeof( D3DXCOLOR ) );
+	effect->SetValue( "g_TexOffset", &m_texOffset,     sizeof( Vector2 ) );
 
 	assert(SUCCEEDED(effect->SetTechnique( "RenderSceneWithTextureDefault" )));
 	UINT cPasses = 1;

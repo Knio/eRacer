@@ -19,9 +19,9 @@ QuadNode::QuadNode(const string& name, const Matrix& transform)
 	assert(SUCCEEDED(
 		GraphicsLayer::GetInstance().GetDevice()->CreateVertexBuffer(
 			4 * sizeof(Vertex),   
-			D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+			0,
 			D3DFVF_XYZ | D3DFVF_TEX1,
-			D3DPOOL_DEFAULT,
+			D3DPOOL_MANAGED,
 			&vertexBuffer_,
 			NULL)
 		));
@@ -104,7 +104,11 @@ void QuadNode::Draw(IDirect3DDevice9* device) const{
 
 	//FIXME Should not be accessed directly
 	ID3DXEffect* effect = GraphicsLayer::GetInstance().m_pEffect;
-    effect->SetMatrix( "g_WorldMatrix", &transform_);
+  effect->SetMatrix( "g_WorldMatrix", &transform_);
+  Vector2 z;
+  z.u = 0;
+  z.v = 0;
+  effect->SetValue( "g_TexOffset", &z,     sizeof( Vector2 ) );
 
 	assert(SUCCEEDED(effect->SetTechnique( "RenderSceneWithTextureFixedLight" )));
 	UINT cPasses = 1;

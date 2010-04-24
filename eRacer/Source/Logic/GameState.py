@@ -26,46 +26,68 @@ from AI.Behavior import PlayerBehavior, AIBehavior
 from AI.Raceline import Raceline
 
 # View stuff
-from Graphics.View    import View
+from Graphics.View    import View, HudView
 from Graphics.SkyBox  import SkyBox
     
 
-    # TODO
-    # can we render a fake loading screen here until the real one works?
-
-# TODO
-# need a lock so that loading of IO does not happen
-# inside BegineScene()/EndScene() pairs, or else the 
-# driver will freak out
-class LoadingState(State):
-  def __init__(self, func):
-    State.__init__(self)    
-    def load():
-      # do loading function
-      func()
-      # wait for all asyncronous loads to finish
-      game().io.LoadAsyncEvent(self.Loaded)
-    
-    self.thread = threading.Thread(target=load)
-    self.thread.start()
-    
-  def Activate(self):
-    game().simspeed = 0.
+class LoadScreenState(State):
   
-  def Deactivate(self):
-    game().simspeed = 1.    
+  def __init__(self, settings):
+    State.__init__(self)
+    self.view = HudView([self.scene])
     
-  def Loaded(self, none):
-    game().PopState()
+    
+    self.mappingQuads = []
+    nPlayers = settings.nPlayers
+    w = 800
+    h = 600
+
+    self.mappingCoords = []
+    self.nameStringCoords = []
+    
+    if nPlayers==1:
+      self.mappingCoords.append((0,0,w,h))
+      self.nameStringCoords.append((20,20))
+    elif nPlayers==2:
+      self.mappingCoords.append((w/4,0,w/2,h/2))
+      self.mappingCoords.append((w/4,h/2,w/2,h/2))
+      self.nameStringCoords.append((20,20))
+      self.nameStringCoords.append((20,h/2+20))
+    elif nPlayers>2:
+      self.mappingCoords.append((0,0,w/2,h/2))
+      self.mappingCoords.append((w/2,0,w/2,h/2))
+      self.mappingCoords.append((0,h/2,w/2,h/2))
+      self.mappingCoords.append((w/2,h/2,w/2,h/2))
+      self.nameStringCoords.append((20,     20))
+      self.nameStringCoords.append((w/2+20, 20))
+      self.nameStringCoords.append((20,     h/2+20))
+      self.nameStringCoords.append((w/2+20, h/2+20))
+    
+    self.names = []
+    for i,player in enumerate(settings.players):
+      self.mappingQuads.append(HudQuad("%sMapping" % player.name,player.mapping.IMAGE, *self.mappingCoords[i]))
+      self.names.append(player.name)
+      
+    for quad in self.mappingQuads:
+      self.view.Add(quad)
+    self.settings = settings
+
+    self.isLoaded = False
     
   def Tick(self, time):
     State.Tick(self, time)
-    game().graphics.graphics.WriteString(
-      "Loading...", 
-      "Verdana", 32, 300, 220
-    )    
-##############################################
+    if not self.isLoaded:
+      game().graphics.views.append(self.view)
+      game().graphics.force = True
+      self.isLoaded = True
+      self.view.WriteString('Loading...',Config.FONT, 60, 270,250)
+      for i in range(self.settings.nPlayers):
+        self.view.WriteString(self.names[i], Config.FONT, 30, *self.nameStringCoords[i])
 
+
+    else:
+      game().PopState()
+      game().PushState(GameState(self.settings))
 
 class GameState(State):
   def __init__(self, settings):
@@ -79,7 +101,9 @@ class GameState(State):
    
     self.laps   = self.settings.nLaps
     self.stats  = {}
- 
+    self.countdown = 4
+    self.countsound = self.countdown
+    self.gameStarted = False
     self.gameOver = False
  
     self.nPlayersRacing = self.settings.nPlayers
@@ -95,8 +119,8 @@ class GameState(State):
     
     forwardMat = Matrix(ORIGIN, -PI/2.0, X)
     
-    startFrame = track.GetFrame(0.0)
-    
+    startFrame = track.GetFrame(0.0)\
+       
     finishLineTransform = Matrix(40, 8, 1) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.fw, -startFrame.up)
     self.Add(Quad('FinishLine','FinishLine2.png',finishLineTransform))
     finishLineTransform = Matrix(6.35, 4.0, 4.0) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.up, startFrame.fw)
@@ -106,8 +130,8 @@ class GameState(State):
       for i in xrange(64):
         frame = track.GetFrame(x+10*i)
         tx = Matrix(3.0, 3.0, 6.0) * Matrix(frame.position, frame.up, frame.fw)
-        #ring = Ring("Ring", "Ring1.x", "Ring1.x", tx)
-        #self.Add(ring)
+        ring = Ring("Ring", "Ring1.x", "Ring1.x", tx)
+        self.Add(ring)
     self.track = self.Add(track)
       
     
@@ -136,15 +160,27 @@ class GameState(State):
     
     self.lastMeteorTime = 0
     
-    # self.LoadMusic("Adventure.mp3")
+    self.countFx = cpp.SoundFx();
+    self.countFx.isLooping  = False
+    self.countFx.is3D     = False
+    self.countFx.isPaused = True
+    game().sound.sound.LoadSoundFx("Countdown.wav", self.countFx)
+
+##    self.goFx = cpp.SoundFx();
+##    self.goFx.isLooping  = False
+##    self.goFx.is3D     = False
+##    self.goFx.isPaused = True
+##    game().sound.sound.LoadSoundFx("Go.wav", self.goFx)
 
     self.music.volume = 20
-    self.LoadMusic("Adventure.mp3")
+    self.LoadMusic(track.music)
+    self.PauseMusic()
         
     self.boostbeams = []
     for i in xrange(16):
       beam = Model('StealBeam%d'%i, 'boostStealBeam.x', None, IDENTITY)
       beam.active = False
+      beam.graphics.m_texOffset.v = random.random()
       self.boostbeams.append(self.Add(beam))
     
     game().io.LoadTexture(Config.UI_TEXTURE)
@@ -158,6 +194,7 @@ class GameState(State):
       b.active = True
       b.graphics.visible = True
       b.transform = tx
+      b.graphics.m_texOffset.v += game().time.game_delta * -0.5 / game().time.RESOLUTION
       return
       
   def AddVehicle(self, player = None):
@@ -178,11 +215,14 @@ class GameState(State):
     vehicle.isAI = player==None
     self.Add(Shadow(vehicle))
     self.vehicleList.append(vehicle)
+    vehicle.isShutoff = True
+    vehicle.Brake(1)
     if player:
+      vehicle.sound.priority = 200
       PlayerBehavior(vehicle)
       vehicle.Backwards = False #???
     else:
-      AIBehavior(vehicle, self.track)
+      AIBehavior(vehicle, self.track, self)
     
     return vehicle                
       
@@ -225,7 +265,25 @@ class GameState(State):
   
   
   def Tick(self, time):
-    
+    delta = float(time.game_delta) / time.RESOLUTION
+    self.countdown = self.countdown - delta
+    if self.gameStarted == False:
+      if math.ceil(self.countdown) < self.countsound:
+        self.countsound = self.countsound - 1;
+        if self.countdown > 0 and self.countdown <= 3:
+          game().sound.sound.PlaySoundFx(self.countFx)
+        #if self.countsound == 0:
+        # game().sound.sound.PlaySoundFx(self.goFx)
+        
+    if self.gameStarted == False and self.countdown <=0:
+      self.UnpauseMusic()
+      self.gameStarted = True
+      for vehicle in self.vehicleList:
+        vehicle.isShutoff = False
+        vehicle.Brake(0)
+        self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+        
+
     for b in self.boostbeams:
       b.active = False
       b.graphics.visible = False
@@ -238,7 +296,6 @@ class GameState(State):
     
     _time.sleep(CONSTS.SLEEP_TIME)
     
-
     self.vehicleList.sort(key = lambda vehicle:vehicle.trackpos, reverse=True)
     
     for place,vehicle in enumerate(self.vehicleList):
@@ -249,9 +306,11 @@ class GameState(State):
       interface.Tick(time)
       game().graphics.views.append(interface.view)
       game().graphics.views.append(interface.hud)
-
+      
+    if self.gameStarted:
+      self.handleBoostStealing(float(time.game_delta)/time.RESOLUTION)
     
-    if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL:
+    if (not self.gameOver) and CONSTS.AIMED_METEOR_INTERVAL and self.gameStarted:
       self.lastMeteorTime += time.game_delta
       if self.lastMeteorTime > CONSTS.AIMED_METEOR_INTERVAL*time.RESOLUTION:
         self.lastMeteorTime = 0
@@ -260,12 +319,14 @@ class GameState(State):
     self.meteorManager.Tick(time)
     
     State.Tick(self, time)
-      
+    
+    
   def LapEvent(self, vehicle, lap):
-    #len(self.stats[vehicle])
     if vehicle.lapBugCount < lap:
-      self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
       vehicle.lapBugCount+=1
+      if lap != 1:
+        self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+      
     
     if lap == self.laps+1:
       vehicle.finishPlace = vehicle.place
@@ -298,6 +359,39 @@ class GameState(State):
     obstacle = self.entities[obstacleId]
     vehicle.obstacles.append(obstacle)
     
+  def handleBoostStealing(self, delta):
+    stealAmount = CONSTS.STEALING_SPEED*delta
+    if stealAmount < 0.0001:
+      #print "must be paused, no boost"
+      return
+    for i in range(len(self.vehicleList)-1):
+      a = self.vehicleList[i]
+      for j in range(i+1, len(self.vehicleList)):
+        b = self.vehicleList[j]
+        ap = a.physics.GetPosition()
+        bp = b.physics.GetPosition()
+        
+        if length(ap-bp) > CONSTS.MAX_STEALING_DISTANCE: continue
+        #possible stealing for one of the cars
+        
+        atx = a.physics.GetTransform()
+        btx = b.physics.GetTransform()
+        
+        def steal(stealer, stealee, vec):
+          
+          size = 0.2
+          if stealee.boostFuel > stealAmount and stealer.boostFuel + stealAmount < 5:
+            #actually take boost
+            stealer.boostFuel += stealAmount
+            stealee.boostFuel -= stealAmount
+            size = 1.0
+            
+          beamTransform = Matrix(size, size, length(vec)) * Matrix(stealer.physics.GetPosition(), Y, vec)
+          game().event.BoostStealEvent(stealer, stealee, beamTransform)  
+          
+        if dot(mul0(atx, Z), normalized(bp-ap)) > 0.5:  steal(a, b, bp-ap)
+        if dot(mul0(btx, Z), normalized(ap-bp)) > 0.5:  steal(b, a, ap-bp)
+                    
   def Release(self):
     self.loaded = False
     self.meteorManager.Release()

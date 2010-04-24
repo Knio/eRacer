@@ -51,9 +51,9 @@ CarBody::CarBody(float mass, const Point3& pos, const Matrix& orient){
   
   
   NxBoxShapeDesc triggerBoxDesc;
-  triggerBoxDesc.dimensions = NxVec3((NxReal)10.0, (NxReal)2.0, (NxReal)30.0);
+  triggerBoxDesc.dimensions = NxVec3((NxReal)20.0, (NxReal)2.0, (NxReal)50.0);
   triggerBoxDesc.shapeFlags |= NX_TRIGGER_ON_STAY;
-  triggerBoxDesc.localPose.t = NxVec3((NxReal)0.0, (NxReal)0, (NxReal)22.5);
+  triggerBoxDesc.localPose.t = NxVec3((NxReal)0.0, (NxReal)0, (NxReal)40.0);
   actorDesc.shapes.pushBack(&triggerBoxDesc);
   
   

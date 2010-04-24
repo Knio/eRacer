@@ -158,14 +158,14 @@ int GraphicsLayer::Init( HWND hWnd )
     
     
     stringSprite = new StringSprite();
-    debugRenderable = new DebugRenderable();
+    //debugRenderable = new DebugRenderable();
     
     return S_OK;
 }
 
 void GraphicsLayer::Shutdown()
 {
-	SAFE_DELETE(debugRenderable);
+	//SAFE_DELETE(debugRenderable);
 	SAFE_RELEASE(m_pEffect);
 	SAFE_RELEASE(screen);
 	SAFE_RELEASE(msaasurf);
@@ -190,7 +190,7 @@ void GraphicsLayer::resetPresentationParameters(){
     m_presentationParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
     m_presentationParameters.hDeviceWindow = Game::GetInstance()->hwnd;
     
-    D3DDISPLAYMODE mode;
+    D3DDISPLAYMODE mode, bestMode; //bestMode will be 59hz or 60hz, either will do
     for (UINT i=0; i<m_pD3D->GetAdapterModeCount(0, D3DFMT_R5G6B5); i++)
     { 
         assert(SUCCEEDED(m_pD3D->EnumAdapterModes(
@@ -199,6 +199,9 @@ void GraphicsLayer::resetPresentationParameters(){
             i,
             &mode
         )));
+		if(mode.RefreshRate == 59 || mode.RefreshRate == 60){
+			bestMode = mode;
+		}
         // printf("%4dx%4dx%2d\n", mode.Width, mode.Height, mode.RefreshRate);
     }
     
@@ -211,10 +214,10 @@ void GraphicsLayer::resetPresentationParameters(){
     }
     else
     {
-        m_presentationParameters.BackBufferWidth    = mode.Width;
-        m_presentationParameters.BackBufferHeight   = mode.Height;
-        m_presentationParameters.FullScreen_RefreshRateInHz = mode.RefreshRate;
-        m_presentationParameters.BackBufferFormat   = mode.Format;
+        m_presentationParameters.BackBufferWidth    = bestMode.Width;
+        m_presentationParameters.BackBufferHeight   = bestMode.Height;
+        m_presentationParameters.FullScreen_RefreshRateInHz = bestMode.RefreshRate;
+        m_presentationParameters.BackBufferFormat   = bestMode.Format;
         SetWindowLong(Game::GetInstance()->hwnd, GWL_STYLE, WS_POPUPWINDOW);
         SetWindowPos(Game::GetInstance()->hwnd, HWND_TOP, 0, 0, 0, 0,
             SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
@@ -263,8 +266,8 @@ void GraphicsLayer::PostRender(){
 	stringSprite->Draw(m_pd3dDevice);
     stringSprite->Clear();
     // draw debug
-    debugRenderable->Draw(m_pd3dDevice);
-    debugRenderable->Clear();
+    //debugRenderable->Draw(m_pd3dDevice);
+    //debugRenderable->Clear();
         
     // do postprocessing here
     
@@ -308,10 +311,11 @@ void GraphicsLayer::WriteString(const char* text, const char* family, int size, 
 
 void GraphicsLayer::ClearStrings(){
     stringSprite->Clear();
-    debugRenderable->Clear();
+    //debugRenderable->Clear();
 }
 
 void GraphicsLayer::InvalidateDeviceObjects(){
+    SAFE_RELEASE(screen);
 	SAFE_RELEASE(msaasurf);
 	SAFE_RELEASE(depthsurf);
 }
@@ -319,25 +323,27 @@ void GraphicsLayer::InvalidateDeviceObjects(){
 void GraphicsLayer::RestoreDeviceObjects(){
     // create a new surface
     // http://www.borgsoft.de/renderToSurface.html
-    assert(SUCCEEDED(m_pd3dDevice->CreateRenderTarget(
+    HRESULT r = m_pd3dDevice->CreateRenderTarget(
         width, height,
         D3DFMT_A8R8G8B8,
         D3DMULTISAMPLE_4_SAMPLES, 0,
         false,
         &msaasurf,
         NULL
-    )));
+    );
+    assert(SUCCEEDED(r));
     
     // create a depth buffer to go with it
-    assert(SUCCEEDED(m_pd3dDevice->CreateDepthStencilSurface(
+    r = m_pd3dDevice->CreateDepthStencilSurface(
         width, height,
         D3DFMT_D16,
         D3DMULTISAMPLE_4_SAMPLES, 0,
         TRUE,
         &depthsurf,
         NULL
-    )));
-
+    );
+    
+    assert(SUCCEEDED(r));
 }
 
 
@@ -361,7 +367,7 @@ void GraphicsLayer::WaitForDevice(){
 }
 
 void GraphicsLayer::resetDevice(){
-	//resetPresentationParameters();
+	resetPresentationParameters();
 	HRESULT r = m_pd3dDevice->Reset(&m_presentationParameters);
 
 	switch(r){
@@ -377,6 +383,9 @@ void GraphicsLayer::resetDevice(){
 	case D3DERR_OUTOFVIDEOMEMORY:
 		printf("Fatal error: Out of video memory\n");
 		throw runtime_error("Fatal error: Out of video memory.");
+    default:
+        cout << "Encountered logic error: "<< r << endl;
+        assert(SUCCEEDED(r));    
 	}
 }
 

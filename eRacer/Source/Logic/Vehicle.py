@@ -32,8 +32,6 @@ class Vehicle(Model):
     self.MAX_BRAKE_FORCE  = CONSTS.MAX_BRAKE_FORCE  
     self.SPRING_K         = (CONSTS.CAR_MASS * CONSTS.CAR_GRAVITY) / (len(self.WHEELS) * self.DISPLACEMENT)
     self.DAMPING          = 2.0 * math.sqrt(self.SPRING_K * self.MASS)
-    print 'SPRING_K', self.SPRING_K
-    print 'DAMPING',  self.DAMPING
     
   def __init__(self, name, track, tx, modelnum=1):
     self.ReloadedConstsEvent()
@@ -86,48 +84,14 @@ class Vehicle(Model):
     self.sound.isPaused = True
     self.sound.volume   = 128
     self.sound.minDist  = 50
+    self.sound.priority = 5
     
     self.obstacles = []
     self.stealingBeams = {}
 
     game().sound.sound.LoadSoundFx("EngineSound.wav", self.sound)
 
-    game().event.Register(self.ReloadedConstsEvent)
-
-
-  def BoostStealing(self, delta_s):
-    
-    stealingBeams = self.stealingBeams
-    self.stealingBeams = {}
-    
-    for obstacle in self.obstacles:
-      if isinstance(obstacle, Vehicle):
-        obstaclePosition = mul1(obstacle.transform, ORIGIN)
-        stealerPosition = mul1(self.transform, self.tip)
-        vector = obstaclePosition-stealerPosition
-        distance = length(vector)
-        
-        if(distance < CONSTS.MAX_STEALING_DISTANCE):
-          stealerDirection = mul0(self.transform,Z)
-          
-          #to the front?
-          if dot(vector, stealerDirection) > 0:
-            pos = stealerPosition
-            up = Vector3(0,1,0)
-            fw = Vector3(0,0,1) #stealerDirection
-            beamTransform = Matrix(0.1, 0.1, distance) * Matrix(pos, up, vector)
-            # TODO: I think every car should only be able to steal from 2 or 3 other cars at a time
-            # this would allow us to store a fixed number of models for the beam and only make them 
-            # (in)visible/ change position
-            
-            
-            if obstacle.boostFuel >=CONSTS.STEALING_SPEED*delta_s:
-              self.boostFuel += CONSTS.STEALING_SPEED*delta_s
-              obstacle.boostFuel -= CONSTS.STEALING_SPEED*delta_s
-
-              game().event.BoostStealEvent(self, obstacle, beamTransform)   
-    
-    
+    game().event.Register(self.ReloadedConstsEvent)    
 
   # control events
   def Brake(self, brake):
@@ -141,12 +105,12 @@ class Vehicle(Model):
   
   def Boost(self, boostState):
     tx = self.physics.GetTransform()
-    if boostState == True and self.boostFuel > 0.5:
+    if boostState == True and self.boostFuel > 0.5 and self.isShutoff == False:
       normal = Vector3(0, 0, 0)
       dist = game().physics.physics.Raycast(mul1(tx, ORIGIN), mul0(tx, -Y), normal)
       if dist < 3.0 and self.boosting == 0:
         self.boostFuel = self.boostFuel - 0.5
-        pushForce = normalized(Vector3(0,1,1)) * 250000 
+        pushForce = normalized(Vector3(0,1,1)) * 290000 
         self.physics.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
       self.boosting = 1
     else:
@@ -159,9 +123,10 @@ class Vehicle(Model):
       game().sound.sound.UpdateSoundFx(self.sound)
       return
     
+    if self.isShutoff == True:
+      self.acceleration = 0
+      
     delta = float(time.game_delta) / time.RESOLUTION
-
-    self.BoostStealing(delta)
     
     phys  = self.physics
     tx    = phys.GetTransform()
@@ -187,7 +152,7 @@ class Vehicle(Model):
         game().event.LapEvent(self, lapcount)
     self.lapcount = lapcount
   
-    if self.behavior: 
+    if self.behavior and self.isShutoff == False: 
       self.behavior.Tick(time)
     
     # remove obstacles - they are not needed any more
@@ -199,7 +164,6 @@ class Vehicle(Model):
     
     alphaa = math.pow(self.REV_ALPHA,  delta)
     alphat = math.pow(self.TURN_ALPHA, delta)
-    
     self.acceleration = (alphaa)*self.acceleration + (1-alphaa)*self.throttle
     self.turning      = (alphat)*self.turning      + (1-alphat)*self.steerPos
 
@@ -237,8 +201,6 @@ class Vehicle(Model):
     
     self.sound.position = mul1(tx, ORIGIN)
     self.sound.velocity = ORIGIN #vel
-    
-
     
     self.sound.pitch = max(50000, int(50000 * length(vel) / 60.0))
     if self.crashtime > 0:
@@ -289,8 +251,13 @@ class Vehicle(Model):
       self.boostFuel = max( 0, self.boostFuel - delta )
       if self.boostFuel == 0:
         self.boosting = 0
-      pushForce = normalized(Vector3(0,-0.5,1)) * 4000
-      phys.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
+
+      tx = self.physics.GetTransform()
+      normal = Vector3(0, 0, 0)
+      dist = game().physics.physics.Raycast(mul1(tx, ORIGIN), mul0(tx, -Y), normal)
+      if dist < 3.0:
+        pushForce = normalized(Vector3(0,-1.2,1)) * 6000
+        phys.AddLocalImpulseAtLocalPos(pushForce, self.MASS_CENTRE)
     else:    
       self.boostFuel = min( 5, self.boostFuel + delta/3 )
       
@@ -353,6 +320,8 @@ class Vehicle(Model):
     
         
   def resetCar(self):
+    if self.isShutoff:
+      return
     print 'Reset Car'
     phys  = self.physics
     self.resetFrame.position = self.resetFrame.position + self.resetFrame.up * 3.0

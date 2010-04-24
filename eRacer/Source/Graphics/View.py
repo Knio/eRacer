@@ -16,6 +16,10 @@ class View(object):
   def Add(self, obj):
     return self.AddRenderable(obj)
     
+  def Remove(self, obj):
+    self.renderables.remove(obj)
+
+    
   def Draw(self):
     gfx = game().graphics.graphics
     gfx.SetCamera(self.camera)

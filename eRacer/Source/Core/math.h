@@ -27,6 +27,12 @@ typedef D3DXVECTOR4 Point4;
 
 typedef D3DXMATRIX Matrix;
 
+struct Vector2
+{
+  float u,v;
+};
+
+
 #undef RGB
 typedef D3DXVECTOR3 RGB;
 typedef D3DXVECTOR4 RGBA;

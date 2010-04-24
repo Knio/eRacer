@@ -3,6 +3,7 @@ NAME = 'Triple Eight'
 from Core.Globals import *
 
 SIZE = 400
+MUSIC = 'e15_12.mp3'
 
 TRACK = [
   cpp.Frame(Point3( -SIZE,  0,   00), Y),  
@@ -27,6 +28,7 @@ PROFILE = [
   cpp.TrackVertex(Point3( -15,  0,  0),  Y, 0.80, 0.01),  
   cpp.TrackVertex(Point3( -25,  0,  0),  Y, 0.95, 0.01),  
   cpp.TrackVertex(Point3( -25,  4,  0),  Y, 1.00, 0.01),
+  cpp.TrackVertex(Point3( -25,  4,  0),  Y, 0.00, 0.01),
   cpp.TrackVertex(Point3( -25, -4,  0),  Y, 0.00, 0.01),
   cpp.TrackVertex(Point3(  25, -4,  0),  Y, 1.00, 0.01),
 ]

@@ -64,9 +64,7 @@ class Config(object):
     self.user.set(section, key, value)
     self.settings.set(section, key, value)
     self.save()
-
     
   def get_setting(self, key, section='GENERAL'):
     return self.settings.get(section, key)
     
-         
