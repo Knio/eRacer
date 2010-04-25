@@ -107,6 +107,11 @@ void SoundLayer::StopSounds()
 	FSOUND_StopSound(FSOUND_ALL);
 }
 
+void SoundLayer::ResetSound(SoundFx* samp)
+{
+	FSOUND_SetCurrentPosition(samp->channel,0);
+}
+
 void SoundLayer::PlaySoundFx(SoundFx* samp)
 {
 	if (NULL == samp->soundsample)
@@ -145,8 +150,8 @@ int SoundLayer::Init()
 	flags |= FSOUND_INIT_DONTLATENCYADJUST;
 	flags |= FSOUND_INIT_STREAM_FROM_MAIN_THREAD;*/
 
-	FSOUND_SetMaxHardwareChannels(0);
-	FSOUND_SetMinHardwareChannels(0);
+	//FSOUND_SetMaxHardwareChannels(0);
+	//FSOUND_SetMinHardwareChannels(0);
 	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_FPU);
 	// FSOUND_SetMixer(FSOUND_MIXER_MAX);
 	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP5);
@@ -167,6 +172,19 @@ int SoundLayer::SetOrientation3D(const Point3& listenerPos, const Vector3& liste
 {
 	float pos[3] = { listenerPos.x, listenerPos.y, listenerPos.z };
 	float vel[3] = { listenerVel.x, listenerVel.y, listenerVel.z };
+	FSOUND_3D_Listener_SetAttributes(pos, vel, 
+		atVector.x, atVector.y, atVector.z, 
+		upVector.x, upVector.y, upVector.z);
+
+	return 0;
+}
+
+int SoundLayer::SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector, int listener, int total)
+{
+	float pos[3] = { listenerPos.x, listenerPos.y, listenerPos.z };
+	float vel[3] = { listenerVel.x, listenerVel.y, listenerVel.z };
+
+	FSOUND_3D_Listener_SetCurrent( listener, total );
 	FSOUND_3D_Listener_SetAttributes(pos, vel, 
 		atVector.x, atVector.y, atVector.z, 
 		upVector.x, upVector.y, upVector.z);

@@ -175,7 +175,7 @@ class GameState(State):
 ##    game().sound.sound.LoadSoundFx("Go.wav", self.goFx)
 
     self.music = Music(track.music)
-    self.music.volume = 20
+    self.music.volume = 50
     self.music.Pause()
         
     self.boostbeams = []
@@ -403,7 +403,8 @@ class GameState(State):
     
   def Activate(self):
     State.Activate(self)
-    self.music.Unpause()    
+    if self.gameStarted:
+      self.music.Unpause()    
     print "Activate game state"
 
   def Deactivate(self):
