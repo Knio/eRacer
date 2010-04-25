@@ -37,7 +37,7 @@ class GameEndState(State):
         
         best = min(stat.laps)
         f.write('%s\t%d\t%s\t%.4f\n' % (
-          parent.track.name,
+          parent.track.classname,
           0,
           stat.player.name,
           best,
