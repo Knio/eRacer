@@ -59,7 +59,8 @@ class HighScoreState(MenuState):
     
   def update(self):
     self.current = [i for i in self.stats if i.track==self.curTrack and i.laps==self.curLaps]
-    self.current.sort(key=lambda x:x.time)    
+    self.current.sort(key=lambda x:x.time)  
+    self.current = self.current[:10:]  
     
   def Tick(self, time):
     MenuState.Tick(self, time)
@@ -68,15 +69,15 @@ class HighScoreState(MenuState):
     
     if self.loaded:
       header = self.curLaps and 'Total Time' or 'Best Lap'
-      self.view.WriteString('Player', Config.FONT, 28, 100, y)
+      self.view.WriteString('Player', Config.FONT, 28, 120, y)
       self.view.WriteString(header,   Config.FONT, 28, 500, y)
       y += 40
       
       for i, stat in enumerate(self.current[:20]):
-        self.view.WriteString(str(i+1),           Config.FONT, 22, 60, y)
-        self.view.WriteString(stat.name,          Config.FONT, 22, 100, y)
-        self.view.WriteString('%.2f' % stat.time, Config.FONT, 22, 500, y)
-        y += 30
+        self.view.WriteString(str(i+1),           Config.FONT, 22, 80, y)
+        self.view.WriteString(stat.name,          Config.FONT, 22, 120, y)
+        self.view.WriteString('%.2f' % stat.time, Config.FONT, 22, 520, y)
+        y += 25
     else:
       self.view.WriteString('Could not load high score file - have you played yet?', Config.FONT, 28, 100, y)
     
