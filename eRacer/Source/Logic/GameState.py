@@ -28,6 +28,8 @@ from AI.Raceline import Raceline
 # View stuff
 from Graphics.View    import View, HudView
 from Graphics.SkyBox  import SkyBox
+
+from Sound.Music import Music
     
 
 class LoadScreenState(State):
@@ -172,9 +174,9 @@ class GameState(State):
 ##    self.goFx.isPaused = True
 ##    game().sound.sound.LoadSoundFx("Go.wav", self.goFx)
 
+    self.music = Music(track.music)
     self.music.volume = 20
-    self.LoadMusic(track.music)
-    self.PauseMusic()
+    self.music.Pause()
         
     self.boostbeams = []
     for i in xrange(16):
@@ -276,7 +278,7 @@ class GameState(State):
         # game().sound.sound.PlaySoundFx(self.goFx)
         
     if self.gameStarted == False and self.countdown <=0:
-      self.UnpauseMusic()
+      self.music.Unpause()
       self.gameStarted = True
       for vehicle in self.vehicleList:
         vehicle.isShutoff = False
@@ -346,9 +348,6 @@ class GameState(State):
     
   def PauseEvent(self):
     game().PushState(PauseMenuState())
-
-  def PlayJaguarSoundEvent(self):
-    game().sound.PlaySound2D("jaguar.wav")
     
   def KeyPressedEvent(self, key):
     if key == KEY.HOME:
@@ -395,7 +394,6 @@ class GameState(State):
   def Release(self):
     self.loaded = False
     self.meteorManager.Release()
-    self.PauseMusic()
     del self.meteorManager
     
     for i in self.entities.values():
@@ -405,14 +403,12 @@ class GameState(State):
     
   def Activate(self):
     State.Activate(self)
-    #if not self.loaded:
-    #  game().PushState(LoadingState(self.load))
+    self.music.Unpause()    
     print "Activate game state"
 
   def Deactivate(self):
-    State.Deactivate(self)    
-    # self.sound.isPaused = True
-    # game().sound.sound.UpdateSoundFx(self.sound)
+    State.Deactivate(self)
+    self.music.Pause()    
     
   def Pop(self):
     self.Release()

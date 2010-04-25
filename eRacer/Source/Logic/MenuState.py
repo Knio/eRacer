@@ -8,6 +8,7 @@ from HudQuad          import HudQuad
 from MenuMapping      import *
 from Graphics.View    import View, HudView
 from GameSettings     import GameSettings
+from Sound.Music      import Music
 
 class MenuState(State):
   menuNav = None;
@@ -99,7 +100,7 @@ class MainMenuState(MenuState):
     logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
     self.view.Add(logo)
     # self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
-    self.LoadMusic("Terran5.ogg")
+    self.music = Music("Terran5.ogg")
     
     self.menu = [
       ApplyMenuItem('New Game', self.Menu_New_Game),
@@ -122,7 +123,6 @@ class MainMenuState(MenuState):
         i, Config.FONT, 28, 500, y
       )
       y += 30
-    self.UnpauseMusic()
     MenuState.Tick(self, time)
 
 
@@ -130,7 +130,6 @@ class MainMenuState(MenuState):
 class SetupGameMenuState(MenuState):
   MAPPING = MainMenuMapping
 
-  
   def __init__(self):
     MenuState.__init__(self)
     
@@ -168,9 +167,8 @@ class SetupGameMenuState(MenuState):
     self.view.Add(self.ui) # must be after the bg
     
   def Menu_Start(self):
-    self.parent.PauseMusic()
+    self.parent.music.Pause()
     game().PushState(LoadScreenState(self.settings))
-    #game().PushState(GameState(self.settings))
         
   def Menu_AI_Players(self, value):
     self.settings.nAIs = value[1]
@@ -292,6 +290,7 @@ class SetupPlayersMenuState(MenuState):
 
 class PauseMenuState(MenuState):
   MAPPING = PauseMenuMapping
+  music = None  
   
   def __init__(self):
     MenuState.__init__(self)
@@ -307,15 +306,18 @@ class PauseMenuState(MenuState):
     pause.SetCenter(350,125)
     self.view.Add(pause)
     self.view.name = 'Pause HudView'
+    if not PauseMenuState.music:
+      PauseMenuState.music = Music("SwanLakeShort.mp3")
     
   def Activate(self):
-    print "activate pause!!!!"
     game().simspeed = 0.
     MenuState.Activate(self)
+    self.music.Unpause()
     
   def Deactivate(self):
     game().simspeed = 1.
     MenuState.Deactivate(self)
+    self.music.Pause()
     
   def UnPauseEvent(self):
     game().PopState()

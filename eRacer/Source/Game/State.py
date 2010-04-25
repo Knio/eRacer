@@ -1,4 +1,4 @@
-from Core.Globals import *
+from Core.Globals import *    
 
 class State(cpp.State):
   MAPPING = None
@@ -8,13 +8,6 @@ class State(cpp.State):
     self.active   = False
     self.entities = {}
     self.scene    = cpp.Scene()
-
-    self.music          = cpp.SoundFx();
-    self.music.looping  = True
-    self.music.is3D     = False
-    self.music.isPaused = False
-    self.music.volume   = 255
-    self.music.priority = 255
     
   def Add(self, obj, scene=True):
     self.entities[obj.id] = obj
@@ -51,13 +44,4 @@ class State(cpp.State):
   def Pop(self):
     pass
     
-  def LoadMusic(self, filename):
-    game().sound.sound.LoadSoundFx(filename, self.music)
-    
-  def PauseMusic(self):
-    self.music.isPaused = True
-    game().sound.sound.UpdateSoundFx(self.music)
 
-  def UnpauseMusic(self):
-    self.music.isPaused = False
-    game().sound.sound.UpdateSoundFx(self.music)
