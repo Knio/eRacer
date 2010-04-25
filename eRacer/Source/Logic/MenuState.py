@@ -105,6 +105,7 @@ class MainMenuState(MenuState):
     self.menu = [
       ApplyMenuItem('New Game', self.Menu_New_Game),
       ApplyMenuItem('High Scores', self.Menu_High_Scores),
+      ApplyMenuItem('Credits', self.Menu_Credits),
       ApplyMenuItem('Exit', self.Menu_Exit)
     ]
     self.menuTop = 240
@@ -112,6 +113,9 @@ class MainMenuState(MenuState):
     
   def Menu_High_Scores(self):
     game().PushState(HighScoreState())
+    
+  def Menu_Credits(self):
+    game().PushState(CreditsState())
     
   def Menu_New_Game(self):
     game().PushState(SetupGameMenuState())
@@ -344,3 +348,4 @@ class PauseMenuState(MenuState):
       
 from GameState      import GameState, LoadScreenState
 from HighScoreState import HighScoreState
+from CreditsState   import CreditsState  
