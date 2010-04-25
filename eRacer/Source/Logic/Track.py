@@ -16,6 +16,7 @@ class Track(Entity, cpp.Track):
     # otherwise only Tracks will be stored in track     
     
     self.name = track.NAME
+    self.classname = track.__name__
     self.music = track.MUSIC
     
     for i in track.TRACK:
