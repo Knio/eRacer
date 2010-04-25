@@ -109,6 +109,11 @@ class MainMenuState(MenuState):
     ]
     self.menuTop = 240
 
+  def Activate(self):
+    State.Activate(self)
+    game().sound.sound.ResetSound(self.music)
+    self.music.Unpause()
+    #self.music = Music("Terran5.ogg")
     
   def Menu_High_Scores(self):
     game().PushState(HighScoreState())
