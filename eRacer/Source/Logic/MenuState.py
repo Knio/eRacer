@@ -190,6 +190,7 @@ class SetupGameMenuState(MenuState):
     self.settings.nLapsIndex = value[1]    
     
   def Menu_Setup_Players(self):
+    print 'setupplayer'
     game().PushState(SetupPlayersMenuState(self.settings))    
     
   def Menu_Back(self):
@@ -280,7 +281,14 @@ class SetupPlayersMenuState(MenuState):
       + self.pmenu[3]  \
       + self.mmenu[1:] \
     
-    
+
+  def KeyPressedEvent(self, key):
+    if key == KEY.RETURN:
+      print 'back'
+      game().PopState()    
+  #   else:
+  #     print 'else'
+    # MenuState.KeyPressedEvent(self,key)
 
   def Menu_Human_Players(self, value):
     self.settings.nPlayersIndex = value[1]      
