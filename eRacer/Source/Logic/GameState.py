@@ -75,6 +75,7 @@ class LoadScreenState(State):
     self.settings = settings
 
     self.isLoaded = False
+    PauseMenuState.PreloadMusic()
     
   def Tick(self, time):
     State.Tick(self, time)

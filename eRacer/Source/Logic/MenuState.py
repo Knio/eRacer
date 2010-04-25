@@ -301,6 +301,12 @@ class PauseMenuState(MenuState):
   MAPPING = PauseMenuMapping
   music = None  
   
+  @classmethod
+  def PreloadMusic(cls):
+    if not cls.music:
+      cls.music = Music("SwanLakeShort.mp3")
+      cls.music.Pause()
+  
   def __init__(self):
     MenuState.__init__(self)
     self.menu = [
