@@ -36,6 +36,7 @@ class MenuState(State):
     self.menu = []
     self.menuTop = 50
     self.menuLeft = 100
+    self.bg = None
   
   def Tick(self, time):
     State.Tick(self, time)
@@ -49,6 +50,17 @@ class MenuState(State):
     for i,m in enumerate(self.menu):
       yOffset = m.draw(self.view, self.menuLeft, y, i == self.selected)
       y += yOffset
+
+  
+  def setBackground(self, filename):
+    if self.bg:
+      self.view.Remove(self.bg.graphics)
+      self.view.Remove(self.ui.graphics)
+    
+    self.bg = HudQuad("background", filename, 0, 0, 800, 600, True)
+    self.view.Add(self.bg)
+    self.view.Add(self.ui) # must be after the bg
+
       
   def MenuUpEvent(self):
     game().sound.sound.PlaySoundFx(self.menuNav)
@@ -163,17 +175,10 @@ class SetupGameMenuState(MenuState):
       SelectMenuItem('Lap Count', self.Menu_Lap_Count, map(lambda x: (str(x[1]),x[0]) , enumerate(GameSettings.LAP_COUNTS)), self.settings.nLapsIndex),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
-    self.trackQuad = None
     self.updateBackground()
     
   def updateBackground(self):
-    if self.trackQuad:
-      self.view.Remove(self.trackQuad.graphics)
-      self.view.Remove(self.ui.graphics)
-    
-    self.trackQuad = HudQuad("TextBox", 'Trackbg-%s.png' % self.settings.track.__name__, 0, 0, 800, 600, True)
-    self.view.Add(self.trackQuad)
-    self.view.Add(self.ui) # must be after the bg
+    self.setBackground('Trackbg-%s.png' % self.settings.track.__name__)    
     
   def Menu_Start(self):
     self.parent.music.Pause()
@@ -201,11 +206,14 @@ class SetupPlayersMenuState(MenuState):
   def __init__(self, settings):
     MenuState.__init__(self)  
     
-    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20, 110, 760, 420))
+    self.ui = HudQuad("UI Overlay", Config.UI_TEXTURE, 20, 110, 760, 420)
+    self.view.Add(self.ui)
     
     self.settings = settings
    
-    self.UpdateMenu()    
+    self.UpdateMenu()  
+    self.setBackground('Trackbg-%s.png' % self.settings.track.__name__)    
+  
 
   def Tick(self, time):
     State.Tick(self, time)
@@ -223,7 +231,7 @@ class SetupPlayersMenuState(MenuState):
 
     for (x,y), menu in zip(quadrants,self.pmenu):
       for i,m in enumerate(menu):
-        yOffset = m.draw(self.view, x, y, m is self.menu[self.selected], width=100)
+        yOffset = m.draw(self.view, x, y, m is self.menu[self.selected])
         y += yOffset
     
     y = 170
@@ -249,7 +257,7 @@ class SetupPlayersMenuState(MenuState):
     padding = 10
 
     for playerId,player in enumerate(self.settings.playersIndices):
-      self.pmenu[playerId].append(InputMenuItem('Name', self.settings.set_player_name, playerId, player.name))
+      self.pmenu[playerId].append(InputMenuItem('Name', self.settings.set_player_name, playerId, player.name, labelwidth=100))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight
     
@@ -258,7 +266,7 @@ class SetupPlayersMenuState(MenuState):
         s = mapping and mapping.__name__.replace('Mapping','') or 'None'
         mappingOptions.append((s,playerId,i))   
     
-      self.pmenu[playerId].append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex))
+      self.pmenu[playerId].append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex, labelwidth=100))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight
       
@@ -267,7 +275,7 @@ class SetupPlayersMenuState(MenuState):
       for i,textureName in enumerate(GameSettings.TEXTURE_NAMES):
         textureOptions.append((textureName, playerId, i))
       
-      self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
+      self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex, labelwidth=100))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight + padding
     
