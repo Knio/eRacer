@@ -207,6 +207,7 @@ class SetupGameMenuState(MenuState):
     self.settings.nLapsIndex = value[1]    
     
   def Menu_Setup_Players(self):
+    print 'setupplayer'
     game().PushState(SetupPlayersMenuState(self.settings))    
     
   def Menu_Back(self):
@@ -312,7 +313,9 @@ class SetupPlayersMenuState(MenuState):
       + self.pmenu[3]  \
       + self.mmenu[1:] \
     
-    
+  def MenuSelectEvent(self):
+    # if not MenuState.MenuSelectEvent(self):
+    game().PopState()
 
   def Menu_Human_Players(self, value):
     self.settings.nPlayersIndex = value[1]      

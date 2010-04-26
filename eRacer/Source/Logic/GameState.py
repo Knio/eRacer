@@ -84,7 +84,11 @@ class LoadScreenState(State):
       game().graphics.views.append(self.view)
       game().graphics.force = True
       self.isLoaded = True
-      self.view.WriteString('Loading...',Config.FONT, 60, 270,250)
+      if self.settings.nPlayers==1:
+        t = 500
+      else:
+        t = 250
+      self.view.WriteString('Loading...',Config.FONT, 60, 290, t)
       for i in range(self.settings.nPlayers):
         self.view.WriteString(self.names[i], Config.FONT, 30, *self.nameStringCoords[i])
 
