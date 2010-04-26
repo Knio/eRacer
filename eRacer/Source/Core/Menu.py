@@ -14,6 +14,20 @@ class MenuItem(object):
     ) 
       
     return self.lineheight 
+
+class NonMenuItem(object):
+  def __init__(self, label, fontsize=32, lineheight=50):
+    self.label = label
+    self.fontsize = fontsize
+    self.lineheight = lineheight
+    self.fontfamily = Config.FONT
+    
+  def draw(self, view, x, y, selected, width=-1):
+    view.WriteString(
+      self.label, self.fontfamily, self.fontsize, x, y, selected and RED or WHITE
+    ) 
+      
+    return self.lineheight 
     
 class ApplyMenuItem(MenuItem):
   def __init__(self, label, callback, *args, **kwargs):
@@ -49,6 +63,24 @@ class SelectMenuItem(MenuItem):
       ) 
       
     return self.lineheight
+
+class NonSelectMenuItem(NonMenuItem):
+  def __init__(self, label, callback, options, default=0):
+    NonMenuItem.__init__(self,label)
+    self.callback = callback
+    self.options = options
+    if default < len(options):
+      self.index = default
+    else:
+      self.index = len(options)-1
+    
+  def draw(self, view, x, y, selected, width=300):
+    NonMenuItem.draw(self, view, x, y, selected)
+    view.WriteString(
+      self.options[self.index][0], self.fontfamily, self.fontsize, x+width, y, GREY
+      )
+      
+    return self.lineheight
     
 class InputMenuItem(MenuItem):
   def __init__(self, label, callback, id, default):
@@ -74,3 +106,18 @@ class InputMenuItem(MenuItem):
     if key == KEY.BACK:
       self.value = self.value[:len(self.value)-1]
       self.callback(self.id, self.value)    
+
+class NonInputMenuItem(MenuItem):
+  def __init__(self, label, callback, id, default):
+    MenuItem.__init__(self,label)
+    self.callback = callback
+    self.value = default;
+    self.id = id
+
+  def draw(self, view, x, y, selected, width=300):
+    MenuItem.draw(self, view, x, y, selected)
+    view.WriteString(
+      self.value, self.fontfamily, self.fontsize, x+width, y, GREY
+      ) 
+      
+    return self.lineheight

@@ -261,8 +261,20 @@ class SetupPlayersMenuState(MenuState):
       self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight + padding
+      
+    for j in range(playerId+1, 4):
+		  self.pmenu[j].append(NonInputMenuItem('Name', 'Player', j, 'Player'))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight
+	      
+		  self.pmenu[j].append(NonSelectMenuItem('Controls', self.Menu_Controls, mappingOptions, 0))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight
+	      
+		  self.pmenu[j].append(NonSelectMenuItem('Color', self.Menu_Color, textureOptions, 0))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight + padding
     
-
     # copy all elements linearly for input logic
     self.menu = self.mmenu[:1] \
       + self.pmenu[0]  \
