@@ -168,9 +168,6 @@ class GameState(State):
     self.SetupInputMapping()
        
     self.meteorManager = MeteorManager(self)
-
-    for i in range(CONSTS.NUM_METEORS):
-      self.meteorManager.spawnRandom()
     
     self.lastMeteorTime = 0
     
@@ -296,6 +293,10 @@ class GameState(State):
         vehicle.isShutoff = False
         vehicle.Brake(0)
         self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+        
+      for i in range(CONSTS.NUM_METEORS):
+        self.meteorManager.spawnRandom()
+
         
 
     for b in self.boostbeams:
