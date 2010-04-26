@@ -6,7 +6,7 @@ class Music(cpp.SoundFx):
     self.looping  = True
     self.is3D     = False
     self.isPaused = False
-    self.volume   = 255
+    self.volume   = 50
     self.priority = 255    
     game().sound.sound.LoadSoundFx(filename, self)
   
