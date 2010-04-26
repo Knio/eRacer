@@ -130,9 +130,6 @@ class MainMenuState(MenuState):
 
   def Activate(self):
     State.Activate(self)
-    game().sound.sound.ResetSound(self.music)
-    self.music.Unpause()
-    #self.music = Music("Terran5.ogg")
     
   def Menu_High_Scores(self):
     game().PushState(HighScoreState())
@@ -380,6 +377,8 @@ class PauseMenuState(MenuState):
     self.parent = None
     while not game().states[-1].__class__ is MainMenuState:
       game().PopState()
+      
+    game().states[-1].music.Restart()
       
   def Menu_Restart_race(self):
     while not game().states[-1].__class__ is GameState:
