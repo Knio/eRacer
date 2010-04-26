@@ -82,7 +82,7 @@ class Vehicle(Model):
     self.sound.isLooping  = True
     self.sound.is3D     = True
     self.sound.isPaused = True
-    self.sound.volume   = 128
+    self.sound.volume   = 64
     self.sound.minDist  = 50
     self.sound.priority = 5
     
