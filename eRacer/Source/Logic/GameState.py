@@ -1,5 +1,6 @@
 import threading
 import random
+import colorsys
 import time as _time
 
 from Core.Globals   import *
@@ -129,11 +130,17 @@ class GameState(State):
     finishLineTransform = Matrix(6.35, 4.0, 4.0) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.up, startFrame.fw)
     self.Add(StaticModel('FinishLine','FinishLine.x',finishLineTransform))
 
+    self.rings = []
+    self.accuDelta = 0.
+    self.ringStartingHue = 0.0
+
+
     for x in [200., 2200.]:
       for i in xrange(64):
         frame = track.GetFrame(x+10*i)
         tx = Matrix(3.0, 3.0, 6.0) * Matrix(frame.position, frame.up, frame.fw)
         ring = Ring("Ring", "Ring1.x", "Ring1.x", tx)
+        self.rings.append(ring)
         self.Add(ring)
     self.track = self.Add(track)
       
@@ -325,6 +332,21 @@ class GameState(State):
         self.meteorManager.spawnTargeted(random.choice(self.vehicleList))
     
     self.meteorManager.Tick(time)
+    
+    self.accuDelta += delta
+    
+    if self.accuDelta>0.02:
+      self.ringStartingHue = (self.ringStartingHue + self.accuDelta*5) % 1.0
+      self.accuDelta-=0.1
+
+      h = self.ringStartingHue
+      
+      for ring in self.rings:
+        rgb = colorsys.hsv_to_rgb(h, .8, 0.5)
+        ring.graphics.setTint(Vector4(rgb[0],rgb[1],rgb[2],1.0))
+        h=(h+0.05)%1.0
+  
+
     
     State.Tick(self, time)
     
