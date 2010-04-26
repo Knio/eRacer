@@ -92,6 +92,16 @@ class IO(Module, cpp.IO):
       self.textures[name] = r
     return self.textures[name]
 
+  def UnloadTexture(self, name):
+    name = j(TEXPATH, name)
+    if name in self.textures:
+      t = self.textures[name]
+      self._FreeTexture(t)
+      del self.textures[name]
+      if game().debug or True:
+        print 'Unloaded texture %s' % name
+    
+
   def Loaded(self):
     pass
   LoadAsyncEvent = asynchronous(Loaded)

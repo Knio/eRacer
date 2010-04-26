@@ -11,8 +11,11 @@ from GameSettings     import GameSettings
 from Sound.Music      import Music
 
 class MenuState(State):
-  menuNav = None;
+  menuNav = None
   menuSel = None
+  
+  bgFileNames = []
+  
   def __init__(self):
     State.__init__(self)
     self.selected = 0
@@ -37,6 +40,7 @@ class MenuState(State):
     self.menuTop = 50
     self.menuLeft = 100
     self.bg = None
+    self.bgFileNames = []
   
   def Tick(self, time):
     State.Tick(self, time)
@@ -56,6 +60,8 @@ class MenuState(State):
     if self.bg:
       self.view.Remove(self.bg.graphics)
       self.view.Remove(self.ui.graphics)
+    
+    self.bgFileNames.append(filename)
     
     self.bg = HudQuad("background", filename, 0, 0, 800, 600, True)
     self.view.Add(self.bg)
@@ -182,6 +188,12 @@ class SetupGameMenuState(MenuState):
     
   def Menu_Start(self):
     self.parent.music.Pause()
+    if self.bg:
+      self.view.Remove(self.bg.graphics)
+    for filename in self.bgFileNames:
+      print "trying to free",filename
+      game().io.UnloadTexture(filename)
+    
     game().PushState(LoadScreenState(self.settings))
         
   def Menu_AI_Players(self, value):
