@@ -8,6 +8,7 @@ nAIs = 2
 trackIndex = 0
 nLapsIndex = 1
 nPlayersIndex = 0
+DEBUG_FPS     = 1
 
 
 [PLAYER1]

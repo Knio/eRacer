@@ -40,6 +40,7 @@ RED       = cpp.cvar.RED
 BLUE      = cpp.cvar.BLUE
 GREEN     = cpp.cvar.GREEN
 WHITE     = cpp.cvar.WHITE
+GREY	  = cpp.cvar.GREY
 
 length    = cpp.abs
 dot       = cpp.dot

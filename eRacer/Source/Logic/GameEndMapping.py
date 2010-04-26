@@ -23,7 +23,6 @@ class GameEndMapping(Mapping):
   def GamepadButtonPressedEvent(self, gamepadId, button):
     if   button == cpp.BUTTON_START:   return E.PauseEvent()
     elif button == cpp.BUTTON_A:       return E.ReloadConstsEvent()
-    elif button == cpp.BUTTON_Y:       return E.CameraChangedEvent()
     elif button == cpp.BUTTON_X:       CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
     
     

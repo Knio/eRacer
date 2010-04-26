@@ -35,9 +35,10 @@ from Sound.Music import Music
 
 class LoadScreenState(State):
   
-  def __init__(self, settings):
+  def __init__(self, settings, game=None):
     State.__init__(self)
     self.view = HudView([self.scene])
+    self.game = game
     
     
     self.mappingQuads = []
@@ -84,23 +85,35 @@ class LoadScreenState(State):
       game().graphics.views.append(self.view)
       game().graphics.force = True
       self.isLoaded = True
-      self.view.WriteString('Loading...',Config.FONT, 60, 270,250)
+      if self.settings.nPlayers==1:
+        t = 500
+      else:
+        t = 250
+      self.view.WriteString('Loading...',Config.FONT, 60, 290, t)
       for i in range(self.settings.nPlayers):
         self.view.WriteString(self.names[i], Config.FONT, 30, *self.nameStringCoords[i])
 
-
     else:
       game().PopState()
-      game().PushState(GameState(self.settings))
+      if not self.game:
+        game().PushState(GameState(self.settings))
+      else:
+        self.game.Release()
+        self.game.load(self.game.settings)
+        
 
 class GameState(State):
   def __init__(self, settings):
     State.__init__(self)
     self.loaded = False
+    self.music = None
     self.load(settings)
+
  
 
   def load(self, settings):
+    if self.music != None:
+      self.music.Pause()
     self.settings = settings
    
     self.laps   = self.settings.nLaps
@@ -164,9 +177,6 @@ class GameState(State):
     self.SetupInputMapping()
        
     self.meteorManager = MeteorManager(self)
-
-    for i in range(CONSTS.NUM_METEORS):
-      self.meteorManager.spawnRandom()
     
     self.lastMeteorTime = 0
     
@@ -174,6 +184,7 @@ class GameState(State):
     self.countFx.isLooping  = False
     self.countFx.is3D     = False
     self.countFx.isPaused = True
+    self.countFx.volume = 10
     game().sound.sound.LoadSoundFx("Countdown.wav", self.countFx)
 
 ##    self.goFx = cpp.SoundFx();
@@ -182,8 +193,8 @@ class GameState(State):
 ##    self.goFx.isPaused = True
 ##    game().sound.sound.LoadSoundFx("Go.wav", self.goFx)
 
-    self.music = Music(track.music)
-    self.music.volume = 20
+    if (self.music == None):
+      self.music = Music(track.music, volume=20)
     self.music.Pause()
         
     self.boostbeams = []
@@ -292,6 +303,10 @@ class GameState(State):
         vehicle.isShutoff = False
         vehicle.Brake(0)
         self.stats.setdefault(vehicle, []).append(game().time.get_seconds())
+        
+      for i in range(CONSTS.NUM_METEORS):
+        self.meteorManager.spawnRandom()
+
         
 
     for b in self.boostbeams:
@@ -437,8 +452,7 @@ class GameState(State):
       print "Activate game state"
 
   def Deactivate(self):
-    State.Deactivate(self)
-    self.music.Pause()    
+    State.Deactivate(self) 
     
   def Pop(self):
     self.Release()

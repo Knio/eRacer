@@ -43,6 +43,7 @@ private:
 	IDirect3DSurface9* screen;
 	IDirect3DSurface9* msaasurf;
 	IDirect3DSurface9* depthsurf;
+	
 	std::map<std::string, ID3DXEffect*> effects;
 
 	LPDIRECT3D9						m_pD3D;				//Used to create the D3DDevice

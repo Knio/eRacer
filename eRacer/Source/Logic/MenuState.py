@@ -69,12 +69,17 @@ class MenuState(State):
 
       
   def MenuUpEvent(self):
+    self.ChangeMenu(-1)
+  
+  def ChangeMenu(self, delta):
     game().sound.sound.PlaySoundFx(self.menuNav)
-    self.selected = (self.selected-1) % len(self.menu)
+    self.selected = (self.selected+delta) % len(self.menu)
+    while not self.menu[self.selected].enabled:
+      self.selected = (self.selected+delta) % len(self.menu)    
   
   def MenuDownEvent(self):
-    game().sound.sound.PlaySoundFx(self.menuNav)
-    self.selected = (self.selected+1) % len(self.menu)
+    self.ChangeMenu(+
+    1)
 
   def MenuLeftEvent(self):
     method = getattr(self.menu[self.selected], 'MenuLeftEvent', None)
@@ -115,7 +120,7 @@ class MainMenuState(MenuState):
   
   def __init__(self):
     MenuState.__init__(self)
-    logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
+    logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 535, 212)
     self.view.Add(logo)
     # self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
     self.music = Music("Terran5.ogg")
@@ -130,9 +135,6 @@ class MainMenuState(MenuState):
 
   def Activate(self):
     State.Activate(self)
-    game().sound.sound.ResetSound(self.music)
-    self.music.Unpause()
-    #self.music = Music("Terran5.ogg")
     
   def Menu_High_Scores(self):
     game().PushState(HighScoreState())
@@ -207,6 +209,7 @@ class SetupGameMenuState(MenuState):
     self.settings.nLapsIndex = value[1]    
     
   def Menu_Setup_Players(self):
+    print 'setupplayer'
     game().PushState(SetupPlayersMenuState(self.settings))    
     
   def Menu_Back(self):
@@ -290,8 +293,20 @@ class SetupPlayersMenuState(MenuState):
       self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex, labelwidth=100))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight + padding
+      
+    for j in range(playerId+1, 4):
+		  self.pmenu[j].append(InputMenuItem('Name', 'Player', j, 'Player', labelwidth=100, enabled=False))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight
+	      
+		  self.pmenu[j].append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, 0, labelwidth=100, enabled=False))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight
+	      
+		  self.pmenu[j].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, 0, labelwidth=100, enabled=False))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight + padding
     
-
     # copy all elements linearly for input logic
     self.menu = self.mmenu[:1] \
       + self.pmenu[0]  \
@@ -300,7 +315,9 @@ class SetupPlayersMenuState(MenuState):
       + self.pmenu[3]  \
       + self.mmenu[1:] \
     
-    
+  def MenuSelectEvent(self):
+    # if not MenuState.MenuSelectEvent(self):
+    game().PopState()
 
   def Menu_Human_Players(self, value):
     self.settings.nPlayersIndex = value[1]      
@@ -324,7 +341,7 @@ class PauseMenuState(MenuState):
   @classmethod
   def PreloadMusic(cls):
     if not cls.music:
-      cls.music = Music("SwanLakeShort.mp3")
+      cls.music = Music("SwanLakeShort.mp3",volume=128)
       cls.music.Pause()
   
   def __init__(self):
@@ -342,20 +359,21 @@ class PauseMenuState(MenuState):
     self.view.Add(pause)
     self.view.name = 'Pause HudView'
     if not PauseMenuState.music:
-      PauseMenuState.music = Music("SwanLakeShort.mp3")
-      PauseMenuState.music.volume = 255
-      game().sound.sound.UpdateSoundFx(PauseMenuState.music)
+      PauseMenuState.music = Music("SwanLakeShort.mp3", volume=255)
       
     
   def Activate(self):
     game().simspeed = 0.
     MenuState.Activate(self)
+    self.parent.music.Pause()
     self.music.Unpause()
+
     
   def Deactivate(self):
     game().simspeed = 1.
     MenuState.Deactivate(self)
     self.music.Pause()
+    self.parent.music.Unpause()
     
   def UnPauseEvent(self):
     game().PopState()
@@ -368,13 +386,15 @@ class PauseMenuState(MenuState):
     while not game().states[-1].__class__ is MainMenuState:
       game().PopState()
       
+    game().states[-1].music.Restart()
+      
   def Menu_Restart_race(self):
     while not game().states[-1].__class__ is GameState:
       game().PopState()
     
     gamestate = game().states[-1]
-    gamestate.Release()
-    gamestate.load(gamestate.settings)
+    load = LoadScreenState(gamestate.settings, gamestate)
+    game().PushState(load)
           
   def Tick(self, time):
     self.parent.Tick(time)

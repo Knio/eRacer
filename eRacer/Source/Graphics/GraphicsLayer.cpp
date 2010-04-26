@@ -160,6 +160,7 @@ int GraphicsLayer::Init( HWND hWnd )
     stringSprite = new StringSprite();
     //debugRenderable = new DebugRenderable();
     
+    
     return S_OK;
 }
 
@@ -257,21 +258,21 @@ void GraphicsLayer::PreRender(){
 
     // Begin the scene
     //In the future this will be done inside a loop to handle each shader/effect
-    assert(SUCCEEDED( m_pd3dDevice->BeginScene()));
+    assert(SUCCEEDED(m_pd3dDevice->BeginScene()));
     assert(SUCCEEDED(m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &IDENTITY)));
 }
 
 void GraphicsLayer::PostRender(){
-
+    // global strings
 	stringSprite->Draw(m_pd3dDevice);
     stringSprite->Clear();
+    
     // draw debug
     //debugRenderable->Draw(m_pd3dDevice);
     //debugRenderable->Clear();
-        
-    // do postprocessing here
     
-    // copy msaasurf back to the screen
+    
+    // copy rtsurf back to the screen
     assert(SUCCEEDED(m_pd3dDevice->SetRenderTarget(0, screen)));
     IDirect3DSurface9* backBuffer = NULL;
     assert(SUCCEEDED(m_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer)));
@@ -280,8 +281,10 @@ void GraphicsLayer::PostRender(){
     
     // End the scene
     assert(SUCCEEDED(m_pd3dDevice->EndScene()));
-
+    
+    
     // TODO: performance: Calling Present() later instead of now will get us 20% more CPU time
+    // NOTE: no it doesn't.
     // Present the backbuffer contents to the display
 	HRESULT r = m_pd3dDevice->Present( NULL, NULL, NULL, NULL );
 
@@ -325,7 +328,7 @@ void GraphicsLayer::RestoreDeviceObjects(){
     // http://www.borgsoft.de/renderToSurface.html
     HRESULT r = m_pd3dDevice->CreateRenderTarget(
         width, height,
-        D3DFMT_A8R8G8B8,
+        D3DFMT_A8R8G8B8, //D3DFMT_A32B32G32R32F,
         D3DMULTISAMPLE_4_SAMPLES, 0,
         false,
         &msaasurf,
@@ -342,8 +345,8 @@ void GraphicsLayer::RestoreDeviceObjects(){
         &depthsurf,
         NULL
     );
-    
     assert(SUCCEEDED(r));
+    
 }
 
 

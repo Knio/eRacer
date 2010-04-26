@@ -7,6 +7,8 @@ from Graphics.View    import View, HudView
 from GameEndState     import GameEndState
 
 class PlayerInterface(object):
+  DISTANCE_BAR_LEFT = 110
+  
   def __init__(self, state, vehicle, viewport):
     self.state    = state # TODO try to get rid of this
     self.vehicle   = vehicle
@@ -35,12 +37,12 @@ class PlayerInterface(object):
     self.boostFuelBottom = self.boostFuelTop+self.boostFuelMaxHeight
     self.boostBar = self.AddHud(HudQuad("BoostBarFuel", "BoostBarFuel.png", 758, self.boostFuelTop, 29, self.boostFuelMaxHeight,True))
     self.AddHud(HudQuad("BoostBarFrame", "BoostBarFrame.png", 750, self.boostFuelTop-47, 44, 383,True))
-    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", 150, 35, 500, 8, True))
+    self.distanceBar = self.AddHud(HudQuad("DistanceBar", "CheckerBar.jpg", self.DISTANCE_BAR_LEFT, 35, 500, 8, True))
     
     for vehicle in state.vehicleList:
       if vehicle == self.vehicle: continue
-      self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", "redmarker.png", 150-8, 50-12, 16, 16))
-    self.icons[self.vehicle.name] = self.AddHud(HudQuad(self.vehicle.name+"Icon", "bluemarker.png", 150-8, 50-12, 16, 16))
+      self.icons[vehicle.name] = self.AddHud(HudQuad(vehicle.name+"Icon", "redmarker.png", self.DISTANCE_BAR_LEFT-8, 50-12, 16, 16))
+    self.icons[self.vehicle.name] = self.AddHud(HudQuad(self.vehicle.name+"Icon", "bluemarker.png", self.DISTANCE_BAR_LEFT-8, 50-12, 16, 16))
 
 
     self.starfields = []
@@ -80,7 +82,7 @@ class PlayerInterface(object):
       self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,1,0))
     if countdown == 1:
       self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,1,0))
-    if countdown <= 0 and countdown >= -2:
+    if countdown <= 0 and countdown >= -1:
       self.hud.WriteString( "GO!", Config.FONT, 150, 300, 200, Vector3(0,1,0))
 
     t = time.seconds*5
@@ -97,7 +99,7 @@ class PlayerInterface(object):
     
   
     for vehicle in self.state.vehicleList:
-      self.icons[vehicle.name].SetLeftTop(150-8 + 500 * vehicle.lapRatio, 35-12)
+      self.icons[vehicle.name].SetLeftTop(self.DISTANCE_BAR_LEFT-8 + 500 * vehicle.lapRatio, 35-12)
 
     #Energy Bar HUD 750, 200, 35, 350
     boostPercent = self.vehicle.boostFuel/5.0
