@@ -10,15 +10,15 @@ from HudQuad        import HudQuad
 class GameEndState(State):
   MAPPING = GameEndMapping
   def __init__(self, stats, parent):
-    State.__init__(self)    
+    State.__init__(self)
     self.parent = parent
+    self.music = self.parent.music
     self.stats = stats
     self.view = HudView([self.scene])
     self.view.Add(HudQuad("UI-Overlay", Config.UI_TEXTURE, 20, 110, 720, 420, True))
     gameover = HudQuad("GameOverHeadline", "gameover_glow.png", 300, 110, 190, 30)
     gameover.SetCenter(350,125)
-    self.view.Add(gameover)
-    
+    self.view.Add(gameover)    
     
     if not os.path.isdir(os.path.dirname(Config.USER_STATS)):
       os.mkdir(os.path.dirname(Config.USER_STATS))
@@ -72,7 +72,6 @@ class GameEndState(State):
       State.Tick(self, time)
       self.parent.Tick(time)
       return
-    
     stats = self.calcstats()
     
     font = Config.FONT

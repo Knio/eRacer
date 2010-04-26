@@ -442,8 +442,7 @@ class GameState(State):
       print "Activate game state"
 
   def Deactivate(self):
-    State.Deactivate(self)
-    self.music.Pause()    
+    State.Deactivate(self) 
     
   def Pop(self):
     self.Release()
