@@ -112,16 +112,16 @@ class InputMenuItem(MenuItem):
       self.value = self.value[:len(self.value)-1]
       self.callback(self.id, self.value)    
 
-class NonInputMenuItem(MenuItem):
+class NonInputMenuItem(NonMenuItem):
   def __init__(self, label, callback, id, default, labelwidth=250):
-    MenuItem.__init__(self,label)
+    NonMenuItem.__init__(self,label)
     self.callback = callback
     self.value = default;
     self.id = id
     self.labelwidth = labelwidth
 
   def draw(self, view, x, y, selected, width=300):
-    MenuItem.draw(self, view, x, y, selected)
+    NonMenuItem.draw(self, view, x, y, selected)
     view.WriteString(
       self.value, self.fontfamily, self.fontsize, x+self.labelwidth, y, GREY
       ) 
