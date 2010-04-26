@@ -1,9 +1,24 @@
 from Core.Globals     import *
 from Game.State       import State
 from Graphics.View    import View, HudView
+from HudQuad          import HudQuad
 from Core.Config      import Config
+from Mapping          import Mapping, E
+
+
+class CreditsMapping(Mapping):
+  def __init__(self):
+    pass
+    
+  def KeyPressedEvent(self, key):
+    if key   == KEY.ESCAPE:   return E.QuitEvent()
+    elif key == KEY.RETURN: return E.MenuSelectEvent()
+    
+  def GamepadButtonPressedEvent(self, id, button):
+    if button == cpp.BUTTON_A: return E.MenuSelectEvent()
 
 class CreditsState(State):
+  MAPPING = CreditsMapping
   SCROLLING_SPEED = 30 #pixels per second
   LEFT = 50
   
@@ -34,11 +49,16 @@ class CreditsState(State):
       
     self.view = HudView([self.scene])
     self.top = 550
+
+    self.logo = HudQuad("Logo","eRacerXLogoNegative.png", CreditsState.LEFT, self.top-150, 535, 212)
+    self.view.Add(self.logo)
       
   def Tick(self, time):
     State.Tick(self, time)
  
     t = self.top
+
+    self.logo.SetLeftTop(CreditsState.LEFT, t-150)
 
     self.view.WriteString("Credits", Config.FONT, 60, CreditsState.LEFT, t, cpp.WHITE)
     t += 60
@@ -59,8 +79,5 @@ class CreditsState(State):
     
     game().graphics.views.append(self.view)
     
-  def KeyPressedEvent(self, key):
-    if key == KEY.RETURN:
-      game().PopState()
-    elif key == KEY.ESCAPE:
-      game().event.QuitEvent()  
+  def MenuSelectEvent(self):
+    game().PopState()

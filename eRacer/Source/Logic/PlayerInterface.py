@@ -82,7 +82,7 @@ class PlayerInterface(object):
       self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,1,0))
     if countdown == 1:
       self.hud.WriteString( "%d" % (countdown), Config.FONT, 150, 330, 200, Vector3(1,1,0))
-    if countdown <= 0 and countdown >= -2:
+    if countdown <= 0 and countdown >= -1:
       self.hud.WriteString( "GO!", Config.FONT, 150, 300, 200, Vector3(0,1,0))
 
     t = time.seconds*5
