@@ -65,12 +65,12 @@ class MeteorManager(object):
     
     if length(force) > 1000000:
       game().sound.sound.PlaySoundFx(self.meteorfx)
-    #print "MC Collision reported to MeteorManager"
+      # print "MT Collision reported to MeteorManager",self.meteorfx.position
 
     
   def MeteorCarCollisionEvent(self, meteorId, carId, force):
     pass
-    print "MC Collision reported to MeteorManager"
+    # print "MC Collision reported to MeteorManager"
 
   def Release(self):
     self.meteors = []
@@ -146,6 +146,7 @@ class RandomMeteor(Meteor):
     
     
   def reset(self):
+    print "reset meteor"
     u = random.uniform
     
     # the meteor is spawned in a random location on a sphere

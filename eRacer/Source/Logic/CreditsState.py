@@ -2,8 +2,22 @@ from Core.Globals     import *
 from Game.State       import State
 from Graphics.View    import View, HudView
 from Core.Config      import Config
+from Mapping          import Mapping, E
+
+
+class CreditsMapping(Mapping):
+  def __init__(self):
+    pass
+    
+  def KeyPressedEvent(self, key):
+    if key   == KEY.ESCAPE:   return E.QuitEvent()
+    elif key == KEY.RETURN: return E.MenuSelectEvent()
+    
+  def GamepadButtonPressedEvent(self, id, button):
+    if button == cpp.BUTTON_A: return E.MenuSelectEvent()
 
 class CreditsState(State):
+  MAPPING = CreditsMapping
   SCROLLING_SPEED = 30 #pixels per second
   LEFT = 50
   
@@ -59,8 +73,5 @@ class CreditsState(State):
     
     game().graphics.views.append(self.view)
     
-  def KeyPressedEvent(self, key):
-    if key == KEY.RETURN:
-      game().PopState()
-    elif key == KEY.ESCAPE:
-      game().event.QuitEvent()  
+  def MenuSelectEvent(self):
+    game().PopState()
