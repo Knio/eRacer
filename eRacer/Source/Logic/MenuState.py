@@ -120,7 +120,7 @@ class MainMenuState(MenuState):
   
   def __init__(self):
     MenuState.__init__(self)
-    logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 600, 235)
+    logo = HudQuad("Logo","eRacerXLogoNegative.png", 30, 35, 535, 212)
     self.view.Add(logo)
     # self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20,110,760,420, False))
     self.music = Music("Terran5.ogg")

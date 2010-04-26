@@ -1,3 +1,12 @@
+h3. A production by
+Wallsocket Studios
+
+h3. After a book by
+Wallsocket Studios
+
+h3. In cooperation with
+Wallsocket Studios 
+
 h3. Game Architecture
 Tom Flanagan
 Don Ha

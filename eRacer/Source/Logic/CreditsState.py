@@ -1,6 +1,7 @@
 from Core.Globals     import *
 from Game.State       import State
 from Graphics.View    import View, HudView
+from HudQuad          import HudQuad
 from Core.Config      import Config
 from Mapping          import Mapping, E
 
@@ -48,11 +49,16 @@ class CreditsState(State):
       
     self.view = HudView([self.scene])
     self.top = 550
+
+    self.logo = HudQuad("Logo","eRacerXLogoNegative.png", CreditsState.LEFT, self.top-150, 535, 212)
+    self.view.Add(self.logo)
       
   def Tick(self, time):
     State.Tick(self, time)
  
     t = self.top
+
+    self.logo.SetLeftTop(CreditsState.LEFT, t-150)
 
     self.view.WriteString("Credits", Config.FONT, 60, CreditsState.LEFT, t, cpp.WHITE)
     t += 60
