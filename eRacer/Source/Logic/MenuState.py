@@ -281,14 +281,9 @@ class SetupPlayersMenuState(MenuState):
       + self.pmenu[3]  \
       + self.mmenu[1:] \
     
-
-  def KeyPressedEvent(self, key):
-    if key == KEY.RETURN:
-      print 'back'
-      game().PopState()    
-  #   else:
-  #     print 'else'
-    # MenuState.KeyPressedEvent(self,key)
+  def MenuSelectEvent(self):
+    # if not MenuState.MenuSelectEvent(self):
+    game().PopState()
 
   def Menu_Human_Players(self, value):
     self.settings.nPlayersIndex = value[1]      
