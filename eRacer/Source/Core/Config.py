@@ -11,6 +11,7 @@ class Config(object):
   USER_FOLDER     = 'User/'
   USER_FILE       = USER_FOLDER+'Settings.cnf'
   USER_STATS      = USER_FOLDER+'Statistics.cnf'
+  CREDITS_FILE    = 'Config/Credits.txt'
   
   
   FONT = 'Sony Sketch EF'

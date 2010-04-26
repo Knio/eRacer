@@ -173,7 +173,8 @@ class Vehicle(Model):
     # drag
     bodyVel = phys.GetVelocity();
     dragForceMag = self.DRAG_COEFF * length(bodyVel) ** 2
-    dragDir = normalize(bodyVel) * -1.0
+    dragDir = bodyVel * -1.0
+    normalize(dragDir)
     dragForce = dragDir * dragForceMag
     if delta: phys.AddWorldForceAtLocalPos(dragForce, self.MASS_CENTRE)
     #print dragForce.x, dragForce.y, dragForce.z
