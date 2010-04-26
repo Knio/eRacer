@@ -292,15 +292,15 @@ class SetupPlayersMenuState(MenuState):
       self.pmenu[playerId][-1].lineheight = lineheight + padding
       
     for j in range(playerId+1, 4):
-		  self.pmenu[j].append(NonInputMenuItem('Name', 'Player', j, 'Player'))
+		  self.pmenu[j].append(NonInputMenuItem('Name', 'Player', j, 'Player', labelwidth=100))
 		  self.pmenu[j][-1].fontsize = fontsize
 		  self.pmenu[j][-1].lineheight = lineheight
 	      
-		  self.pmenu[j].append(NonSelectMenuItem('Controls', self.Menu_Controls, mappingOptions, 0))
+		  self.pmenu[j].append(NonSelectMenuItem('Controls', self.Menu_Controls, mappingOptions, 0, labelwidth=100))
 		  self.pmenu[j][-1].fontsize = fontsize
 		  self.pmenu[j][-1].lineheight = lineheight
 	      
-		  self.pmenu[j].append(NonSelectMenuItem('Color', self.Menu_Color, textureOptions, 0))
+		  self.pmenu[j].append(NonSelectMenuItem('Color', self.Menu_Color, textureOptions, 0, labelwidth=100))
 		  self.pmenu[j][-1].fontsize = fontsize
 		  self.pmenu[j][-1].lineheight = lineheight + padding
     
