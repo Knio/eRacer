@@ -313,6 +313,9 @@ class PauseMenuState(MenuState):
     self.view.name = 'Pause HudView'
     if not PauseMenuState.music:
       PauseMenuState.music = Music("SwanLakeShort.mp3")
+      PauseMenuState.music.volume = 200
+      game().sound.sound.UpdateSoundFx(PauseMenuState.music)
+      
     
   def Activate(self):
     game().simspeed = 0.

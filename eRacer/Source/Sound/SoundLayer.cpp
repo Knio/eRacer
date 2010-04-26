@@ -152,7 +152,7 @@ int SoundLayer::Init()
 
 	//FSOUND_SetMaxHardwareChannels(0);
 	//FSOUND_SetMinHardwareChannels(0);
-	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_FPU);
+	 FSOUND_SetMixer(FSOUND_MIXER_QUALITY_FPU);
 	// FSOUND_SetMixer(FSOUND_MIXER_MAX);
 	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP5);
 	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP6);
@@ -179,7 +179,7 @@ int SoundLayer::SetOrientation3D(const Point3& listenerPos, const Vector3& liste
 	return 0;
 }
 
-int SoundLayer::SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector, int listener, int total)
+int SoundLayer::SetOrientation3DB(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector, int listener, int total)
 {
 	float pos[3] = { listenerPos.x, listenerPos.y, listenerPos.z };
 	float vel[3] = { listenerVel.x, listenerVel.y, listenerVel.z };
