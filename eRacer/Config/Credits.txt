@@ -58,11 +58,13 @@ h3. Ingame Music
 Derek Sanders
 
 h3. Some stats...
-349 issues fixed
+349 issues total
+fixed
+won't fix 
 1 147 commits
-6000 lines of code
-bla bla lines of comments
-0 unit tests :-(
+7891 lines of code
+1828 lines of comments
+0 unit tests
 
 
 
