@@ -161,8 +161,6 @@ int GraphicsLayer::Init( HWND hWnd )
     //debugRenderable = new DebugRenderable();
     
     
-    postprocess = GetEffect("Starfield.fx");
-    
     return S_OK;
 }
 
@@ -273,27 +271,12 @@ void GraphicsLayer::PostRender(){
     //debugRenderable->Draw(m_pd3dDevice);
     //debugRenderable->Clear();
     
-        
-    // do postprocessing here
-    
-    // copy msaasurf to rtsurf
-    assert(SUCCEEDED(m_pd3dDevice->StretchRect(msaasurf, NULL, rtsurf, NULL, D3DTEXF_LINEAR)));
-    
-    
-    /*
-    assert(SUCCEEDED(m_pd3dDevice->SetRenderTarget(0, threshsurf)));
-    // setup the PP shader
-    unsigned int p;
-    postprocess->Begin(&p, 0);
-    postprocess->End();
-    */
-    
     
     // copy rtsurf back to the screen
     assert(SUCCEEDED(m_pd3dDevice->SetRenderTarget(0, screen)));
     IDirect3DSurface9* backBuffer = NULL;
     assert(SUCCEEDED(m_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer)));
-    assert(SUCCEEDED(m_pd3dDevice->StretchRect(rtsurf, NULL, backBuffer, NULL, D3DTEXF_LINEAR)));
+    assert(SUCCEEDED(m_pd3dDevice->StretchRect(msaasurf, NULL, backBuffer, NULL, D3DTEXF_LINEAR)));
     backBuffer->Release();
     
     // End the scene
@@ -362,22 +345,6 @@ void GraphicsLayer::RestoreDeviceObjects(){
         &depthsurf,
         NULL
     );
-    assert(SUCCEEDED(r));
-    
-    // create a RT texture to read back from for PP
-    r = m_pd3dDevice->CreateTexture(
-        width,
-        height,
-        0,
-        D3DUSAGE_RENDERTARGET,
-        D3DFMT_A32B32G32R32F,
-        D3DPOOL_DEFAULT,
-        &rttex,
-        NULL
-    );
-    assert(SUCCEEDED(r));
-    
-    r = rttex->GetSurfaceLevel(0,&rtsurf);
     assert(SUCCEEDED(r));
     
 }
