@@ -24,7 +24,7 @@ class NonMenuItem(object):
     
   def draw(self, view, x, y, selected, width=-1):
     view.WriteString(
-      self.label, self.fontfamily, self.fontsize, x, y, GREY
+      self.label, self.fontfamily, self.fontsize, x, y, selected and cpp.RED or cpp.GREY
     ) 
       
     return self.lineheight 
@@ -81,7 +81,7 @@ class NonSelectMenuItem(NonMenuItem):
   def draw(self, view, x, y, selected, width=300):
     NonMenuItem.draw(self, view, x, y, selected)
     view.WriteString(
-      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, GREY
+      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, cpp.GREY
       )
       
     return self.lineheight
