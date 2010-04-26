@@ -2,7 +2,7 @@ import os
 import sys
 import time
 
-debug   = True
+debug   = False
 profile = False
 
 def run():
