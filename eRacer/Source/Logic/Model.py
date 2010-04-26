@@ -13,11 +13,8 @@ class StaticModel(Entity):
         self.graphics.Init(mesh)
     game().io.LoadMeshAsync(load, filename, *args)
     
-    
   def Release(self):
     self.graphics.Release()
-    if self.physics:
-      self.physics.Release()
       
       
 class Model(StaticModel):
@@ -28,10 +25,14 @@ class Model(StaticModel):
     if self.physics:
       self.physics.SetTransform(tx)
       
-  
   def Tick(self, time):
     Entity.Tick(self, time)
     if self.physics:
       self.transform = self.physics.GetTransform()
     self.graphics.SetTransform(self.transform)
+
+  def Release(self):
+    StaticModel.Release(self)
+    if self.physics:
+      self.physics.Release()
   
