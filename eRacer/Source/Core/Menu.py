@@ -24,7 +24,7 @@ class NonMenuItem(object):
     
   def draw(self, view, x, y, selected, width=-1):
     view.WriteString(
-      self.label, self.fontfamily, self.fontsize, x, y, selected and cpp.RED or cpp.GREY
+      self.label, self.fontfamily, self.fontsize, x, y, selected and RED or GREY
     ) 
       
     return self.lineheight 
@@ -61,7 +61,7 @@ class SelectMenuItem(MenuItem):
   def draw(self, view, x, y, selected):
     MenuItem.draw(self, view, x, y, selected)
     view.WriteString(
-      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, selected and cpp.RED or cpp.WHITE
+      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, selected and RED or WHITE
       ) 
       
     return self.lineheight
@@ -81,7 +81,7 @@ class NonSelectMenuItem(NonMenuItem):
   def draw(self, view, x, y, selected, width=300):
     NonMenuItem.draw(self, view, x, y, selected)
     view.WriteString(
-      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, cpp.GREY
+      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, GREY
       )
       
     return self.lineheight
