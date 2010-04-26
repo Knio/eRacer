@@ -1,7 +1,7 @@
 h3. A production by
 Wallsocket Studios
 
-h3. After a book by
+h3. Based on a book by
 Wallsocket Studios
 
 h3. In cooperation with
@@ -51,6 +51,9 @@ h3. Art
 John Stuart
 Ole Rehmsen
 
+h3. Modelling
+John Stuart
+
 h3. Tool Support
 Ole Rehmsen
 
@@ -59,9 +62,7 @@ Derek Sanders
 
 h3. Some stats...
 349 issues total
-fixed
-won't fix 
-1 147 commits
+1147 commits
 7891 lines of code
 1828 lines of comments
 0 unit tests

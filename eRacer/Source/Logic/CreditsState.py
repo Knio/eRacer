@@ -20,7 +20,7 @@ class CreditsMapping(Mapping):
 class CreditsState(State):
   MAPPING = CreditsMapping
   SCROLLING_SPEED = 30 #pixels per second
-  LEFT = 50
+  LEFT = 150
   
   def __init__(self):
     State.__init__(self)
