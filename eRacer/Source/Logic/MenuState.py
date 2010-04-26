@@ -336,7 +336,7 @@ class PauseMenuState(MenuState):
   @classmethod
   def PreloadMusic(cls):
     if not cls.music:
-      cls.music = Music("SwanLakeShort.mp3")
+      cls.music = Music("SwanLakeShort.mp3",volume=128)
       cls.music.Pause()
   
   def __init__(self):
@@ -354,9 +354,7 @@ class PauseMenuState(MenuState):
     self.view.Add(pause)
     self.view.name = 'Pause HudView'
     if not PauseMenuState.music:
-      PauseMenuState.music = Music("SwanLakeShort.mp3")
-      PauseMenuState.music.volume = 255
-      game().sound.sound.UpdateSoundFx(PauseMenuState.music)
+      PauseMenuState.music = Music("SwanLakeShort.mp3", volume=255)
       
     
   def Activate(self):

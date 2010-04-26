@@ -174,6 +174,7 @@ class GameState(State):
     self.countFx.isLooping  = False
     self.countFx.is3D     = False
     self.countFx.isPaused = True
+    self.countFx.volume = 10
     game().sound.sound.LoadSoundFx("Countdown.wav", self.countFx)
 
 ##    self.goFx = cpp.SoundFx();
@@ -182,8 +183,7 @@ class GameState(State):
 ##    self.goFx.isPaused = True
 ##    game().sound.sound.LoadSoundFx("Go.wav", self.goFx)
 
-    self.music = Music(track.music)
-    self.music.volume = 20
+    self.music = Music(track.music, volume=20)
     self.music.Pause()
         
     self.boostbeams = []

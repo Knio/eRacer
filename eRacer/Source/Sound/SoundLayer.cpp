@@ -83,7 +83,6 @@ void SoundLayer::UpdateSoundFx(SoundFx* samp)
 		return;
 
 	FSOUND_SetFrequency(samp->channel, samp->pitch);
-	FSOUND_SetVolume(samp->channel, samp->volume);
 	FSOUND_SetPriority(samp->channel, samp->priority);
 
 	if (samp->is3D) {
@@ -123,6 +122,7 @@ void SoundLayer::PlaySoundFx(SoundFx* samp)
 	samp->channel = FSOUND_PlaySoundEx(FSOUND_FREE, samp->soundsample, NULL, TRUE);
 	FSOUND_SetFrequency(samp->channel, samp->pitch);
 	FSOUND_SetVolume(samp->channel, samp->volume);
+	FSOUND_SetPriority(samp->channel, samp->priority);
 
 	if (samp->is3D) {
 		FSOUND_3D_SetMinMaxDistance(samp->channel, samp->minDist, samp->maxDist);
@@ -150,12 +150,13 @@ int SoundLayer::Init()
 	flags |= FSOUND_INIT_DONTLATENCYADJUST;
 	flags |= FSOUND_INIT_STREAM_FROM_MAIN_THREAD;*/
 
-	//FSOUND_SetMaxHardwareChannels(0);
+	//FSOUND_SetMaxHardwareChannels(2);
 	//FSOUND_SetMinHardwareChannels(0);
-	 FSOUND_SetMixer(FSOUND_MIXER_QUALITY_FPU);
-	// FSOUND_SetMixer(FSOUND_MIXER_MAX);
+	//FSOUND_SetMixer(FSOUND_MIXER_QUALITY_FPU);
+	//FSOUND_SetMixer(FSOUND_MIXER_MAX);
 	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP5);
 	// FSOUND_SetMixer(FSOUND_MIXER_QUALITY_MMXP6);
+	FSOUND_SetBufferSize(90);
 
 	if (!FSOUND_Init(44100, 32, flags))
     {
