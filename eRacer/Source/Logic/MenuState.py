@@ -69,12 +69,17 @@ class MenuState(State):
 
       
   def MenuUpEvent(self):
+    self.ChangeMenu(-1)
+  
+  def ChangeMenu(self, delta):
     game().sound.sound.PlaySoundFx(self.menuNav)
-    self.selected = (self.selected-1) % len(self.menu)
+    self.selected = (self.selected+delta) % len(self.menu)
+    while not self.menu[self.selected].enabled:
+      self.selected = (self.selected+delta) % len(self.menu)    
   
   def MenuDownEvent(self):
-    game().sound.sound.PlaySoundFx(self.menuNav)
-    self.selected = (self.selected+1) % len(self.menu)
+    self.ChangeMenu(+
+    1)
 
   def MenuLeftEvent(self):
     method = getattr(self.menu[self.selected], 'MenuLeftEvent', None)
@@ -290,15 +295,15 @@ class SetupPlayersMenuState(MenuState):
       self.pmenu[playerId][-1].lineheight = lineheight + padding
       
     for j in range(playerId+1, 4):
-		  self.pmenu[j].append(NonInputMenuItem('Name', 'Player', j, 'Player', labelwidth=100))
+		  self.pmenu[j].append(InputMenuItem('Name', 'Player', j, 'Player', labelwidth=100, enabled=False))
 		  self.pmenu[j][-1].fontsize = fontsize
 		  self.pmenu[j][-1].lineheight = lineheight
 	      
-		  self.pmenu[j].append(NonSelectMenuItem('Controls', self.Menu_Controls, mappingOptions, 0, labelwidth=100))
+		  self.pmenu[j].append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, 0, labelwidth=100, enabled=False))
 		  self.pmenu[j][-1].fontsize = fontsize
 		  self.pmenu[j][-1].lineheight = lineheight
 	      
-		  self.pmenu[j].append(NonSelectMenuItem('Color', self.Menu_Color, textureOptions, 0, labelwidth=100))
+		  self.pmenu[j].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, 0, labelwidth=100, enabled=False))
 		  self.pmenu[j][-1].fontsize = fontsize
 		  self.pmenu[j][-1].lineheight = lineheight + padding
     
