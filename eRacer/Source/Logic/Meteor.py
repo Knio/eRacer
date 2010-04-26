@@ -146,7 +146,6 @@ class RandomMeteor(Meteor):
     
     
   def reset(self):
-    print "reset meteor"
     u = random.uniform
     
     # the meteor is spawned in a random location on a sphere

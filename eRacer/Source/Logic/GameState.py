@@ -184,7 +184,7 @@ class GameState(State):
     self.countFx.isLooping  = False
     self.countFx.is3D     = False
     self.countFx.isPaused = True
-    self.countFx.volume = 10
+    self.countFx.volume = 20
     game().sound.sound.LoadSoundFx("Countdown.wav", self.countFx)
 
 ##    self.goFx = cpp.SoundFx();
@@ -193,9 +193,9 @@ class GameState(State):
 ##    self.goFx.isPaused = True
 ##    game().sound.sound.LoadSoundFx("Go.wav", self.goFx)
 
-    if (self.music == None):
+    if self.music is None:
       self.music = Music(track.music, volume=20)
-    self.music.Pause()
+      self.music.Pause()
         
     self.boostbeams = []
     for i in xrange(16):
@@ -447,7 +447,8 @@ class GameState(State):
   def Activate(self):
     State.Activate(self)
     if self.gameStarted:
-      self.music.Unpause() 
+      pass
+      self.music.Unpause()
     if game().debug:
       print "Activate game state"
 
@@ -456,7 +457,7 @@ class GameState(State):
     
   def Pop(self):
     self.Release()
-        
+    self.music.Pause()
     self.vehicleList = []
     self.stats = {}
       

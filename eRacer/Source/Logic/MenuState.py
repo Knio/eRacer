@@ -373,7 +373,8 @@ class PauseMenuState(MenuState):
     game().simspeed = 1.
     MenuState.Deactivate(self)
     self.music.Pause()
-    self.parent.music.Unpause()
+    if self.parent and self.parent.music:
+      self.parent.music.Unpause()
     
   def UnPauseEvent(self):
     game().PopState()
@@ -387,7 +388,7 @@ class PauseMenuState(MenuState):
       game().PopState()
       
     game().states[-1].music.Restart()
-      
+    
   def Menu_Restart_race(self):
     while not game().states[-1].__class__ is GameState:
       game().PopState()
