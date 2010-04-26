@@ -47,11 +47,15 @@ John Stuart
 Tom Flanagan
 Michael Blackadar
 
-h3. Art
+h3. 2D Art
 John Stuart
 Ole Rehmsen
 
-h3. Modelling
+h3. Epic Backstory
+Michael Blackadar
+Don Ha
+
+h3. 3D Art/Modelling
 John Stuart
 
 h3. Tool Support
@@ -62,6 +66,7 @@ Derek Sanders
 
 h3. Some stats...
 349 issues total
+290 actually fixed
 1147 commits
 7891 lines of code
 1828 lines of comments
