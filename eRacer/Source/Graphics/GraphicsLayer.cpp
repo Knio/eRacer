@@ -328,7 +328,7 @@ void GraphicsLayer::RestoreDeviceObjects(){
     // http://www.borgsoft.de/renderToSurface.html
     HRESULT r = m_pd3dDevice->CreateRenderTarget(
         width, height,
-        D3DFMT_A32B32G32R32F,
+        D3DFMT_A8R8G8B8, //D3DFMT_A32B32G32R32F,
         D3DMULTISAMPLE_4_SAMPLES, 0,
         false,
         &msaasurf,
