@@ -46,6 +46,7 @@ const RGB RED   = RGB(1,0,0);
 const RGB GREEN = RGB(0,1,0); 
 const RGB BLUE  = RGB(0,0,1);
 const RGB WHITE = RGB(1,1,1);
+const RGB GREY = RGB(0.5,0.5,0.5);
 
 /*
 const RGBA RED   = RGBA(1,0,0,1); 

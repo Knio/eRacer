@@ -43,7 +43,8 @@ class Config(object):
         c = getattr(CONSTS, k)
         r = getattr(cp, 'get%s' % type(c).__name__)('CONSTS', k)
         setattr(CONSTS, k, r)
-        print 'Set %s \t= %r' % (k,r)
+        if game().debug:
+          print 'Set %s \t= %r' % (k,r)
       except:
         print 'Failed to set %s' % k
         import traceback

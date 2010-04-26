@@ -11,8 +11,11 @@ from GameSettings     import GameSettings
 from Sound.Music      import Music
 
 class MenuState(State):
-  menuNav = None;
+  menuNav = None
   menuSel = None
+  
+  bgFileNames = []
+  
   def __init__(self):
     State.__init__(self)
     self.selected = 0
@@ -37,6 +40,7 @@ class MenuState(State):
     self.menuTop = 50
     self.menuLeft = 100
     self.bg = None
+    self.bgFileNames = []
   
   def Tick(self, time):
     State.Tick(self, time)
@@ -56,6 +60,8 @@ class MenuState(State):
     if self.bg:
       self.view.Remove(self.bg.graphics)
       self.view.Remove(self.ui.graphics)
+    
+    self.bgFileNames.append(filename)
     
     self.bg = HudQuad("background", filename, 0, 0, 800, 600, True)
     self.view.Add(self.bg)
@@ -182,6 +188,12 @@ class SetupGameMenuState(MenuState):
     
   def Menu_Start(self):
     self.parent.music.Pause()
+    if self.bg:
+      self.view.Remove(self.bg.graphics)
+    for filename in self.bgFileNames:
+      print "trying to free",filename
+      game().io.UnloadTexture(filename)
+    
     game().PushState(LoadScreenState(self.settings))
         
   def Menu_AI_Players(self, value):
@@ -195,6 +207,7 @@ class SetupGameMenuState(MenuState):
     self.settings.nLapsIndex = value[1]    
     
   def Menu_Setup_Players(self):
+    print 'setupplayer'
     game().PushState(SetupPlayersMenuState(self.settings))    
     
   def Menu_Back(self):
@@ -278,8 +291,20 @@ class SetupPlayersMenuState(MenuState):
       self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex, labelwidth=100))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight + padding
+      
+    for j in range(playerId+1, 4):
+		  self.pmenu[j].append(NonInputMenuItem('Name', 'Player', j, 'Player', labelwidth=100))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight
+	      
+		  self.pmenu[j].append(NonSelectMenuItem('Controls', self.Menu_Controls, mappingOptions, 0, labelwidth=100))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight
+	      
+		  self.pmenu[j].append(NonSelectMenuItem('Color', self.Menu_Color, textureOptions, 0, labelwidth=100))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight + padding
     
-
     # copy all elements linearly for input logic
     self.menu = self.mmenu[:1] \
       + self.pmenu[0]  \
@@ -288,7 +313,9 @@ class SetupPlayersMenuState(MenuState):
       + self.pmenu[3]  \
       + self.mmenu[1:] \
     
-    
+  def MenuSelectEvent(self):
+    # if not MenuState.MenuSelectEvent(self):
+    game().PopState()
 
   def Menu_Human_Players(self, value):
     self.settings.nPlayersIndex = value[1]      
@@ -331,6 +358,9 @@ class PauseMenuState(MenuState):
     self.view.name = 'Pause HudView'
     if not PauseMenuState.music:
       PauseMenuState.music = Music("SwanLakeShort.mp3")
+      PauseMenuState.music.volume = 255
+      game().sound.sound.UpdateSoundFx(PauseMenuState.music)
+      
     
   def Activate(self):
     game().simspeed = 0.
