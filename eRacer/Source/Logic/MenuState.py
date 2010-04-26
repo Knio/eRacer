@@ -365,12 +365,15 @@ class PauseMenuState(MenuState):
   def Activate(self):
     game().simspeed = 0.
     MenuState.Activate(self)
+    self.parent.music.Pause()
     self.music.Unpause()
+
     
   def Deactivate(self):
     game().simspeed = 1.
     MenuState.Deactivate(self)
     self.music.Pause()
+    self.parent.music.Unpause()
     
   def UnPauseEvent(self):
     game().PopState()
@@ -390,7 +393,6 @@ class PauseMenuState(MenuState):
       game().PopState()
     
     gamestate = game().states[-1]
-    
     load = LoadScreenState(gamestate.settings, gamestate)
     game().PushState(load)
           
