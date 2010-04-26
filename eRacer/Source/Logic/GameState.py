@@ -35,9 +35,10 @@ from Sound.Music import Music
 
 class LoadScreenState(State):
   
-  def __init__(self, settings):
+  def __init__(self, settings, game=None):
     State.__init__(self)
     self.view = HudView([self.scene])
+    self.game = game
     
     
     self.mappingQuads = []
@@ -92,10 +93,14 @@ class LoadScreenState(State):
       for i in range(self.settings.nPlayers):
         self.view.WriteString(self.names[i], Config.FONT, 30, *self.nameStringCoords[i])
 
-
     else:
       game().PopState()
-      game().PushState(GameState(self.settings))
+      if not self.game:
+        game().PushState(GameState(self.settings))
+      else:
+        self.game.Release()
+        self.game.load(self.game.settings)
+        
 
 class GameState(State):
   def __init__(self, settings):

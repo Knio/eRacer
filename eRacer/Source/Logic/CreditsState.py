@@ -20,7 +20,7 @@ class CreditsMapping(Mapping):
 class CreditsState(State):
   MAPPING = CreditsMapping
   SCROLLING_SPEED = 30 #pixels per second
-  LEFT = 50
+  LEFT = 150
   
   def __init__(self):
     State.__init__(self)
@@ -81,3 +81,10 @@ class CreditsState(State):
     
   def MenuSelectEvent(self):
     game().PopState()
+
+  def KeyPressedEvent(self, key):
+    if key in [KEY.DOWN, KEY.SPACE]:
+      self.top -= 300
+    if key in [KEY.UP]:
+      self.top += 300
+      
