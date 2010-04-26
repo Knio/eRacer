@@ -81,3 +81,10 @@ class CreditsState(State):
     
   def MenuSelectEvent(self):
     game().PopState()
+
+  def KeyPressedEvent(self, key):
+    if key in [KEY.DOWN, KEY.SPACE]:
+      self.top -= 300
+    if key in [KEY.UP]:
+      self.top += 300
+      
