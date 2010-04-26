@@ -50,12 +50,12 @@ class HighScoreState(MenuState):
         print self.curTrack, self.curLaps
         self.update()
         
+        self.setBackground('Trackbg-%s.png' % self.curTrack)
         
     except:
       import traceback
       traceback.print_exc()
-      
-    self.setBackground('Trackbg-%s.png' % self.curTrack)        
+    
     
   def update(self):
     self.current = [i for i in self.stats if i.track==self.curTrack and i.laps==self.curLaps]

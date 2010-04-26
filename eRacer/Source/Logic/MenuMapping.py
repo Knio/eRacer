@@ -6,10 +6,10 @@ class MenuMapping(Mapping):
     self.gamepadReleased = True
   
   def KeyPressedEvent(self, key):
-    if key == KEY.UP:     return E.MenuUpEvent()
+    if   key == KEY.UP:     return E.MenuUpEvent()
     elif key == KEY.DOWN:   return E.MenuDownEvent()
     elif key == KEY.LEFT:   return E.MenuLeftEvent()
-    elif key == KEY.RIGHT:   return E.MenuRightEvent()
+    elif key == KEY.RIGHT:  return E.MenuRightEvent()
     elif key == KEY.RETURN: return E.MenuSelectEvent()
     
   def GamepadStick1AbsoluteEvent(self, id, x, y):
@@ -34,7 +34,7 @@ class MenuMapping(Mapping):
 class MainMenuMapping(MenuMapping):
   def KeyPressedEvent(self, key):
     if key == KEY.ESCAPE:     return E.QuitEvent()
-    return MenuMapping.KeyPressedEvent(self, key)    
+    return MenuMapping.KeyPressedEvent(self, key) 
 
 class PauseMenuMapping(MenuMapping):
   def KeyPressedEvent(self, key):
