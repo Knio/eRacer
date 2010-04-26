@@ -40,6 +40,7 @@ RED       = cpp.cvar.RED
 BLUE      = cpp.cvar.BLUE
 GREEN     = cpp.cvar.GREEN
 WHITE     = cpp.cvar.WHITE
+GREY	  = cpp.cvar.GREY
 
 length    = cpp.abs
 dot       = cpp.dot
@@ -76,7 +77,7 @@ def ordinal(num):
 
 from Game.Module  	import Module
 from Game.Entity    import Entity
-from Logic.Model      import Model
+from Logic.Model      import StaticModel, Model
 
 from Core.Event 	  import Event
 from Input          import KEY

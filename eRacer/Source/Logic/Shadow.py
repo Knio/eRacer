@@ -8,9 +8,16 @@ class Shadow(Quad):
     self.target = target
     
   def Tick(self, time):
+    targetTransform = self.target.physics.GetTransform()
+    targetForward = mul0(targetTransform, Z)
+    
+    trackUp = self.target.frame.up
+    shadowForward = cross(trackUp, cross(targetForward, trackUp))
+    normalize(shadowForward)
+    
     f = self.target.frame
     p = mul1(self.target.transform, ORIGIN)
     pos = projectOnto(p - f.position, f.up) + f.position + f.up*0.3
-    self.transform = Matrix(pos, f.fw, -f.up,self.SCALING)
+    self.transform = Matrix(pos, shadowForward, -f.up,self.SCALING)
     Quad.Tick(self, time)
     

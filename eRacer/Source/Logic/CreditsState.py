@@ -45,13 +45,12 @@ class CreditsState(State):
 
     
     for i,line in enumerate(self.data):
-      t += line.paddingTop
+      t += line.paddingTop + line.lineheight
       
       if t<-50:
         continue
       
-      self.view.WriteString(line.text, Config.FONT, line.fontsize, CreditsState.LEFT, t, line.color)
-      t += line.lineheight
+      self.view.WriteString(line.text, Config.FONT, line.fontsize, CreditsState.LEFT, t+line.lineheight, line.color)
       
       if t>600:
         break

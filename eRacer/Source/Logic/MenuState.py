@@ -11,8 +11,11 @@ from GameSettings     import GameSettings
 from Sound.Music      import Music
 
 class MenuState(State):
-  menuNav = None;
+  menuNav = None
   menuSel = None
+  
+  bgFileNames = []
+  
   def __init__(self):
     State.__init__(self)
     self.selected = 0
@@ -36,6 +39,8 @@ class MenuState(State):
     self.menu = []
     self.menuTop = 50
     self.menuLeft = 100
+    self.bg = None
+    self.bgFileNames = []
   
   def Tick(self, time):
     State.Tick(self, time)
@@ -49,6 +54,19 @@ class MenuState(State):
     for i,m in enumerate(self.menu):
       yOffset = m.draw(self.view, self.menuLeft, y, i == self.selected)
       y += yOffset
+
+  
+  def setBackground(self, filename):
+    if self.bg:
+      self.view.Remove(self.bg.graphics)
+      self.view.Remove(self.ui.graphics)
+    
+    self.bgFileNames.append(filename)
+    
+    self.bg = HudQuad("background", filename, 0, 0, 800, 600, True)
+    self.view.Add(self.bg)
+    self.view.Add(self.ui) # must be after the bg
+
       
   def MenuUpEvent(self):
     game().sound.sound.PlaySoundFx(self.menuNav)
@@ -163,20 +181,19 @@ class SetupGameMenuState(MenuState):
       SelectMenuItem('Lap Count', self.Menu_Lap_Count, map(lambda x: (str(x[1]),x[0]) , enumerate(GameSettings.LAP_COUNTS)), self.settings.nLapsIndex),
       ApplyMenuItem('Back', self.Menu_Back),
     ]
-    self.trackQuad = None
     self.updateBackground()
     
   def updateBackground(self):
-    if self.trackQuad:
-      self.view.Remove(self.trackQuad.graphics)
-      self.view.Remove(self.ui.graphics)
-    
-    self.trackQuad = HudQuad("TextBox", 'Trackbg-%s.png' % self.settings.track.__name__, 0, 0, 800, 600, True)
-    self.view.Add(self.trackQuad)
-    self.view.Add(self.ui) # must be after the bg
+    self.setBackground('Trackbg-%s.png' % self.settings.track.__name__)    
     
   def Menu_Start(self):
     self.parent.music.Pause()
+    if self.bg:
+      self.view.Remove(self.bg.graphics)
+    for filename in self.bgFileNames:
+      print "trying to free",filename
+      game().io.UnloadTexture(filename)
+    
     game().PushState(LoadScreenState(self.settings))
         
   def Menu_AI_Players(self, value):
@@ -202,11 +219,14 @@ class SetupPlayersMenuState(MenuState):
   def __init__(self, settings):
     MenuState.__init__(self)  
     
-    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20, 110, 760, 420))
+    self.ui = HudQuad("UI Overlay", Config.UI_TEXTURE, 20, 110, 760, 420)
+    self.view.Add(self.ui)
     
     self.settings = settings
    
-    self.UpdateMenu()    
+    self.UpdateMenu()  
+    self.setBackground('Trackbg-%s.png' % self.settings.track.__name__)    
+  
 
   def Tick(self, time):
     State.Tick(self, time)
@@ -224,7 +244,7 @@ class SetupPlayersMenuState(MenuState):
 
     for (x,y), menu in zip(quadrants,self.pmenu):
       for i,m in enumerate(menu):
-        yOffset = m.draw(self.view, x, y, m is self.menu[self.selected], width=100)
+        yOffset = m.draw(self.view, x, y, m is self.menu[self.selected])
         y += yOffset
     
     y = 170
@@ -250,7 +270,7 @@ class SetupPlayersMenuState(MenuState):
     padding = 10
 
     for playerId,player in enumerate(self.settings.playersIndices):
-      self.pmenu[playerId].append(InputMenuItem('Name', self.settings.set_player_name, playerId, player.name))
+      self.pmenu[playerId].append(InputMenuItem('Name', self.settings.set_player_name, playerId, player.name, labelwidth=100))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight
     
@@ -259,7 +279,7 @@ class SetupPlayersMenuState(MenuState):
         s = mapping and mapping.__name__.replace('Mapping','') or 'None'
         mappingOptions.append((s,playerId,i))   
     
-      self.pmenu[playerId].append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex))
+      self.pmenu[playerId].append(SelectMenuItem('Controls', self.Menu_Controls, mappingOptions, player.mappingIndex, labelwidth=100))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight
       
@@ -268,11 +288,23 @@ class SetupPlayersMenuState(MenuState):
       for i,textureName in enumerate(GameSettings.TEXTURE_NAMES):
         textureOptions.append((textureName, playerId, i))
       
-      self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex))
+      self.pmenu[playerId].append(SelectMenuItem('Color', self.Menu_Color, textureOptions, player.textureIndex, labelwidth=100))
       self.pmenu[playerId][-1].fontsize = fontsize
       self.pmenu[playerId][-1].lineheight = lineheight + padding
+      
+    for j in range(playerId+1, 4):
+		  self.pmenu[j].append(NonInputMenuItem('Name', 'Player', j, 'Player', labelwidth=100))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight
+	      
+		  self.pmenu[j].append(NonSelectMenuItem('Controls', self.Menu_Controls, mappingOptions, 0, labelwidth=100))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight
+	      
+		  self.pmenu[j].append(NonSelectMenuItem('Color', self.Menu_Color, textureOptions, 0, labelwidth=100))
+		  self.pmenu[j][-1].fontsize = fontsize
+		  self.pmenu[j][-1].lineheight = lineheight + padding
     
-
     # copy all elements linearly for input logic
     self.menu = self.mmenu[:1] \
       + self.pmenu[0]  \
@@ -304,6 +336,12 @@ class PauseMenuState(MenuState):
   MAPPING = PauseMenuMapping
   music = None  
   
+  @classmethod
+  def PreloadMusic(cls):
+    if not cls.music:
+      cls.music = Music("SwanLakeShort.mp3")
+      cls.music.Pause()
+  
   def __init__(self):
     MenuState.__init__(self)
     self.menu = [
@@ -320,6 +358,9 @@ class PauseMenuState(MenuState):
     self.view.name = 'Pause HudView'
     if not PauseMenuState.music:
       PauseMenuState.music = Music("SwanLakeShort.mp3")
+      PauseMenuState.music.volume = 255
+      game().sound.sound.UpdateSoundFx(PauseMenuState.music)
+      
     
   def Activate(self):
     game().simspeed = 0.

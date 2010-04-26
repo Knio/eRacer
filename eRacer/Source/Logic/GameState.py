@@ -1,5 +1,6 @@
 import threading
 import random
+import colorsys
 import time as _time
 
 from Core.Globals   import *
@@ -75,6 +76,7 @@ class LoadScreenState(State):
     self.settings = settings
 
     self.isLoaded = False
+    PauseMenuState.PreloadMusic()
     
   def Tick(self, time):
     State.Tick(self, time)
@@ -130,13 +132,19 @@ class GameState(State):
     finishLineTransform = Matrix(40, 8, 1) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.fw, -startFrame.up)
     self.Add(Quad('FinishLine','FinishLine2.png',finishLineTransform))
     finishLineTransform = Matrix(6.35, 4.0, 4.0) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.up, startFrame.fw)
-    self.Add(Model('FinishLine','FinishLine.x',None,finishLineTransform))
+    self.Add(StaticModel('FinishLine','FinishLine.x',finishLineTransform))
+
+    self.rings = []
+    self.accuDelta = 0.
+    self.ringStartingHue = 0.0
+
 
     for x in [200., 2200.]:
       for i in xrange(64):
         frame = track.GetFrame(x+10*i)
         tx = Matrix(3.0, 3.0, 6.0) * Matrix(frame.position, frame.up, frame.fw)
         ring = Ring("Ring", "Ring1.x", "Ring1.x", tx)
+        self.rings.append(ring)
         self.Add(ring)
     self.track = self.Add(track)
       
@@ -179,7 +187,7 @@ class GameState(State):
 ##    game().sound.sound.LoadSoundFx("Go.wav", self.goFx)
 
     self.music = Music(track.music)
-    self.music.volume = 50
+    self.music.volume = 20
     self.music.Pause()
         
     self.boostbeams = []
@@ -204,7 +212,7 @@ class GameState(State):
       return
       
   def AddVehicle(self, player = None):
-    if player: print vars(player)
+    if player and game().debug: print vars(player)
     
     n = len(self.vehicleList)    
     x = (n % 3 - 1)*15
@@ -296,9 +304,14 @@ class GameState(State):
     
     # int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
     if len(self.interfaces) > 0:
-      cam = self.interfaces[0].view.camera
-      # TODO camera velocity
-      game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
+      for i,interface in enumerate(self.interfaces):
+        cam = interface.view.camera
+        game().sound.sound.SetOrientation3DB(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp(), i, len(self.interfaces))
+
+      #cam = self.interfaces[0].view.camera
+      #---------------------------------------------------
+      #game().sound.sound.SetOrientation3D(cam.GetPosition(), Point3(0,0,0), cam.GetLookAt(), cam.GetUp())
+      
     
     _time.sleep(CONSTS.SLEEP_TIME)
     
@@ -323,6 +336,21 @@ class GameState(State):
         self.meteorManager.spawnTargeted(random.choice(self.vehicleList))
     
     self.meteorManager.Tick(time)
+    
+    self.accuDelta += delta
+    
+    if self.accuDelta>0.02:
+      self.ringStartingHue = (self.ringStartingHue + self.accuDelta*5) % 1.0
+      self.accuDelta-=0.1
+
+      h = self.ringStartingHue
+      
+      for ring in self.rings:
+        rgb = colorsys.hsv_to_rgb(h, .8, 0.5)
+        ring.graphics.setTint(Vector4(rgb[0],rgb[1],rgb[2],1.0))
+        h=(h+0.05)%1.0
+  
+
     
     State.Tick(self, time)
     
@@ -408,8 +436,9 @@ class GameState(State):
   def Activate(self):
     State.Activate(self)
     if self.gameStarted:
-      self.music.Unpause()    
-    print "Activate game state"
+      self.music.Unpause() 
+    if game().debug:
+      print "Activate game state"
 
   def Deactivate(self):
     State.Deactivate(self)

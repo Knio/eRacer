@@ -16,6 +16,7 @@ class Track(Entity, cpp.Track):
     # otherwise only Tracks will be stored in track     
     
     self.name = track.NAME
+    self.classname = track.__name__
     self.music = track.MUSIC
     
     for i in track.TRACK:
@@ -32,7 +33,6 @@ class Track(Entity, cpp.Track):
     meshes = cpp.VectorMesh()
     
     self.CreateMesh(profile, meshes, 400)
-    print meshes.size()
     
     for i in xrange(meshes.size()):
       tex   = game().io.LoadTexture('AlphaTrackTexture2.png')

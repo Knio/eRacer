@@ -34,7 +34,6 @@ namespace Graphics {
 	FontManager::FontManager()
 	{
 		int nFontsLoaded = AddFontResource("Resources\\Fonts\\Sony_Sketch_EF.ttf");
-		cout << "Loaded "<< nFontsLoaded << " custom fonts."<< endl;
 	}
 
 	FontManager::~FontManager()
