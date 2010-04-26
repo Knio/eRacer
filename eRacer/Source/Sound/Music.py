@@ -1,12 +1,12 @@
 from Core.Globals import *   
 
 class Music(cpp.SoundFx):
-  def __init__(self, filename):
+  def __init__(self, filename, volume = 50):
     cpp.SoundFx.__init__(self)
     self.looping  = True
     self.is3D     = False
     self.isPaused = False
-    self.volume   = 25
+    self.volume   = volume
     self.priority = 255    
     game().sound.sound.LoadSoundFx(filename, self)
   
