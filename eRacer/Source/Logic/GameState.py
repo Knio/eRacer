@@ -208,7 +208,7 @@ class GameState(State):
       return
       
   def AddVehicle(self, player = None):
-    if player: print vars(player)
+    if player and game().debug: print vars(player)
     
     n = len(self.vehicleList)    
     x = (n % 3 - 1)*15
@@ -432,8 +432,9 @@ class GameState(State):
   def Activate(self):
     State.Activate(self)
     if self.gameStarted:
-      self.music.Unpause()    
-    print "Activate game state"
+      self.music.Unpause() 
+    if game().debug:
+      print "Activate game state"
 
   def Deactivate(self):
     State.Deactivate(self)

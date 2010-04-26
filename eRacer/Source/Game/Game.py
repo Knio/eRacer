@@ -13,7 +13,6 @@ import Core.Globals
 class Game(cpp.Game):
   def __init__(self):
     Core.Globals._set_game(self)
-    print Core.Globals.game()
     self.modules = []
     self.namedmodules = {}
     self.time = Time()
@@ -23,7 +22,8 @@ class Game(cpp.Game):
     cpp.Game.__init__(self)
     
   def PushState(self, state):
-    print 'Game::PushState(%r)' % state
+    if game().debug:
+      print 'Game::PushState(%r)' % state
     s = self.states[-1]
     if s: s.Deactivate()
     state.parent = s
@@ -31,7 +31,8 @@ class Game(cpp.Game):
     state.Activate()
     
   def PopState(self):
-    print 'Game::PopState() %r' % self.states[-1]
+    if game().debug:
+      print 'Game::PopState() %r' % self.states[-1]
     s = self.states.pop()
     s.Deactivate()
     s.Pop()
@@ -39,18 +40,21 @@ class Game(cpp.Game):
     return s
 
   def AddModule(self, module, name=None):
-    print 'Adding module %r' % module
+    if game().debug:
+      print 'Adding module %r' % module
     self.modules.append(module)
     if name:
       self.namedmodules[name] = module
 
   def Init(self):
-    print 'Game::Init'
+    if game().debug:
+      print 'Game::Init'
     for i in self.modules:
       i.Init()
 
   def Run(self, stop=0):  
-    print 'Game::Run'
+    if game().debug:
+      print 'Game::Run'
     self.Start()  
     self.time.Zero()
     self.ticks = 0
@@ -62,7 +66,8 @@ class Game(cpp.Game):
     self.Quit()
 
   def Start(self):
-    print 'Game::Start'
+    if game().debug:
+      print 'Game::Start'
     for i in self.modules:
       i.Start()
     self.state = 1
@@ -74,7 +79,8 @@ class Game(cpp.Game):
       i.Tick(time)
       
   def Quit(self):
-    print 'Game::Quit'
+    if game().debug:
+      print 'Game::Quit'
     for i in self.modules:
       i.Quit()
 

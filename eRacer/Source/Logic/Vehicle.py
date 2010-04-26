@@ -232,7 +232,8 @@ class Vehicle(Model):
     
     if self.crashtime > 3: # or car stopped? ## why stopped?
       self.crashtime = 0
-      print "Crash! resetting car"
+      if game().debug:
+        print "Crash! resetting car"
       self.resetCar()
 
     if self.brake and phys.GetSpeed() < 2:
@@ -323,7 +324,8 @@ class Vehicle(Model):
   def resetCar(self):
     if self.isShutoff:
       return
-    print 'Reset Car'
+    if game().debug:
+      print 'Reset Car'
     phys  = self.physics
     self.resetFrame.position = self.resetFrame.position + self.resetFrame.up * 3.0
     orient = Matrix(self.resetFrame.position, self.resetFrame.up, self.resetFrame.fw)

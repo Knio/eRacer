@@ -77,7 +77,6 @@ class KeyboardDebugMapping(VehicleMapping):
         print "DebugMode is On"
         CONSTS.CAR_DEBUG = not CONSTS.CAR_DEBUG
       else: 
-        print "DebugMode is OFf"
         return E.ReloadConstsEvent()
 
   def MouseMovedEvent(self, relX, relY):

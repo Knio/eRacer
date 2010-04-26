@@ -57,7 +57,8 @@ class IO(Module, cpp.IO):
       if not r:
         print 'Failed to load mesh "%s"' % name
         return None # should throw exception
-      print "Loaded mesh %s" % name
+      if game().debug:
+        print "Loaded mesh %s" % name
       self.meshes[name] = mesh
               
     textures = cpp.VectorTexture()
@@ -86,7 +87,8 @@ class IO(Module, cpp.IO):
       if not self.valid(r):
         print 'Failed to load texture "%s", using default' % name
         return self.defaulttex
-      print 'Loaded texture %s' % name
+      if game().debug:
+        print 'Loaded texture %s' % name
       self.textures[name] = r
     return self.textures[name]
 

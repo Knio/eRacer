@@ -16,14 +16,13 @@ class Module(eRacer.Module):
     game subsystems have been constructed
     '''
     pass
-    print 'Initializing module %s' % self.__class__.__name__    
+    # print 'Initializing module %s' % self.__class__.__name__    
     
   def Start(self):
     '''
     initialize this module
     '''
-    pass
-    print 'Starting module %s' % self.__class__.__name__
+    # print 'Starting module %s' % self.__class__.__name__
     
   def Tick(self, time):
     '''
@@ -38,5 +37,4 @@ class Module(eRacer.Module):
     '''
     destroy this module
     '''
-    pass
-    print 'Quitting module %s' % self.__class__.__name__
+    # print 'Quitting module %s' % self.__class__.__name__
