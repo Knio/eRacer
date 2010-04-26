@@ -106,10 +106,14 @@ class GameState(State):
   def __init__(self, settings):
     State.__init__(self)
     self.loaded = False
+    self.music = None
     self.load(settings)
+
  
 
   def load(self, settings):
+    if self.music != None:
+      self.music.Pause()
     self.settings = settings
    
     self.laps   = self.settings.nLaps
@@ -189,7 +193,8 @@ class GameState(State):
 ##    self.goFx.isPaused = True
 ##    game().sound.sound.LoadSoundFx("Go.wav", self.goFx)
 
-    self.music = Music(track.music, volume=20)
+    if (self.music == None):
+      self.music = Music(track.music, volume=20)
     self.music.Pause()
         
     self.boostbeams = []

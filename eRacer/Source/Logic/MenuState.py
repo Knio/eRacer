@@ -393,7 +393,6 @@ class PauseMenuState(MenuState):
       game().PopState()
     
     gamestate = game().states[-1]
-    
     load = LoadScreenState(gamestate.settings, gamestate)
     game().PushState(load)
           
