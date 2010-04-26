@@ -2,33 +2,30 @@ from Core.Globals     import *
 from Core.Config      import Config
 
 class MenuItem(object):
-  def __init__(self, label, fontsize=32, lineheight=50):
+  def __init__(self, label, fontsize=32, lineheight=50, enabled=True):
     self.label = label
     self.fontsize = fontsize
     self.lineheight = lineheight
     self.fontfamily = Config.FONT
+    self.enabled = enabled
     
   def draw(self, view, x, y, selected):
     view.WriteString(
-      self.label, self.fontfamily, self.fontsize, x, y, selected and RED or WHITE
+      self.label, self.fontfamily, self.fontsize, x, y, self.getColor(selected)
     ) 
       
     return self.lineheight 
+    
+  def getColor(self, selected):
+    if not self.enabled:
+      return GREY
+    elif selected:
+      return RED
+    else:
+      return WHITE
+    
 
-class NonMenuItem(object):
-  def __init__(self, label, fontsize=32, lineheight=50):
-    self.label = label
-    self.fontsize = fontsize
-    self.lineheight = lineheight
-    self.fontfamily = Config.FONT
-    
-  def draw(self, view, x, y, selected, width=-1):
-    view.WriteString(
-      self.label, self.fontfamily, self.fontsize, x, y, selected and RED or GREY
-    ) 
-      
-    return self.lineheight 
-    
+   
 class ApplyMenuItem(MenuItem):
   def __init__(self, label, callback, *args, **kwargs):
     MenuItem.__init__(self, label, *args, **kwargs)
@@ -39,8 +36,8 @@ class ApplyMenuItem(MenuItem):
     
     
 class SelectMenuItem(MenuItem):
-  def __init__(self, label, callback, options, default=0, labelwidth=250):
-    MenuItem.__init__(self,label)
+  def __init__(self, label, callback, options, default=0, labelwidth=250, *args, **kwargs):
+    MenuItem.__init__(self,label, *args, **kwargs)
     self.callback = callback
     self.options = options
     if default < len(options):
@@ -61,34 +58,14 @@ class SelectMenuItem(MenuItem):
   def draw(self, view, x, y, selected):
     MenuItem.draw(self, view, x, y, selected)
     view.WriteString(
-      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, selected and RED or WHITE
+      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, self.getColor(selected)
       ) 
       
     return self.lineheight
 
-class NonSelectMenuItem(NonMenuItem):
-  def __init__(self, label, callback, options, default=0, labelwidth=250):
-    NonMenuItem.__init__(self,label)
-    self.callback = callback
-    self.options = options
-    if default < len(options):
-      self.index = default
-    else:
-      self.index = len(options)-1
-      
-    self.labelwidth = labelwidth
-    
-  def draw(self, view, x, y, selected, width=300):
-    NonMenuItem.draw(self, view, x, y, selected)
-    view.WriteString(
-      self.options[self.index][0], self.fontfamily, self.fontsize, x+self.labelwidth, y, GREY
-      )
-      
-    return self.lineheight
-    
 class InputMenuItem(MenuItem):
-  def __init__(self, label, callback, id, default, labelwidth=250):
-    MenuItem.__init__(self,label)
+  def __init__(self, label, callback, id, default, labelwidth=250, *args, **kwargs):
+    MenuItem.__init__(self,label, *args, **kwargs)
     self.callback = callback
     self.value = default;
     self.id = id
@@ -97,7 +74,7 @@ class InputMenuItem(MenuItem):
   def draw(self, view, x, y, selected):
     MenuItem.draw(self, view, x, y, selected)
     view.WriteString(
-      self.value, self.fontfamily, self.fontsize, x+self.labelwidth, y, selected and RED or WHITE
+      self.value, self.fontfamily, self.fontsize, x+self.labelwidth, y, self.getColor(selected)
       ) 
       
     return self.lineheight
@@ -112,18 +89,3 @@ class InputMenuItem(MenuItem):
       self.value = self.value[:len(self.value)-1]
       self.callback(self.id, self.value)    
 
-class NonInputMenuItem(NonMenuItem):
-  def __init__(self, label, callback, id, default, labelwidth=250):
-    NonMenuItem.__init__(self,label)
-    self.callback = callback
-    self.value = default;
-    self.id = id
-    self.labelwidth = labelwidth
-
-  def draw(self, view, x, y, selected, width=300):
-    NonMenuItem.draw(self, view, x, y, selected)
-    view.WriteString(
-      self.value, self.fontfamily, self.fontsize, x+self.labelwidth, y, GREY
-      ) 
-      
-    return self.lineheight

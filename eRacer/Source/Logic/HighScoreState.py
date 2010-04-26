@@ -36,18 +36,22 @@ class HighScoreState(MenuState):
           tracknames[stat.track] = 1
           laps[stat.laps] = 1
         self.current = []
-        self.curTrack = len(tracknames.keys())  and tracknames.keys()[0]  or None
         self.curLaps =  len(laps.keys())        and laps.keys()[0]
         
         trackoptions = []
         for track in tracknames:
           if track in Track.tracks:
             trackoptions.append((Track.tracks[track].NAME,track))
+        self.curTrack = None
+
+        if len(trackoptions)==0:
+          return
+          
+        self.curTrack = trackoptions[0][1]
         
         self.menu.append(SelectMenuItem('Track', self.Menu_Track, trackoptions, 0, labelwidth=110))
         self.menu.append(SelectMenuItem('Laps', self.Menu_Laps, [(i and str(i) or 'Best',i) for i in laps.keys()], 0, labelwidth=110))
         self.loaded = True
-        print self.curTrack, self.curLaps
         self.update()
         
         self.setBackground('Trackbg-%s.png' % self.curTrack)

@@ -17,3 +17,7 @@ class Music(cpp.SoundFx):
   def Unpause(self):
     self.isPaused = False
     game().sound.sound.UpdateSoundFx(self)
+    
+  def Restart(self):
+    self.Unpause()
+    game().sound.sound.ResetSound(self)    
