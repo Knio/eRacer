@@ -390,8 +390,9 @@ class PauseMenuState(MenuState):
       game().PopState()
     
     gamestate = game().states[-1]
-    gamestate.Release()
-    gamestate.load(gamestate.settings)
+    
+    load = LoadScreenState(gamestate.settings, gamestate)
+    game().PushState(load)
           
   def Tick(self, time):
     self.parent.Tick(time)
