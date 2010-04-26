@@ -127,7 +127,7 @@ class GameState(State):
     finishLineTransform = Matrix(40, 8, 1) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.fw, -startFrame.up)
     self.Add(Quad('FinishLine','FinishLine2.png',finishLineTransform))
     finishLineTransform = Matrix(6.35, 4.0, 4.0) * Matrix(startFrame.position+startFrame.up*0.1+startFrame.fw*-3, startFrame.up, startFrame.fw)
-    self.Add(Model('FinishLine','FinishLine.x',None,finishLineTransform))
+    self.Add(StaticModel('FinishLine','FinishLine.x',finishLineTransform))
 
     for x in [200., 2200.]:
       for i in xrange(64):
