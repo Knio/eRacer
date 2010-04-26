@@ -11,6 +11,7 @@ class Config(object):
   USER_FOLDER     = 'User/'
   USER_FILE       = USER_FOLDER+'Settings.cnf'
   USER_STATS      = USER_FOLDER+'Statistics.cnf'
+  CREDITS_FILE    = 'Config/Credits.txt'
   
   
   FONT = 'Sony Sketch EF'
@@ -42,7 +43,8 @@ class Config(object):
         c = getattr(CONSTS, k)
         r = getattr(cp, 'get%s' % type(c).__name__)('CONSTS', k)
         setattr(CONSTS, k, r)
-        print 'Set %s \t= %r' % (k,r)
+        if game().debug:
+          print 'Set %s \t= %r' % (k,r)
       except:
         print 'Failed to set %s' % k
         import traceback
@@ -53,9 +55,7 @@ class Config(object):
     if not os.path.exists(self.USER_FOLDER):
       os.mkdir(self.USER_FOLDER)
 
-    print "trying to save"
     with open(self.USER_FILE, 'wb') as file:
-      print "worked"
       self.user.write(file)
       
   def set_setting(self, key, value, section='GENERAL'):
@@ -63,6 +63,7 @@ class Config(object):
       self.user.add_section(section)
     self.user.set(section, key, value)
     self.settings.set(section, key, value)
+    self.save()
     
   def get_setting(self, key, section='GENERAL'):
     return self.settings.get(section, key)

@@ -14,7 +14,7 @@ class GameEndState(State):
     self.parent = parent
     self.stats = stats
     self.view = HudView([self.scene])
-    self.view.Add(HudQuad("TextBox", Config.UI_TEXTURE, 20, 110, 760, 420))
+    self.view.Add(HudQuad("UI-Overlay", Config.UI_TEXTURE, 20, 110, 720, 420, True))
     gameover = HudQuad("GameOverHeadline", "gameover_glow.png", 300, 110, 190, 30)
     gameover.SetCenter(350,125)
     self.view.Add(gameover)
@@ -28,7 +28,7 @@ class GameEndState(State):
         # i = [player, lap1, lap2, ..., total]
         if stat.player.isAI: continue
         f.write('%s\t%d\t%s\t%.4f\n' % (
-          parent.track.name,
+          parent.track.classname,
           parent.laps,
           stat.player.name,
           stat.total,
@@ -37,7 +37,7 @@ class GameEndState(State):
         
         best = min(stat.laps)
         f.write('%s\t%d\t%s\t%.4f\n' % (
-          parent.track.name,
+          parent.track.classname,
           0,
           stat.player.name,
           best,
@@ -80,18 +80,18 @@ class GameEndState(State):
     yd = 30
     
     laps = ''.join('Lap %s     ' % i for i in range(1, len(stats[0].laps)+1))
-    x = 100
+    x = 80
     y = 200
     self.view.WriteString("Name", font, 28, x, y)
     x += xd
     for i in range(0, len(stats[0].laps)):
       self.view.WriteString("Lap %d" % (i+1), font, 28, x, y)
       x += xd/2
-    x += xd/2
+    x += xd/4
     self.view.WriteString("Total", font, 28, x,y)
     
     y += yd
-    x = 100
+    x = 80
     for stat in stats:
       self.view.WriteString(stat.player.name, font, 24, x, y)
       x += xd
@@ -100,11 +100,11 @@ class GameEndState(State):
         if lap == 99999: s = '---'
         self.view.WriteString(s, font, 24, x, y)
         x += xd/2
-      x += xd/2
+      x += xd/4
       s = "%6.2f" % stat.total
       if stat.total == 99999: s = '---'
       self.view.WriteString(s, font, 24, x, y)
-      x = 100
+      x = 80
       y += yd
     
     State.Tick(self, time)

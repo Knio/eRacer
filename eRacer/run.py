@@ -24,7 +24,7 @@ def run():
       m.Init()
       settings = GameSettings()
       m.PushState(GameState(settings))
-      cProfile.runctx('m.Run(5000)', globals(), locals(), 'profile.data')
+      cProfile.runctx('m.Run(3000)', globals(), locals(), 'profile.data')
       stats = pstats.Stats('profile.data')
       stats.sort_stats('cumulative') 
       stats.print_stats(0.1)

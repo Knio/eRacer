@@ -77,7 +77,7 @@ def ordinal(num):
 
 from Game.Module  	import Module
 from Game.Entity    import Entity
-from Logic.Model      import Model
+from Logic.Model      import StaticModel, Model
 
 from Core.Event 	  import Event
 from Input          import KEY

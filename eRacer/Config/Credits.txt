@@ -1,0 +1,45 @@
+h3. Game Architecture
+Tom Flanagan
+
+h3. Graphics
+Don Ha
+Tom Flanagan
+
+h3. Physics
+Michael Blackadar
+Tom Flanagan
+John Stuart
+
+h3. Sound
+Don Ha
+
+h3. AI
+Michael Blackadar
+
+h3. HUD
+Don Ha
+Ole Rehmsen
+
+h3. Front End
+Ole Rehmsen
+Tom Flanagan
+
+h3. Scene Representation
+Ole Rehmsen
+
+h3. Track Design
+John Stuart
+Tom Flanagan
+Michael Blackadar
+
+h3. Art
+John Stuart
+
+h3. Tool Support
+Ole Rehmsen
+
+h3. Ingame Music
+Derek Sanders
+
+
+

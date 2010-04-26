@@ -41,8 +41,8 @@ class AIBehavior(Behavior):
     self.line = track
     self.arrow = arrow
     self.startDist = 0.0 # the distance around the track at the last check
-    self.resetDist = 50.0 # if travelled less than this in interval, reset
-    self.resetCheckTime = 5.0 # how often to check if we should reset
+    self.resetDist = 20.0 # if travelled less than this in interval, reset
+    self.resetCheckTime = 2.0 # how often to check if we should reset
     self.resetCounter = -5.0 # don't check for the first 5 seconds
     
     self.curState = AIState.DRIVE
@@ -94,10 +94,10 @@ class AIBehavior(Behavior):
         
         if distFromCentre > centreRad: 
         #we are on the right side, so it would be better to go left ot the centre
-          self.parent.Turn(-1)
+          self.parent.Turn(-0.7)
           #print "right side, dodge left"
         elif distFromCentre < -centreRad:
-          self.parent.Turn(1)
+          self.parent.Turn(0.7)
           #print "left side, dodge right"
         else:
           #in middle
@@ -105,10 +105,10 @@ class AIBehavior(Behavior):
           turnPoint = 0.5 + distFromCentre/(centreRad*2)
           if rand < turnPoint:
             #print "centre, dodge left"
-            self.parent.Turn(-1)
+            self.parent.Turn(-0.7)
           else:
             #print "centre, dodge right"
-            self.parent.Turn(1)
+            self.parent.Turn(0.7)
 
             
       else:
@@ -120,9 +120,9 @@ class AIBehavior(Behavior):
         turnSize = min(1.0, length(turnProj) * turnScale)
         if turnSize < 0.05:
           turnSize = 0
-        costheta = dot(turnProj, bodyRight) / length(turnProj)
+        costheta = dot(turnProj, bodyRight) / max(length(turnProj), 0.00001)
         fwProj = projectOnto(nowFrame.fw, bodyUp)#check if we are driving into the walls
-        fwCosth = dot(fwProj, bodyRight) / length(fwProj)
+        fwCosth = dot(fwProj, bodyRight) / max(length(fwProj), 0.00001)
         #print distFromCentre
        # print "fwcost", fwCosth
         if 0.999 < costheta < 1.001:#right turn
@@ -154,7 +154,7 @@ class AIBehavior(Behavior):
       if(distAhead > 1000):
         dodgeMode = True
         #print "way ahead, slow to 0.2"
-        self.parent.Accelerate(0.6)
+        self.parent.Accelerate(0.5)
         self.parent.Boost(False)
       elif(distAhead > 500):
         dodgeMode = True
@@ -164,33 +164,35 @@ class AIBehavior(Behavior):
       elif(distAhead > 200):
         dodgeMode = True
         #print "a little ahead, slow down to 0.8"
-        self.parent.Accelerate(0.8)
+        self.parent.Accelerate(0.9)
         self.parent.Boost(False)
       else:
         self.parent.Accelerate(1.0)
       #basic boost code: we don't need to turn off boost until the turn becomes large
       #print turnSize
-      distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 50.0)
-      if turnSize < 0.1 and self.parent.boostFuel > 2 and not dodgeMode:
+      distAhead = self.line.GetOffsetFromCentre(pos + bodyForward * 20.0)
+      if turnSize < 0.05 and self.parent.boostFuel > 2.0 and not dodgeMode:
         if distAhead < self.line.maxX and distAhead > self.line.minX:
         #make sure we won't jump off the edge
           #print "boost"
           self.parent.Boost(True)
-      if turnSize > 0.5:
+      if turnSize > 0.8:
         #print "boost off"
         self.parent.Boost(False)
         
       self.ResetChecker(delta, nowFrame)
 
       #now change state if needed
-      if self.parent.physics.GetSpeed() < 1.0 and self.objectInFront(1.0, tx):
+      if self.parent.physics.GetSpeed() < 5.0 and self.objectInFront(2.0, tx) and self.resetCounter > 0:
+        #only say we are stuck if we are passed the start
         #object close in front has almost stopped us
         self.curState = AIState.STUCK
        
     if self.curState == AIState.STUCK:
+      #print "stuck, maybe reset"
       self.parent.Accelerate(-1.0)
       self.parent.Turn(0)
-      self.ResetChecker(delta, nowFrame)
+      self.ResetChecker(delta+0.5, nowFrame)
       if not self.objectInFront(8.0, tx):
         #nothing in front of us, continue driving normally
         self.curState = AIState.DRIVE

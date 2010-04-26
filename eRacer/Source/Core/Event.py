@@ -4,7 +4,6 @@ class Event(cpp.Event):
   def __init__(self, game):
     cpp.Event.__init__(self)
     self.listeners = {}
-    print 'Initialized Event manager'
 
   def Register(self, obj, event=None):
     #print 'Register', event, obj

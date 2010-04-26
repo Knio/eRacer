@@ -39,6 +39,7 @@ class SoundFx
 public:
 	FSOUND_SAMPLE* soundsample;
 
+	int priority;
 	int channel;
 	int pitch;
 	unsigned char volume;
@@ -69,6 +70,7 @@ public:
 	  velocity = Vector3(0,0,0);
 	  maxDist = 1000000000.0f;
 	  minDist = 50.0f;
+	  priority = 128;
    }
    ~SoundFx();
    
@@ -101,10 +103,14 @@ public:
 	int Init();
 	int Update();
 	int SetOrientation3D(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector); //For 3D sound
+	int SetOrientation3DB(const Point3& listenerPos, const Vector3& listenerVel, const Vector3& atVector, const Vector3& upVector, int listener, int total);
+	int mydebug();
 
+	void StopSounds();
 	void LoadSoundFx(const string& filename, SoundFx* samp);
 	void UpdateSoundFx(SoundFx* samp);
 	void PlaySoundFx(SoundFx* samp);
+	void ResetSound(SoundFx* samp);
 
 	int PlaySound2D(const string& name);
 
